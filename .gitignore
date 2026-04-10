@@ -1,0 +1,73 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js
+/.next/
+/out/
+/build/
+
+# Production
+/dist
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+/prisma/*.db
+/prisma/*.db-journal
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# IDEs and editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+/coverage
+
+# Temporary files
+*.tmp
+*.temp
+
+# Logs gerais
+logs
+*.log
+
+# Cache
+.cache
+.next/cache
+
+# Build artifacts
+*.out
+*.tgz
+
+# Optional: lock files (geralmente você DEVE versionar, então cuidado!)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
