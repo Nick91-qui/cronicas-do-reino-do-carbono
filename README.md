@@ -120,33 +120,95 @@ app/
 components/
 lib/
 prisma/
+podman/
+scripts/
 ```
+
+## Banco de dados por ambiente
+
+### Desenvolvimento local
+
+O ambiente de desenvolvimento usa PostgreSQL local em container **Podman**.
+
+Arquivos relevantes:
+
+- `podman/postgres.env.example`
+- `scripts/podman-db-up.sh`
+- `scripts/podman-db-down.sh`
+- `scripts/podman-db-logs.sh`
+- `.env.example`
+
+### Produção
+
+Produção continua usando **Neon**.
+
+Arquivo de referência:
+
+- `.env.production.example`
 
 ## Setup local
 
-Esta seção pode ser ajustada conforme a implementação real avançar.
-
 ### Pré-requisitos
 
-- Node.js
-- `npm`, `pnpm` ou `yarn`
-- PostgreSQL acessível via Neon
+- Node.js 20+
+- `npm`
+- `podman`
 - arquivo `.env` configurado
 
-### Passos gerais
+### Subir PostgreSQL local com Podman
 
-1. instalar dependências;
-2. configurar variáveis de ambiente;
-3. rodar migrations;
-4. iniciar o servidor local.
+1. subir o banco local:
 
-Exemplo genérico:
+```bash
+npm run db:dev:up
+```
+
+2. se necessário, acompanhar logs:
+
+```bash
+npm run db:dev:logs
+```
+
+3. para parar o container:
+
+```bash
+npm run db:dev:down
+```
+
+O script cria `podman/postgres.env` automaticamente a partir de `podman/postgres.env.example` se o arquivo ainda não existir.
+
+### Configurar variáveis de ambiente
+
+Para desenvolvimento local, copie a base abaixo para `.env`:
+
+```bash
+cp .env.example .env
+```
+
+O `DATABASE_URL` padrão de desenvolvimento já aponta para o PostgreSQL local em `localhost:5432`.
+
+### Preparar Prisma e seed
+
+Com o banco local de pé e `.env` configurado:
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+```
+
+O seed inicial cria a turma `TURMA-ALFA`.
+
+### Rodar a aplicação
 
 ```bash
 npm install
-npm run prisma:migrate
 npm run dev
 ```
+
+## Fluxo de produção
+
+Em produção, substitua o `.env` local por valores equivalentes aos de `.env.production.example` e aponte `DATABASE_URL` para o Neon.
 
 ## Observação importante
 
