@@ -1,3 +1,14 @@
+import Link from "next/link";
+
+import { AuthForm } from "@/components/auth/auth-form";
+
 export default function LoginPage() {
-  return <main className="p-8">Login do jogador</main>;
+  return (
+    <>
+      <AuthForm mode="login" />
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400">
+        Ainda não tem conta? <Link href="/register" className="text-sky-300">Cadastre-se</Link>
+      </div>
+    </>
+  );
 }

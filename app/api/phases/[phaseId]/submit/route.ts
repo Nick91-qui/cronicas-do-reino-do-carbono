@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
+import { getAuthenticatedPlayer } from "@/lib/auth/session";
 import { phaseIdSchema } from "@/lib/content/schema";
-import { evaluatePhaseSubmission } from "@/lib/gameplay/evaluate-phase";
+import { prisma } from "@/lib/db/prisma";
+import { submitPhaseForPlayer } from "@/lib/gameplay/submit-phase";
 import { phaseSubmitSchema } from "@/lib/gameplay/schema";
 
 export async function POST(
@@ -13,6 +15,12 @@ export async function POST(
 
   if (!parsedPhaseId.success) {
     return NextResponse.json({ error: "Parâmetro de fase inválido." }, { status: 400 });
+  }
+
+  const authenticatedPlayer = await getAuthenticatedPlayer(prisma);
+
+  if (!authenticatedPlayer) {
+    return NextResponse.json({ error: "Autenticação obrigatória." }, { status: 401 });
   }
 
   const json = await request.json().catch(() => null);
@@ -33,7 +41,12 @@ export async function POST(
   }
 
   try {
-    const result = evaluatePhaseSubmission(parsedPayload.data);
+    const result = await submitPhaseForPlayer(
+      prisma,
+      authenticatedPlayer.playerId,
+      parsedPayload.data,
+    );
+
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Falha ao avaliar submissão.";

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const highlights = [
   "Next.js + React + TypeScript + Tailwind CSS",
   "Prisma + PostgreSQL (Neon)",
@@ -10,14 +12,14 @@ export default function HomePage() {
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 px-6 py-16">
       <section className="space-y-4">
         <span className="inline-flex rounded-full border border-sky-400/30 px-3 py-1 text-sm text-accent">
-          Milestone 1 · Fundação
+          Milestone 4 · Autenticação e sessão
         </span>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Crônicas do Reino do Carbono
         </h1>
         <p className="max-w-3xl text-lg text-slate-300">
-          Base inicial do MVP web orientado por conteúdo, com foco em progressão linear,
-          construção molecular simplificada e avaliação pedagógica no servidor.
+          MVP web com conteúdo estático oficial, autenticação customizada por sessão e backend
+          autoritativo para builder, avaliação e persistência.
         </p>
       </section>
 
@@ -29,12 +31,13 @@ export default function HomePage() {
         ))}
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 className="text-xl font-semibold">Próximo passo</h2>
-        <p className="mt-2 text-sm text-slate-300">
-          Implementar conteúdo tipado, builder molecular e persistência operacional conforme
-          os milestones oficiais em <code>docs/planning/</code>.
-        </p>
+      <section className="flex flex-wrap gap-4">
+        <Link href="/login" className="rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-slate-950">
+          Entrar
+        </Link>
+        <Link href="/register" className="rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-slate-100">
+          Cadastrar jogador
+        </Link>
       </section>
     </main>
   );
