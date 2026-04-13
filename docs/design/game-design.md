@@ -1,4 +1,4 @@
-# Game Design
+# Design de Jogo
 
 ## Objetivo deste documento
 

@@ -104,15 +104,13 @@ Embora a progressão seja binária, o sistema poderá apresentar ao jogador uma 
 
 - **excellent** = 3 pontos
 - **adequate** = 2 pontos
-- **partial** = 1 ponto
 - **inadequate** = resposta incorreta, sem pontuação
 
 Esses níveis servem para:
 
 - enriquecer o feedback;
-- registrar desempenho parcial;
 - apoiar análise pedagógica;
-- alimentar pontuação do jogador.
+- alimentar a pontuação do jogador.
 
 No entanto, apenas respostas classificadas como **correct** permitem progressão.
 
@@ -220,7 +218,7 @@ O jogador deve ver:
 Exemplos:
 
 - “Excelente escolha. Você identificou corretamente a molécula mais adequada.”
-- “Resposta parcial. Há lógica na sua escolha, mas falta considerar uma propriedade decisiva.”
+- “Boa escolha. Sua resposta faz sentido, mas existe uma opção mais precisa para este desafio.”
 - “Não foi dessa vez. Tente novamente.”
 
 O MVP não incluirá, como regra geral:

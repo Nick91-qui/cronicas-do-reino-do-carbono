@@ -16,7 +16,7 @@ O projeto foi concebido para ensinar conceitos introdutórios de química orgân
 
 ## Status do projeto
 
-**MVP documentation-first em planejamento/implementação**
+**MVP documentation-first, em planejamento e implementação**
 
 Isso significa que a base conceitual, pedagógica, de design e técnica está sendo consolidada antes da implementação completa do produto.
 
@@ -53,8 +53,6 @@ docs/
     technical-spec.md
   planning/
     implementation-plan.md
-
-archive/
 ```
 
 ## Documentos principais
@@ -122,7 +120,6 @@ app/
 components/
 lib/
 prisma/
-archive/
 ```
 
 ## Setup local

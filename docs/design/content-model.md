@@ -1,4 +1,4 @@
-# Content Model
+# Modelo de Conteúdo
 
 ## Objetivo deste documento
 
@@ -32,7 +32,7 @@ No MVP, o conteúdo estático do jogo será mantido em arquivos locais do projet
 
 ## IDs oficiais
 
-### Molecule IDs
+### IDs de moléculas
 
 Os ids oficiais de moléculas do Capítulo I são:
 
@@ -44,7 +44,7 @@ Os ids oficiais de moléculas do Capítulo I são:
 - `buteno`
 - `benzeno`
 
-### Fragment IDs
+### IDs de fragmentos
 
 Os ids oficiais de fragmentos estruturais são:
 
@@ -52,7 +52,7 @@ Os ids oficiais de fragmentos estruturais são:
 - `ligacao_dupla`
 - `estrutura_aromatica`
 
-### Phase IDs
+### IDs de fases
 
 O padrão oficial para ids de fase é:
 
@@ -65,7 +65,7 @@ O padrão oficial para ids de fase é:
 - `chapter-1-phase-7`
 - `chapter-1-phase-8`
 
-### Chapter IDs
+### IDs de capítulos
 
 ```ts
 type ChapterId = "chapter-1";
@@ -240,7 +240,7 @@ type Molecule = {
 
 ### Regras para moléculas
 
-#### Formula molecular
+#### Fórmula molecular
 
 O campo `formulaMolecular` usa texto simples.
 
@@ -251,7 +251,7 @@ Exemplos:
 - `C2H4`
 - `C6H6`
 
-#### Formula estrutural
+#### Fórmula estrutural
 
 O campo `formulaEstrutural` também usa texto simples padronizado.
 
