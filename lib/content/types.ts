@@ -1,5 +1,29 @@
 export type ChapterId = "chapter-1";
 
+export type MoleculeId =
+  | "metano"
+  | "etano"
+  | "propano"
+  | "eteno"
+  | "propeno"
+  | "buteno"
+  | "benzeno";
+
+export type FragmentId =
+  | "ligacao_simples"
+  | "ligacao_dupla"
+  | "estrutura_aromatica";
+
+export type PhaseId =
+  | "chapter-1-phase-1"
+  | "chapter-1-phase-2"
+  | "chapter-1-phase-3"
+  | "chapter-1-phase-4"
+  | "chapter-1-phase-5"
+  | "chapter-1-phase-6"
+  | "chapter-1-phase-7"
+  | "chapter-1-phase-8";
+
 export type PhaseType = "construction" | "choice" | "construction_choice";
 
 export type QualitativeResult = "excellent" | "adequate" | "inadequate";
@@ -40,7 +64,7 @@ export type MoleculeAttributes = {
 };
 
 export type Molecule = {
-  id: string;
+  id: MoleculeId;
   nomeQuimico: string;
   nomeEpico: string;
   formulaMolecular: string;
@@ -58,14 +82,14 @@ export type Molecule = {
 export type PhaseResources = {
   carbonAvailable: number;
   hydrogenMode: "implicit_infinite";
-  availableFragments: string[];
+  availableFragments: FragmentId[];
   supportCards: string[];
 };
 
 export type Reward = {
   carbon?: number;
-  fragments?: string[];
-  unlockedMolecule?: string;
+  fragments?: FragmentId[];
+  unlockedMolecule?: MoleculeId;
   unlockedTitle?: string;
 };
 
@@ -76,7 +100,7 @@ export type PhaseFeedback = {
 };
 
 export type Phase = {
-  id: string;
+  id: PhaseId;
   chapterId: ChapterId;
   number: number;
   title: string;
@@ -86,9 +110,9 @@ export type Phase = {
   narrative: string;
   objective: string;
   resources: PhaseResources;
-  availableMolecules: string[];
-  excellentAnswer: string;
-  adequateAnswers: string[];
+  availableMolecules: MoleculeId[];
+  excellentAnswer: MoleculeId;
+  adequateAnswers: MoleculeId[];
   expectedProperties: SelectableProperty[];
   pedagogicalNotes: string[];
   rewards: Reward;
@@ -100,9 +124,17 @@ export type Phase = {
   };
 };
 
+export type Chapter = {
+  id: ChapterId;
+  title: string;
+  totalPhases: number;
+  moleculeIds: MoleculeId[];
+  phaseIds: PhaseId[];
+};
+
 export type PhaseSubmission = {
-  phaseId: string;
-  selectedMoleculeId: string;
+  phaseId: PhaseId;
+  selectedMoleculeId: MoleculeId;
   selectedProperties: SelectableProperty[];
 };
 
@@ -115,7 +147,7 @@ export type PhaseResult = {
 export type PlayerInventory = {
   carbonAvailable: number;
   hydrogenMode: "implicit_infinite";
-  unlockedFragments: string[];
-  unlockedMolecules: string[];
+  unlockedFragments: FragmentId[];
+  unlockedMolecules: MoleculeId[];
   unlockedTitles: string[];
 };
