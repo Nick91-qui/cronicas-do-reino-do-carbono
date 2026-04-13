@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PhaseType {
+  construction
+  choice
+  construction_choice
+}
+
+enum QualitativeResult {
+  excellent
+  adequate
+  inadequate
+}
+
+enum ValidationResult {
+  correct
+  incorrect
+}
+
+model Classroom {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  players   Player[]
+}
+
+model Player {
+  id             String               @id @default(cuid())
+  classroomId    String
+  displayName    String
+  username       String               @unique
+  passwordHash   String
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  classroom      Classroom            @relation(fields: [classroomId], references: [id], onDelete: Restrict)
+  sessions       Session[]
+  phaseAttempts  PlayerPhaseAttempt[]
+  phaseSummaries PlayerPhaseSummary[]
+  chapterProgress PlayerChapterProgress[]
+  inventory      PlayerInventory?
+  rewardEvents   PlayerRewardEvent[]
+  analyticsEvents PlayerAnalyticsEvent[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  playerId  String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model PlayerPhaseAttempt {
+  id                     String            @id @default(cuid())
+  playerId               String
+  phaseId                String
+  phaseType              PhaseType
+  builderStateJson       Json?
+  constructedMoleculeId  String?
+  selectedMoleculeId     String?
+  selectedPropertiesJson Json?
+  qualitativeResult      QualitativeResult
+  validationResult       ValidationResult
+  scoreAwarded           Int
+  createdAt              DateTime          @default(now())
+  player                 Player            @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, phaseId])
+}
+
+model PlayerPhaseSummary {
+  id                    String            @id @default(cuid())
+  playerId              String
+  phaseId               String
+  isCompleted           Boolean           @default(false)
+  bestQualitativeResult QualitativeResult?
+  bestValidationResult  ValidationResult?
+  bestScore             Int               @default(0)
+  attemptCount          Int               @default(0)
+  firstCompletedAt      DateTime?
+  lastAttemptAt         DateTime?
+  updatedAt             DateTime          @updatedAt
+  player                Player            @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, phaseId])
+}
+
+model PlayerChapterProgress {
+  id                        String   @id @default(cuid())
+  playerId                  String
+  chapterId                 String
+  highestUnlockedPhaseNumber Int
+  completedPhaseCount       Int      @default(0)
+  chapterScore              Int      @default(0)
+  updatedAt                 DateTime @updatedAt
+  player                    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, chapterId])
+}
+
+model PlayerInventory {
+  id                    String   @id @default(cuid())
+  playerId              String   @unique
+  carbonAvailable       Int
+  hydrogenMode          String
+  unlockedFragmentsJson Json
+  unlockedMoleculesJson Json
+  unlockedTitlesJson    Json
+  updatedAt             DateTime @updatedAt
+  player                Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model PlayerRewardEvent {
+  id         String   @id @default(cuid())
+  playerId   String
+  phaseId    String?
+  rewardType String
+  rewardValue String
+  metadataJson Json?
+  grantedAt  DateTime @default(now())
+  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, phaseId])
+}
+
+model PlayerAnalyticsEvent {
+  id         String   @id @default(cuid())
+  playerId   String
+  eventType  String
+  phaseId    String?
+  payloadJson Json?
+  createdAt  DateTime @default(now())
+  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, phaseId])
+}
