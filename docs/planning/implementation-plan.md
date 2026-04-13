@@ -1,0 +1,462 @@
+# Plano de Implementação
+
+## 1. Propósito do documento
+
+Este documento define o plano oficial de implementação do MVP de **Crônicas do Reino do Carbono**.
+
+Ele existe para:
+
+- orientar a ordem de implementação;
+- organizar a entrega em blocos práticos e marcos de execução;
+- alinhar engenharia, integração de conteúdo e QA;
+- tornar explícitas dependências e riscos;
+- definir o que significa um MVP tecnicamente pronto.
+
+Este plano é estruturado para execução, e não apenas para documentação. Ele deve ser usado em conjunto com:
+
+- `docs/product/vision.md`;
+- `docs/product/mvp-scope.md`;
+- `docs/design/game-design.md`;
+- `docs/design/content-model.md`;
+- `docs/design/phases.md`;
+- `docs/tech/technical-spec.md`.
+
+---
+
+## 2. Princípios de planejamento
+
+O plano de implementação segue os princípios abaixo.
+
+### 2.1 Jogabilidade vertical precoce
+
+O projeto deve se tornar jogável o mais cedo possível, mesmo em uma fatia limitada.
+
+### 2.2 Risco principal primeiro
+
+O builder molecular e o fluxo de validação autoritativa são os riscos centrais e devem ser validados cedo.
+
+### 2.3 Fundação antes de escala
+
+A base técnica, o modelo operacional e as convenções do projeto devem ser definidos antes da expansão funcional ampla.
+
+### 2.4 Conteúdo integrado progressivamente
+
+O conteúdo do Capítulo I deve ser integrado em blocos menores, e não todo de uma vez.
+
+### 2.5 Documentação continua oficial
+
+Se a implementação alterar qualquer regra oficial, a documentação deve ser atualizada explicitamente.
+
+### 2.6 QA acompanha a implementação
+
+Testes e validação devem acompanhar as entregas críticas, e não ficar restritos ao final.
+
+---
+
+## 3. Estratégia de entrega
+
+### 3.1 Modelo de execução
+
+A abordagem oficial do MVP é uma implementação por blocos com fatias verticais progressivas.
+
+A ordem geral é:
+
+1. fundação técnica;
+2. validação do risco central de gameplay;
+3. autenticação e persistência base;
+4. loop central de gameplay;
+5. progresso, inventário e recompensas;
+6. integração progressiva do Capítulo I;
+7. estabilização, QA e deploy.
+
+### 3.2 Interpretação prática
+
+Isso significa que:
+
+- a arquitetura central é criada primeiro;
+- o risco técnico principal é testado cedo;
+- uma primeira experiência jogável aparece antes da cobertura total do capítulo;
+- blocos posteriores expandem robustez, conteúdo e confiabilidade.
+
+---
+
+## 4. Visão geral dos blocos
+
+A implementação está organizada nos seguintes blocos:
+
+- **Bloco 1 — Fundação**
+- **Bloco 2 — Fatia de risco de gameplay**
+- **Bloco 3 — Autenticação e banco de dados**
+- **Bloco 4 — Loop central de gameplay**
+- **Bloco 5 — Progresso, inventário e recompensas**
+- **Bloco 6 — Integração do Capítulo I**
+- **Bloco 7 — Estabilização, QA e implantação**
+
+---
+
+## 5. Bloco 1 — Fundação
+
+### Objetivo
+
+Preparar a base técnica do projeto para que os blocos seguintes possam ser implementados sem retrabalho estrutural.
+
+### Entregas principais
+
+- projeto Next.js inicializado;
+- TypeScript configurado;
+- Tailwind CSS configurado;
+- Prisma configurado;
+- conexão com PostgreSQL/Neon validada;
+- estrutura inicial de pastas definida;
+- convenções de nomenclatura e tipos alinhadas à documentação oficial.
+
+### Saídas esperadas
+
+Ao final deste bloco, o projeto deve ter:
+
+- estrutura mínima navegável;
+- banco acessível;
+- base de código pronta para módulos de autenticação, conteúdo e gameplay;
+- organização coerente com `docs/tech/technical-spec.md`.
+
+### Dependências
+
+- nenhuma dependência técnica prévia relevante.
+
+---
+
+## 6. Bloco 2 — Fatia de risco de gameplay
+
+### Objetivo
+
+Validar cedo a mecânica de maior risco do MVP: o builder molecular guiado com validação estrutural autoritativa no servidor.
+
+### Por que este bloco vem cedo
+
+Se o builder não funcionar de forma clara, estável e pedagogicamente útil, o MVP perde sua mecânica central.
+
+### Entregas principais
+
+- UI inicial do builder;
+- modelo de estado temporário do builder;
+- validação estrutural no backend;
+- resolução da molécula a partir da configuração válida;
+- retorno de erro para estrutura inválida;
+- preview ou card básico da molécula criada.
+
+### Critérios de sucesso
+
+- o jogador consegue montar uma estrutura simples válida;
+- o servidor valida a estrutura de forma determinística;
+- estruturas inválidas não geram moléculas;
+- a UI recebe retorno suficiente para orientar nova tentativa.
+
+### Dependências
+
+- conclusão do Bloco 1.
+
+---
+
+## 7. Bloco 3 — Autenticação e banco de dados
+
+### Objetivo
+
+Introduzir identidade do jogador, autenticação vinculada à turma e persistência operacional básica.
+
+### Entregas principais
+
+- fluxo de cadastro;
+- fluxo de login;
+- sessão autenticada;
+- proteção de rotas;
+- entidades operacionais mínimas de `Classroom`, `Player` e `Session`;
+- hashing seguro de senha.
+
+### Critérios de sucesso
+
+- um jogador novo consegue se cadastrar;
+- um jogador existente consegue autenticar;
+- rotas protegidas exigem sessão válida;
+- a identidade persistida está corretamente vinculada à turma.
+
+### Dependências
+
+- conclusão do Bloco 1;
+- alinhamento com o modelo operacional definido em `docs/tech/technical-spec.md`.
+
+---
+
+## 8. Bloco 4 — Loop central de gameplay
+
+### Objetivo
+
+Implementar o fluxo oficial de fase em versão funcional, ainda sem cobertura total do capítulo.
+
+### Entregas principais
+
+- carregamento de conteúdo de fase;
+- exibição de narrativa curta e objetivo;
+- exibição de recursos disponíveis;
+- integração entre builder, escolha da molécula e seleção de propriedades;
+- submissão da resposta;
+- avaliação no servidor;
+- feedback qualitativo ao jogador.
+
+### Critérios de sucesso
+
+- a fase pode ser jogada do início ao feedback final;
+- a submissão retorna `excellent`, `adequate` ou `inadequate` quando aplicável;
+- a camada interna de validação mapeia corretamente para `correct` e `incorrect`;
+- o fluxo visual respeita o design oficial.
+
+### Dependências
+
+- conclusão do Bloco 2;
+- conclusão do Bloco 3.
+
+---
+
+## 9. Bloco 5 — Progresso, inventário e recompensas
+
+### Objetivo
+
+Persistir o estado oficial do jogador e garantir progressão segura entre tentativas, sucesso e replay.
+
+### Entregas principais
+
+- histórico de tentativas por fase;
+- resumo por jogador-fase;
+- progresso por capítulo;
+- snapshot de inventário;
+- aplicação de recompensas;
+- histórico de eventos de recompensa;
+- lógica de melhor pontuação.
+
+### Critérios de sucesso
+
+- o jogador pode errar e tentar novamente sem perda estrutural de progresso;
+- o melhor resultado da fase é preservado;
+- a próxima fase só é desbloqueada com `correct`;
+- o inventário reflete corretamente desbloqueios e recompensas.
+
+### Dependências
+
+- conclusão do Bloco 3;
+- conclusão do Bloco 4.
+
+---
+
+## 10. Bloco 6 — Integração do Capítulo I
+
+### Objetivo
+
+Integrar progressivamente o conteúdo real das 8 fases do Capítulo I.
+
+### Estratégia de integração
+
+O conteúdo deve ser integrado em três subblocos:
+
+### 6A — Fases 1 e 2
+
+Foco em:
+
+- fluxo de construção fundamental;
+- estabilidade estrutural do carbono;
+- ligação entre carbonos.
+
+### 6B — Fases 3 a 5
+
+Foco em:
+
+- lógica de escolha;
+- comparação entre moléculas;
+- volatilidade e potencial energético;
+- introdução de ligação dupla.
+
+### 6C — Fases 6 a 8
+
+Foco em:
+
+- transformação química;
+- polimerização;
+- aromaticidade;
+- integração do conjunto completo do capítulo.
+
+### Critérios de sucesso
+
+- todas as fases usam o conteúdo oficial;
+- ids e propriedades batem com `docs/design/content-model.md`;
+- respostas ideais e adequadas batem com `docs/design/phases.md`;
+- recompensas e feedback permanecem coerentes com o design oficial.
+
+### Dependências
+
+- conclusão do Bloco 4;
+- conclusão do Bloco 5.
+
+---
+
+## 11. Bloco 7 — Estabilização, QA e implantação
+
+### Objetivo
+
+Refinar o MVP para disponibilização em ambiente de produção com confiabilidade mínima adequada.
+
+### Entregas principais
+
+- correção de bugs críticos;
+- refinamento de UI e feedback;
+- cobertura mínima de testes unitários e integração;
+- analytics leves funcionando;
+- deploy em produção na Vercel;
+- validação final do ambiente com banco Neon.
+
+### Critérios de sucesso
+
+- fluxos críticos funcionam em produção;
+- erros de persistência não geram falso sucesso na UI;
+- login, submissão, progresso e inventário funcionam ponta a ponta;
+- o sistema está pronto para uso por um jogador novo.
+
+### Dependências
+
+- conclusão dos Blocos 1 a 6.
+
+---
+
+## 12. Dependências entre blocos
+
+A sequência mínima recomendada é:
+
+- Bloco 1 antes de todos os demais;
+- Bloco 2 antes do loop completo de gameplay;
+- Bloco 3 antes da persistência oficial do jogador;
+- Bloco 4 antes da integração completa do capítulo;
+- Bloco 5 antes da validação final de progressão;
+- Bloco 6 antes do hardening final;
+- Bloco 7 como fechamento do MVP.
+
+Embora haja espaço para trabalho paralelo em partes da UI e do conteúdo, o projeto deve respeitar essa ordem lógica para evitar retrabalho.
+
+---
+
+## 13. Riscos principais
+
+### 13.1 Builder molecular
+
+Risco:
+
+- dificuldade de equilibrar liberdade controlada, clareza visual e validação estrutural.
+
+Mitigação:
+
+- validar cedo no Bloco 2;
+- manter o modelo semilivre dentro dos limites do MVP.
+
+### 13.2 Deriva entre conteúdo e implementação
+
+Risco:
+
+- o código divergir da documentação oficial de fases, ids, propriedades e avaliação.
+
+Mitigação:
+
+- usar conteúdo estático versionado;
+- alinhar naming e tipos à documentação oficial;
+- revisar integração fase por fase.
+
+### 13.3 Complexidade de persistência
+
+Risco:
+
+- misturar tentativa, progresso, inventário e recompensa de forma inconsistente.
+
+Mitigação:
+
+- separar tentativas de resumos;
+- usar modelo operacional explícito;
+- aplicar atualizações críticas em transação quando necessário.
+
+### 13.4 Escopo excessivo
+
+Risco:
+
+- tentar incluir sistemas fora do MVP, como painel docente, autoria de conteúdo ou editor químico avançado.
+
+Mitigação:
+
+- seguir rigidamente o escopo oficial;
+- adiar extensões para revisões futuras.
+
+---
+
+## 14. QA por bloco
+
+### Bloco 1
+
+- verificar setup do projeto;
+- verificar conexão com banco;
+- verificar convenções e estrutura de pastas.
+
+### Bloco 2
+
+- testar estruturas válidas e inválidas;
+- testar resposta do backend ao builder;
+- validar determinismo da resolução molecular.
+
+### Bloco 3
+
+- testar cadastro;
+- testar login;
+- testar proteção de rotas;
+- testar persistência de sessão.
+
+### Bloco 4
+
+- testar fluxo completo de uma fase jogável;
+- testar submissão correta e incorreta;
+- testar feedback exibido ao jogador.
+
+### Bloco 5
+
+- testar histórico de tentativas;
+- testar melhor pontuação;
+- testar desbloqueio de fase;
+- testar atualização de inventário e recompensa.
+
+### Bloco 6
+
+- validar cada fase integrada contra o documento de fases;
+- revisar consistência entre conteúdo, feedback e recompensas.
+
+### Bloco 7
+
+- executar testes críticos finais;
+- revisar produção;
+- validar fluxo ponta a ponta com usuário novo.
+
+---
+
+## 15. Definição de pronto
+
+O MVP será considerado pronto quando:
+
+- as 8 fases do Capítulo I estiverem integradas e consistentes com a documentação oficial;
+- o builder funcionar com validação autoritativa no servidor;
+- autenticação, sessão e vínculo com turma estiverem estáveis;
+- tentativas, progresso, inventário e recompensas estiverem persistindo corretamente;
+- a progressão por `correct` estiver funcionando sem ambiguidades;
+- testes cobrirem as áreas críticas definidas no spec técnico;
+- o deploy em produção estiver ativo e funcional para um jogador novo.
+
+---
+
+## 16. Resultado esperado deste plano
+
+Ao seguir este plano, o projeto deve chegar a um MVP:
+
+- tecnicamente viável;
+- pedagogicamente fiel;
+- simples de operar;
+- coerente com a documentação oficial;
+- pronto para validação real em contexto de uso.
