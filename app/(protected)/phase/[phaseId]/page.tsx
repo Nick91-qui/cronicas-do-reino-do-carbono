@@ -1,7 +1,11 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
+import { PhaseExperience } from "@/components/phase/phase-experience";
+import { requireAuthenticatedPlayer } from "@/lib/auth/session";
+import { getMoleculesByIds, getPhaseById } from "@/lib/content/loaders";
 import { phaseIdSchema } from "@/lib/content/schema";
-import { getPhaseById } from "@/lib/content/loaders";
+import { prisma } from "@/lib/db/prisma";
+import { getChapterProgressView } from "@/lib/progress/queries";
 
 export default async function PhasePage({
   params,
@@ -15,15 +19,16 @@ export default async function PhasePage({
     notFound();
   }
 
+  const player = await requireAuthenticatedPlayer(prisma);
   const phase = getPhaseById(parsedPhaseId.data);
+  const chapterProgress = await getChapterProgressView(prisma, player.playerId, phase.chapterId);
+  const phaseProgress = chapterProgress.phases.find((item) => item.phaseId === phase.id);
 
-  return (
-    <main className="mx-auto w-full max-w-5xl px-6 py-10">
-      <section className="rounded-2xl border border-white/10 bg-white/5 p-8">
-        <p className="text-sm text-sky-300">Fase {phase.number}</p>
-        <h1 className="mt-2 text-3xl font-semibold">{phase.title}</h1>
-        <p className="mt-4 text-sm text-slate-300">{phase.objective}</p>
-      </section>
-    </main>
-  );
+  if (!phaseProgress?.isUnlocked) {
+    redirect(`/chapter/${phase.chapterId}`);
+  }
+
+  const molecules = getMoleculesByIds(phase.availableMolecules);
+
+  return <PhaseExperience phase={phase} molecules={molecules} chapterProgress={chapterProgress} />;
 }

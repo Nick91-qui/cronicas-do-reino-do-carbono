@@ -218,4 +218,6 @@ Se a implementação divergir das regras, estruturas ou fluxos descritos nos doc
 
 ## Licença
 
-Adicionar conforme a política final do projeto.
+Este projeto está licenciado sob a licença MIT.
+
+Consulte o arquivo [LICENSE](/home/nmoreira/Projetos/cronicas-do-reino-do-carbono/LICENSE) para os detalhes.
