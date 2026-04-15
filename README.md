@@ -45,6 +45,12 @@ docs/
     game-design.md
     phases.md
     content-model.md
+  visual/
+    visual-direction.md
+    ui-system.md
+    screen-map.md
+    asset-pipeline.md
+    card-spec.md
   narrative/
     narrative.md
   pedagogy/
@@ -67,6 +73,14 @@ docs/
 - `docs/design/game-design.md`
 - `docs/design/phases.md`
 - `docs/design/content-model.md`
+
+### Visual
+
+- `docs/visual/visual-direction.md`
+- `docs/visual/ui-system.md`
+- `docs/visual/screen-map.md`
+- `docs/visual/asset-pipeline.md`
+- `docs/visual/card-spec.md`
 
 ### Narrativa
 
@@ -93,10 +107,15 @@ Para entender o projeto de forma consistente, recomenda-se ler nesta ordem:
 3. `docs/design/game-design.md`
 4. `docs/design/phases.md`
 5. `docs/design/content-model.md`
-6. `docs/narrative/narrative.md`
-7. `docs/pedagogy/teacher-guide.md`
-8. `docs/tech/technical-spec.md`
-9. `docs/planning/implementation-plan.md`
+6. `docs/visual/visual-direction.md`
+7. `docs/visual/ui-system.md`
+8. `docs/visual/screen-map.md`
+9. `docs/visual/asset-pipeline.md`
+10. `docs/visual/card-spec.md`
+11. `docs/narrative/narrative.md`
+12. `docs/pedagogy/teacher-guide.md`
+13. `docs/tech/technical-spec.md`
+14. `docs/planning/implementation-plan.md`
 
 ## Estrutura resumida do repositório
 

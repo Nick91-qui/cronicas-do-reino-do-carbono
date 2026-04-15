@@ -23,6 +23,9 @@ Este documento deve permanecer alinhado com os demais documentos oficiais em `do
 - `docs/design/game-design.md`;
 - `docs/design/content-model.md`;
 - `docs/design/phases.md`;
+- `docs/visual/visual-direction.md`;
+- `docs/visual/ui-system.md`;
+- `docs/visual/card-spec.md`;
 - `docs/planning/implementation-plan.md`.
 
 Se houver divergência entre implementação e especificação oficial, a documentação deve ser atualizada explicitamente.
@@ -51,7 +54,7 @@ A implementação técnica do MVP deve suportar:
 - acesso autenticado ao jogo;
 - progressão linear por capítulo e fase;
 - renderização do conteúdo oficial do Capítulo I;
-- oficina molecular híbrida semilivre;
+- oficina molecular híbrida semilivre guiada por blueprints;
 - validação de molécula construída;
 - seleção de molécula-resposta;
 - seleção de 1 a 3 propriedades como justificativa;
@@ -156,8 +159,9 @@ Responsável por:
 Responsável por:
 
 - modelar o estado temporário da construção;
+- representar o blueprint ativo e seus slots;
 - validar a estrutura montada;
-- resolver a molécula resultante, quando válida.
+- resolver a molécula resultante a partir de uma assinatura estrutural, quando válida.
 
 ### 6.4 Gameplay
 
@@ -191,6 +195,15 @@ Responsável por:
 - registrar eventos leves de gameplay;
 - apoiar análise futura sem bloquear o fluxo principal.
 
+### 6.8 Camada visual
+
+Responsável por:
+
+- mapear conteúdo estático a assets visuais oficiais;
+- manter a fronteira entre bitmap decorativo e conteúdo vivo;
+- padronizar cartas, painéis, builder e telas principais;
+- permitir evolução visual sem alterar a lógica autoritativa do jogo.
+
 ---
 
 ## 7. Conteúdo estático e fonte da verdade
@@ -204,7 +217,8 @@ Isso inclui:
 - moléculas;
 - enums;
 - propriedades selecionáveis;
-- recompensas definidas por conteúdo.
+- recompensas definidas por conteúdo;
+- campos visuais orientados a assets.
 
 ### 7.1 Regra oficial
 
@@ -261,6 +275,8 @@ O sistema deve:
 O sistema deve:
 
 - permitir construção molecular guiada;
+- permitir seleção de blueprint de construção quando aplicável;
+- permitir preenchimento de slots com elementos válidos;
 - permitir seleção da molécula-resposta;
 - permitir seleção de propriedades justificadoras;
 - submeter a resposta ao backend.
@@ -325,7 +341,17 @@ A interface deve:
 - funcionar em fluxo passo a passo;
 - reduzir ambiguidade no estado da fase;
 - manter coerência com o tom narrativo;
-- evitar sobrecarga cognitiva desnecessária.
+- evitar sobrecarga cognitiva desnecessária;
+- seguir a trilha oficial definida em `docs/visual/`.
+
+### 10.2.1 Regra visual oficial
+
+A UI do MVP deve obedecer às seguintes regras:
+
+- textos, números, barras e estados interativos permanecem em código;
+- assets bitmap são usados para molduras, ilustrações, texturas e ornamentação;
+- cartas de molécula seguem modelo híbrido orientado a dados;
+- a oficina por blueprints deve tornar visíveis slots, estados de preenchimento e ação de forja.
 
 ### 10.3 Estado no frontend
 
@@ -334,7 +360,7 @@ No MVP, o gerenciamento de estado deve permanecer leve.
 Separação recomendada:
 
 - **estado de servidor:** progresso, inventário, conteúdo carregado, resultados persistidos;
-- **estado de cliente:** interações temporárias, seleção atual, estado local do builder e feedback transitório.
+- **estado de cliente:** interações temporárias, blueprint ativo, preenchimento de slots, seleção atual, estado local do builder e feedback transitório.
 
 Não há necessidade de biblioteca pesada de estado global no MVP, salvo necessidade prática comprovada.
 
@@ -350,6 +376,8 @@ O backend é responsável por:
 - entrega controlada de conteúdo dinâmico;
 - validação de payloads;
 - validação estrutural do builder;
+- validação do blueprint e do preenchimento de slots;
+- resolução da assinatura estrutural em molécula oficial;
 - avaliação de fases;
 - aplicação de progresso, recompensas e inventário;
 - persistência do estado do jogador.
@@ -1194,3 +1222,24 @@ Os princípios técnicos mais importantes são:
 - a arquitetura permanece simples o suficiente para entregar o MVP sem sistemas desnecessários.
 
 Esta é a direção técnica oficial para o MVP.
+
+
+### 11.3 Contrato do builder molecular
+
+O contrato técnico do builder deve evoluir para representar explicitamente:
+
+- blueprint ativo;
+- lista de slots definidos pelo blueprint;
+- ocupação atual de cada slot;
+- elementos disponíveis no inventário da fase;
+- resultado estrutural resolvido.
+
+Esse contrato substitui progressivamente abordagens simplificadas baseadas apenas em contagem de carbonos e tipo de ligação.
+
+### 11.4 Fronteira entre conteúdo e visual
+
+A camada de conteúdo pode incluir campos visuais orientados a assets, mas:
+
+- a lógica de progressão continua independente da apresentação;
+- o backend não depende de bitmaps para validar gameplay;
+- a UI usa esses campos apenas para renderização visual consistente.

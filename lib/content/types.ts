@@ -34,6 +34,36 @@ export type ChemicalClass = "alcano" | "alceno" | "aromatico";
 
 export type BondType = "single" | "double" | "aromatic";
 
+export type MoleculeVisualState =
+  | "default"
+  | "locked"
+  | "unlocked"
+  | "newly_created"
+  | "selected"
+  | "rewarded";
+
+export type MoleculeAttributePalette = "hydrocarbon" | "alkene" | "aromatic";
+
+export type MoleculeVisualAssets = {
+  artworkAsset: string;
+  frameAsset: string;
+  textureAsset?: string;
+  iconAsset?: string;
+};
+
+export type MoleculeCardVisual = {
+  assets: MoleculeVisualAssets;
+  accentFrom: string;
+  accentTo: string;
+  attributePalette: MoleculeAttributePalette;
+  preferredLayout: "expanded" | "compact";
+  stateVariants?: Partial<Record<MoleculeVisualState, {
+    frameAsset?: string;
+    textureAsset?: string;
+    badgeLabel?: string;
+  }>>;
+};
+
 export type SelectableProperty =
   | "saturada"
   | "insaturada"
@@ -77,6 +107,7 @@ export type Molecule = {
   descricaoCurta: string;
   pontosFortes: string[];
   limitacoes: string[];
+  visual: MoleculeCardVisual;
 };
 
 export type PhaseResources = {

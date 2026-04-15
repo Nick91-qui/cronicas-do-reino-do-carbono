@@ -221,6 +221,34 @@ Toda molécula do MVP deve ter todos os atributos preenchidos na mesma escala.
 ## Modelo oficial de molécula
 
 ```ts
+type MoleculeVisualState =
+  | "default"
+  | "locked"
+  | "unlocked"
+  | "newly_created"
+  | "selected"
+  | "rewarded";
+
+type MoleculeVisualAssets = {
+  artworkAsset: string;
+  frameAsset: string;
+  textureAsset?: string;
+  iconAsset?: string;
+};
+
+type MoleculeCardVisual = {
+  assets: MoleculeVisualAssets;
+  accentFrom: string;
+  accentTo: string;
+  attributePalette: "hydrocarbon" | "alkene" | "aromatic";
+  preferredLayout: "expanded" | "compact";
+  stateVariants?: Partial<Record<MoleculeVisualState, {
+    frameAsset?: string;
+    textureAsset?: string;
+    badgeLabel?: string;
+  }>>;
+};
+
 type Molecule = {
   id: string;
   nomeQuimico: string;
@@ -235,6 +263,7 @@ type Molecule = {
   descricaoCurta: string;
   pontosFortes: string[];
   limitacoes: string[];
+  visual: MoleculeCardVisual;
 };
 ```
 
@@ -570,3 +599,76 @@ Serve para limitar ou ampliar possibilidades de construção.
 ### Nota pedagógica
 
 Serve para documentação e mediação, não necessariamente para exibição na interface.
+
+### Modelo visual oficial de molécula
+
+A camada visual da molécula deve permanecer acoplada ao conteúdo estático, mas separada da lógica de gameplay.
+
+### Objetivo
+
+O campo `visual` existe para:
+
+- ligar a molécula aos assets oficiais da carta;
+- padronizar gradientes, molduras e textura;
+- permitir estados visuais sem alterar dados químicos;
+- manter a renderização da carta orientada por conteúdo.
+
+### Regras para o campo `visual`
+
+- `artworkAsset` aponta para a arte principal da molécula;
+- `frameAsset` aponta para a moldura padrão da carta;
+- `textureAsset` é opcional e cobre texturas de base;
+- `iconAsset` é opcional e cobre usos compactos;
+- `accentFrom` e `accentTo` definem gradiente ou cor de destaque em UI viva;
+- `stateVariants` só altera decoração e selo visual, nunca conteúdo textual.
+
+### Exemplo oficial
+
+```ts
+const metano = {
+  id: "metano",
+  nomeQuimico: "Metano",
+  nomeEpico: "O Primeiro Sopro",
+  formulaMolecular: "CH4",
+  formulaEstrutural: "CH4",
+  classe: "alcano",
+  carbonos: 1,
+  tipoDeLigacao: "single",
+  atributos: {
+    polaridade: 1,
+    potencialEnergetico: 4,
+    reatividade: 1,
+    estabilidade: 4,
+    caraterAcidoBasico: 1,
+    interacaoBiologica: 2,
+    volatilidade: 5,
+  },
+  propriedades: ["saturada", "aberta", "homogenea"],
+  descricaoCurta: "A menor e mais simples molécula orgânica da jornada.",
+  pontosFortes: ["estrutura simples", "alta volatilidade"],
+  limitacoes: ["baixa reatividade"],
+  visual: {
+    assets: {
+      artworkAsset: "/visual/cards/art/molecule-metano-main.png",
+      frameAsset: "/visual/cards/frames/card-frame-common.png",
+      textureAsset: "/visual/cards/textures/card-texture-paper-v1.png",
+      iconAsset: "/visual/icons/molecule-metano-icon.png",
+    },
+    accentFrom: "#21d4fd",
+    accentTo: "#b721ff",
+    attributePalette: "hydrocarbon",
+    preferredLayout: "expanded",
+    stateVariants: {
+      unlocked: {
+        badgeLabel: "Desbloqueada",
+      },
+      newly_created: {
+        badgeLabel: "Forjada",
+      },
+      selected: {
+        badgeLabel: "Selecionada",
+      },
+    },
+  },
+};
+```

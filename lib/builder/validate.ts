@@ -1,7 +1,16 @@
 import { getPhaseById } from "@/lib/content/loaders";
 import type { BondType, FragmentId, MoleculeId, PhaseId } from "@/lib/content/types";
 
-import type { BuilderDerivedStructure, BuilderState, BuilderValidationResult } from "@/lib/builder/types";
+import type {
+  BlueprintBuilderState,
+  BuilderBlueprintId,
+  BuilderDerivedStructure,
+  BuilderFilledSlot,
+  BuilderSignatureEntry,
+  BuilderState,
+  BuilderValidationResult,
+  LegacyBuilderState,
+} from "@/lib/builder/types";
 
 const officialMoleculeMap: Record<BondType, Partial<Record<number, MoleculeId>>> = {
   single: {
@@ -18,6 +27,55 @@ const officialMoleculeMap: Record<BondType, Partial<Record<number, MoleculeId>>>
     6: "benzeno",
   },
 };
+
+const blueprintDefinitions: Record<BuilderBlueprintId, { bondType: BondType; slots: Array<{ slotId: string; bondOrder: 1 | 2 | 3 }> }> = {
+  tetra_single: {
+    bondType: "single",
+    slots: [
+      { slotId: "s1", bondOrder: 1 },
+      { slotId: "s2", bondOrder: 1 },
+      { slotId: "s3", bondOrder: 1 },
+      { slotId: "s4", bondOrder: 1 },
+    ],
+  },
+  trigonal_double: {
+    bondType: "double",
+    slots: [
+      { slotId: "d1", bondOrder: 2 },
+      { slotId: "s1", bondOrder: 1 },
+      { slotId: "s2", bondOrder: 1 },
+    ],
+  },
+  linear_triple: {
+    bondType: "double",
+    slots: [
+      { slotId: "t1", bondOrder: 3 },
+      { slotId: "s1", bondOrder: 1 },
+    ],
+  },
+  linear_two_doubles: {
+    bondType: "double",
+    slots: [
+      { slotId: "d1", bondOrder: 2 },
+      { slotId: "d2", bondOrder: 2 },
+    ],
+  },
+  aromatic_ring: {
+    bondType: "aromatic",
+    slots: [
+      { slotId: "a1", bondOrder: 1 },
+      { slotId: "a2", bondOrder: 1 },
+      { slotId: "a3", bondOrder: 1 },
+      { slotId: "a4", bondOrder: 1 },
+      { slotId: "a5", bondOrder: 1 },
+      { slotId: "a6", bondOrder: 1 },
+    ],
+  },
+};
+
+function isLegacyBuilderState(builderState: BuilderState): builderState is LegacyBuilderState {
+  return "carbonCount" in builderState;
+}
 
 function getRequiredFragmentId(bondType: BondType): FragmentId {
   if (bondType === "single") return "ligacao_simples";
@@ -57,7 +115,7 @@ function getFormulaEstrutural(carbonCount: number, bondType: BondType): string {
   return `C${carbonCount}H${getHydrogenCount(carbonCount, bondType)}`;
 }
 
-function deriveStructure(builderState: BuilderState): BuilderDerivedStructure {
+function deriveLegacyStructure(builderState: LegacyBuilderState): BuilderDerivedStructure {
   const hydrogenCount = getHydrogenCount(builderState.carbonCount, builderState.bondType);
 
   return {
@@ -69,7 +127,68 @@ function deriveStructure(builderState: BuilderState): BuilderDerivedStructure {
   };
 }
 
-function validateStructuralRules(builderState: BuilderState, errors: string[]): boolean {
+function normalizeBlueprintSignature(builderState: BlueprintBuilderState): BuilderSignatureEntry[] {
+  const definition = blueprintDefinitions[builderState.blueprintId];
+  const counts = new Map<string, BuilderSignatureEntry>();
+
+  for (const slot of builderState.slots) {
+    if (!slot.element) continue;
+    const slotDefinition = definition.slots.find((item) => item.slotId === slot.slotId);
+    if (!slotDefinition) continue;
+
+    const key = `${slotDefinition.bondOrder}:${slot.element}`;
+    const current = counts.get(key);
+
+    if (current) {
+      current.count += 1;
+      continue;
+    }
+
+    counts.set(key, {
+      bondOrder: slotDefinition.bondOrder,
+      element: slot.element,
+      count: 1,
+    });
+  }
+
+  return [...counts.values()].sort((left, right) => {
+    if (left.bondOrder !== right.bondOrder) {
+      return left.bondOrder - right.bondOrder;
+    }
+
+    return left.element.localeCompare(right.element);
+  });
+}
+
+function deriveBlueprintStructure(builderState: BlueprintBuilderState): BuilderDerivedStructure {
+  const definition = blueprintDefinitions[builderState.blueprintId];
+  const carbonCount = 1 + builderState.slots.filter((slot) => slot.element === "C").length;
+  const hydrogenCount = builderState.slots.filter((slot) => slot.element === "H").length;
+  const oxygenCount = builderState.slots.filter((slot) => slot.element === "O").length;
+  const signature = normalizeBlueprintSignature(builderState);
+  const formulaParts = [`C${carbonCount}`];
+
+  if (hydrogenCount > 0) {
+    formulaParts.push(`H${hydrogenCount}`);
+  }
+
+  if (oxygenCount > 0) {
+    formulaParts.push(`O${oxygenCount}`);
+  }
+
+  return {
+    blueprintId: builderState.blueprintId,
+    carbonCount,
+    hydrogenCount,
+    oxygenCount: oxygenCount || undefined,
+    bondType: definition.bondType,
+    formulaMolecular: formulaParts.join(""),
+    formulaEstrutural: `${builderState.blueprintId}:${builderState.slots.map((slot) => slot.element ?? "_").join("-")}`,
+    signature,
+  };
+}
+
+function validateLegacyStructuralRules(builderState: LegacyBuilderState, errors: string[]): boolean {
   if (builderState.bondType === "single" && builderState.carbonCount < 1) {
     errors.push("Estruturas com ligação simples precisam ter pelo menos 1 carbono.");
   }
@@ -85,8 +204,55 @@ function validateStructuralRules(builderState: BuilderState, errors: string[]): 
   return errors.length === 0;
 }
 
+function validateBlueprintStructuralRules(builderState: BlueprintBuilderState, errors: string[]): boolean {
+  const definition = blueprintDefinitions[builderState.blueprintId];
+  const expectedSlotIds = new Set(definition.slots.map((slot) => slot.slotId));
+  const receivedSlotIds = new Set(builderState.slots.map((slot) => slot.slotId));
+
+  if (definition.slots.length !== builderState.slots.length) {
+    errors.push("O blueprint exige o preenchimento de todos os slots oficiais.");
+  }
+
+  for (const expectedSlotId of expectedSlotIds) {
+    if (!receivedSlotIds.has(expectedSlotId)) {
+      errors.push("Existem slots obrigatórios não informados no blueprint.");
+      break;
+    }
+  }
+
+  for (const slot of builderState.slots) {
+    if (!expectedSlotIds.has(slot.slotId)) {
+      errors.push("O blueprint recebeu um slot desconhecido.");
+      break;
+    }
+
+    if (!slot.element) {
+      errors.push("Todos os slots precisam ser preenchidos antes da forja.");
+      break;
+    }
+  }
+
+  return errors.length === 0;
+}
+
 export function resolveOfficialMoleculeId(builderState: BuilderState): MoleculeId | null {
-  return officialMoleculeMap[builderState.bondType][builderState.carbonCount] ?? null;
+  if (isLegacyBuilderState(builderState)) {
+    return officialMoleculeMap[builderState.bondType][builderState.carbonCount] ?? null;
+  }
+
+  const signature = normalizeBlueprintSignature(builderState);
+
+  if (
+    builderState.blueprintId === "tetra_single"
+    && signature.length === 1
+    && signature[0].bondOrder === 1
+    && signature[0].element === "H"
+    && signature[0].count === 4
+  ) {
+    return "metano";
+  }
+
+  return null;
 }
 
 export function validateBuilderStateForPhase(
@@ -100,22 +266,37 @@ export function validateBuilderStateForPhase(
     errors.push("Esta fase não suporta construção molecular.");
   }
 
-  if (builderState.carbonCount > phase.resources.carbonAvailable) {
+  let bondType: BondType;
+  let carbonCount: number;
+
+  if (isLegacyBuilderState(builderState)) {
+    bondType = builderState.bondType;
+    carbonCount = builderState.carbonCount;
+  } else {
+    bondType = blueprintDefinitions[builderState.blueprintId].bondType;
+    carbonCount = 1 + builderState.slots.filter((slot: BuilderFilledSlot) => slot.element === "C").length;
+  }
+
+  if (carbonCount > phase.resources.carbonAvailable) {
     errors.push("A estrutura usa mais carbonos do que a fase permite.");
   }
 
-  const requiredFragmentId = getRequiredFragmentId(builderState.bondType);
+  const requiredFragmentId = getRequiredFragmentId(bondType);
 
   if (!phase.resources.availableFragments.includes(requiredFragmentId)) {
     errors.push("O tipo de ligação escolhido não está desbloqueado nesta fase.");
   }
 
-  const structuralValid = validateStructuralRules(builderState, errors);
-  const derivedStructure = structuralValid ? deriveStructure(builderState) : null;
+  const structuralValid = isLegacyBuilderState(builderState)
+    ? validateLegacyStructuralRules(builderState, errors)
+    : validateBlueprintStructuralRules(builderState, errors);
+  const derivedStructure = structuralValid
+    ? (isLegacyBuilderState(builderState) ? deriveLegacyStructure(builderState) : deriveBlueprintStructure(builderState))
+    : null;
   const resolvedMoleculeId = structuralValid ? resolveOfficialMoleculeId(builderState) : null;
 
   if (structuralValid && !resolvedMoleculeId) {
-    errors.push("A estrutura é válida, mas não corresponde a uma molécula oficial disponível no MVP.");
+    errors.push("A estrutura é válida, mas ainda não corresponde a uma molécula oficial disponível no MVP.");
   }
 
   return {

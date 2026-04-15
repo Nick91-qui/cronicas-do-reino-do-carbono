@@ -18,6 +18,8 @@ const qualitativeResults = ["excellent", "adequate", "inadequate"] as const;
 const validationResults = ["correct", "incorrect"] as const;
 const chemicalClasses = ["alcano", "alceno", "aromatico"] as const;
 const bondTypes = ["single", "double", "aromatic"] as const;
+const moleculeVisualStates = ["default", "locked", "unlocked", "newly_created", "selected", "rewarded"] as const;
+const moleculeAttributePalettes = ["hydrocarbon", "alkene", "aromatic"] as const;
 const selectableProperties = [
   "saturada",
   "insaturada",
@@ -47,6 +49,8 @@ export const qualitativeResultSchema = z.enum(qualitativeResults);
 export const validationResultSchema = z.enum(validationResults);
 export const chemicalClassSchema = z.enum(chemicalClasses);
 export const bondTypeSchema = z.enum(bondTypes);
+export const moleculeVisualStateSchema = z.enum(moleculeVisualStates);
+export const moleculeAttributePaletteSchema = z.enum(moleculeAttributePalettes);
 export const selectablePropertySchema = z.enum(selectableProperties);
 
 export const moleculeAttributesSchema = z.object({
@@ -57,6 +61,29 @@ export const moleculeAttributesSchema = z.object({
   caraterAcidoBasico: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
   interacaoBiologica: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
   volatilidade: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
+});
+
+export const moleculeVisualAssetsSchema = z.object({
+  artworkAsset: z.string().min(1),
+  frameAsset: z.string().min(1),
+  textureAsset: z.string().min(1).optional(),
+  iconAsset: z.string().min(1).optional(),
+});
+
+export const moleculeCardVisualSchema = z.object({
+  assets: moleculeVisualAssetsSchema,
+  accentFrom: z.string().min(1),
+  accentTo: z.string().min(1),
+  attributePalette: moleculeAttributePaletteSchema,
+  preferredLayout: z.enum(["expanded", "compact"]),
+  stateVariants: z.record(
+    moleculeVisualStateSchema,
+    z.object({
+      frameAsset: z.string().min(1).optional(),
+      textureAsset: z.string().min(1).optional(),
+      badgeLabel: z.string().min(1).optional(),
+    }),
+  ).optional(),
 });
 
 export const moleculeSchema = z.object({
@@ -73,6 +100,7 @@ export const moleculeSchema = z.object({
   descricaoCurta: z.string().min(1),
   pontosFortes: z.array(z.string().min(1)),
   limitacoes: z.array(z.string().min(1)),
+  visual: moleculeCardVisualSchema,
 });
 
 export const phaseResourcesSchema = z.object({

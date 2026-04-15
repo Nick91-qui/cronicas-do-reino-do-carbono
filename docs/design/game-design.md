@@ -4,7 +4,7 @@
 
 Este documento define as regras oficiais de design do MVP de **Crônicas do Reino do Carbono**. Seu papel é consolidar os sistemas centrais do jogo, eliminando ambiguidades entre produto, conteúdo, interface e implementação.
 
-O foco deste documento é o funcionamento do jogo, e não os detalhes narrativos, pedagógicos ou técnicos de implementação.
+O foco deste documento é o funcionamento do jogo, e não os detalhes narrativos, pedagógicos ou técnicos de implementação. A camada visual oficial do MVP é complementar e deve ser consultada em `docs/visual/`.
 
 ## Princípio central do gameplay
 
@@ -100,45 +100,67 @@ A oficina molecular é a principal mecânica de construção do MVP. Ela deve of
 
 ### Modelo adotado
 
-O MVP usará uma oficina **híbrida semilivre**.
+O MVP usará uma oficina **híbrida semilivre guiada por blueprints**.
 
 Isso significa que:
 
-- o jogador interage com átomos e possibilidades de ligação de forma visual;
-- a interface permite montar estruturas simplificadas;
+- o jogador interage com um núcleo de carbono central e slots visuais de valência;
+- a interface oferece blueprints de hibridização válidos para a fase;
+- cada blueprint define a geometria e o tipo de ligação de seus slots;
 - o sistema guia a construção dentro de limites definidos;
 - a validação da molécula é feita automaticamente.
+
+### Blueprints oficiais do MVP
+
+A oficina deve trabalhar com quatro configurações base de blueprint:
+
+- Configuração A: quatro slots simples;
+- Configuração B: um slot duplo e dois slots simples;
+- Configuração C: um slot triplo e um slot simples;
+- Configuração D: dois slots duplos opostos.
+
+Esses blueprints representam distribuições de valência e funcionam como forma pedagógica de introduzir geometrias e tipos de ligação sem recorrer a um editor químico livre completo.
 
 ### Recursos manipuláveis
 
 Na oficina, o jogador poderá trabalhar com:
 
-- quantidade disponível de carbonos;
-- ligações estruturais permitidas na fase;
-- arranjo simplificado da cadeia;
-- hidrogênios ajustados pelo sistema.
+- blueprint disponível na fase;
+- slots visuais vazios ou preenchidos;
+- inventário de elementos liberados;
+- quantidade disponível de carbonos e outros átomos limitados;
+- hidrogênios ilimitados.
 
 ### Regra dos hidrogênios
 
-No MVP, os hidrogênios **não serão posicionados manualmente como elemento principal de montagem**.
+No MVP com blueprint, os hidrogênios continuam simples de usar, mas passam a ser tratados como preenchimento explícito de slot quando necessário para a leitura pedagógica da valência.
 
-O jogador:
+Isso significa que:
 
-- posiciona carbonos;
-- escolhe a configuração de ligações disponível;
-- o sistema completa os hidrogênios automaticamente por ligações simples, quando a estrutura for válida.
+- o aluno pode encaixar hidrogênios nos slots disponíveis;
+- hidrogênios continuam ilimitados;
+- outros elementos seguem os limites definidos pela fase;
+- a UI deve tornar claro que o carbono precisa completar quatro valências distribuídas entre ligações simples, duplas ou triplas.
+
+### Sistema de interação por slots
+
+A oficina deve operar por preenchimento de slots:
+
+- slots vazios aparecem como círculos ou encaixes visuais;
+- ao clicar em um slot, o jogador escolhe um elemento no inventário contextual;
+- o elemento selecionado ocupa o slot e recebe feedback luminoso;
+- o botão de criação só pode ser acionado quando todos os slots exigidos pelo blueprint estiverem preenchidos.
 
 ### Configurações de ligação
 
-A oficina deve permitir, de forma progressiva, configurações como:
+A disponibilidade dos blueprints e tipos de ligação depende do avanço do jogador e dos recursos já liberados.
 
-- quatro ligações simples;
-- uma ligação dupla e duas simples;
-- duas ligações duplas;
-- uma ligação tripla e uma simples;
-- estrutura aromática, quando desbloqueada.
+No Capítulo I, a progressão esperada continua sendo:
 
-A disponibilidade dessas configurações depende do avanço do jogador e dos recursos já liberados.
+- início com estruturas simples;
+- desbloqueio posterior de ligação dupla;
+- expansão futura para tripla e duas duplas quando o conteúdo exigir;
+- uso de estrutura aromática como caso especial quando desbloqueado.
 
 ### Validação de estrutura
 
@@ -150,9 +172,10 @@ Exemplo:
 
 O sistema então:
 
-- verifica a consistência estrutural;
-- ajusta os hidrogênios conforme as regras simplificadas;
-- cria a molécula se a estrutura for válida;
+- verifica se todos os slots do blueprint foram preenchidos;
+- verifica se a combinação respeita o inventário e as regras da fase;
+- compara a assinatura estrutural resultante com a base oficial do MVP;
+- cria a molécula se a combinação for válida;
 - impede a criação se houver inconsistência.
 
 ### Regra oficial de erro estrutural
@@ -163,7 +186,20 @@ Se houver erro estrutural, o jogo deve retornar uma mensagem curta, clara e obje
 
 - ligações inconsistentes;
 - estrutura incompatível;
+- a estrutura colapsou;
 - não foi possível criar a molécula.
+
+### Camada visual da oficina
+
+A oficina molecular deve ser apresentada como uma interface ritual-científica com:
+
+- carbono central em destaque;
+- slots distribuídos visualmente conforme o blueprint;
+- action bar destacada;
+- animação de forja em caso de sucesso;
+- leitura clara de estados vazios, preenchidos, válidos e inválidos.
+
+A especificação visual dessa camada deve permanecer alinhada com `docs/visual/ui-system.md` e `docs/visual/visual-direction.md`.
 
 ## Inventário
 
@@ -234,6 +270,16 @@ A carta deve ajudar o jogador a:
 - ler atributos e características;
 - decidir se aquela molécula é adequada para o desafio atual;
 - comparar alternativas já conhecidas.
+
+### Regra visual das cartas
+
+As cartas oficiais do MVP devem seguir o modelo híbrido definido em `docs/visual/card-spec.md` e `docs/visual/asset-pipeline.md`.
+
+Isso significa que:
+
+- arte, moldura e textura podem usar bitmap;
+- texto, atributos, barras e estados continuam vivos em interface;
+- a carta deve continuar responsiva, comparável e guiada por dados.
 
 ### Coleção de cartas
 

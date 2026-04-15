@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { BuilderValidationResult } from "@/lib/builder/types";
 import type { ChapterProgressView } from "@/lib/progress/queries";
 import type { BuilderState } from "@/lib/builder/types";
-import type { Molecule, MoleculeId, Phase, SelectableProperty } from "@/lib/content/types";
+import type { BondType, Molecule, MoleculeId, Phase, SelectableProperty } from "@/lib/content/types";
 
 type PersistedResponse = {
   evaluation: {
@@ -54,15 +54,15 @@ const fragmentToBondType = {
   ligacao_simples: "single",
   ligacao_dupla: "double",
   estrutura_aromatica: "aromatic",
-} as const satisfies Record<string, BuilderState["bondType"]>;
+} as const satisfies Record<string, BondType>;
 
-const bondTypeLabels: Record<BuilderState["bondType"], string> = {
+const bondTypeLabels: Record<BondType, string> = {
   single: "Ligação simples",
   double: "Ligação dupla",
   aromatic: "Estrutura aromática",
 };
 
-function getDefaultBondType(phase: Phase): BuilderState["bondType"] {
+function getDefaultBondType(phase: Phase): BondType {
   for (const fragmentId of phase.resources.availableFragments) {
     return fragmentToBondType[fragmentId];
   }
@@ -78,7 +78,7 @@ function getNextPhaseHref(chapterProgress: ChapterProgressView, currentPhaseNumb
 export function PhaseExperience({ phase, molecules, chapterProgress }: PhaseExperienceProps) {
   const router = useRouter();
   const [carbonCount, setCarbonCount] = useState(String(Math.max(1, Math.min(phase.resources.carbonAvailable, 1))));
-  const [bondType, setBondType] = useState<BuilderState["bondType"]>(getDefaultBondType(phase));
+  const [bondType, setBondType] = useState<BondType>(getDefaultBondType(phase));
   const [builderResult, setBuilderResult] = useState<BuilderValidationResult | null>(null);
   const [selectedMoleculeId, setSelectedMoleculeId] = useState<MoleculeId | "">("");
   const [selectedProperties, setSelectedProperties] = useState<SelectableProperty[]>([]);
@@ -270,7 +270,7 @@ export function PhaseExperience({ phase, molecules, chapterProgress }: PhaseExpe
                   <span className="mb-2 block text-slate-200">Tipo de ligação</span>
                   <select
                     value={bondType}
-                    onChange={(event) => setBondType(event.target.value as BuilderState["bondType"])}
+                    onChange={(event) => setBondType(event.target.value as BondType)}
                     className="w-full rounded-xl border border-white/10 bg-slate-950 px-4 py-3 text-slate-100 outline-none"
                   >
                     {phase.resources.availableFragments.map((fragmentId) => {

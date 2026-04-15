@@ -129,6 +129,25 @@ inadequate -> incorrect -> 0
 - **Legado removido:** `archive/` excluído para evitar ambiguidade
 - **Próximo passo imediato:** iniciar o **Milestone 1 — Fundação do projeto**
 
+## Estrutura documental visual
+
+Para cobrir a camada visual do produto, a documentação oficial também inclui uma trilha dedicada em `docs/visual/`:
+
+- `visual-direction.md`
+- `ui-system.md`
+- `screen-map.md`
+- `asset-pipeline.md`
+- `card-spec.md`
+
+Essa trilha existe para separar claramente:
+
+- regras de gameplay;
+- conteúdo pedagógico;
+- direção visual;
+- organização de interface e assets.
+
+Ela também define o vínculo entre conteúdo estático e apresentação por meio de campos visuais orientados a assets, especialmente para cartas de molécula.
+
 ## Próximo passo operacional
 
 Executar o Milestone 1 com foco em:

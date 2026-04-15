@@ -1,4 +1,36 @@
-import type { Molecule } from "@/lib/content/types";
+import type { ChemicalClass, Molecule, MoleculeAttributePalette, MoleculeId } from "@/lib/content/types";
+
+function getPalette(classe: ChemicalClass): MoleculeAttributePalette {
+  if (classe === "alceno") return "alkene";
+  if (classe === "aromatico") return "aromatic";
+  return "hydrocarbon";
+}
+
+function buildVisual(id: MoleculeId, classe: ChemicalClass, badgeLabel: string) {
+  return {
+    assets: {
+      artworkAsset: `/visual/cards/art/molecule-${id}-main.png`,
+      frameAsset: "/visual/cards/frames/card-frame-common.png",
+      textureAsset: "/visual/cards/textures/card-texture-paper-v1.png",
+      iconAsset: `/visual/icons/molecule-${id}-icon.png`,
+    },
+    accentFrom: classe === "aromatico" ? "#f7c948" : classe === "alceno" ? "#22c55e" : "#21d4fd",
+    accentTo: classe === "aromatico" ? "#f97316" : classe === "alceno" ? "#0ea5e9" : "#b721ff",
+    attributePalette: getPalette(classe),
+    preferredLayout: "expanded" as const,
+    stateVariants: {
+      unlocked: {
+        badgeLabel,
+      },
+      newly_created: {
+        badgeLabel: "Forjada",
+      },
+      selected: {
+        badgeLabel: "Selecionada",
+      },
+    },
+  };
+}
 
 export const chapter1Molecules: Molecule[] = [
   {
@@ -15,6 +47,7 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "A menor e mais simples molécula orgânica da jornada.",
     pontosFortes: ["estrutura simples", "alta volatilidade", "boa introdução à tetravalência do carbono"],
     limitacoes: ["baixa reatividade", "baixa versatilidade estrutural"],
+    visual: buildVisual("metano", "alcano", "Desbloqueada"),
   },
   {
     id: "etano",
@@ -30,6 +63,7 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "O primeiro crescimento de cadeia do reino.",
     pontosFortes: ["introduz ligação C-C", "estrutura estável", "bom exemplo de alcano simples"],
     limitacoes: ["reatividade baixa", "menos volátil que o metano"],
+    visual: buildVisual("etano", "alcano", "Desbloqueada"),
   },
   {
     id: "propano",
@@ -45,6 +79,7 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "O alcano mais representativo para o desafio energético inicial.",
     pontosFortes: ["alto potencial energético", "bom uso em contexto de combustível", "cadeia maior que metano e etano"],
     limitacoes: ["menos volátil que alcanos menores", "reatividade baixa"],
+    visual: buildVisual("propano", "alcano", "Desbloqueada"),
   },
   {
     id: "eteno",
@@ -60,6 +95,7 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "A primeira estrutura insaturada da jornada.",
     pontosFortes: ["introduz a ligação dupla", "mais reativo que etano", "base para transformação e polimerização"],
     limitacoes: ["menos estável que alcanos equivalentes"],
+    visual: buildVisual("eteno", "alceno", "Desbloqueada"),
   },
   {
     id: "propeno",
@@ -75,6 +111,7 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "Um alceno aceitável para transformação e polimerização.",
     pontosFortes: ["reativo", "útil em contexto de transformação", "aceitável em contextos de polimerização"],
     limitacoes: ["menos direto que eteno para introdução pedagógica"],
+    visual: buildVisual("propeno", "alceno", "Desbloqueada"),
   },
   {
     id: "buteno",
@@ -90,6 +127,7 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "Uma cadeia maior que mantém a lógica da insaturação.",
     pontosFortes: ["mantém comportamento de alceno", "aceitável como precursor em contexto amplo de polímeros"],
     limitacoes: ["menos direto para introdução do conceito"],
+    visual: buildVisual("buteno", "alceno", "Desbloqueada"),
   },
   {
     id: "benzeno",
@@ -105,5 +143,6 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "Estrutura aromática introdutória com estabilidade especial.",
     pontosFortes: ["aromaticidade", "estabilidade diferenciada", "fecha o arco conceitual do capítulo"],
     limitacoes: ["não deve ser confundido com alceno comum"],
+    visual: buildVisual("benzeno", "aromatico", "Desbloqueada"),
   },
 ];
