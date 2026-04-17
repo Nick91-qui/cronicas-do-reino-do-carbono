@@ -7,7 +7,21 @@ import { useEffect, useState } from "react";
 import { MoleculeCard } from "@/components/cards/molecule-card";
 import { AtomForge } from "@/components/phase/atom-forge";
 
-import type { BuilderState, BuilderValidationResult } from "@/lib/builder/types";
+import type {
+  BuilderLayout,
+  BuilderState,
+  BuilderValidationResult,
+  GraphBuilderBondOrder,
+} from "@/lib/builder/types";
+import {
+  buildGraphBuilderState,
+  getBuilderBondType,
+  getClosedRingCarbonLimit,
+  getHydrogensByCarbon,
+  getPreviewFormulaEstrutural,
+  getPreviewFormulaMolecular,
+  normalizeBondOrders,
+} from "@/lib/builder/graph-preview";
 import type {
   BondType,
   Molecule,
@@ -59,8 +73,6 @@ type PhaseExperienceProps = {
 };
 
 type PhaseStep = "intro" | "forge" | "choice" | "justify" | "result";
-type BuilderLayout = "open_chain" | "closed_ring";
-type BuilderBondOrder = 1 | 2;
 
 const fragmentToBondType = {
   ligacao_simples: "single",
@@ -123,117 +135,6 @@ const stepCopy: Record<Exclude<PhaseStep, "result">, { eyebrow: string; title: s
   },
 };
 
-function getBondSlotCount(layout: BuilderLayout, carbonCount: number): number {
-  return layout === "closed_ring"
-    ? Math.max(0, carbonCount)
-    : Math.max(0, carbonCount - 1);
-}
-
-function normalizeBondOrders(
-  currentOrders: BuilderBondOrder[],
-  layout: BuilderLayout,
-  carbonCount: number,
-): BuilderBondOrder[] {
-  const nextCount = getBondSlotCount(layout, carbonCount);
-
-  return Array.from({ length: nextCount }, (_, index) => currentOrders[index] ?? 1);
-}
-
-function getBuilderBondType(
-  layout: BuilderLayout,
-  carbonCount: number,
-  bondOrders: BuilderBondOrder[],
-): BondType {
-  if (
-    layout === "closed_ring"
-    && carbonCount === 6
-    && bondOrders.length === 6
-    && (
-      bondOrders.every((order, index) => order === (index % 2 === 0 ? 2 : 1))
-      || bondOrders.every((order, index) => order === (index % 2 === 0 ? 1 : 2))
-    )
-  ) {
-    return "aromatic";
-  }
-
-  return bondOrders.some((order) => order === 2) ? "double" : "single";
-}
-
-function buildGraphBuilderState(
-  layout: BuilderLayout,
-  carbonCount: number,
-  bondOrders: BuilderBondOrder[],
-): BuilderState {
-  return {
-    layout,
-    carbonCount,
-    bonds: bondOrders.map((order, index) => ({
-      from: index,
-      to: layout === "closed_ring" ? (index + 1) % carbonCount : index + 1,
-      order,
-    })),
-  };
-}
-
-function getHydrogensByCarbon(
-  layout: BuilderLayout,
-  carbonCount: number,
-  bondOrders: BuilderBondOrder[],
-): number[] {
-  const valenceByCarbon = Array.from({ length: carbonCount }, () => 0);
-
-  bondOrders.forEach((order, index) => {
-    const from = index;
-    const to = layout === "closed_ring" ? (index + 1) % carbonCount : index + 1;
-
-    if (from < carbonCount) {
-      valenceByCarbon[from] += order;
-    }
-
-    if (to < carbonCount) {
-      valenceByCarbon[to] += order;
-    }
-  });
-
-  return valenceByCarbon.map((valence) => Math.max(0, 4 - valence));
-}
-
-function getPreviewFormulaEstrutural(
-  layout: BuilderLayout,
-  hydrogensByCarbon: number[],
-  bondOrders: BuilderBondOrder[],
-  bondType: BondType,
-): string {
-  if (layout === "closed_ring" && bondType === "aromatic") {
-    return "anel(CH=CH)3";
-  }
-
-  const groups = hydrogensByCarbon.map((hydrogenCount) => {
-    if (hydrogenCount <= 0) return "C";
-    if (hydrogenCount === 1) return "CH";
-    return `CH${hydrogenCount}`;
-  },
-  );
-
-  if (layout === "closed_ring") {
-    return `ciclo(${groups.join("-")})`;
-  }
-
-  return groups
-    .map((group, index) => {
-      if (index === groups.length - 1) {
-        return group;
-      }
-
-      return `${group}${bondOrders[index] === 2 ? "=" : "-"}`;
-    })
-    .join("");
-}
-
-function getClosedRingCarbonLimit(phase: Phase): number {
-  return Math.min(9, phase.resources.carbonAvailable);
-}
-
 function getNextPhaseHref(
   chapterProgress: ChapterProgressView,
   currentPhaseNumber: number,
@@ -283,7 +184,7 @@ export function PhaseExperience({
   const [carbonCount, setCarbonCount] = useState(
     String(Math.max(1, Math.min(phase.resources.carbonAvailable, 1))),
   );
-  const [bondOrders, setBondOrders] = useState<BuilderBondOrder[]>([]);
+  const [bondOrders, setBondOrders] = useState<GraphBuilderBondOrder[]>([]);
   const [builderResult, setBuilderResult] =
     useState<BuilderValidationResult | null>(null);
   const [selectedMoleculeId, setSelectedMoleculeId] = useState<MoleculeId | "">(
@@ -353,10 +254,10 @@ export function PhaseExperience({
     normalizedBondOrders,
     previewBondType,
   );
-  const previewFormulaMolecular = `C${activeCarbonCount}H${previewHydrogensByCarbon.reduce(
-    (sum, value) => sum + value,
-    0,
-  )}`;
+  const previewFormulaMolecular = getPreviewFormulaMolecular(
+    activeCarbonCount,
+    previewHydrogensByCarbon,
+  );
   const bondOrdersKey = normalizedBondOrders.join("-");
   const selectedMolecule =
     molecules.find((molecule) => molecule.id === effectiveSelectedMoleculeId) ??

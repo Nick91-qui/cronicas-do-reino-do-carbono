@@ -1,5 +1,13 @@
 import { getPhaseById } from "@/lib/content/loaders";
 import type { BondType, FragmentId, MoleculeId, PhaseId } from "@/lib/content/types";
+import {
+  getExpectedGraphBonds,
+  getGraphBondType,
+  getGraphFormulaEstrutural,
+  getGraphHydrogensByCarbon,
+  getPreviewFormulaMolecular,
+  normalizeBondKey,
+} from "@/lib/builder/graph-preview";
 
 import type {
   BlueprintBuilderState,
@@ -9,7 +17,6 @@ import type {
   BuilderSignatureEntry,
   BuilderState,
   BuilderValidationResult,
-  GraphBuilderBond,
   GraphBuilderState,
   LegacyBuilderState,
 } from "@/lib/builder/types";
@@ -241,98 +248,6 @@ function validateBlueprintStructuralRules(builderState: BlueprintBuilderState, e
   return errors.length === 0;
 }
 
-function getExpectedGraphBonds(builderState: GraphBuilderState): GraphBuilderBond[] {
-  if (builderState.layout === "open_chain") {
-    return Array.from({ length: Math.max(0, builderState.carbonCount - 1) }, (_, index) => ({
-      from: index,
-      to: index + 1,
-      order: 1,
-    }));
-  }
-
-  return Array.from({ length: builderState.carbonCount }, (_, index) => ({
-    from: index,
-    to: (index + 1) % builderState.carbonCount,
-    order: 1,
-  }));
-}
-
-function normalizeBondKey(from: number, to: number): string {
-  return from < to ? `${from}:${to}` : `${to}:${from}`;
-}
-
-function getGraphHydrogensByCarbon(builderState: GraphBuilderState): number[] {
-  const valenceLoads = Array.from({ length: builderState.carbonCount }, () => 0);
-
-  for (const bond of builderState.bonds) {
-    valenceLoads[bond.from] += bond.order;
-    valenceLoads[bond.to] += bond.order;
-  }
-
-  return valenceLoads.map((load) => 4 - load);
-}
-
-function isAlternatingAromaticRing(builderState: GraphBuilderState): boolean {
-  if (builderState.layout !== "closed_ring" || builderState.carbonCount !== 6) {
-    return false;
-  }
-
-  const orderedBonds = getExpectedGraphBonds(builderState).map((expectedBond) =>
-    builderState.bonds.find(
-      (bond) => normalizeBondKey(bond.from, bond.to) === normalizeBondKey(expectedBond.from, expectedBond.to),
-    )?.order ?? 0,
-  );
-
-  const patternA = [2, 1, 2, 1, 2, 1];
-  const patternB = [1, 2, 1, 2, 1, 2];
-
-  return orderedBonds.every((order, index) => order === patternA[index])
-    || orderedBonds.every((order, index) => order === patternB[index]);
-}
-
-function getGraphBondType(builderState: GraphBuilderState): BondType {
-  if (isAlternatingAromaticRing(builderState)) {
-    return "aromatic";
-  }
-
-  return builderState.bonds.some((bond) => bond.order === 2) ? "double" : "single";
-}
-
-function formatCarbonGroup(hydrogenCount: number): string {
-  if (hydrogenCount <= 0) return "C";
-  if (hydrogenCount === 1) return "CH";
-  return `CH${hydrogenCount}`;
-}
-
-function getGraphFormulaEstrutural(
-  builderState: GraphBuilderState,
-  hydrogensByCarbon: number[],
-): string {
-  if (builderState.layout === "closed_ring" && isAlternatingAromaticRing(builderState)) {
-    return "anel(CH=CH)3";
-  }
-
-  const orderedGroups = hydrogensByCarbon.map((hydrogenCount) => formatCarbonGroup(hydrogenCount));
-
-  if (builderState.layout === "closed_ring") {
-    return `ciclo(${orderedGroups.join("-")})`;
-  }
-
-  return orderedGroups
-    .map((group, index) => {
-      if (index === orderedGroups.length - 1) {
-        return group;
-      }
-
-      const bond = builderState.bonds.find(
-        (item) => normalizeBondKey(item.from, item.to) === normalizeBondKey(index, index + 1),
-      );
-
-      return `${group}${bond?.order === 2 ? "=" : "-"}`
-    })
-    .join("");
-}
-
 function deriveGraphStructure(builderState: GraphBuilderState): BuilderDerivedStructure {
   const hydrogensByCarbon = getGraphHydrogensByCarbon(builderState);
   const hydrogenCount = hydrogensByCarbon.reduce((sum, value) => sum + value, 0);
@@ -345,7 +260,10 @@ function deriveGraphStructure(builderState: GraphBuilderState): BuilderDerivedSt
     hydrogensByCarbon,
     bondType,
     bonds: builderState.bonds,
-    formulaMolecular: `C${builderState.carbonCount}H${hydrogenCount}`,
+    formulaMolecular: getPreviewFormulaMolecular(
+      builderState.carbonCount,
+      hydrogensByCarbon,
+    ),
     formulaEstrutural: getGraphFormulaEstrutural(builderState, hydrogensByCarbon),
   };
 }
