@@ -3,13 +3,14 @@
 import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
 
+import { MoleculeCard } from "@/components/cards/molecule-card";
 import { AtomForgeVisual } from "@/components/phase/atom-forge-visual";
 import type {
   BuilderLayout,
   BuilderValidationResult,
   GraphBuilderBondOrder,
 } from "@/lib/builder/types";
-import type { BondType } from "@/lib/content/types";
+import type { BondType, Molecule } from "@/lib/content/types";
 
 type AtomForgeProps = {
   layout: BuilderLayout;
@@ -28,6 +29,7 @@ type AtomForgeProps = {
   isValidatingBuilder: boolean;
   builderError: string | null;
   builderResult: BuilderValidationResult | null;
+  forgedMolecule: Molecule | null;
   onSetLayout: (layout: BuilderLayout) => void;
   onSetCarbonCount: (value: string) => void;
   onUpdateBondOrder: (index: number) => void;
@@ -62,6 +64,7 @@ export function AtomForge({
   isValidatingBuilder,
   builderError,
   builderResult,
+  forgedMolecule,
   onSetLayout,
   onSetCarbonCount,
   onUpdateBondOrder,
@@ -69,6 +72,7 @@ export function AtomForge({
 }: AtomForgeProps) {
   const [hoveredBondIndex, setHoveredBondIndex] = useState<number | null>(null);
   const [recentlyChangedBondIndex, setRecentlyChangedBondIndex] = useState<number | null>(null);
+  const currentCarbonValue = Number(carbonCount) || activeCarbonCount;
 
   useEffect(() => {
     if (recentlyChangedBondIndex === null) {
@@ -122,6 +126,18 @@ export function AtomForge({
     bondButtons[nextPosition]?.focus();
   }
 
+  function handleCarbonStep(direction: "decrease" | "increase") {
+    const delta = direction === "increase" ? 1 : -1;
+    const nextValue = Math.max(
+      minimumCarbonCount,
+      Math.min(maximumCarbonCount, activeCarbonCount + delta),
+    );
+
+    if (nextValue !== currentCarbonValue) {
+      onSetCarbonCount(String(nextValue));
+    }
+  }
+
   return (
     <section className="overflow-hidden rounded-[28px] border border-cyan-300/15 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(15,23,42,0.72))] p-4 shadow-[0_20px_60px_rgba(15,23,42,0.28)] sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -133,168 +149,23 @@ export function AtomForge({
             Forja estrutural
           </h3>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-            Escolha a topologia da cadeia, defina onde entram as duplas ligacoes e acompanhe os hidrogenios implicitos em cada carbono.
+            Centralize a montagem na mesa de forja: ajuste o numero de carbonos e altere as ligacoes direto na estrutura.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onValidateBuilder}
-          disabled={isValidatingBuilder}
-          className="rounded-2xl bg-cyan-300 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          {isValidatingBuilder ? "Validando..." : "Validar estrutura"}
-        </button>
       </div>
 
-      <div className="mt-6 grid gap-4 xl:grid-cols-[0.95fr,1.05fr]">
-        <div className="grid gap-4">
-          <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-3 sm:p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Banco de reagentes
-            </p>
-            <div className="mt-3 grid gap-3">
-              <div className="grid gap-3 md:grid-cols-[1.1fr,0.9fr]">
-                <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
-                  Topologia
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
-                    <button
-                      key={nextLayout}
-                      type="button"
-                      onClick={() => onSetLayout(nextLayout)}
-                      disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                      className={`rounded-xl border px-3 py-2 text-sm font-black transition ${
-                        layout === nextLayout
-                          ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
-                          : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
-                      } disabled:cursor-not-allowed disabled:opacity-30`}
-                    >
-                      {layoutLabels[nextLayout]}
-                    </button>
-                  ))}
-                </div>
-                </div>
-
-                <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
-                  Carbonos
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {Array.from({ length: maximumCarbonCount }, (_, index) =>
-                    String(index + 1),
-                  ).map((value) => {
-                    const isDisabled =
-                      layout === "closed_ring" && Number(value) < 3;
-
-                    return (
-                      <button
-                        key={value}
-                        type="button"
-                        onClick={() => onSetCarbonCount(value)}
-                        disabled={isDisabled}
-                        className={`flex h-9 w-9 items-center justify-center rounded-xl border text-sm font-black transition ${
-                          activeCarbonCount === Number(value)
-                            ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
-                            : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
-                        } disabled:cursor-not-allowed disabled:opacity-30`}
-                      >
-                        {value}
-                      </button>
-                    );
-                  })}
-                </div>
-                  <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-500">
-                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.14em]">
-                      Max {maximumCarbonCount}
-                    </span>
-                    {layout === "closed_ring" ? (
-                      <span className="truncate">anel: 3-9 carbonos</span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
-                  Ligacoes C-C
-                </p>
-                <div className="mt-2 grid max-h-[336px] gap-2 overflow-y-auto pr-1">
-                  {normalizedBondOrders.length > 0 ? (
-                    normalizedBondOrders.map((order, index) => {
-                      const from = index + 1;
-                      const to =
-                        layout === "closed_ring"
-                        && index === normalizedBondOrders.length - 1
-                          ? 1
-                          : index + 2;
-
-                      return (
-                        <button
-                          key={`${from}-${to}`}
-                          type="button"
-                          data-bond-index={index}
-                          onClick={() => handleBondToggle(index)}
-                          onMouseEnter={() => setHoveredBondIndex(index)}
-                          onMouseLeave={() => setHoveredBondIndex(null)}
-                          onFocus={() => setHoveredBondIndex(index)}
-                          onBlur={() => setHoveredBondIndex(null)}
-                          onKeyDown={(event) => handleBondKeyDown(event, index)}
-                          disabled={!canUseDoubleBond}
-                          className={`flex items-center justify-between rounded-2xl border px-3 py-2.5 text-left text-sm transition ${
-                            hoveredBondIndex === index
-                              ? "border-cyan-300/50 bg-cyan-400/12 text-cyan-100"
-                              : recentlyChangedBondIndex === index
-                                ? "border-amber-300/45 bg-amber-400/12 text-amber-100"
-                                : order === 2
-                                  ? "border-emerald-300/35 bg-emerald-500/10 text-emerald-100"
-                                  : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
-                          } disabled:cursor-not-allowed disabled:opacity-60`}
-                        >
-                            <span className="font-semibold">
-                              C{from} {order === 2 ? "=" : "-"} C{to}
-                            </span>
-                            <div className="flex items-center gap-2">
-                              {(hoveredBondIndex === index
-                                || recentlyChangedBondIndex === index) ? (
-                                <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/90">
-                                  {hoveredBondIndex === index ? "Ativa" : "Alterada"}
-                                </span>
-                              ) : null}
-                              <span className="text-[10px] uppercase tracking-[0.18em] text-slate-400">
-                                {canUseDoubleBond
-                                  ? order === 2
-                                    ? "Dupla"
-                                    : "Simples"
-                                  : "So simples"}
-                              </span>
-                            </div>
-                        </button>
-                      );
-                    })
-                  ) : (
-                    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-400">
-                      Esta estrutura ainda nao possui ligacoes C-C editaveis.
-                    </div>
-                  )}
-                </div>
-                <p className="mt-2 text-[11px] leading-5 text-slate-500">
-                  Clique ou use `Enter` para alternar. Setas `↑` e `↓` navegam entre ligacoes.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/8 pt-2 text-[11px] text-slate-500">
-                <span>
-                  Fragmentos:{" "}
-                  {availableBondTypes
-                    .map((availableBondType) => bondTypeLabels[availableBondType])
-                    .join(" · ")}
-                </span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.14em]">
-                  C atuais {activeCarbonCount}
-                </span>
-              </div>
-            </div>
+      <div className="mt-6 grid gap-4">
+        <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-3 sm:p-4">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-white/8 pt-3 text-[11px] text-slate-500">
+            <span>
+              Fragmentos:{" "}
+              {availableBondTypes
+                .map((availableBondType) => bondTypeLabels[availableBondType])
+                .join(" · ")}
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.14em]">
+              Altere as ligacoes direto na estrutura
+            </span>
           </div>
         </div>
 
@@ -312,6 +183,151 @@ export function AtomForge({
           onBondHover={setHoveredBondIndex}
           onBondToggle={handleBondToggle}
         />
+
+        <div className="rounded-[24px] border border-white/10 bg-slate-950/35 px-4 py-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-8">
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Topologia
+              </span>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
+                  <button
+                    key={nextLayout}
+                    type="button"
+                    onClick={() => onSetLayout(nextLayout)}
+                    disabled={nextLayout === "closed_ring" && !canUseClosedRing}
+                    className={`rounded-full border px-4 py-2 text-sm font-black transition ${
+                      layout === nextLayout
+                        ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
+                    } disabled:cursor-not-allowed disabled:opacity-30`}
+                  >
+                    {layoutLabels[nextLayout]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Carbonos
+              </span>
+              <div className="inline-flex items-center rounded-full border border-white/10 bg-slate-950/70 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <button
+                  type="button"
+                  onClick={() => handleCarbonStep("decrease")}
+                  disabled={activeCarbonCount <= minimumCarbonCount}
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
+                  aria-label="Diminuir carbonos"
+                >
+                  -
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSetCarbonCount(String(activeCarbonCount))}
+                  className="min-w-[84px] rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-black tracking-[0.16em] text-white"
+                  aria-label={`Carbonos atuais: ${activeCarbonCount}`}
+                >
+                  {activeCarbonCount}C
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleCarbonStep("increase")}
+                  disabled={activeCarbonCount >= maximumCarbonCount}
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
+                  aria-label="Aumentar carbonos"
+                >
+                  +
+                </button>
+              </div>
+              <span className="text-[11px] text-slate-500">
+                {layout === "closed_ring"
+                  ? `anel de ${minimumCarbonCount} a ${maximumCarbonCount} carbonos`
+                  : `de ${minimumCarbonCount} a ${maximumCarbonCount} carbonos`}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={onValidateBuilder}
+            disabled={isValidatingBuilder}
+            className="rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {isValidatingBuilder ? "Forjando..." : "Forjar"}
+          </button>
+        </div>
+
+        <details className="rounded-[24px] border border-white/10 bg-slate-950/35 p-3 sm:p-4">
+          <summary className="cursor-pointer list-none text-sm font-black uppercase tracking-[0.14em] text-slate-200">
+            Detalhes da estrutura
+          </summary>
+          <p className="mt-2 text-[11px] leading-5 text-slate-500">
+            Apoio para teclado e leitura fina das ligacoes. `Enter` alterna e as setas `↑` e `↓` navegam entre elas.
+          </p>
+          <div className="mt-3 grid max-h-[280px] gap-2 overflow-y-auto pr-1">
+            {normalizedBondOrders.length > 0 ? (
+              normalizedBondOrders.map((order, index) => {
+                const from = index + 1;
+                const to =
+                  layout === "closed_ring"
+                  && index === normalizedBondOrders.length - 1
+                    ? 1
+                    : index + 2;
+
+                return (
+                  <button
+                    key={`${from}-${to}`}
+                    type="button"
+                    data-bond-index={index}
+                    onClick={() => handleBondToggle(index)}
+                    onMouseEnter={() => setHoveredBondIndex(index)}
+                    onMouseLeave={() => setHoveredBondIndex(null)}
+                    onFocus={() => setHoveredBondIndex(index)}
+                    onBlur={() => setHoveredBondIndex(null)}
+                    onKeyDown={(event) => handleBondKeyDown(event, index)}
+                    disabled={!canUseDoubleBond}
+                    className={`flex items-center justify-between rounded-2xl border px-3 py-2.5 text-left text-sm transition ${
+                      hoveredBondIndex === index
+                        ? "border-cyan-300/50 bg-cyan-400/12 text-cyan-100"
+                        : recentlyChangedBondIndex === index
+                          ? "border-amber-300/45 bg-amber-400/12 text-amber-100"
+                          : order === 2
+                            ? "border-emerald-300/35 bg-emerald-500/10 text-emerald-100"
+                            : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
+                    } disabled:cursor-not-allowed disabled:opacity-60`}
+                  >
+                    <span className="font-semibold">
+                      C{from} {order === 2 ? "=" : "-"} C{to}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {(hoveredBondIndex === index
+                        || recentlyChangedBondIndex === index) ? (
+                        <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/90">
+                          {hoveredBondIndex === index ? "Ativa" : "Alterada"}
+                        </span>
+                      ) : null}
+                      <span className="text-[10px] uppercase tracking-[0.18em] text-slate-400">
+                        {canUseDoubleBond
+                          ? order === 2
+                            ? "Dupla"
+                            : "Simples"
+                          : "So simples"}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })
+            ) : (
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-400">
+                Esta estrutura ainda nao possui ligacoes C-C editaveis.
+              </div>
+            )}
+          </div>
+        </details>
       </div>
 
       {builderError ? (
@@ -321,23 +337,22 @@ export function AtomForge({
       ) : null}
 
       {builderResult ? (
-        <article className="mt-6 rounded-[24px] border border-white/10 bg-slate-950/40 p-5 text-sm text-slate-300">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
+        <article className="mt-6 rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.72),rgba(15,23,42,0.72))] p-5 text-sm text-slate-300">
+          <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/8 pb-4">
+            <div className="max-w-2xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                 Validacao estrutural
               </p>
-              <p className="mt-2 text-base font-semibold text-slate-100">
+              <p className="mt-2 text-xl font-black tracking-tight text-slate-100">
                 {builderResult.canCreateMolecule
                   ? "Estrutura valida e reconhecida pelo MVP."
                   : "A estrutura ainda nao gerou uma molecula oficial valida."}
               </p>
-              {builderResult.derivedStructure ? (
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {builderResult.derivedStructure.formulaEstrutural} ·{" "}
-                  {builderResult.derivedStructure.formulaMolecular}
-                </p>
-              ) : null}
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {builderResult.canCreateMolecule
+                  ? "A mesa estabilizou a estrutura e converteu a forja em uma molecula oficial do capitulo."
+                  : "A estrutura ainda precisa de ajuste antes de gerar uma carta oficial para a fase."}
+              </p>
             </div>
             <div className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] ${
               builderResult.canCreateMolecule
@@ -347,6 +362,57 @@ export function AtomForge({
               {builderResult.canCreateMolecule ? "Forja estavel" : "Estrutura inconclusiva"}
             </div>
           </div>
+
+          <div className={`mt-4 grid gap-3 ${forgedMolecule ? "xl:grid-cols-[0.32fr,0.68fr]" : "md:grid-cols-2"}`}>
+            <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                Estrutural
+              </p>
+              <p className="mt-2 text-sm font-semibold text-white">
+                {builderResult.derivedStructure?.formulaEstrutural ?? previewFormulaEstrutural}
+              </p>
+            </div>
+            <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                Molecular
+              </p>
+              <p className="mt-2 text-sm font-semibold text-white">
+                {builderResult.derivedStructure?.formulaMolecular ?? previewFormulaMolecular}
+              </p>
+            </div>
+          </div>
+
+          {forgedMolecule ? (
+            <div className="mt-5 grid gap-4 xl:grid-cols-[0.32fr,0.68fr] xl:items-start">
+              <div className="rounded-[24px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(15,23,42,0.12))] p-3">
+                <MoleculeCard
+                  molecule={forgedMolecule}
+                  isCreated
+                  selectable={false}
+                  variant="compact"
+                />
+              </div>
+              <div className="rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-300">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
+                  Molecula forjada
+                </p>
+                <p className="mt-2 text-2xl font-black tracking-tight text-white">
+                  {forgedMolecule.nomeQuimico}
+                </p>
+                <p className="mt-3">
+                  A validacao estrutural reconheceu esta carta como a saida coerente da mesa de forja. Na proxima etapa, voce so confirma se ela continua sendo a melhor resposta para o contexto da fase.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-emerald-300/25 bg-emerald-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100">
+                    Reconhecida pela forja
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/80">
+                    Pronta para comparacao
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </article>
       ) : null}
     </section>

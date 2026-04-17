@@ -112,6 +112,8 @@ const stepOrder: PhaseStep[] = [
   "result",
 ];
 
+const minimumForgeFeedbackMs = 900;
+
 const stepCopy: Record<Exclude<PhaseStep, "result">, { eyebrow: string; title: string; description: string }> = {
   intro: {
     eyebrow: "Entrada",
@@ -163,6 +165,30 @@ function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boo
   }
 
   return "justify";
+}
+
+function getAvailablePhaseSteps(
+  supportsBuilder: boolean,
+  supportsMoleculeSelection: boolean,
+  hasResult: boolean,
+): PhaseStep[] {
+  const steps: PhaseStep[] = ["intro"];
+
+  if (supportsBuilder) {
+    steps.push("forge");
+  }
+
+  if (supportsMoleculeSelection) {
+    steps.push("choice");
+  }
+
+  steps.push("justify");
+
+  if (hasResult) {
+    steps.push("result");
+  }
+
+  return steps;
 }
 
 export function PhaseExperience({
@@ -292,11 +318,20 @@ export function PhaseExperience({
   const createdMolecule =
     molecules.find((molecule) => molecule.id === builderResult?.resolvedMoleculeId) ??
     null;
+  const availableSteps = getAvailablePhaseSteps(
+    supportsBuilder,
+    supportsMoleculeSelection,
+    Boolean(submitResult),
+  );
 
   function navigateToStep(
     nextStep: PhaseStep,
     direction: "forward" | "backward",
   ) {
+    if (!availableSteps.includes(nextStep)) {
+      return;
+    }
+
     setStepDirection(direction);
     setCurrentStep(nextStep);
 
@@ -335,17 +370,46 @@ export function PhaseExperience({
 
   useEffect(() => {
     const requestedStep = new URLSearchParams(searchParamsKey).get("step");
+    const fallbackStep = getInitialStep(
+      supportsBuilder,
+      supportsMoleculeSelection,
+    );
 
-    if (!isPhaseStep(requestedStep) || requestedStep === currentStep) {
+    if (!isPhaseStep(requestedStep)) {
       return;
     }
 
-    if (requestedStep === "result" && !submitResult) {
+    if (!availableSteps.includes(requestedStep)) {
+      if (requestedStep !== fallbackStep || currentStep !== fallbackStep) {
+        navigateToStep(fallbackStep, "forward");
+      }
+      return;
+    }
+
+    if (requestedStep === currentStep) {
       return;
     }
 
     setCurrentStep(requestedStep);
-  }, [currentStep, searchParamsKey, submitResult]);
+  }, [
+    availableSteps,
+    currentStep,
+    searchParamsKey,
+    submitResult,
+    supportsBuilder,
+    supportsMoleculeSelection,
+  ]);
+
+  useEffect(() => {
+    if (availableSteps.includes(currentStep)) {
+      return;
+    }
+
+    navigateToStep(
+      getInitialStep(supportsBuilder, supportsMoleculeSelection),
+      "forward",
+    );
+  }, [availableSteps, currentStep, supportsBuilder, supportsMoleculeSelection]);
 
   useEffect(() => {
     if (currentStep === renderedStep) {
@@ -363,42 +427,51 @@ export function PhaseExperience({
   }, [currentStep, renderedStep]);
 
   async function handleValidateBuilder() {
+    const startedAt = Date.now();
     setIsValidatingBuilder(true);
     setBuilderError(null);
     setSubmitError(null);
     setSubmitResult(null);
 
-    const response = await fetch(`/api/phases/${phase.id}/builder/validate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(previewBuilderState),
-    });
+    try {
+      const response = await fetch(`/api/phases/${phase.id}/builder/validate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(previewBuilderState),
+      });
 
-    const json = (await response.json().catch(() => null)) as
-      | BuilderValidationResult
-      | { error?: string }
-      | null;
+      const json = (await response.json().catch(() => null)) as
+        | BuilderValidationResult
+        | { error?: string }
+        | null;
 
-    if (!response.ok) {
-      setBuilderError(
-        (json as { error?: string } | null)?.error ??
-          "Falha ao validar a estrutura.",
-      );
-      setBuilderResult(null);
+      const elapsed = Date.now() - startedAt;
+      const remainingDelay = Math.max(0, minimumForgeFeedbackMs - elapsed);
+
+      if (remainingDelay > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
+      }
+
+      if (!response.ok) {
+        setBuilderError(
+          (json as { error?: string } | null)?.error ??
+            "Falha ao validar a estrutura.",
+        );
+        setBuilderResult(null);
+        return;
+      }
+
+      const result = json as BuilderValidationResult;
+      setBuilderResult(result);
+
+      if (result.resolvedMoleculeId && supportsMoleculeSelection) {
+        setSelectedMoleculeId(result.resolvedMoleculeId);
+      }
+    } finally {
       setIsValidatingBuilder(false);
-      return;
     }
-
-    const result = json as BuilderValidationResult;
-    setBuilderResult(result);
-
-    if (result.resolvedMoleculeId && supportsMoleculeSelection) {
-      setSelectedMoleculeId(result.resolvedMoleculeId);
-    }
-
-    setIsValidatingBuilder(false);
   }
 
   function toggleProperty(property: SelectableProperty) {
@@ -564,7 +637,7 @@ export function PhaseExperience({
 
           <div className="flex flex-wrap gap-2">
             {stepOrder
-              .filter((step) => step !== "result" || submitResult)
+              .filter((step) => availableSteps.includes(step))
               .map((step, index) => {
                 const isActive = currentStep === step;
                 const isDone =
@@ -671,6 +744,7 @@ export function PhaseExperience({
             isValidatingBuilder={isValidatingBuilder}
             builderError={builderError}
             builderResult={builderResult}
+            forgedMolecule={createdMolecule}
             onSetLayout={setLayout}
             onSetCarbonCount={setCarbonCount}
             onUpdateBondOrder={updateBondOrder}
@@ -697,11 +771,11 @@ export function PhaseExperience({
                 {createdMolecule ? (
                   <div className="rounded-[24px] border border-emerald-400/25 bg-emerald-500/10 p-5 text-sm text-emerald-100">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                      Sugerida pela forja
+                      Pista confirmada
                     </p>
                     <p className="mt-2 text-lg font-black">{createdMolecule.nomeQuimico}</p>
                     <p className="mt-2 leading-6 text-emerald-50/90">
-                      A validacao estrutural reconheceu esta molecula como a saida mais coerente da oficina.
+                      A forja ja reconheceu esta molecula. Use esta etapa para confirmar a resposta final comparando a carta sugerida com as demais opcoes.
                     </p>
                   </div>
                 ) : null}
@@ -722,6 +796,11 @@ export function PhaseExperience({
                       <span className="font-semibold text-white">
                         {createdMolecule ? "forja validada" : "comparacao manual"}
                       </span>
+                    </div>
+                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
+                      {createdMolecule
+                        ? "A carta sugerida ja veio da forja. Aqui o foco e confirmar se ela segue a melhor resposta diante das outras cartas."
+                        : "Sem uma molecula reconhecida pela forja, a escolha depende da comparacao manual entre as cartas disponiveis."}
                     </div>
                   </div>
                 </div>
