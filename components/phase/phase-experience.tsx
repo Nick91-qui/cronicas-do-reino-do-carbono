@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { MoleculeCard } from "@/components/cards/molecule-card";
+
 import type { BuilderValidationResult } from "@/lib/builder/types";
 import type { ChapterProgressView } from "@/lib/progress/queries";
 import type { BuilderState } from "@/lib/builder/types";
@@ -326,49 +328,24 @@ export function PhaseExperience({ phase, molecules, chapterProgress }: PhaseExpe
 
           <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <h2 className="text-xl font-semibold">Cartas disponíveis</h2>
-            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            <p className="mt-2 text-sm text-slate-300">
+              Primeira versão da carta híbrida: shell visual guiado por assets e conteúdo vivo em React.
+            </p>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
               {molecules.map((molecule) => {
                 const isSelected = effectiveSelectedMoleculeId === molecule.id;
                 const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
 
                 return (
-                  <article key={molecule.id} className={`rounded-2xl border p-5 ${isSelected ? "border-sky-400/60 bg-sky-500/10" : "border-white/10 bg-slate-950/40"}`}>
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-sm text-sky-300">{molecule.id}</p>
-                        <h3 className="mt-1 text-lg font-semibold text-slate-100">{molecule.nomeQuimico}</h3>
-                        <p className="mt-1 text-sm text-slate-300">{molecule.nomeEpico}</p>
-                      </div>
-                      {supportsMoleculeSelection ? (
-                        <button
-                          type="button"
-                          onClick={() => setSelectedMoleculeId(molecule.id)}
-                          className={`rounded-xl px-3 py-2 text-xs font-semibold ${isSelected ? "bg-sky-500 text-slate-950" : "border border-white/10 text-slate-100"}`}
-                        >
-                          {isSelected ? "Selecionada" : "Escolher"}
-                        </button>
-                      ) : null}
-                    </div>
-                    <dl className="mt-4 grid gap-2 text-sm text-slate-300">
-                      <div>
-                        <dt className="text-slate-500">Fórmula</dt>
-                        <dd className="mt-1 text-slate-100">{molecule.formulaMolecular}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-slate-500">Classe</dt>
-                        <dd className="mt-1 text-slate-100">{molecule.classe}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-slate-500">Descrição</dt>
-                        <dd className="mt-1 text-slate-100">{molecule.descricaoCurta}</dd>
-                      </div>
-                    </dl>
-                    {isCreated ? (
-                      <p className="mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-200">
-                        Esta foi a molécula criada pela oficina.
-                      </p>
-                    ) : null}
-                  </article>
+                  <MoleculeCard
+                    key={molecule.id}
+                    molecule={molecule}
+                    isSelected={isSelected}
+                    isCreated={isCreated}
+                    selectable={supportsMoleculeSelection}
+                    variant="compact"
+                    onSelect={supportsMoleculeSelection ? () => setSelectedMoleculeId(molecule.id) : undefined}
+                  />
                 );
               })}
             </div>
