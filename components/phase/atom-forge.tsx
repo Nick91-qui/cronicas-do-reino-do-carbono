@@ -169,83 +169,85 @@ export function AtomForge({
           </div>
         </div>
 
-        <AtomForgeVisual
-          layout={layout}
-          activeCarbonCount={activeCarbonCount}
-          normalizedBondOrders={normalizedBondOrders}
-          previewBondType={previewBondType}
-          previewHydrogensByCarbon={previewHydrogensByCarbon}
-          previewFormulaEstrutural={previewFormulaEstrutural}
-          previewFormulaMolecular={previewFormulaMolecular}
-          hoveredBondIndex={hoveredBondIndex}
-          recentlyChangedBondIndex={recentlyChangedBondIndex}
-          canUseDoubleBond={canUseDoubleBond}
-          onBondHover={setHoveredBondIndex}
-          onBondToggle={handleBondToggle}
-        />
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr),280px] xl:items-start">
+          <AtomForgeVisual
+            layout={layout}
+            activeCarbonCount={activeCarbonCount}
+            normalizedBondOrders={normalizedBondOrders}
+            previewBondType={previewBondType}
+            previewHydrogensByCarbon={previewHydrogensByCarbon}
+            previewFormulaEstrutural={previewFormulaEstrutural}
+            previewFormulaMolecular={previewFormulaMolecular}
+            hoveredBondIndex={hoveredBondIndex}
+            recentlyChangedBondIndex={recentlyChangedBondIndex}
+            canUseDoubleBond={canUseDoubleBond}
+            onBondHover={setHoveredBondIndex}
+            onBondToggle={handleBondToggle}
+          />
 
-        <div className="rounded-[24px] border border-white/10 bg-slate-950/35 px-4 py-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-8">
-            <div className="flex flex-col items-center gap-3">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Topologia
-              </span>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
+          <div className="rounded-[24px] border border-white/10 bg-slate-950/35 px-4 py-4">
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-3">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Topologia
+                </span>
+                <div className="flex flex-col gap-2">
+                  {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
+                    <button
+                      key={nextLayout}
+                      type="button"
+                      onClick={() => onSetLayout(nextLayout)}
+                      disabled={nextLayout === "closed_ring" && !canUseClosedRing}
+                      className={`rounded-2xl border px-4 py-3 text-sm font-black transition ${
+                        layout === nextLayout
+                          ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
+                          : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
+                      } disabled:cursor-not-allowed disabled:opacity-30`}
+                    >
+                      {layoutLabels[nextLayout]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Carbonos
+                </span>
+                <div className="inline-flex items-center self-start rounded-full border border-white/10 bg-slate-950/70 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                   <button
-                    key={nextLayout}
                     type="button"
-                    onClick={() => onSetLayout(nextLayout)}
-                    disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                    className={`rounded-full border px-4 py-2 text-sm font-black transition ${
-                      layout === nextLayout
-                        ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
-                    } disabled:cursor-not-allowed disabled:opacity-30`}
+                    onClick={() => handleCarbonStep("decrease")}
+                    disabled={activeCarbonCount <= minimumCarbonCount}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
+                    aria-label="Diminuir carbonos"
                   >
-                    {layoutLabels[nextLayout]}
+                    -
                   </button>
-                ))}
+                  <button
+                    type="button"
+                    onClick={() => onSetCarbonCount(String(activeCarbonCount))}
+                    className="min-w-[84px] rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-black tracking-[0.16em] text-white"
+                    aria-label={`Carbonos atuais: ${activeCarbonCount}`}
+                  >
+                    {activeCarbonCount}C
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCarbonStep("increase")}
+                    disabled={activeCarbonCount >= maximumCarbonCount}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
+                    aria-label="Aumentar carbonos"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="text-[11px] leading-5 text-slate-500">
+                  {layout === "closed_ring"
+                    ? `anel de ${minimumCarbonCount} a ${maximumCarbonCount} carbonos`
+                    : `de ${minimumCarbonCount} a ${maximumCarbonCount} carbonos`}
+                </span>
               </div>
-            </div>
-
-            <div className="flex flex-col items-center gap-3">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Carbonos
-              </span>
-              <div className="inline-flex items-center rounded-full border border-white/10 bg-slate-950/70 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-                <button
-                  type="button"
-                  onClick={() => handleCarbonStep("decrease")}
-                  disabled={activeCarbonCount <= minimumCarbonCount}
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
-                  aria-label="Diminuir carbonos"
-                >
-                  -
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSetCarbonCount(String(activeCarbonCount))}
-                  className="min-w-[84px] rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-black tracking-[0.16em] text-white"
-                  aria-label={`Carbonos atuais: ${activeCarbonCount}`}
-                >
-                  {activeCarbonCount}C
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleCarbonStep("increase")}
-                  disabled={activeCarbonCount >= maximumCarbonCount}
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
-                  aria-label="Aumentar carbonos"
-                >
-                  +
-                </button>
-              </div>
-              <span className="text-[11px] text-slate-500">
-                {layout === "closed_ring"
-                  ? `anel de ${minimumCarbonCount} a ${maximumCarbonCount} carbonos`
-                  : `de ${minimumCarbonCount} a ${maximumCarbonCount} carbonos`}
-              </span>
             </div>
           </div>
         </div>
