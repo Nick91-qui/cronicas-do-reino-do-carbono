@@ -758,13 +758,15 @@ export function PhaseExperience({
               <aside className="grid gap-4 self-start">
                 <div className="rounded-[24px] border border-cyan-300/20 bg-[linear-gradient(180deg,rgba(14,116,144,0.16),rgba(15,23,42,0.16))] p-5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
-                    Decisao tatica
+                    {createdMolecule ? "Decisao tatica" : "Leitura da missao"}
                   </p>
                   <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
                     Escolha da molecula
                   </h3>
                   <p className="mt-3 text-sm leading-6 text-slate-300">
-                    Compare as cartas disponiveis e confirme a resposta principal da fase.
+                    {createdMolecule
+                      ? "Compare as cartas disponiveis e confirme se a molecula sugerida pela forja continua sendo a melhor resposta."
+                      : "Compare as cartas disponiveis e escolha a resposta principal da fase sem depender de uma etapa de forja."}
                   </p>
                 </div>
 
@@ -794,13 +796,31 @@ export function PhaseExperience({
                     <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
                       Origem da pista:{" "}
                       <span className="font-semibold text-white">
-                        {createdMolecule ? "forja validada" : "comparacao manual"}
+                        {createdMolecule ? "forja validada" : "comparacao direta"}
                       </span>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
                       {createdMolecule
                         ? "A carta sugerida ja veio da forja. Aqui o foco e confirmar se ela segue a melhor resposta diante das outras cartas."
-                        : "Sem uma molecula reconhecida pela forja, a escolha depende da comparacao manual entre as cartas disponiveis."}
+                        : "Nesta fase, a decisao nasce da leitura das cartas disponiveis. Compare atributos, propriedades e contexto antes de escolher."}
+                    </div>
+                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
+                      Objetivo da fase:{" "}
+                      <span className="font-semibold text-white">
+                        {phase.objective}
+                      </span>
+                    </div>
+                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
+                      Conceito em foco:{" "}
+                      <span className="font-semibold text-white">
+                        {phase.coreConcept}
+                      </span>
+                    </div>
+                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
+                      Estado da decisao:{" "}
+                      <span className="font-semibold text-white">
+                        {selectedMolecule ? "resposta pronta" : "escolha pendente"}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -846,6 +866,29 @@ export function PhaseExperience({
                           }
                         />
                       </div>
+                      {supportsMoleculeSelection ? (
+                        <div className="mt-3 flex items-center justify-between rounded-[22px] border border-white/10 bg-slate-950/45 px-4 py-3">
+                          <div>
+                            <p className="text-sm font-black text-white">
+                              {molecule.nomeQuimico}
+                            </p>
+                            <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                              {isCreated ? "reconhecida pela forja" : "comparacao direta"}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedMoleculeId(molecule.id)}
+                            className={`rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] transition ${
+                              isSelected
+                                ? "bg-cyan-300 text-slate-950"
+                                : "border border-white/15 bg-white/5 text-white hover:border-cyan-300/40 hover:bg-cyan-400/10"
+                            }`}
+                          >
+                            {isSelected ? "Resposta ativa" : "Escolher"}
+                          </button>
+                        </div>
+                      ) : null}
                     </div>
                   );
                 })}
