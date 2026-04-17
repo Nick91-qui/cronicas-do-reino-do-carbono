@@ -268,8 +268,20 @@ export function getRingGeometry(carbonCount: number): {
   const stageWidth = 340;
   const stageHeight = 280;
   const centerX = stageWidth / 2;
-  const centerY = stageHeight / 2;
-  const ringRadius = carbonCount <= 4 ? 68 : carbonCount >= 8 ? 96 : 84;
+  const centerYOffset =
+    carbonCount === 3 ? 8
+      : carbonCount === 4 ? 4
+      : carbonCount >= 7 ? -4
+      : 0;
+  const centerY = stageHeight / 2 + centerYOffset;
+  const ringRadius =
+    carbonCount === 3 ? 72
+      : carbonCount === 4 ? 78
+      : carbonCount === 5 ? 82
+      : carbonCount === 6 ? 84
+      : carbonCount === 7 ? 88
+      : carbonCount === 8 ? 92
+      : 96;
   const carbonRadius = 24;
   const points = Array.from({ length: carbonCount }, (_, index) => {
     const angle = ((Math.PI * 2) / carbonCount) * index - Math.PI / 2;

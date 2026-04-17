@@ -148,12 +148,13 @@ export function AtomForge({
 
       <div className="mt-6 grid gap-4 xl:grid-cols-[0.95fr,1.05fr]">
         <div className="grid gap-4">
-          <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-4">
+          <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-3 sm:p-4">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
               Banco de reagentes
             </p>
-            <div className="mt-4 grid gap-4">
-              <div>
+            <div className="mt-3 grid gap-3">
+              <div className="grid gap-3 md:grid-cols-[1.1fr,0.9fr]">
+                <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                   Topologia
                 </p>
@@ -164,7 +165,7 @@ export function AtomForge({
                       type="button"
                       onClick={() => onSetLayout(nextLayout)}
                       disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                      className={`rounded-xl border px-4 py-3 text-sm font-black transition ${
+                      className={`rounded-xl border px-3 py-2 text-sm font-black transition ${
                         layout === nextLayout
                           ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
                           : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
@@ -174,9 +175,9 @@ export function AtomForge({
                     </button>
                   ))}
                 </div>
-              </div>
+                </div>
 
-              <div>
+                <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                   Carbonos
                 </p>
@@ -193,7 +194,7 @@ export function AtomForge({
                         type="button"
                         onClick={() => onSetCarbonCount(value)}
                         disabled={isDisabled}
-                        className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm font-black transition ${
+                        className={`flex h-9 w-9 items-center justify-center rounded-xl border text-sm font-black transition ${
                           activeCarbonCount === Number(value)
                             ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
                             : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
@@ -204,13 +205,22 @@ export function AtomForge({
                     );
                   })}
                 </div>
+                  <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-500">
+                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.14em]">
+                      Max {maximumCarbonCount}
+                    </span>
+                    {layout === "closed_ring" ? (
+                      <span className="truncate">anel: 3-9 carbonos</span>
+                    ) : null}
+                  </div>
+                </div>
               </div>
 
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
                   Ligacoes C-C
                 </p>
-                <div className="mt-2 grid gap-2">
+                <div className="mt-2 grid max-h-[336px] gap-2 overflow-y-auto pr-1">
                   {normalizedBondOrders.length > 0 ? (
                     normalizedBondOrders.map((order, index) => {
                       const from = index + 1;
@@ -232,7 +242,7 @@ export function AtomForge({
                           onBlur={() => setHoveredBondIndex(null)}
                           onKeyDown={(event) => handleBondKeyDown(event, index)}
                           disabled={!canUseDoubleBond}
-                          className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
+                          className={`flex items-center justify-between rounded-2xl border px-3 py-2.5 text-left text-sm transition ${
                             hoveredBondIndex === index
                               ? "border-cyan-300/50 bg-cyan-400/12 text-cyan-100"
                               : recentlyChangedBondIndex === index
@@ -242,24 +252,24 @@ export function AtomForge({
                                   : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
                           } disabled:cursor-not-allowed disabled:opacity-60`}
                         >
-                          <span className="font-semibold">
-                            C{from} {order === 2 ? "=" : "-"} C{to}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            {(hoveredBondIndex === index
-                              || recentlyChangedBondIndex === index) ? (
-                              <span className="rounded-full border border-white/10 px-2 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/90">
-                                {hoveredBondIndex === index ? "Ativa" : "Alterada"}
-                              </span>
-                            ) : null}
-                            <span className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                              {canUseDoubleBond
-                                ? order === 2
-                                  ? "Dupla"
-                                  : "Simples"
-                                : "So simples"}
+                            <span className="font-semibold">
+                              C{from} {order === 2 ? "=" : "-"} C{to}
                             </span>
-                          </div>
+                            <div className="flex items-center gap-2">
+                              {(hoveredBondIndex === index
+                                || recentlyChangedBondIndex === index) ? (
+                                <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/90">
+                                  {hoveredBondIndex === index ? "Ativa" : "Alterada"}
+                                </span>
+                              ) : null}
+                              <span className="text-[10px] uppercase tracking-[0.18em] text-slate-400">
+                                {canUseDoubleBond
+                                  ? order === 2
+                                    ? "Dupla"
+                                    : "Simples"
+                                  : "So simples"}
+                              </span>
+                            </div>
                         </button>
                       );
                     })
@@ -269,41 +279,22 @@ export function AtomForge({
                     </div>
                   )}
                 </div>
-                <p className="mt-2 text-xs leading-5 text-slate-500">
-                  Clique em cada ligacao para alternar entre simples e dupla.
-                </p>
-                <p className="mt-1 text-xs leading-5 text-slate-600">
-                  Teclado: use `Tab` para focar, `Enter` ou `Espaco` para alternar, e setas para navegar entre ligacoes.
+                <p className="mt-2 text-[11px] leading-5 text-slate-500">
+                  Clique ou use `Enter` para alternar. Setas `↑` e `↓` navegam entre ligacoes.
                 </p>
               </div>
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/8 pt-2 text-[11px] text-slate-500">
+                <span>
+                  Fragmentos:{" "}
+                  {availableBondTypes
+                    .map((availableBondType) => bondTypeLabels[availableBondType])
+                    .join(" · ")}
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.14em]">
+                  C atuais {activeCarbonCount}
+                </span>
+              </div>
             </div>
-          </div>
-
-          <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-4">
-            <label className="block text-sm">
-              <span className="mb-2 block text-slate-200">
-                Quantidade de carbonos
-              </span>
-              <input
-                type="number"
-                min={minimumCarbonCount}
-                max={maximumCarbonCount}
-                value={carbonCount}
-                onChange={(event) => onSetCarbonCount(event.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-300/60"
-              />
-            </label>
-            <p className="mt-3 text-xs leading-5 text-slate-500">
-              Fragmentos liberados:{" "}
-              {availableBondTypes
-                .map((availableBondType) => bondTypeLabels[availableBondType])
-                .join(" · ")}
-            </p>
-            {layout === "closed_ring" ? (
-              <p className="mt-2 text-xs leading-5 text-slate-500">
-                A cadeia fechada aceita de 3 a 9 carbonos. No MVP atual, o conteudo oficial reconhece o anel de 6 carbonos.
-              </p>
-            ) : null}
           </div>
         </div>
 
