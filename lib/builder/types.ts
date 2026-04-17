@@ -31,7 +31,26 @@ export type LegacyBuilderState = {
   bondType: BondType;
 };
 
-export type BuilderState = BlueprintBuilderState | LegacyBuilderState;
+export type BuilderLayout = "open_chain" | "closed_ring";
+
+export type GraphBuilderBondOrder = 1 | 2;
+
+export type GraphBuilderBond = {
+  from: number;
+  to: number;
+  order: GraphBuilderBondOrder;
+};
+
+export type GraphBuilderState = {
+  layout: BuilderLayout;
+  carbonCount: number;
+  bonds: GraphBuilderBond[];
+};
+
+export type BuilderState =
+  | BlueprintBuilderState
+  | LegacyBuilderState
+  | GraphBuilderState;
 
 export type BuilderSignatureEntry = {
   bondOrder: BuilderSlotBondOrder;
@@ -41,6 +60,7 @@ export type BuilderSignatureEntry = {
 
 export type BuilderDerivedStructure = {
   blueprintId?: BuilderBlueprintId;
+  layout?: BuilderLayout;
   carbonCount: number;
   hydrogenCount: number;
   oxygenCount?: number;
@@ -48,6 +68,8 @@ export type BuilderDerivedStructure = {
   formulaMolecular: string;
   formulaEstrutural: string;
   signature?: BuilderSignatureEntry[];
+  bonds?: GraphBuilderBond[];
+  hydrogensByCarbon?: number[];
 };
 
 export type BuilderValidationResult = {

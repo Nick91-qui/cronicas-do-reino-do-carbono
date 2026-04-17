@@ -9,6 +9,8 @@ import type {
   BuilderSignatureEntry,
   BuilderState,
   BuilderValidationResult,
+  GraphBuilderBond,
+  GraphBuilderState,
   LegacyBuilderState,
 } from "@/lib/builder/types";
 
@@ -74,7 +76,11 @@ const blueprintDefinitions: Record<BuilderBlueprintId, { bondType: BondType; slo
 };
 
 function isLegacyBuilderState(builderState: BuilderState): builderState is LegacyBuilderState {
-  return "carbonCount" in builderState;
+  return "bondType" in builderState && "carbonCount" in builderState;
+}
+
+function isGraphBuilderState(builderState: BuilderState): builderState is GraphBuilderState {
+  return "layout" in builderState;
 }
 
 function getRequiredFragmentId(bondType: BondType): FragmentId {
@@ -109,7 +115,7 @@ function getFormulaEstrutural(carbonCount: number, bondType: BondType): string {
   }
 
   if (bondType === "aromatic") {
-    return "C6H6 (anel aromático)";
+    return "anel C6H6";
   }
 
   return `C${carbonCount}H${getHydrogenCount(carbonCount, bondType)}`;
@@ -235,9 +241,207 @@ function validateBlueprintStructuralRules(builderState: BlueprintBuilderState, e
   return errors.length === 0;
 }
 
+function getExpectedGraphBonds(builderState: GraphBuilderState): GraphBuilderBond[] {
+  if (builderState.layout === "open_chain") {
+    return Array.from({ length: Math.max(0, builderState.carbonCount - 1) }, (_, index) => ({
+      from: index,
+      to: index + 1,
+      order: 1,
+    }));
+  }
+
+  return Array.from({ length: builderState.carbonCount }, (_, index) => ({
+    from: index,
+    to: (index + 1) % builderState.carbonCount,
+    order: 1,
+  }));
+}
+
+function normalizeBondKey(from: number, to: number): string {
+  return from < to ? `${from}:${to}` : `${to}:${from}`;
+}
+
+function getGraphHydrogensByCarbon(builderState: GraphBuilderState): number[] {
+  const valenceLoads = Array.from({ length: builderState.carbonCount }, () => 0);
+
+  for (const bond of builderState.bonds) {
+    valenceLoads[bond.from] += bond.order;
+    valenceLoads[bond.to] += bond.order;
+  }
+
+  return valenceLoads.map((load) => 4 - load);
+}
+
+function isAlternatingAromaticRing(builderState: GraphBuilderState): boolean {
+  if (builderState.layout !== "closed_ring" || builderState.carbonCount !== 6) {
+    return false;
+  }
+
+  const orderedBonds = getExpectedGraphBonds(builderState).map((expectedBond) =>
+    builderState.bonds.find(
+      (bond) => normalizeBondKey(bond.from, bond.to) === normalizeBondKey(expectedBond.from, expectedBond.to),
+    )?.order ?? 0,
+  );
+
+  const patternA = [2, 1, 2, 1, 2, 1];
+  const patternB = [1, 2, 1, 2, 1, 2];
+
+  return orderedBonds.every((order, index) => order === patternA[index])
+    || orderedBonds.every((order, index) => order === patternB[index]);
+}
+
+function getGraphBondType(builderState: GraphBuilderState): BondType {
+  if (isAlternatingAromaticRing(builderState)) {
+    return "aromatic";
+  }
+
+  return builderState.bonds.some((bond) => bond.order === 2) ? "double" : "single";
+}
+
+function formatCarbonGroup(hydrogenCount: number): string {
+  if (hydrogenCount <= 0) return "C";
+  if (hydrogenCount === 1) return "CH";
+  return `CH${hydrogenCount}`;
+}
+
+function getGraphFormulaEstrutural(
+  builderState: GraphBuilderState,
+  hydrogensByCarbon: number[],
+): string {
+  if (builderState.layout === "closed_ring" && isAlternatingAromaticRing(builderState)) {
+    return "anel(CH=CH)3";
+  }
+
+  const orderedGroups = hydrogensByCarbon.map((hydrogenCount) => formatCarbonGroup(hydrogenCount));
+
+  if (builderState.layout === "closed_ring") {
+    return `ciclo(${orderedGroups.join("-")})`;
+  }
+
+  return orderedGroups
+    .map((group, index) => {
+      if (index === orderedGroups.length - 1) {
+        return group;
+      }
+
+      const bond = builderState.bonds.find(
+        (item) => normalizeBondKey(item.from, item.to) === normalizeBondKey(index, index + 1),
+      );
+
+      return `${group}${bond?.order === 2 ? "=" : "-"}`
+    })
+    .join("");
+}
+
+function deriveGraphStructure(builderState: GraphBuilderState): BuilderDerivedStructure {
+  const hydrogensByCarbon = getGraphHydrogensByCarbon(builderState);
+  const hydrogenCount = hydrogensByCarbon.reduce((sum, value) => sum + value, 0);
+  const bondType = getGraphBondType(builderState);
+
+  return {
+    layout: builderState.layout,
+    carbonCount: builderState.carbonCount,
+    hydrogenCount,
+    hydrogensByCarbon,
+    bondType,
+    bonds: builderState.bonds,
+    formulaMolecular: `C${builderState.carbonCount}H${hydrogenCount}`,
+    formulaEstrutural: getGraphFormulaEstrutural(builderState, hydrogensByCarbon),
+  };
+}
+
+function validateGraphStructuralRules(builderState: GraphBuilderState, errors: string[]): boolean {
+  if (builderState.layout === "open_chain" && builderState.carbonCount < 1) {
+    errors.push("Cadeias abertas precisam ter pelo menos 1 carbono.");
+  }
+
+  if (builderState.layout === "closed_ring" && builderState.carbonCount < 3) {
+    errors.push("Cadeias fechadas precisam ter pelo menos 3 carbonos.");
+  }
+
+  const expectedBonds = getExpectedGraphBonds(builderState);
+  const expectedBondKeys = new Set(
+    expectedBonds.map((bond) => normalizeBondKey(bond.from, bond.to)),
+  );
+  const receivedBondKeys = new Set<string>();
+
+  for (const bond of builderState.bonds) {
+    if (bond.from === bond.to) {
+      errors.push("Uma ligação não pode conectar um carbono a ele mesmo.");
+      continue;
+    }
+
+    if (
+      bond.from < 0
+      || bond.to < 0
+      || bond.from >= builderState.carbonCount
+      || bond.to >= builderState.carbonCount
+    ) {
+      errors.push("A estrutura usa um índice de carbono inválido.");
+      continue;
+    }
+
+    const bondKey = normalizeBondKey(bond.from, bond.to);
+
+    if (receivedBondKeys.has(bondKey)) {
+      errors.push("A mesma ligação entre carbonos foi informada mais de uma vez.");
+      continue;
+    }
+
+    receivedBondKeys.add(bondKey);
+
+    if (!expectedBondKeys.has(bondKey)) {
+      errors.push("A estrutura contém uma ligação fora da geometria permitida.");
+    }
+  }
+
+  for (const expectedBond of expectedBonds) {
+    const bondKey = normalizeBondKey(expectedBond.from, expectedBond.to);
+    if (!receivedBondKeys.has(bondKey)) {
+      errors.push("A estrutura não informou todas as ligações obrigatórias entre carbonos.");
+      break;
+    }
+  }
+
+  const hydrogensByCarbon = getGraphHydrogensByCarbon(builderState);
+
+  for (const hydrogenCount of hydrogensByCarbon) {
+    if (hydrogenCount < 0) {
+      errors.push("A estrutura excede a valência permitida do carbono.");
+      break;
+    }
+  }
+
+  return errors.length === 0;
+}
+
 export function resolveOfficialMoleculeId(builderState: BuilderState): MoleculeId | null {
   if (isLegacyBuilderState(builderState)) {
     return officialMoleculeMap[builderState.bondType][builderState.carbonCount] ?? null;
+  }
+
+  if (isGraphBuilderState(builderState)) {
+    const bondType = getGraphBondType(builderState);
+
+    if (bondType === "aromatic" && builderState.layout === "closed_ring" && builderState.carbonCount === 6) {
+      return "benzeno";
+    }
+
+    if (builderState.layout !== "open_chain") {
+      return null;
+    }
+
+    const doubleBondCount = builderState.bonds.filter((bond) => bond.order === 2).length;
+
+    if (doubleBondCount > 1) {
+      return null;
+    }
+
+    if (doubleBondCount === 0) {
+      return officialMoleculeMap.single[builderState.carbonCount] ?? null;
+    }
+
+    return officialMoleculeMap.double[builderState.carbonCount] ?? null;
   }
 
   const signature = normalizeBlueprintSignature(builderState);
@@ -268,30 +472,48 @@ export function validateBuilderStateForPhase(
 
   let bondType: BondType;
   let carbonCount: number;
+  let requiredFragments: FragmentId[];
 
   if (isLegacyBuilderState(builderState)) {
     bondType = builderState.bondType;
     carbonCount = builderState.carbonCount;
+    requiredFragments = [getRequiredFragmentId(bondType)];
+  } else if (isGraphBuilderState(builderState)) {
+    bondType = getGraphBondType(builderState);
+    carbonCount = builderState.carbonCount;
+    requiredFragments = builderState.bonds.some((bond) => bond.order === 2)
+      ? ["ligacao_dupla"]
+      : ["ligacao_simples"];
   } else {
     bondType = blueprintDefinitions[builderState.blueprintId].bondType;
     carbonCount = 1 + builderState.slots.filter((slot: BuilderFilledSlot) => slot.element === "C").length;
+    requiredFragments = [getRequiredFragmentId(bondType)];
   }
 
   if (carbonCount > phase.resources.carbonAvailable) {
     errors.push("A estrutura usa mais carbonos do que a fase permite.");
   }
 
-  const requiredFragmentId = getRequiredFragmentId(bondType);
-
-  if (!phase.resources.availableFragments.includes(requiredFragmentId)) {
-    errors.push("O tipo de ligação escolhido não está desbloqueado nesta fase.");
+  for (const fragmentId of requiredFragments) {
+    if (!phase.resources.availableFragments.includes(fragmentId)) {
+      errors.push("A estrutura usa um tipo de ligação não desbloqueado nesta fase.");
+      break;
+    }
   }
 
   const structuralValid = isLegacyBuilderState(builderState)
     ? validateLegacyStructuralRules(builderState, errors)
-    : validateBlueprintStructuralRules(builderState, errors);
+    : isGraphBuilderState(builderState)
+      ? validateGraphStructuralRules(builderState, errors)
+      : validateBlueprintStructuralRules(builderState, errors);
   const derivedStructure = structuralValid
-    ? (isLegacyBuilderState(builderState) ? deriveLegacyStructure(builderState) : deriveBlueprintStructure(builderState))
+    ? (
+      isLegacyBuilderState(builderState)
+        ? deriveLegacyStructure(builderState)
+        : isGraphBuilderState(builderState)
+          ? deriveGraphStructure(builderState)
+          : deriveBlueprintStructure(builderState)
+    )
     : null;
   const resolvedMoleculeId = structuralValid ? resolveOfficialMoleculeId(builderState) : null;
 
