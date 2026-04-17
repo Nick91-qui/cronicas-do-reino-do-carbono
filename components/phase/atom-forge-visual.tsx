@@ -18,12 +18,30 @@ type AtomForgeVisualProps = {
   previewFormulaMolecular: string;
   hoveredBondIndex: number | null;
   recentlyChangedBondIndex: number | null;
+  canUseDoubleBond: boolean;
+  onBondHover: (index: number | null) => void;
+  onBondToggle: (index: number) => void;
 };
 
 const layoutLabels: Record<BuilderLayout, string> = {
   open_chain: "Cadeia aberta",
   closed_ring: "Cadeia fechada",
 };
+
+function getBondLabel(
+  layout: BuilderLayout,
+  index: number,
+  order: GraphBuilderBondOrder,
+  activeCarbonCount: number,
+): string {
+  const from = index + 1;
+  const to =
+    layout === "closed_ring" && index === activeCarbonCount - 1
+      ? 1
+      : index + 2;
+
+  return `C${from} ${order === 2 ? "=" : "-"} C${to}`;
+}
 
 export function AtomForgeVisual({
   layout,
@@ -35,7 +53,21 @@ export function AtomForgeVisual({
   previewFormulaMolecular,
   hoveredBondIndex,
   recentlyChangedBondIndex,
+  canUseDoubleBond,
+  onBondHover,
+  onBondToggle,
 }: AtomForgeVisualProps) {
+  const activeBondIndex = hoveredBondIndex ?? recentlyChangedBondIndex;
+  const activeBondLabel =
+    activeBondIndex !== null
+      ? getBondLabel(
+          layout,
+          activeBondIndex,
+          normalizedBondOrders[activeBondIndex] ?? 1,
+          activeCarbonCount,
+        )
+      : null;
+
   return (
     <div className="rounded-[28px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.18),transparent_44%),linear-gradient(180deg,rgba(2,6,23,0.65),rgba(15,23,42,0.95))] p-5">
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -47,6 +79,11 @@ export function AtomForgeVisual({
             <span>Estrutura prevista</span>
             <span>{previewBondType}</span>
           </div>
+          {activeBondLabel ? (
+            <div className="mt-3 inline-flex items-center rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-cyan-100">
+              Ligacao ativa: {activeBondLabel}
+            </div>
+          ) : null}
 
           {layout === "closed_ring" ? (
             <div className="relative mx-auto mt-6 h-[280px] w-full max-w-[340px]">
@@ -75,7 +112,7 @@ export function AtomForgeVisual({
                           : isRecentlyChanged
                             ? "rgba(252, 211, 77, 0.95)"
                             : "rgba(253, 230, 138, 0.78)";
-                        const strokeWidth = isHovered ? 2.4 : isRecentlyChanged ? 2.2 : 1.6;
+                        const strokeWidth = isHovered ? 2.8 : isRecentlyChanged ? 2.4 : 1.6;
 
                         return (
                         <g key={`ring-bond-${segment.index}`}>
@@ -84,10 +121,30 @@ export function AtomForgeVisual({
                             y1={segment.line1.y1}
                             x2={segment.line1.x2}
                             y2={segment.line1.y2}
+                            stroke="transparent"
+                            strokeWidth="16"
+                            strokeLinecap="round"
+                            className={canUseDoubleBond ? "cursor-pointer" : "cursor-not-allowed"}
+                            onMouseEnter={() => onBondHover(segment.index)}
+                            onMouseLeave={() => onBondHover(null)}
+                            onClick={() => {
+                              if (canUseDoubleBond) {
+                                onBondToggle(segment.index);
+                              }
+                            }}
+                          />
+                          <line
+                            x1={segment.line1.x1}
+                            y1={segment.line1.y1}
+                            x2={segment.line1.x2}
+                            y2={segment.line1.y2}
                             stroke={stroke}
                             strokeWidth={strokeWidth}
                             strokeLinecap="round"
-                            className="transition-all duration-200"
+                            pointerEvents="none"
+                            className={`origin-center transition-all duration-200 ${
+                              isRecentlyChanged ? "animate-pulse" : ""
+                            }`}
                           />
                           {segment.line2 ? (
                             <line
@@ -98,7 +155,10 @@ export function AtomForgeVisual({
                               stroke={stroke}
                               strokeWidth={strokeWidth}
                               strokeLinecap="round"
-                              className="transition-all duration-200"
+                              pointerEvents="none"
+                              className={`origin-center transition-all duration-200 ${
+                                isRecentlyChanged ? "animate-pulse" : ""
+                              }`}
                             />
                           ) : null}
                         </g>
@@ -227,7 +287,17 @@ export function AtomForgeVisual({
                     {index < activeCarbonCount - 1 ? (
                       <div className="mx-1 flex w-10 shrink-0 justify-center sm:w-14">
                         {normalizedBondOrders[index] === 2 ? (
-                          <div className="flex flex-col gap-1">
+                          <button
+                            type="button"
+                            disabled={!canUseDoubleBond}
+                            onMouseEnter={() => onBondHover(index)}
+                            onMouseLeave={() => onBondHover(null)}
+                            onFocus={() => onBondHover(index)}
+                            onBlur={() => onBondHover(null)}
+                            onClick={() => onBondToggle(index)}
+                            className="flex flex-col gap-1 rounded-md p-1 disabled:cursor-not-allowed"
+                            aria-label={`Alternar ligacao entre C${index + 1} e C${index + 2}`}
+                          >
                             <div
                               className={`h-px w-8 transition-all duration-200 sm:w-12 ${
                                 hoveredBondIndex === index
@@ -235,7 +305,7 @@ export function AtomForgeVisual({
                                   : recentlyChangedBondIndex === index
                                     ? "bg-amber-200"
                                     : "bg-fuchsia-200/70"
-                              }`}
+                              } ${recentlyChangedBondIndex === index ? "scale-x-110" : ""}`}
                             />
                             <div
                               className={`h-px w-8 transition-all duration-200 sm:w-12 ${
@@ -244,19 +314,31 @@ export function AtomForgeVisual({
                                   : recentlyChangedBondIndex === index
                                     ? "bg-amber-200"
                                     : "bg-fuchsia-200/70"
-                              }`}
+                              } ${recentlyChangedBondIndex === index ? "scale-x-110" : ""}`}
                             />
-                          </div>
+                          </button>
                         ) : (
-                          <div
-                            className={`h-px w-8 transition-all duration-200 sm:w-12 ${
-                              hoveredBondIndex === index
-                                ? "bg-cyan-200"
-                                : recentlyChangedBondIndex === index
-                                  ? "bg-amber-200"
-                                  : "bg-cyan-200/65"
-                            }`}
-                          />
+                          <button
+                            type="button"
+                            disabled={!canUseDoubleBond}
+                            onMouseEnter={() => onBondHover(index)}
+                            onMouseLeave={() => onBondHover(null)}
+                            onFocus={() => onBondHover(index)}
+                            onBlur={() => onBondHover(null)}
+                            onClick={() => onBondToggle(index)}
+                            className="rounded-md p-1 disabled:cursor-not-allowed"
+                            aria-label={`Alternar ligacao entre C${index + 1} e C${index + 2}`}
+                          >
+                            <div
+                              className={`h-px w-8 transition-all duration-200 sm:w-12 ${
+                                hoveredBondIndex === index
+                                  ? "bg-cyan-200"
+                                  : recentlyChangedBondIndex === index
+                                    ? "bg-amber-200"
+                                    : "bg-cyan-200/65"
+                              } ${recentlyChangedBondIndex === index ? "scale-x-110" : ""}`}
+                            />
+                          </button>
                         )}
                       </div>
                     ) : null}

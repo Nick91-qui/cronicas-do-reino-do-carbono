@@ -1,5 +1,6 @@
 "use client";
 
+import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
 
 import { AtomForgeVisual } from "@/components/phase/atom-forge-visual";
@@ -84,6 +85,41 @@ export function AtomForge({
   function handleBondToggle(index: number) {
     onUpdateBondOrder(index);
     setRecentlyChangedBondIndex(index);
+  }
+
+  function handleBondKeyDown(
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleBondToggle(index);
+      return;
+    }
+
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+      return;
+    }
+
+    event.preventDefault();
+
+    const bondButtons = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("[data-bond-index]"),
+    );
+    const currentPosition = bondButtons.findIndex(
+      (button) => Number(button.dataset.bondIndex) === index,
+    );
+
+    if (currentPosition < 0) {
+      return;
+    }
+
+    const nextPosition =
+      event.key === "ArrowDown"
+        ? Math.min(bondButtons.length - 1, currentPosition + 1)
+        : Math.max(0, currentPosition - 1);
+
+    bondButtons[nextPosition]?.focus();
   }
 
   return (
@@ -188,11 +224,13 @@ export function AtomForge({
                         <button
                           key={`${from}-${to}`}
                           type="button"
+                          data-bond-index={index}
                           onClick={() => handleBondToggle(index)}
                           onMouseEnter={() => setHoveredBondIndex(index)}
                           onMouseLeave={() => setHoveredBondIndex(null)}
                           onFocus={() => setHoveredBondIndex(index)}
                           onBlur={() => setHoveredBondIndex(null)}
+                          onKeyDown={(event) => handleBondKeyDown(event, index)}
                           disabled={!canUseDoubleBond}
                           className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
                             hoveredBondIndex === index
@@ -207,13 +245,21 @@ export function AtomForge({
                           <span className="font-semibold">
                             C{from} {order === 2 ? "=" : "-"} C{to}
                           </span>
-                          <span className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                            {canUseDoubleBond
-                              ? order === 2
-                                ? "Dupla"
-                                : "Simples"
-                              : "So simples"}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            {(hoveredBondIndex === index
+                              || recentlyChangedBondIndex === index) ? (
+                              <span className="rounded-full border border-white/10 px-2 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/90">
+                                {hoveredBondIndex === index ? "Ativa" : "Alterada"}
+                              </span>
+                            ) : null}
+                            <span className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                              {canUseDoubleBond
+                                ? order === 2
+                                  ? "Dupla"
+                                  : "Simples"
+                                : "So simples"}
+                            </span>
+                          </div>
                         </button>
                       );
                     })
@@ -225,6 +271,9 @@ export function AtomForge({
                 </div>
                 <p className="mt-2 text-xs leading-5 text-slate-500">
                   Clique em cada ligacao para alternar entre simples e dupla.
+                </p>
+                <p className="mt-1 text-xs leading-5 text-slate-600">
+                  Teclado: use `Tab` para focar, `Enter` ou `Espaco` para alternar, e setas para navegar entre ligacoes.
                 </p>
               </div>
             </div>
@@ -268,6 +317,9 @@ export function AtomForge({
           previewFormulaMolecular={previewFormulaMolecular}
           hoveredBondIndex={hoveredBondIndex}
           recentlyChangedBondIndex={recentlyChangedBondIndex}
+          canUseDoubleBond={canUseDoubleBond}
+          onBondHover={setHoveredBondIndex}
+          onBondToggle={handleBondToggle}
         />
       </div>
 
