@@ -67,6 +67,14 @@ logs
 *.out
 *.tgz
 
+# Images and visual assets
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.svg
+
 # Optional: lock files (geralmente você DEVE versionar, então cuidado!)
 # package-lock.json
 # yarn.lock
