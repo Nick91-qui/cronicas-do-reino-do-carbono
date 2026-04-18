@@ -142,7 +142,7 @@ export function getExpectedGraphBonds(
 export function getHydrogensByCarbon(
   layout: BuilderLayout,
   carbonCount: number,
-  bondOrders: GraphBuilderBondOrder[],
+  bondOrders: readonly number[],
 ): number[] {
   const valenceByCarbon = Array.from({ length: carbonCount }, () => 0);
 
