@@ -2,6 +2,8 @@
 
 import {
   formatCarbonGroup,
+  getOpenChainBondSegments,
+  getOpenChainGeometry,
   getRingBondSegments,
   getRingGeometry,
 } from "@/lib/builder/graph-preview";
@@ -21,11 +23,6 @@ type AtomForgeVisualProps = {
   canUseDoubleBond: boolean;
   onBondHover: (index: number | null) => void;
   onBondToggle: (index: number) => void;
-};
-
-const layoutLabels: Record<BuilderLayout, string> = {
-  open_chain: "Cadeia aberta",
-  closed_ring: "Cadeia fechada",
 };
 
 function carbonHasDoubleBond(
@@ -327,86 +324,134 @@ export function AtomForgeVisual({
           </div>
         ) : (
           <div className="mt-8 overflow-x-auto pb-16 pt-10 sm:pb-14 sm:pt-8">
-            <div className="mx-auto flex min-w-max items-center justify-center gap-1 px-2 sm:gap-2">
-              {Array.from({ length: activeCarbonCount }, (_, index) => (
-                <div key={`atom-${index}`} className="flex items-center">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`flex h-12 min-w-12 items-center justify-center rounded-full border px-2.5 text-xs font-black transition-all duration-200 sm:h-14 sm:min-w-14 sm:px-3 sm:text-sm ${getCarbonToneClass(
-                        carbonHasDoubleBond(index, normalizedBondOrders, layout),
-                      )}`}
-                      title={`Carbono ${index + 1}: ${formatCarbonGroup(
-                        previewHydrogensByCarbon[index] ?? 0,
-                      )}`}
-                    >
-                      {formatCarbonGroup(previewHydrogensByCarbon[index] ?? 0)}
-                    </div>
-                  </div>
+            {(() => {
+              const { stageWidth, stageHeight, carbonRadius, points } =
+                getOpenChainGeometry(activeCarbonCount, normalizedBondOrders);
+              const segments = getOpenChainBondSegments(
+                points,
+                carbonRadius,
+                normalizedBondOrders,
+              );
 
-                  {index < activeCarbonCount - 1 ? (
-                    <div className="mx-1 flex w-10 shrink-0 justify-center sm:w-14">
-                      {normalizedBondOrders[index] === 2 ? (
-                        <button
-                          type="button"
-                          disabled={!canUseDoubleBond}
-                          onMouseEnter={() => onBondHover(index)}
-                          onMouseLeave={() => onBondHover(null)}
-                          onFocus={() => onBondHover(index)}
-                          onBlur={() => onBondHover(null)}
-                          onClick={() => onBondToggle(index)}
-                          className="flex flex-col gap-1 rounded-md p-1.5 disabled:cursor-not-allowed"
-                          aria-label={`Alternar ligacao entre C${index + 1} e C${index + 2}`}
-                        >
-                          <div
-                            className={`h-px w-10 transition-all duration-200 sm:w-12 ${
-                              hoveredBondIndex === index
-                                ? "bg-cyan-200"
-                                : recentlyChangedBondIndex === index
-                                  ? "bg-amber-200"
-                                  : "bg-fuchsia-200/70"
-                            } ${recentlyChangedBondIndex === index ? "scale-x-110" : ""}`}
+              return (
+                <div className="mx-auto min-w-max px-2">
+                  <svg
+                    viewBox={`0 0 ${stageWidth} ${stageHeight}`}
+                    className="h-[220px] w-auto min-w-full"
+                    aria-hidden="true"
+                  >
+                    {segments.map((segment) => {
+                      const isHovered = hoveredBondIndex === segment.index;
+                      const isRecentlyChanged =
+                        recentlyChangedBondIndex === segment.index;
+                      const stroke = isHovered
+                        ? "rgba(103, 232, 249, 0.95)"
+                        : isRecentlyChanged
+                          ? "rgba(252, 211, 77, 0.95)"
+                          : segment.order === 2
+                            ? "rgba(240, 171, 252, 0.8)"
+                            : "rgba(125, 211, 252, 0.72)";
+                      const strokeWidth = isHovered ? 2.8 : isRecentlyChanged ? 2.4 : 1.6;
+                      const showGhostDouble =
+                        canUseDoubleBond && isHovered && segment.order === 1;
+
+                      return (
+                        <g key={`open-bond-${segment.index}`}>
+                          <line
+                            x1={segment.line1.x1}
+                            y1={segment.line1.y1}
+                            x2={segment.line1.x2}
+                            y2={segment.line1.y2}
+                            stroke="transparent"
+                            strokeWidth="18"
+                            strokeLinecap="round"
+                            className={canUseDoubleBond ? "cursor-pointer" : "cursor-not-allowed"}
+                            onMouseEnter={() => onBondHover(segment.index)}
+                            onMouseLeave={() => onBondHover(null)}
+                            onClick={() => {
+                              if (canUseDoubleBond) {
+                                onBondToggle(segment.index);
+                              }
+                            }}
                           />
-                          {canUseDoubleBond && hoveredBondIndex === index ? (
-                            <div className="h-px w-10 border-t border-dashed border-cyan-200/70 sm:w-12" />
+                          <line
+                            x1={segment.line1.x1}
+                            y1={segment.line1.y1}
+                            x2={segment.line1.x2}
+                            y2={segment.line1.y2}
+                            stroke={stroke}
+                            strokeWidth={strokeWidth}
+                            strokeLinecap="round"
+                            pointerEvents="none"
+                            className={`origin-center transition-all duration-200 ${
+                              isRecentlyChanged ? "animate-pulse" : ""
+                            }`}
+                          />
+                          {showGhostDouble && segment.line2 ? (
+                            <line
+                              x1={segment.line2.x1}
+                              y1={segment.line2.y1}
+                              x2={segment.line2.x2}
+                              y2={segment.line2.y2}
+                              stroke="rgba(103, 232, 249, 0.45)"
+                              strokeWidth="1.4"
+                              strokeLinecap="round"
+                              strokeDasharray="4 3"
+                              pointerEvents="none"
+                            />
                           ) : null}
-                          <div
-                            className={`h-px w-10 transition-all duration-200 sm:w-12 ${
-                              hoveredBondIndex === index
-                                ? "bg-cyan-200"
-                                : recentlyChangedBondIndex === index
-                                  ? "bg-amber-200"
-                                  : "bg-fuchsia-200/70"
-                            } ${recentlyChangedBondIndex === index ? "scale-x-110" : ""}`}
-                          />
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={!canUseDoubleBond}
-                          onMouseEnter={() => onBondHover(index)}
-                          onMouseLeave={() => onBondHover(null)}
-                          onFocus={() => onBondHover(index)}
-                          onBlur={() => onBondHover(null)}
-                          onClick={() => onBondToggle(index)}
-                          className="rounded-md p-1.5 disabled:cursor-not-allowed"
-                          aria-label={`Alternar ligacao entre C${index + 1} e C${index + 2}`}
-                        >
-                          <div
-                            className={`h-px w-10 transition-all duration-200 sm:w-12 ${
-                              hoveredBondIndex === index
-                                ? "bg-cyan-200"
-                                : recentlyChangedBondIndex === index
-                                  ? "bg-amber-200"
-                                  : "bg-cyan-200/65"
-                            } ${recentlyChangedBondIndex === index ? "scale-x-110" : ""}`}
-                          />
-                        </button>
-                      )}
-                    </div>
-                  ) : null}
+                          {segment.line2 ? (
+                            <line
+                              x1={segment.line2.x1}
+                              y1={segment.line2.y1}
+                              x2={segment.line2.x2}
+                              y2={segment.line2.y2}
+                              stroke={stroke}
+                              strokeWidth={strokeWidth}
+                              strokeLinecap="round"
+                              pointerEvents="none"
+                              className={`origin-center transition-all duration-200 ${
+                                isRecentlyChanged ? "animate-pulse" : ""
+                              }`}
+                            />
+                          ) : null}
+                        </g>
+                      );
+                    })}
+
+                    {points.map((point, index) => {
+                      const hydrogenCount = previewHydrogensByCarbon[index] ?? 0;
+                      const isUnsaturated = carbonHasDoubleBond(
+                        index,
+                        normalizedBondOrders,
+                        layout,
+                      );
+                      const toneClass = getCarbonToneClass(isUnsaturated);
+
+                      return (
+                        <g key={`open-carbon-${index}`}>
+                          <title>{`Carbono ${index + 1}: ${formatCarbonGroup(hydrogenCount)}`}</title>
+                          <foreignObject
+                            x={point.x - carbonRadius}
+                            y={point.y - carbonRadius}
+                            width={carbonRadius * 2}
+                            height={carbonRadius * 2}
+                          >
+                            <div className="flex h-full w-full items-center justify-center">
+                              <div
+                                className={`flex h-12 min-w-12 items-center justify-center rounded-full border px-2.5 text-xs font-black transition-all duration-200 sm:h-14 sm:min-w-14 sm:px-3 sm:text-sm ${toneClass}`}
+                              >
+                                {formatCarbonGroup(hydrogenCount)}
+                              </div>
+                            </div>
+                          </foreignObject>
+                        </g>
+                      );
+                    })}
+                  </svg>
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </div>
         )}
 

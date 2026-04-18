@@ -28,6 +28,28 @@ type RingBondSegment = {
   } | null;
 };
 
+type OpenChainPoint = {
+  x: number;
+  y: number;
+};
+
+type OpenChainBondSegment = {
+  index: number;
+  order: GraphBuilderBondOrder;
+  line1: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  };
+  line2: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  } | null;
+};
+
 export function formatCarbonGroup(hydrogenCount: number): string {
   if (hydrogenCount <= 0) return "C";
   if (hydrogenCount === 1) return "CH";
@@ -312,6 +334,91 @@ export function getRingBondSegments(
   return bondOrders.map((order, index) => {
     const start = points[index];
     const end = points[(index + 1) % points.length];
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const length = Math.hypot(dx, dy) || 1;
+    const normalX = -dy / length;
+    const normalY = dx / length;
+    const offset = 4.5;
+    const trim = carbonRadius - 2;
+    const trimX = (dx / length) * trim;
+    const trimY = (dy / length) * trim;
+
+    const line1 = {
+      x1: start.x + trimX + (order === 2 ? normalX * offset : 0),
+      y1: start.y + trimY + (order === 2 ? normalY * offset : 0),
+      x2: end.x - trimX + (order === 2 ? normalX * offset : 0),
+      y2: end.y - trimY + (order === 2 ? normalY * offset : 0),
+    };
+
+    return {
+      index,
+      order,
+      line1,
+      line2: order === 2
+        ? {
+            x1: start.x + trimX - normalX * offset,
+            y1: start.y + trimY - normalY * offset,
+            x2: end.x - trimX - normalX * offset,
+            y2: end.y - trimY - normalY * offset,
+          }
+        : null,
+    };
+  });
+}
+
+export function getOpenChainGeometry(
+  carbonCount: number,
+  bondOrders: GraphBuilderBondOrder[],
+): {
+  stageWidth: number;
+  stageHeight: number;
+  carbonRadius: number;
+  points: OpenChainPoint[];
+} {
+  const carbonRadius = 24;
+  const startX = 60;
+  const stepX = 88;
+  const stageHeight = 240;
+  const baseY = 118;
+  const zigzagOffset = 42;
+  const points: OpenChainPoint[] = [{ x: startX, y: baseY + zigzagOffset }];
+  let nextDirection: -1 | 1 = -1;
+
+  for (let index = 1; index < carbonCount; index += 1) {
+    const previousPoint = points[index - 1];
+    const previousOrder = bondOrders[index - 1] ?? 1;
+    const nextY =
+      previousOrder === 2
+        ? previousPoint.y
+        : baseY + zigzagOffset * nextDirection;
+
+    points.push({
+      x: startX + stepX * index,
+      y: nextY,
+    });
+
+    if (previousOrder === 1) {
+      nextDirection = nextDirection === 1 ? -1 : 1;
+    }
+  }
+
+  return {
+    stageWidth: Math.max(320, startX * 2 + stepX * Math.max(0, carbonCount - 1)),
+    stageHeight,
+    carbonRadius,
+    points,
+  };
+}
+
+export function getOpenChainBondSegments(
+  points: OpenChainPoint[],
+  carbonRadius: number,
+  bondOrders: GraphBuilderBondOrder[],
+): OpenChainBondSegment[] {
+  return bondOrders.map((order, index) => {
+    const start = points[index];
+    const end = points[index + 1];
     const dx = end.x - start.x;
     const dy = end.y - start.y;
     const length = Math.hypot(dx, dy) || 1;
