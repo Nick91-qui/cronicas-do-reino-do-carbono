@@ -12,7 +12,7 @@ export default function HomePage() {
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 px-6 py-16">
       <section className="space-y-4">
         <span className="inline-flex rounded-full border border-sky-400/30 px-3 py-1 text-sm text-accent">
-          Milestone 4 · Autenticação e sessão
+          Milestone 8 · Integração do Capítulo I
         </span>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Crônicas do Reino do Carbono

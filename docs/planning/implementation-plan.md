@@ -21,6 +21,22 @@ Este plano é estruturado para execução, e não apenas para documentação. El
 - `docs/design/phases.md`;
 - `docs/tech/technical-spec.md`.
 
+### 1.1 Snapshot de execução atual
+
+Na revisão atual, o repositório já ultrapassou a fase de fundação e possui uma fatia vertical funcional relevante do MVP.
+
+Estado consolidado:
+
+- Bloco 1 — Fundação: concluído;
+- Bloco 2 — Fatia de risco de gameplay: concluído em versão funcional;
+- Bloco 3 — Autenticação e banco de dados: concluído em versão funcional;
+- Bloco 4 — Loop central de gameplay: concluído em versão funcional;
+- Bloco 5 — Progresso, inventário e recompensas: concluído em versão funcional;
+- Bloco 6 — Integração do Capítulo I: majoritariamente implementado, ainda exigindo validação final de aderência e polimento;
+- Bloco 7 — Estabilização, QA e implantação: pendente.
+
+Este documento continua válido como plano, mas não deve mais ser lido como se o projeto estivesse prestes a iniciar o Bloco 1.
+
 ---
 
 ## 2. Princípios de planejamento
@@ -324,7 +340,68 @@ Refinar o MVP para disponibilização em ambiente de produção com confiabilida
 
 ---
 
-## 12. Dependências entre blocos
+## 12. Checklist operacional dos próximos passos
+
+Este checklist traduz o estado atual do projeto em tarefas executáveis de curto prazo.
+
+### 12.1 Fechamento do Bloco 6 — Integração do Capítulo I
+
+- [ ] revisar as 8 fases em `content/` contra `docs/design/phases.md`;
+- [ ] validar ids, propriedades esperadas, respostas `excellent` e `adequate`;
+- [ ] confirmar que feedbacks e recompensas batem com a documentação oficial;
+- [ ] verificar coerência entre fases `construction`, `choice` e `construction_choice`;
+- [ ] revisar se desbloqueios do inventário refletem corretamente a progressão do capítulo.
+
+### 12.2 Validação funcional ponta a ponta
+
+- [ ] executar fluxo completo de cadastro;
+- [ ] executar fluxo completo de login e logout;
+- [ ] jogar ao menos uma fase de cada tipo técnico até o feedback final;
+- [ ] validar avanço de fase apenas com `validationResult = correct`;
+- [ ] validar replay de fase já concluída sem corromper progresso;
+- [ ] validar coleção, inventário e perfil após desbloqueios.
+
+### 12.3 Builder e validação autoritativa
+
+- [ ] revisar casos válidos e inválidos do builder para moléculas oficiais do Capítulo I;
+- [ ] validar retorno de erro claro para estruturas inválidas;
+- [ ] revisar aromaticidade e fragmentos desbloqueáveis;
+- [ ] confirmar serialização e persistência corretas de `builderStateJson`;
+- [ ] confirmar que nenhuma regra crítica de validação depende apenas do cliente.
+
+### 12.4 Persistência, recompensas e consistência operacional
+
+- [ ] revisar criação de `PlayerPhaseAttempt` a cada submissão avaliada;
+- [ ] revisar atualização de `PlayerPhaseSummary` e `PlayerChapterProgress`;
+- [ ] validar cálculo de melhor pontuação e `highestUnlockedPhaseNumber`;
+- [ ] validar idempotência de recompensas e consistência de inventário;
+- [ ] revisar cenários de falha parcial em escrita transacional.
+
+### 12.5 QA automatizado mínimo
+
+- [ ] definir stack de testes do projeto;
+- [ ] criar testes unitários para builder e avaliação de fase;
+- [ ] criar testes de integração para submissão, progresso e recompensas;
+- [ ] criar smoke tests mínimos para autenticação e fluxo principal do jogador;
+- [ ] documentar o comando oficial de testes no repositório.
+
+### 12.6 Segurança, observabilidade e deploy
+
+- [ ] revisar proteção de rotas e exigência de sessão nas escritas;
+- [ ] revisar tratamento de erros para não gerar falso sucesso na UI;
+- [ ] definir logging mínimo para falhas críticas de autenticação e submissão;
+- [ ] revisar variáveis de ambiente de desenvolvimento e produção;
+- [ ] preparar checklist de deploy e smoke test em ambiente conectado ao Neon.
+
+### 12.7 Documentação contínua
+
+- [ ] atualizar documentação sempre que regra oficial e implementação divergirem;
+- [ ] manter status de milestones sincronizado com o estado real do código;
+- [ ] registrar critérios objetivos de aceite para fechamento do MVP.
+
+---
+
+## 13. Dependências entre blocos
 
 A sequência mínima recomendada é:
 
@@ -340,7 +417,7 @@ Embora haja espaço para trabalho paralelo em partes da UI e do conteúdo, o pro
 
 ---
 
-## 13. Riscos principais
+## 14. Riscos principais
 
 ### 13.1 Builder molecular
 

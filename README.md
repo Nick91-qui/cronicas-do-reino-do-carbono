@@ -16,9 +16,19 @@ O projeto foi concebido para ensinar conceitos introdutórios de química orgân
 
 ## Status do projeto
 
-**MVP documentation-first, em planejamento e implementação**
+**MVP em implementação avançada, com fatia vertical jogável já integrada**
 
-Isso significa que a base conceitual, pedagógica, de design e técnica está sendo consolidada antes da implementação completa do produto.
+O repositório já possui:
+
+- fundação técnica em Next.js, TypeScript, Tailwind e Prisma;
+- conteúdo estático tipado do Capítulo I;
+- autenticação customizada por sessão;
+- builder molecular com validação autoritativa no servidor;
+- submissão e avaliação de fases;
+- persistência de tentativas, progresso, inventário e recompensas;
+- páginas protegidas de jogo, capítulo, coleção e perfil.
+
+O foco atual do MVP não é mais iniciar a fundação, e sim consolidar integração completa do Capítulo I, ampliar QA e fechar estabilidade de produção.
 
 ## Stack
 
@@ -119,7 +129,7 @@ Para entender o projeto de forma consistente, recomenda-se ler nesta ordem:
 
 ## Estrutura resumida do repositório
 
-Além da documentação, o repositório deve evoluir para incluir a implementação do MVP.
+Além da documentação, o repositório já inclui a implementação principal do MVP.
 
 Estrutura resumida esperada:
 

@@ -13,6 +13,22 @@ Ele complementa:
 
 Este documento deve ser usado para guiar execução incremental. Em caso de conflito, prevalecem as regras oficiais definidas em `docs/tech/technical-spec.md` e `docs/design/content-model.md`.
 
+### 1.1 Status consolidado do projeto
+
+Na revisão atual do repositório, os milestones não estão mais apenas planejados.
+
+Leitura operacional recomendada:
+
+- Milestone 1 — Fundação do projeto: concluído;
+- Milestone 2 — Conteúdo tipado e loaders: concluído;
+- Milestone 3 — Builder e validação química no servidor: concluído em versão funcional;
+- Milestone 4 — Autenticação, sessão e turma: concluído em versão funcional;
+- Milestone 5 — Loop central de fase: concluído em versão funcional;
+- Milestone 6 — Persistência de tentativas e progresso: concluído em versão funcional;
+- Milestone 7 — Inventário, coleção e recompensas: concluído em versão funcional;
+- Milestone 8 — Integração completa do Capítulo I: parcialmente concluído, com conteúdo oficial materializado e fluxo jogável, ainda dependente de revisão final de aderência e polimento;
+- Milestone 9 — QA, segurança e deploy: pendente.
+
 ---
 
 ## 2. Regras operacionais obrigatórias
@@ -30,6 +46,10 @@ Toda implementação do MVP deve obedecer às seguintes regras:
 ---
 
 ## 3. Milestone 1 — Fundação do projeto
+
+### Status atual
+
+Concluído.
 
 ### Objetivo
 
@@ -59,13 +79,15 @@ Preparar a base técnica e estrutural do repositório.
 
 ### Issues principais
 
-- definir versão exata de Node.js e gerenciador de pacotes;
-- definir convenção exata de naming no Prisma;
-- definir política mínima de `.env` para desenvolvimento.
+- manter setup local e documentação operacional sincronizados com o estado real do repositório.
 
 ---
 
 ## 4. Milestone 2 — Conteúdo tipado e loaders
+
+### Status atual
+
+Concluído.
 
 ### Objetivo
 
@@ -92,13 +114,15 @@ Materializar a fonte estática de verdade do jogo em arquivos e loaders tipados.
 
 ### Issues principais
 
-- decidir formato final dos arquivos de conteúdo (`.ts`, `.json` ou híbrido controlado);
-- garantir compatibilidade entre nomes de exibição e ids técnicos;
-- validar se haverá normalização de conteúdo em build time ou runtime.
+- preservar aderência entre `content/` e `docs/design/`.
 
 ---
 
 ## 5. Milestone 3 — Builder e validação química no servidor
+
+### Status atual
+
+Concluído em versão funcional.
 
 ### Objetivo
 
@@ -128,13 +152,16 @@ Implementar o núcleo químico do MVP com validação estrutural determinística
 
 ### Issues principais
 
-- definir forma exata do `builderStateJson`;
-- definir se a rota de validação retorna apenas validade ou também a molécula resolvida;
-- decidir como representar estrutura aromática no builder sem criar ambiguidade.
+- endurecer QA dos estados válidos e inválidos do builder;
+- revisar cobertura dos casos de aromaticidade e fragmentos desbloqueáveis.
 
 ---
 
 ## 6. Milestone 4 — Autenticação, sessão e turma
+
+### Status atual
+
+Concluído em versão funcional.
 
 ### Objetivo
 
@@ -162,13 +189,15 @@ Introduzir identidade persistente do jogador com vínculo à turma.
 
 ### Issues principais
 
-- definir estratégia exata de sessão persistida;
-- definir seed ou provisão inicial de turmas;
-- definir política de unicidade para `username` por turma ou global.
+- revisar endurecimento de sessão, autorização e fluxos de erro.
 
 ---
 
 ## 7. Milestone 5 — Loop central de fase
+
+### Status atual
+
+Concluído em versão funcional.
 
 ### Objetivo
 
@@ -206,13 +235,15 @@ Implementar o fluxo oficial de fase ponta a ponta.
 
 ### Issues principais
 
-- definir shape final da submissão para fases `construction`;
-- decidir se `construction` usa endpoint de submit separado ou mesma rota com payload adaptado;
-- definir estratégia de reaproveitamento do preview do builder no fluxo de resposta.
+- validar experiência ponta a ponta nas três famílias de fase com revisão funcional final.
 
 ---
 
 ## 8. Milestone 6 — Persistência de tentativas e progresso
+
+### Status atual
+
+Concluído em versão funcional.
 
 ### Objetivo
 
@@ -241,13 +272,15 @@ Persistir o estado oficial do jogador com segurança para replay e retomada.
 
 ### Issues principais
 
-- definir cálculo exato de `highestUnlockedPhaseNumber`;
-- definir se `attemptCount` inclui toda submissão válida de payload ou apenas submissão avaliada;
-- definir política para reprocessamento em caso de falha parcial de escrita.
+- ampliar validação transacional e cobertura de replay.
 
 ---
 
 ## 9. Milestone 7 — Inventário, coleção e recompensas
+
+### Status atual
+
+Concluído em versão funcional.
 
 ### Objetivo
 
@@ -275,13 +308,15 @@ Persistir e refletir no jogo os desbloqueios do jogador.
 
 ### Issues principais
 
-- definir estratégia de idempotência para reward grants;
-- definir ordem de aplicação entre fase concluída, reward event e inventory snapshot;
-- decidir se coleção terá endpoint próprio ou derivará do inventário.
+- revisar idempotência e comportamento em cenários de repetição e falha parcial.
 
 ---
 
 ## 10. Milestone 8 — Integração completa do Capítulo I
+
+### Status atual
+
+Parcialmente concluído.
 
 ### Objetivo
 
@@ -308,13 +343,17 @@ Integrar as 8 fases oficiais com seus conteúdos, feedbacks e recompensas.
 
 ### Issues principais
 
-- revisar se todas as fases têm conteúdo carregável equivalente ao documento textual;
-- garantir que exemplos pedagógicos não conflitam com lógica técnica;
-- revisar se todas as propriedades esperadas existem no enum oficial.
+- revisar aderência fina entre `content/`, feedbacks e documentação textual do Capítulo I;
+- validar a jogabilidade das 8 fases como pacote completo;
+- polir apresentação e consistência visual dos fluxos de fase.
 
 ---
 
 ## 11. Milestone 9 — QA, segurança e deploy
+
+### Status atual
+
+Pendente.
 
 ### Objetivo
 
@@ -389,7 +428,7 @@ As issues abaixo atravessam múltiplos milestones e devem ser acompanhadas conti
 
 ## 13. Ordem recomendada de execução
 
-A sequência recomendada é:
+A sequência histórica do plano continua sendo:
 
 1. Milestone 1 — Fundação do projeto
 2. Milestone 2 — Conteúdo tipado e loaders
@@ -402,6 +441,12 @@ A sequência recomendada é:
 9. Milestone 9 — QA, segurança e deploy
 
 Essa ordem existe para reduzir retrabalho e validar primeiro os pontos de maior risco técnico.
+
+Na execução atual, a prioridade prática é:
+
+1. fechar o Milestone 8 com validação final do Capítulo I;
+2. abrir o Milestone 9 com QA automatizado e smoke tests;
+3. concluir endurecimento de segurança, observabilidade e preparo de deploy.
 
 ---
 

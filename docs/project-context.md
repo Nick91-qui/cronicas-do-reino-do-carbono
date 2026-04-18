@@ -124,10 +124,10 @@ inadequate -> incorrect -> 0
 
 ## Status da Missão
 
-- **Estado atual:** documentação oficial revisada e consolidada em `docs/`
+- **Estado atual:** MVP em implementação avançada com fundação, conteúdo estático, builder, autenticação, loop de fase, progresso e inventário já materializados no repositório
 - **Fonte única da verdade:** `README.md` e pasta `docs/`
 - **Legado removido:** `archive/` excluído para evitar ambiguidade
-- **Próximo passo imediato:** iniciar o **Milestone 1 — Fundação do projeto**
+- **Próximo passo imediato:** consolidar o **Milestone 8 — Integração completa do Capítulo I** e avançar no **Milestone 9 — QA, segurança e deploy**
 
 ## Estrutura documental visual
 
@@ -150,14 +150,13 @@ Ela também define o vínculo entre conteúdo estático e apresentação por mei
 
 ## Próximo passo operacional
 
-Executar o Milestone 1 com foco em:
+Executar a fase atual do projeto com foco em:
 
-- inicialização do projeto Next.js;
-- configuração de TypeScript, Tailwind e Prisma;
-- conexão com Neon/PostgreSQL;
-- estrutura base de diretórios;
-- variáveis de ambiente mínimas;
-- convenções iniciais de tipagem e nomenclatura.
+- validar ponta a ponta as 8 fases oficiais já integradas em conteúdo local;
+- revisar coerência entre `content/` e `docs/design/phases.md`;
+- ampliar QA dos fluxos críticos de builder, submissão, progresso e recompensas;
+- preparar critérios mínimos de smoke test e aceite para produção;
+- atualizar continuamente a documentação de status quando a implementação avançar.
 
 ## Restrições para futuras sessões
 
