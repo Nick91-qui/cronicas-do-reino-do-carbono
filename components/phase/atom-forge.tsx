@@ -42,10 +42,55 @@ const bondTypeLabels: Record<BondType, string> = {
   aromatic: "Estrutura aromatica",
 };
 
-const layoutLabels: Record<BuilderLayout, string> = {
-  open_chain: "Cadeia aberta",
-  closed_ring: "Cadeia fechada",
-};
+function LayoutGlyph({ layout }: { layout: BuilderLayout }) {
+  if (layout === "open_chain") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 44 20"
+        className="h-5 w-11"
+        fill="none"
+      >
+        <circle cx="6" cy="12.5" r="2.5" fill="currentColor" />
+        <circle cx="22" cy="6.5" r="2.5" fill="currentColor" />
+        <circle cx="38" cy="12.5" r="2.5" fill="currentColor" />
+        <line x1="9.2" y1="11.3" x2="18.6" y2="7.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <line x1="25.4" y1="7.7" x2="34.8" y2="11.3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      className="h-5 w-5"
+      fill="none"
+    >
+      <circle cx="10" cy="10" r="6.5" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function FlameGlyph() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+    >
+      <path
+        d="M12.4 3.8c.4 2.1-.4 3.5-1.7 4.9-1.1 1.2-2.3 2.3-2.3 4.2 0 2.1 1.6 3.7 3.7 3.7 2.6 0 4.5-2 4.5-4.8 0-2.4-1.3-4.2-4.2-8z"
+        fill="rgb(220 38 38)"
+      />
+      <path
+        d="M12 13.2c-.8 1-1.6 1.7-1.6 2.9 0 1 .8 1.8 1.8 1.8 1.2 0 2.1-.9 2.1-2.3 0-1.1-.6-1.9-2.3-2.4z"
+        fill="rgb(250 204 21)"
+      />
+    </svg>
+  );
+}
 
 export function AtomForge({
   layout,
@@ -189,7 +234,7 @@ export function AtomForge({
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-3">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  Topologia
+                  Cadeia
                 </span>
                 <div className="flex flex-col gap-2">
                   {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
@@ -198,13 +243,14 @@ export function AtomForge({
                       type="button"
                       onClick={() => onSetLayout(nextLayout)}
                       disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                      className={`rounded-2xl border px-4 py-3 text-sm font-black transition ${
+                      className={`flex items-center justify-center rounded-2xl border px-4 py-3 text-sm font-black transition ${
                         layout === nextLayout
                           ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
                           : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
                       } disabled:cursor-not-allowed disabled:opacity-30`}
+                      aria-label={nextLayout === "open_chain" ? "Cadeia aberta" : "Cadeia fechada"}
                     >
-                      {layoutLabels[nextLayout]}
+                      <LayoutGlyph layout={nextLayout} />
                     </button>
                   ))}
                 </div>
@@ -214,32 +260,24 @@ export function AtomForge({
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                   Carbonos
                 </span>
-                <div className="inline-flex items-center self-start rounded-full border border-white/10 bg-slate-950/70 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => handleCarbonStep("decrease")}
                     disabled={activeCarbonCount <= minimumCarbonCount}
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-orange-300/20 bg-[radial-gradient(circle_at_30%_30%,rgba(251,191,36,0.32),transparent_45%),linear-gradient(180deg,rgba(249,115,22,0.18),rgba(127,29,29,0.32))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(249,115,22,0.16)] transition hover:border-amber-300/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_24px_rgba(249,115,22,0.24)] disabled:cursor-not-allowed disabled:opacity-35"
                     aria-label="Diminuir carbonos"
                   >
-                    -
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onSetCarbonCount(String(activeCarbonCount))}
-                    className="min-w-[84px] rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center text-sm font-black tracking-[0.16em] text-white"
-                    aria-label={`Carbonos atuais: ${activeCarbonCount}`}
-                  >
-                    {activeCarbonCount}C
+                    <FlameGlyph />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleCarbonStep("increase")}
                     disabled={activeCarbonCount >= maximumCarbonCount}
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-slate-200 transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-slate-950/70 text-base font-black text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
                     aria-label="Aumentar carbonos"
                   >
-                    +
+                    C
                   </button>
                 </div>
                 <span className="text-[11px] leading-5 text-slate-500">
