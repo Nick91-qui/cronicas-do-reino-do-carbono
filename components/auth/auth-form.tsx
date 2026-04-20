@@ -13,6 +13,10 @@ type AuthFormProps = {
 const copyByMode: Record<
   AuthMode,
   {
+    eyebrow: string;
+    sideTitle: string;
+    sideDescription: string;
+    sideHighlights: Array<{ title: string; description: string }>;
     title: string;
     description: string;
     submitLabel: string;
@@ -20,15 +24,43 @@ const copyByMode: Record<
   }
 > = {
   login: {
-    title: "Entrar",
-    description: "Use seu username e senha para continuar a jornada.",
-    submitLabel: "Entrar",
+    eyebrow: "Rito de Retorno",
+    sideTitle: "Retorne a oficina e reassuma seu lugar diante da forja.",
+    sideDescription:
+      "Seu nome ja foi inscrito entre os aprendizes. Informe suas credenciais e volte ao ponto em que sua jornada alquimica foi interrompida.",
+    sideHighlights: [
+      {
+        title: "Memoria da jornada",
+        description: "Suas passagens, escolhas e descobertas permanecem vinculadas ao seu nome no grimorio.",
+      },
+      {
+        title: "Retorno imediato",
+        description: "Cruze o portal e volte direto as provas estruturais que aguardam sua proxima decisao.",
+      },
+    ],
+    title: "Retornar a oficina",
+    description: "Informe seu nome de oficio e sua chave sigilosa para retomar os estudos alquimicos.",
+    submitLabel: "Cruzar o portal",
     endpoint: "/api/auth/login",
   },
   register: {
-    title: "Criar conta",
-    description: "Informe a turma, seus dados e gere a sessão inicial do jogador.",
-    submitLabel: "Cadastrar",
+    eyebrow: "Rito de Ingresso",
+    sideTitle: "Toda grande forja comeca quando um nome e aceito pelo reino.",
+    sideDescription:
+      "Apresente os sinais exigidos pela oficina, assuma seu nome no grimorio e receba a primeira marca de aprendiz.",
+    sideHighlights: [
+      {
+        title: "Codigo da oficina",
+        description: "Use o codigo da turma para ingressar no mesmo circulo de estudos conduzido pelo mestre.",
+      },
+      {
+        title: "Nome no grimorio",
+        description: "Escolha como o reino registrara sua passagem pelas provas e descobertas do carbono.",
+      },
+    ],
+    title: "Iniciar a provacao",
+    description: "Apresente seu codigo de turma, escolha seu nome no grimorio e receba sua marca de aprendiz.",
+    submitLabel: "Receber marca de aprendiz",
     endpoint: "/api/auth/register",
   },
 };
@@ -85,36 +117,28 @@ export function AuthForm({ mode }: AuthFormProps) {
             Cronicas do Reino do Carbono
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight text-white">
-            {mode === "login" ? "Retorne a oficina" : "Inicie a jornada"}
+            {copyByMode[mode].sideTitle}
           </h1>
           <p className="mt-4 max-w-md text-sm leading-7 text-slate-300">
-            Entre na campanha pedagogica, acompanhe suas fases e desbloqueie as moleculas oficiais do capitulo.
+            {copyByMode[mode].sideDescription}
           </p>
 
           <div className="mt-8 grid gap-3">
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Fluxo guiado
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-200">
-                Historia, forja, escolha e justificativa em uma progressao clara.
-              </p>
-            </div>
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Progresso persistente
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-200">
-                Pontuacao, fases e cartas ficam vinculadas ao seu jogador.
-              </p>
-            </div>
+            {copyByMode[mode].sideHighlights.map((item) => (
+              <div key={item.title} className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  {item.title}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-200">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="p-6 sm:p-8">
           <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 sm:p-8">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
-              {mode === "login" ? "Sessao autenticada" : "Cadastro inicial"}
+              {copyByMode[mode].eyebrow}
             </p>
             <h1 className="mt-3 text-3xl font-black tracking-tight text-white">{copyByMode[mode].title}</h1>
             <p className="mt-2 text-sm leading-6 text-slate-300">{copyByMode[mode].description}</p>
@@ -123,7 +147,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               {mode === "register" ? (
                 <>
                   <label className="block text-sm">
-                    <span className="mb-2 block text-slate-200">Codigo da turma</span>
+                    <span className="mb-2 block text-slate-200">Codigo da oficina</span>
                     <input
                       name="classroomCode"
                       required
@@ -131,7 +155,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                     />
                   </label>
                   <label className="block text-sm">
-                    <span className="mb-2 block text-slate-200">Nome de exibicao</span>
+                    <span className="mb-2 block text-slate-200">Nome no grimorio</span>
                     <input
                       name="displayName"
                       required
@@ -142,7 +166,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               ) : null}
 
               <label className="block text-sm">
-                <span className="mb-2 block text-slate-200">Username</span>
+                <span className="mb-2 block text-slate-200">Nome de oficio</span>
                 <input
                   name="username"
                   required
@@ -171,7 +195,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 disabled={isPending}
                 className="w-full rounded-2xl bg-cyan-300 px-4 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {isPending ? "Processando..." : copyByMode[mode].submitLabel}
+                {isPending ? "Selando acesso..." : copyByMode[mode].submitLabel}
               </button>
             </form>
           </div>

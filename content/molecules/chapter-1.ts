@@ -6,10 +6,24 @@ function getPalette(classe: ChemicalClass): MoleculeAttributePalette {
   return "hydrocarbon";
 }
 
-function buildVisual(id: MoleculeId, classe: ChemicalClass, badgeLabel: string) {
+type ArtworkConfig = {
+  fit?: "cover" | "contain";
+  position?: string;
+  scale?: number;
+};
+
+function buildVisual(
+  id: MoleculeId,
+  classe: ChemicalClass,
+  badgeLabel: string,
+  artworkConfig?: ArtworkConfig,
+) {
   return {
     assets: {
       artworkAsset: `/visual/cards/art/molecule-${id}-main.png`,
+      artworkFit: artworkConfig?.fit,
+      artworkPosition: artworkConfig?.position,
+      artworkScale: artworkConfig?.scale,
       frameAsset: "/visual/cards/frames/card-frame-common.png",
       textureAsset: "/visual/cards/textures/card-texture-paper-v1.png",
       iconAsset: `/visual/icons/molecule-${id}-icon.png`,
@@ -47,7 +61,11 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "A menor e mais simples molécula orgânica da jornada.",
     pontosFortes: ["estrutura simples", "alta volatilidade", "boa introdução à tetravalência do carbono"],
     limitacoes: ["baixa reatividade", "baixa versatilidade estrutural"],
-    visual: buildVisual("metano", "alcano", "Desbloqueada"),
+    visual: buildVisual("metano", "alcano", "Desbloqueada", {
+      fit: "contain",
+      position: "center 56%",
+      scale: 1.08,
+    }),
   },
   {
     id: "etano",
@@ -63,7 +81,11 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "O primeiro crescimento de cadeia do reino.",
     pontosFortes: ["introduz ligação C-C", "estrutura estável", "bom exemplo de alcano simples"],
     limitacoes: ["reatividade baixa", "menos volátil que o metano"],
-    visual: buildVisual("etano", "alcano", "Desbloqueada"),
+    visual: buildVisual("etano", "alcano", "Desbloqueada", {
+      fit: "contain",
+      position: "center 54%",
+      scale: 1.06,
+    }),
   },
   {
     id: "propano",
@@ -79,7 +101,11 @@ export const chapter1Molecules: Molecule[] = [
     descricaoCurta: "O alcano mais representativo para o desafio energético inicial.",
     pontosFortes: ["alto potencial energético", "bom uso em contexto de combustível", "cadeia maior que metano e etano"],
     limitacoes: ["menos volátil que alcanos menores", "reatividade baixa"],
-    visual: buildVisual("propano", "alcano", "Desbloqueada"),
+    visual: buildVisual("propano", "alcano", "Desbloqueada", {
+      fit: "contain",
+      position: "center 50%",
+      scale: 1.04,
+    }),
   },
   {
     id: "eteno",

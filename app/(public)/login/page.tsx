@@ -7,7 +7,10 @@ export default function LoginPage() {
     <>
       <AuthForm mode="login" />
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400">
-        Ainda não tem conta? <Link href="/register" className="text-sky-300">Cadastre-se</Link>
+        Ainda nao recebeu sua marca?{" "}
+        <Link href="/register" className="text-sky-300">
+          Inicie sua provacao
+        </Link>
       </div>
     </>
   );

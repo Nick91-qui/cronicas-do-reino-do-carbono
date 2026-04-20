@@ -46,6 +46,9 @@ export type MoleculeAttributePalette = "hydrocarbon" | "alkene" | "aromatic";
 
 export type MoleculeVisualAssets = {
   artworkAsset: string;
+  artworkFit?: "cover" | "contain";
+  artworkPosition?: string;
+  artworkScale?: number;
   frameAsset: string;
   textureAsset?: string;
   iconAsset?: string;

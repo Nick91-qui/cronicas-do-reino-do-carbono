@@ -7,7 +7,10 @@ export default function RegisterPage() {
     <>
       <AuthForm mode="register" />
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400">
-        Já tem conta? <Link href="/login" className="text-sky-300">Entrar</Link>
+        Ja possui marca de aprendiz?{" "}
+        <Link href="/login" className="text-sky-300">
+          Retorne a oficina
+        </Link>
       </div>
     </>
   );
