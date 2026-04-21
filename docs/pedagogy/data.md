@@ -1,9 +1,15 @@
-# Tabela integrada de características para hidrocarbonetos do Capítulo I
+# Tabela integrada de características para hidrocarbonetos e conteúdos de expansão
+
+> Status do documento: referência pedagógica ampliada para expansão pós-MVP.
+>
+> Esta tabela reúne compostos e propriedades úteis para a evolução futura do projeto. Ela inclui tanto o conjunto oficial do MVP quanto conteúdos previstos para capítulos ou fases posteriores.
+>
+> Para o escopo oficial do MVP e do Capítulo I validado, prevalecem `README.md`, `docs/product/mvp-scope.md`, `docs/design/phases.md`, `docs/design/content-model.md` e o conteúdo tipado em `content/`.
 
 ## Escopo pedagógico
 
-Esta base cobre os compostos e conceitos centrais dos: alcanos, alcenos, alcinos, dienos e benzeno.
-As colunas priorizam propriedades e comportamentos úteis para ensino introdutório e para coerência com a lore.
+Esta base cobre alcanos, alcenos, alcinos, dienos e benzeno em uma trilha pedagógica ampliada do projeto.
+As colunas priorizam propriedades e comportamentos úteis para ensino introdutório, expansão futura de conteúdo e coerência com a lore.
 
 | Composto      | Fórmula | Classe          | Nº de carbonos | Ligação C-C característica            | Saturação            | Massa molar (g/mol) | Polaridade | Densidade relativa ao ar    | Solubilidade em água (mg/L) | Estado físico (25 °C) | Ponto de ebulição (°C) | Ponto de fusão (°C) | Volatilidade | Reatividade relativa                                           | Geometria predominante          | Hibridização predominante | Reação característica                     | Aplicação / uso comum                           | Risco / inflamabilidade             |
 | ------------- | ------- | --------------- | -------------- | ------------------------------------- | -------------------- | ------------------- | ---------- | --------------------------- | --------------------------- | --------------------- | ---------------------- | ------------------- | ------------ | -------------------------------------------------------------- | ------------------------------- | ------------------------- | ----------------------------------------- | ----------------------------------------------- | ----------------------------------- |
@@ -17,5 +23,5 @@ As colunas priorizam propriedades e comportamentos úteis para ensino introdutó
 | Benzeno       | C6H6    | aromático       | 6              | ligações equivalentes por ressonância | insaturado aromático | 78,11               | apolar     | maior que o ar              | 1780                        | líquido               | 80,1                   | 5,5                 | moderada     | menor que alcenos em adição; alta em substituição eletrofílica | plana hexagonal                 | sp2                       | substituição eletrofílica aromática       | matéria-prima petroquímica                      | inflamável e tóxico                 |
 
 - `*` O butano está no limite entre gás e líquido nas condições ambientes e é facilmente liquefeito sob pressão.
-- A linha do `1,3-butadieno` sustenta as fases sobre conjugação e estabilidade relativa de dienos.
-- A linha do `benzeno` sustenta a transição do capítulo para aromaticidade, ressonância e regra de Hückel.
+- As linhas de `1,3-butadieno` e `etino` sustentam conteúdos de expansão ligados a conjugação, dienos e alcinos.
+- A linha do `benzeno` sustenta a transição do MVP para conteúdos posteriores sobre aromaticidade, ressonância e regra de Hückel.

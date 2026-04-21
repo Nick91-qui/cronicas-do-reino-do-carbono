@@ -2,6 +2,12 @@
 
 ## Compêndio Oficial de Lore — Primeira Edição
 
+> Status do documento: referência de expansão pós-MVP.
+>
+> Este compêndio registra a lore ampliada do universo de **Crônicas do Reino do Carbono** e serve como base para capítulos, personagens, sistemas narrativos e conceitos que poderão ser incorporados após a validação do MVP.
+>
+> Para o escopo oficial do MVP, prevalecem `README.md`, `docs/product/mvp-scope.md`, `docs/design/phases.md`, `docs/design/content-model.md` e o conteúdo tipado em `content/`.
+
 ---
 
 # SEÇÃO 1 — Visão Geral do Reino do Carbono
