@@ -47,7 +47,7 @@ Status: aberto.
 
 - [x] definir stack oficial de testes automatizados
 - [x] criar testes unitários mínimos para builder e avaliação de fase
-- [ ] criar testes de integração mínimos para submissão, progresso e recompensas
+- [x] criar testes de integração mínimos para submissão, progresso e recompensas
 - [x] documentar comando oficial de testes no repositório
 - [x] revisar proteção de rotas e exigência de sessão em todas as escritas
 - [x] revisar tratamento de erros para evitar falso sucesso na UI
