@@ -4,10 +4,11 @@ import { buildGraphBuilderState } from "@/lib/builder/graph-preview";
 import { validateBuilderStateForPhase } from "@/lib/builder/validate";
 
 describe("builder/validate", () => {
-  it("aceita metano em fase de construção inicial usando estado legado", () => {
+  it("aceita metano em fase de construção inicial usando o formato canônico em grafo", () => {
     const result = validateBuilderStateForPhase("chapter-1-phase-1", {
+      layout: "open_chain",
       carbonCount: 1,
-      bondType: "single",
+      bonds: [],
     });
 
     expect(result.structuralValid).toBe(true);
@@ -17,27 +18,11 @@ describe("builder/validate", () => {
     expect(result.derivedStructure?.formulaMolecular).toBe("C1H4");
   });
 
-  it("aceita metano em blueprint tetraédrico com quatro hidrogênios", () => {
-    const result = validateBuilderStateForPhase("chapter-1-phase-1", {
-      blueprintId: "tetra_single",
-      slots: [
-        { slotId: "s1", element: "H" },
-        { slotId: "s2", element: "H" },
-        { slotId: "s3", element: "H" },
-        { slotId: "s4", element: "H" },
-      ],
-    });
-
-    expect(result.structuralValid).toBe(true);
-    expect(result.canCreateMolecule).toBe(true);
-    expect(result.resolvedMoleculeId).toBe("metano");
-  });
-
   it("rejeita construção em fase do tipo choice", () => {
-    const result = validateBuilderStateForPhase("chapter-1-phase-4", {
-      carbonCount: 1,
-      bondType: "single",
-    });
+    const result = validateBuilderStateForPhase(
+      "chapter-1-phase-4",
+      buildGraphBuilderState("open_chain", 1, []),
+    );
 
     expect(result.structuralValid).toBe(false);
     expect(result.canCreateMolecule).toBe(false);
@@ -46,10 +31,10 @@ describe("builder/validate", () => {
   });
 
   it("rejeita estrutura com mais carbonos do que a fase permite", () => {
-    const result = validateBuilderStateForPhase("chapter-1-phase-1", {
-      carbonCount: 2,
-      bondType: "single",
-    });
+    const result = validateBuilderStateForPhase(
+      "chapter-1-phase-1",
+      buildGraphBuilderState("open_chain", 2, [1]),
+    );
 
     expect(result.structuralValid).toBe(false);
     expect(result.resolvedMoleculeId).toBeNull();
@@ -58,10 +43,10 @@ describe("builder/validate", () => {
   });
 
   it("rejeita uso de ligação não desbloqueada na fase", () => {
-    const result = validateBuilderStateForPhase("chapter-1-phase-3", {
-      carbonCount: 2,
-      bondType: "double",
-    });
+    const result = validateBuilderStateForPhase(
+      "chapter-1-phase-3",
+      buildGraphBuilderState("open_chain", 2, [2]),
+    );
 
     expect(result.structuralValid).toBe(false);
     expect(result.resolvedMoleculeId).toBeNull();

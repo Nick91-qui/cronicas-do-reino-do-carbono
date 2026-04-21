@@ -70,6 +70,8 @@ Stack atual preparada:
 - [ ] endurecer QA dos estados válidos e inválidos do builder
 - [ ] revisar cobertura de aromaticidade e fragmentos desbloqueáveis
 - [ ] revisar pontos de expansão já modelados para não contaminarem o MVP
+- [ ] remover `LegacyBuilderState` e `BlueprintBuilderState` após corte explícito de compatibilidade
+- [ ] executar plano de remoção documentado em `docs/tech/builder-legacy-removal.md`
 
 ### Autenticação e autorização
 
@@ -94,7 +96,8 @@ Stack atual preparada:
 1. manter documentação e checklist sincronizados com a produção
 2. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
 3. opcionalmente ampliar cobertura de integração com Prisma real de teste
-4. iniciar planejamento do próximo ciclo pós-MVP
+4. decidir a janela técnica para remover compatibilidade legada do builder
+5. iniciar planejamento do próximo ciclo pós-MVP
 
 ## Critério de fechamento do tracker
 
