@@ -1,15 +1,21 @@
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db/prisma";
 import { clearSessionCookie, deleteCurrentSession } from "@/lib/auth/session";
+import { jsonNoStore } from "@/lib/http/response";
+import { logServerError } from "@/lib/observability/logger";
 
 export async function POST() {
-  const requestCookies = await cookies();
-  await deleteCurrentSession(prisma, requestCookies);
+  try {
+    const requestCookies = await cookies();
+    await deleteCurrentSession(prisma, requestCookies);
 
-  const response = NextResponse.json({ ok: true }, { status: 200 });
-  clearSessionCookie(response.cookies);
+    const response = jsonNoStore({ ok: true }, { status: 200 });
+    clearSessionCookie(response.cookies);
 
-  return response;
+    return response;
+  } catch (error) {
+    logServerError("auth.logout", error);
+    return jsonNoStore({ error: "Falha interna ao encerrar sessão." }, { status: 500 });
+  }
 }
