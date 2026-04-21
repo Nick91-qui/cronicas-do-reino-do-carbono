@@ -48,115 +48,117 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 
 ### Ambiente
 
-- [ ] `.env` configurado com valores válidos.
-- [ ] Banco local sobe corretamente com `npm run db:dev:up`.
-- [ ] Prisma gera cliente corretamente.
-- [ ] Seed inicial executa sem erro.
-- [ ] `npm run typecheck` passa sem erro.
-- [ ] `npm run build` passa sem erro.
+- [x] `.env` configurado com valores válidos.
+- [x] Banco local sobe corretamente com `npm run db:dev:up`.
+- [x] Prisma gera cliente corretamente.
+- [x] Seed inicial executa sem erro.
+- [x] `npm run typecheck` passa sem erro.
+- [x] `npm run build` passa sem erro.
 
 ### Autenticação
 
-- [ ] cadastro com turma válida funciona.
+- [x] cadastro com turma válida funciona.
 - [ ] cadastro com username já existente falha com mensagem adequada.
-- [ ] login com credenciais válidas funciona.
+- [x] login com credenciais válidas funciona.
 - [ ] login com senha inválida falha com mensagem adequada.
-- [ ] rotas protegidas redirecionam visitante não autenticado para `/login`.
-- [ ] logout encerra a sessão corretamente.
+- [x] rotas protegidas redirecionam visitante não autenticado para `/login`.
+- [x] logout encerra a sessão corretamente.
 
 ### Navegação principal
 
-- [ ] página inicial carrega sem erro.
-- [ ] `/game` carrega com progresso e inventário do jogador.
-- [ ] `/chapter/chapter-1` exibe as 8 fases do capítulo.
-- [ ] fases bloqueadas não ficam acessíveis diretamente por URL.
-- [ ] `/collection` exibe cartas desbloqueadas sem erro.
+- [x] página inicial carrega sem erro.
+- [x] `/game` carrega com progresso e inventário do jogador.
+- [x] `/chapter/chapter-1` exibe as 8 fases do capítulo.
+- [x] fases bloqueadas não ficam acessíveis diretamente por URL.
+- [x] `/collection` exibe cartas desbloqueadas sem erro.
 - [ ] `/profile` carrega sem erro.
 
 ## Checklist funcional do Capítulo I
 
 ### Integridade do capítulo
 
-- [ ] o capítulo possui 8 fases jogáveis.
-- [ ] as fases seguem ordem linear de desbloqueio.
-- [ ] o jogador inicia com a Fase 1 desbloqueada.
-- [ ] a conclusão correta de uma fase desbloqueia a próxima.
-- [ ] erro em uma fase não desbloqueia progressão.
+- [x] o capítulo possui 8 fases jogáveis.
+- [x] as fases seguem ordem linear de desbloqueio.
+- [x] o jogador inicia com a Fase 1 desbloqueada.
+- [x] a conclusão correta de uma fase desbloqueia a próxima.
+- [x] erro em uma fase não desbloqueia progressão.
 
 ### Fases de construção
 
-- [ ] estrutura válida gera molécula oficial correta.
-- [ ] estrutura inválida não gera molécula.
-- [ ] feedback de erro é exibido quando a estrutura é inválida.
-- [ ] fases `construction` não aceitam progressão com molécula incorreta.
+- [x] estrutura válida gera molécula oficial correta.
+- [x] estrutura inválida não gera molécula.
+- [x] feedback de erro é exibido quando a estrutura é inválida.
+- [x] fases `construction` não aceitam progressão com molécula incorreta.
 
 ### Fases de escolha
 
-- [ ] fases `choice` exigem seleção de molécula.
-- [ ] fases `choice` exigem de 1 a 3 propriedades.
-- [ ] seleção com propriedades fora do enum oficial é rejeitada no servidor.
-- [ ] resposta `excellent` pontua 3.
-- [ ] resposta `adequate` pontua 2.
-- [ ] resposta `inadequate` pontua 0.
+- [x] fases `choice` exigem seleção de molécula.
+- [x] fases `choice` exigem de 1 a 3 propriedades.
+- [x] seleção com propriedades fora do enum oficial é rejeitada no servidor.
+- [x] resposta `excellent` pontua 3.
+- [x] resposta `adequate` pontua 2.
+- [x] resposta `inadequate` pontua 0.
 
 ### Fases híbridas
 
-- [ ] fases `construction_choice` exigem builder válido quando aplicável.
-- [ ] fases híbridas respeitam moléculas `excellent` e `adequate` do conteúdo oficial.
-- [ ] justificativa não corrige molécula errada.
+- [x] fases `construction_choice` exigem builder válido quando aplicável.
+- [x] fases híbridas respeitam moléculas `excellent` e `adequate` do conteúdo oficial.
+- [x] justificativa não corrige molécula errada.
 
 ### Cobertura mínima por tipo
 
-- [ ] ao menos uma fase `construction` foi concluída com resposta correta e incorreta.
-- [ ] ao menos uma fase `choice` foi concluída com resposta correta e incorreta.
-- [ ] ao menos uma fase `construction_choice` foi concluída com resposta correta e incorreta.
+- [x] ao menos uma fase `construction` foi concluída com resposta correta e incorreta.
+- [x] ao menos uma fase `choice` foi concluída com resposta correta e incorreta.
+- [x] ao menos uma fase `construction_choice` foi concluída com resposta correta e incorreta.
 
 ## Checklist de persistência
 
 ### Tentativas e progresso
 
-- [ ] cada submissão gera tentativa persistida.
-- [ ] `attemptCount` aumenta a cada nova tentativa.
-- [ ] `bestScore` preserva o melhor resultado da fase.
-- [ ] `isCompleted` só vira verdadeiro com `validationResult = correct`.
-- [ ] replay de fase concluída não corrompe progresso.
-- [ ] `chapterScore` soma corretamente os melhores resultados por fase.
+- [x] cada submissão gera tentativa persistida.
+- [x] `attemptCount` aumenta a cada nova tentativa.
+- [x] `bestScore` preserva o melhor resultado da fase.
+- [x] `isCompleted` só vira verdadeiro com `validationResult = correct`.
+- [x] replay de fase concluída não corrompe progresso.
+- [x] `chapterScore` soma corretamente os melhores resultados por fase.
 
 ### Inventário e recompensas
 
-- [ ] inventário inicial é criado ao registrar jogador.
-- [ ] recompensas de carbono são aplicadas uma única vez na primeira conclusão correta.
-- [ ] fragmentos desbloqueados aparecem no inventário.
-- [ ] moléculas desbloqueadas aparecem na coleção.
-- [ ] títulos desbloqueados são persistidos.
-- [ ] replay de fase concluída não duplica recompensa indevidamente.
+- [x] inventário inicial é criado ao registrar jogador.
+- [x] recompensas de carbono são aplicadas uma única vez na primeira conclusão correta.
+- [x] fragmentos desbloqueados aparecem no inventário.
+- [x] moléculas desbloqueadas aparecem na coleção.
+- [x] títulos desbloqueados são persistidos.
+- [x] replay de fase concluída não duplica recompensa indevidamente.
 
 ### Analytics operacionais mínimos
 
-- [ ] registro de jogador cria evento de analytics.
-- [ ] autenticação cria evento de analytics.
-- [ ] submissão de fase cria eventos mínimos de avaliação.
-- [ ] conclusão de fase cria evento de conclusão.
-- [ ] concessão de recompensa cria evento quando aplicável.
+- [x] registro de jogador cria evento de analytics.
+- [x] autenticação cria evento de analytics.
+- [x] submissão de fase cria eventos mínimos de avaliação.
+- [x] conclusão de fase cria evento de conclusão.
+- [x] concessão de recompensa cria evento quando aplicável.
 
 ## Checklist de conteúdo
 
-- [ ] ids de capítulo, fase, molécula e fragmento batem com `docs/design/content-model.md`.
-- [ ] `excellentAnswer` e `adequateAnswers` batem com `docs/design/phases.md`.
-- [ ] `expectedProperties` batem com o design oficial.
-- [ ] recompensas batem com o design oficial.
-- [ ] feedbacks batem com o design oficial.
-- [ ] moléculas do Capítulo I batem com o escopo oficial do MVP.
+- [x] ids de capítulo, fase, molécula e fragmento batem com `docs/design/content-model.md`.
+- [x] `excellentAnswer` e `adequateAnswers` batem com `docs/design/phases.md`.
+- [x] `expectedProperties` batem com o design oficial.
+- [x] recompensas batem com o design oficial.
+- [x] feedbacks batem com o design oficial.
+- [x] moléculas do Capítulo I batem com o escopo oficial do MVP.
 
 ## Resultado da execução
 
 Preencher ao final de cada rodada relevante de QA:
 
-- Data:
-- Ambiente:
-- Responsável:
-- `typecheck`:
-- `build`:
-- Smoke test manual:
-- Pendências encontradas:
-- Decisão final:
+### Rodada registrada — 2026-04-21
+
+- Data: 2026-04-21
+- Ambiente: local + Vercel + Neon
+- Responsável: usuário com suporte do Codex
+- `typecheck`: aprovado
+- `build`: aprovado
+- Smoke test manual: aprovado em produção
+- Pendências encontradas: ajustar `APP_BASE_URL` para ficar sem barra final; aviso não bloqueante do Vitest/Vite sobre CJS
+- Decisão final: MVP validado no fluxo central do jogador

@@ -25,25 +25,25 @@ Referências:
 - [x] Milestone 5 — Loop central de fase
 - [x] Milestone 6 — Persistência de tentativas e progresso
 - [x] Milestone 7 — Inventário, coleção e recompensas
-- [ ] Milestone 8 — Integração completa do Capítulo I
-- [ ] Milestone 9 — QA, segurança e deploy
+- [x] Milestone 8 — Integração completa do Capítulo I
+- [x] Milestone 9 — QA, segurança e deploy
 
 ## Todo List por milestone
 
 ### Milestone 8 — Integração completa do Capítulo I
 
-Status: em fechamento.
+Status: concluído.
 
-- [ ] revisar as 8 fases em `content/` contra `docs/design/phases.md`
-- [ ] validar `excellentAnswer`, `adequateAnswers`, `expectedProperties`, feedbacks e recompensas
-- [ ] revisar coerência entre fases `construction`, `choice` e `construction_choice`
-- [ ] confirmar que desbloqueios de inventário e coleção refletem corretamente a progressão do capítulo
-- [ ] revisar consistência visual e textual dos fluxos de fase
-- [ ] registrar decisão final de pronto do Capítulo I
+- [x] revisar as 8 fases em `content/` contra `docs/design/phases.md`
+- [x] validar `excellentAnswer`, `adequateAnswers`, `expectedProperties`, feedbacks e recompensas
+- [x] revisar coerência entre fases `construction`, `choice` e `construction_choice`
+- [x] confirmar que desbloqueios de inventário e coleção refletem corretamente a progressão do capítulo
+- [x] revisar consistência visual e textual dos fluxos de fase
+- [x] registrar decisão final de pronto do Capítulo I
 
 ### Milestone 9 — QA, segurança e deploy
 
-Status: aberto.
+Status: concluído.
 
 - [x] definir stack oficial de testes automatizados
 - [x] criar testes unitários mínimos para builder e avaliação de fase
@@ -52,9 +52,9 @@ Status: aberto.
 - [x] revisar proteção de rotas e exigência de sessão em todas as escritas
 - [x] revisar tratamento de erros para evitar falso sucesso na UI
 - [x] definir logging mínimo para falhas críticas
-- [ ] revisar variáveis de ambiente de desenvolvimento e produção
-- [ ] preparar checklist de deploy
-- [ ] executar smoke test em ambiente conectado ao Neon/Vercel
+- [x] revisar variáveis de ambiente de desenvolvimento e produção
+- [x] preparar checklist de deploy
+- [x] executar smoke test em ambiente conectado ao Neon/Vercel
 
 Stack atual preparada:
 
@@ -91,17 +91,27 @@ Stack atual preparada:
 
 ## Próxima sequência recomendada
 
-1. fechar revisão final do Milestone 8
-2. iniciar testes automatizados mínimos do Milestone 9
-3. endurecer segurança, logging e observabilidade mínima
-4. preparar deploy e rodada final de aceite
+1. manter documentação e checklist sincronizados com a produção
+2. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
+3. opcionalmente ampliar cobertura de integração com Prisma real de teste
+4. iniciar planejamento do próximo ciclo pós-MVP
 
 ## Critério de fechamento do tracker
 
 O tracker pode ser considerado encerrado quando:
 
-- [ ] as 8 fases oficiais estiverem validadas como pacote completo
-- [ ] `typecheck` e `build` estiverem estáveis
-- [ ] checklist de QA mínimo estiver preenchido e sem bloqueadores
-- [ ] autenticação, progresso, inventário, recompensas e replay estiverem estáveis
-- [ ] fluxo ponta a ponta estiver validado para um jogador novo
+- [x] as 8 fases oficiais estiverem validadas como pacote completo
+- [x] `typecheck` e `build` estiverem estáveis
+- [x] checklist de QA mínimo estiver preenchido e sem bloqueadores
+- [x] autenticação, progresso, inventário, recompensas e replay estiverem estáveis
+- [x] fluxo ponta a ponta estiver validado para um jogador novo
+
+## Registro de aceite
+
+- Data: 2026-04-21
+- Ambiente validado: Vercel + Neon
+- Escopo validado: cadastro, login, `/game`, todas as fases, persistência de progresso, `/collection`, logout e retomada de sessão
+- Resultado: aceite funcional do MVP no fluxo central do jogador
+- Observações residuais:
+  - ajustar `APP_BASE_URL` para remover barra final;
+  - aviso não bloqueante do Vitest/Vite sobre CJS permanece em aberto.
