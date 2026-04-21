@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const persistPhaseEvaluationMock = vi.fn();
+const { persistPhaseEvaluationMock } = vi.hoisted(() => ({
+  persistPhaseEvaluationMock: vi.fn(),
+}));
 
 vi.mock("@/lib/progress/service", () => ({
   persistPhaseEvaluation: persistPhaseEvaluationMock,
