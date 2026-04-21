@@ -100,7 +100,7 @@ const resultTitleByKind: Record<
   string
 > = {
   excellent: "Forja exemplar",
-  adequate: "Solucao aceitavel",
+  adequate: "Passagem promissora",
   inadequate: "Forja instavel",
 };
 
@@ -116,24 +116,24 @@ const minimumForgeFeedbackMs = 900;
 
 const stepCopy: Record<Exclude<PhaseStep, "result">, { eyebrow: string; title: string; description: string }> = {
   intro: {
-    eyebrow: "Entrada",
-    title: "Historia e objetivo",
-    description: "Leia o contexto, entenda a missao e avance quando estiver pronto para agir.",
+    eyebrow: "Chamado",
+    title: "Contexto da prova",
+    description: "Leia o chamado do reino, entenda a missao e avance quando estiver pronto para agir.",
   },
   forge: {
-    eyebrow: "Etapa 1",
-    title: "Forja da estrutura",
-    description: "Monte a estrutura da fase e valide a forja antes de seguir.",
+    eyebrow: "Rito da forja",
+    title: "Moldar a estrutura",
+    description: "Molde a estrutura pedida pela prova e confirme se a mesa reconhece sua leitura.",
   },
   choice: {
-    eyebrow: "Etapa 2",
-    title: "Escolha da molecula",
-    description: "Compare as cartas disponiveis e defina a resposta principal.",
+    eyebrow: "Rito da escolha",
+    title: "Definir a molecula",
+    description: "Compare as cartas disponiveis e decida qual delas melhor responde ao chamado da prova.",
   },
   justify: {
-    eyebrow: "Etapa 3",
-    title: "Justificativa oficial",
-    description: "Selecione ate 3 propriedades para sustentar sua resposta.",
+    eyebrow: "Rito da leitura",
+    title: "Sustentar a resposta",
+    description: "Escolha ate 3 propriedades para demonstrar por que sua resposta merece ser aceita.",
   },
 };
 
@@ -457,7 +457,7 @@ export function PhaseExperience({
       if (!response.ok) {
         setBuilderError(
           (json as { error?: string } | null)?.error ??
-            "Falha ao validar a estrutura.",
+            "A mesa de forja nao conseguiu reconhecer sua estrutura.",
         );
         setBuilderResult(null);
         return;
@@ -528,7 +528,7 @@ export function PhaseExperience({
     if (!response.ok) {
       setSubmitError(
         (json as { error?: string } | null)?.error ??
-          "Falha ao enviar a fase.",
+          "O reino nao conseguiu registrar sua resposta nesta tentativa.",
       );
       setIsSubmitting(false);
       return;
@@ -537,6 +537,16 @@ export function PhaseExperience({
     setSubmitResult(json as PersistedResponse);
     setIsSubmitting(false);
     router.refresh();
+  }
+
+  function handleRetryFromResult() {
+    setSubmitResult(null);
+    setSubmitError(null);
+    setIsSubmitting(false);
+    navigateToStep(
+      getInitialStep(supportsBuilder, supportsMoleculeSelection),
+      "backward",
+    );
   }
 
   function goBack() {
@@ -587,7 +597,7 @@ export function PhaseExperience({
         <div className="relative flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">
-              {phase.chapterId} · Fase {phase.number} · {phase.displayType}
+              Capitulo I · Prova {phase.number}
             </p>
             <h1 className="mt-3 text-4xl font-black tracking-tight text-white">
               {phase.title}
@@ -599,17 +609,17 @@ export function PhaseExperience({
 
           <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
             <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-slate-500">Status atual</p>
+              <p className="text-slate-500">Estado da prova</p>
               <p className="mt-1 font-semibold text-white">
-                {currentPhaseStatus?.isCompleted ? "Concluida" : "Em aberto"}
+                {currentPhaseStatus?.isCompleted ? "Ja dominada" : "Aguardando sua leitura"}
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-slate-500">Progresso do capitulo</p>
+              <p className="text-slate-500">Passagem pelo dominio</p>
               <p className="mt-1 font-semibold text-white">
-                {completedPhaseCount}/{chapterProgress.phases.length} concluidas
+                {completedPhaseCount}/{chapterProgress.phases.length} provas vencidas
               </p>
-              <p className="text-slate-400">{unlockedPhaseCount} desbloqueadas</p>
+              <p className="text-slate-400">{unlockedPhaseCount} portoes respondendo</p>
             </div>
           </div>
         </div>
@@ -620,17 +630,17 @@ export function PhaseExperience({
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
               {displayedStep === "result"
-                ? "Resultado"
+                ? "Desfecho"
                 : stepCopy[displayedStep].eyebrow}
             </p>
             <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
               {displayedStep === "result"
-                ? "Desfecho da fase"
+                ? "Desfecho da prova"
                 : stepCopy[displayedStep].title}
             </h2>
             <p className="mt-2 text-sm text-slate-300">
               {displayedStep === "result"
-                ? "Revise o retorno oficial, as recompensas e o proximo destino."
+                ? "Revise o julgamento do reino, os sinais recebidos e o proximo destino."
                 : stepCopy[displayedStep].description}
             </p>
           </div>
@@ -662,7 +672,15 @@ export function PhaseExperience({
                           : "border-white/10 bg-slate-950/35 text-slate-400"
                     }`}
                   >
-                    {index + 1}. {step}
+                    {displayedStep === "result" && step === "result"
+                      ? `${index + 1}. desfecho`
+                      : step === "intro"
+                        ? `${index + 1}. chamado`
+                        : step === "forge"
+                          ? `${index + 1}. forja`
+                          : step === "choice"
+                            ? `${index + 1}. escolha`
+                            : `${index + 1}. leitura`}
                   </div>
                 );
               })}
@@ -683,7 +701,7 @@ export function PhaseExperience({
           <div className="grid gap-6 xl:grid-cols-[1.15fr,0.85fr]">
             <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Historia
+                Chamado do reino
               </p>
               <p className="mt-4 text-base leading-8 text-slate-200">
                 {phase.narrative}
@@ -758,7 +776,7 @@ export function PhaseExperience({
               <aside className="grid gap-4 self-start">
                 <div className="rounded-[24px] border border-cyan-300/20 bg-[linear-gradient(180deg,rgba(14,116,144,0.16),rgba(15,23,42,0.16))] p-5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
-                    {createdMolecule ? "Decisao tatica" : "Leitura da missao"}
+                    {createdMolecule ? "Leitura refinada" : "Leitura da prova"}
                   </p>
                   <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
                     Escolha da molecula
@@ -766,14 +784,14 @@ export function PhaseExperience({
                   <p className="mt-3 text-sm leading-6 text-slate-300">
                     {createdMolecule
                       ? "Compare as cartas disponiveis e confirme se a molecula sugerida pela forja continua sendo a melhor resposta."
-                      : "Compare as cartas disponiveis e escolha a resposta principal da fase sem depender de uma etapa de forja."}
+                      : "Compare as cartas disponiveis e escolha a resposta principal da prova sem depender da mesa de forja."}
                   </p>
                 </div>
 
                 {createdMolecule ? (
                   <div className="rounded-[24px] border border-emerald-400/25 bg-emerald-500/10 p-5 text-sm text-emerald-100">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                      Pista confirmada
+                      Sinal confirmado
                     </p>
                     <p className="mt-2 text-lg font-black">{createdMolecule.nomeQuimico}</p>
                     <p className="mt-2 leading-6 text-emerald-50/90">
@@ -784,19 +802,19 @@ export function PhaseExperience({
 
                 <div className="rounded-[24px] border border-white/10 bg-slate-950/35 p-5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Resumo da escolha
+                    Leitura atual
                   </p>
                   <div className="mt-3 space-y-3 text-sm text-slate-300">
                     <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
-                      Molecula ativa:{" "}
+                      Molecula em foco:{" "}
                       <span className="font-semibold text-white">
                         {selectedMolecule?.nomeQuimico ?? "nenhuma"}
                       </span>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
-                      Origem da pista:{" "}
+                      Origem do sinal:{" "}
                       <span className="font-semibold text-white">
-                        {createdMolecule ? "forja validada" : "comparacao direta"}
+                        {createdMolecule ? "mesa de forja" : "comparacao direta"}
                       </span>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
@@ -817,7 +835,7 @@ export function PhaseExperience({
                       </span>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
-                      Estado da decisao:{" "}
+                      Estado da leitura:{" "}
                       <span className="font-semibold text-white">
                         {selectedMolecule ? "resposta pronta" : "escolha pendente"}
                       </span>
@@ -901,10 +919,10 @@ export function PhaseExperience({
           <div className="grid gap-6 xl:grid-cols-[1fr,0.8fr]">
             <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:p-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Justificativa
+                Leitura alquimica
               </p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                Propriedades oficiais
+                Propriedades em foco
               </h3>
               <div className="mt-5 grid gap-3">
                 {phase.expectedProperties.map((property) => (
@@ -922,7 +940,7 @@ export function PhaseExperience({
                       {formatSelectableProperty(property)}
                     </span>
                     <span className="text-xs font-semibold uppercase tracking-[0.16em]">
-                      {selectedProperties.includes(property) ? "Selecionada" : "Selecionar"}
+                      {selectedProperties.includes(property) ? "Marcada" : "Marcar"}
                     </span>
                   </button>
                 ))}
@@ -931,14 +949,14 @@ export function PhaseExperience({
 
             <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:p-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Submissao
+                Julgamento
               </p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                Resposta final
+                Resposta a registrar
               </h3>
               <div className="mt-5 grid gap-3 text-sm text-slate-300">
                 <div className="rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3">
-                  Molecula selecionada:{" "}
+                  Molecula escolhida:{" "}
                   <span className="font-semibold text-slate-100">
                     {selectedMolecule?.nomeQuimico ??
                       effectiveSelectedMoleculeId ??
@@ -946,7 +964,7 @@ export function PhaseExperience({
                   </span>
                 </div>
                 <div className="rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3">
-                  Propriedades escolhidas:{" "}
+                  Marcas de leitura:{" "}
                   <span className="font-semibold text-slate-100">
                     {selectedProperties.length}/3
                   </span>
@@ -960,7 +978,7 @@ export function PhaseExperience({
               ) : null}
 
               <p className="mt-6 text-sm text-slate-400">
-                Use o botao de navegacao abaixo para finalizar a fase.
+                Use o botao abaixo para entregar sua leitura ao julgamento do reino.
               </p>
             </section>
           </div>
@@ -973,7 +991,7 @@ export function PhaseExperience({
                 className={`rounded-[26px] border p-5 sm:p-6 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
               >
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">
-                  Resultado oficial
+                  Julgamento do reino
                 </p>
                 <h3 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
                   {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
@@ -993,25 +1011,25 @@ export function PhaseExperience({
                   </p>
                   <div className="mt-3 grid gap-3 text-sm text-slate-300 sm:grid-cols-2 xl:grid-cols-1">
                     <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Pontuacao</p>
+                      <p className="text-slate-500">Forca obtida</p>
                       <p className="mt-1 text-2xl font-black text-white">
                         {submitResult.evaluation.scoreAwarded}
                       </p>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Validacao interna</p>
+                      <p className="text-slate-500">Sentenca da prova</p>
                       <p className="mt-1 text-lg font-semibold capitalize text-white">
                         {submitResult.evaluation.validationResult}
                       </p>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Molecula enviada</p>
+                      <p className="text-slate-500">Molecula apresentada</p>
                       <p className="mt-1 text-lg font-semibold text-white">
                         {selectedMolecule?.nomeQuimico ?? "Nao definida"}
                       </p>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Propriedades corretas</p>
+                      <p className="text-slate-500">Marcas alinhadas</p>
                       <p className="mt-1 text-lg font-semibold text-white">
                         {submitResult.evaluation.expectedPropertiesMatched.length}
                       </p>
@@ -1023,13 +1041,13 @@ export function PhaseExperience({
 
             <div className="mt-5 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
               <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
-                <p className="text-slate-500">Fases concluidas</p>
+                <p className="text-slate-500">Provas vencidas</p>
                 <p className="mt-1 text-lg font-semibold text-slate-100">
                   {submitResult.persistence.chapterProgress.completedPhaseCount}
                 </p>
               </div>
               <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
-                <p className="text-slate-500">Pontuacao do capitulo</p>
+                <p className="text-slate-500">Prestigio no dominio</p>
                 <p className="mt-1 text-lg font-semibold text-slate-100">
                   {submitResult.persistence.chapterProgress.chapterScore}
                 </p>
@@ -1038,31 +1056,31 @@ export function PhaseExperience({
 
             {submitResult.persistence.grantedRewards.length > 0 ? (
               <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                Recompensas:{" "}
+                Sinais recebidos:{" "}
                 {submitResult.persistence.grantedRewards
                   .map((reward) => `${reward.rewardType}:${reward.rewardValue}`)
                   .join(", ")}
               </div>
             ) : (
               <div className="mt-4 rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3 text-sm text-slate-300">
-                Nenhuma recompensa adicional foi liberada nesta tentativa.
+                Nenhum novo sinal foi concedido nesta passagem.
               </div>
             )}
 
             <div className="mt-6 flex flex-wrap gap-3">
               <button
                 type="button"
-                onClick={() => router.refresh()}
+                onClick={handleRetryFromResult}
                 className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-100"
               >
-                Atualizar progresso
+                Renovar leitura
               </button>
               {nextPhaseActionHref ? (
                 <Link
                   href={nextPhaseActionHref}
                   className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
                 >
-                  Ir para proxima fase
+                  Seguir para a proxima prova
                 </Link>
               ) : null}
             </div>
@@ -1082,17 +1100,17 @@ export function PhaseExperience({
           </button>
 
           <p className="text-sm text-slate-400">
-            {currentStep === "intro" && "Leia a fase e avance quando estiver pronto."}
+            {currentStep === "intro" && "Leia o chamado da prova e avance quando estiver pronto."}
             {currentStep === "forge" &&
               (canAdvanceFromForge
-                ? "Estrutura validada. Voce ja pode seguir."
-                : "Valide a estrutura para liberar a proxima etapa.")}
+                ? "A mesa reconheceu sua estrutura. Voce ja pode seguir."
+                : "Confirme sua estrutura para abrir o proximo rito.")}
             {currentStep === "choice" &&
               (canAdvanceFromChoice
-                ? "Molecula definida. Siga para a justificativa."
-                : "Escolha uma molecula antes de continuar.")}
+                ? "Sua leitura ja aponta uma molecula. Siga para sustentar a resposta."
+                : "Escolha uma molecula antes de prosseguir.")}
             {currentStep === "justify" &&
-              "Selecione as propriedades e envie a resposta final."}
+              "Marque as propriedades e entregue sua leitura ao julgamento do reino."}
           </p>
 
           {currentStep !== "justify" ? (
@@ -1106,7 +1124,7 @@ export function PhaseExperience({
               }
               className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Continuar
+              Avancar
             </button>
           ) : (
             <button
@@ -1120,7 +1138,7 @@ export function PhaseExperience({
               }
               className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {isSubmitting ? "Enviando..." : "Finalizar fase"}
+              {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
             </button>
           )}
         </section>

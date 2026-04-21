@@ -203,13 +203,13 @@ export function AtomForge({
         <div className="rounded-[24px] border border-white/10 bg-slate-950/45 p-3 sm:p-4">
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-white/8 pt-3 text-[11px] text-slate-500">
             <span>
-              Fragmentos:{" "}
+              Fragmentos disponiveis:{" "}
               {availableBondTypes
                 .map((availableBondType) => bondTypeLabels[availableBondType])
                 .join(" · ")}
             </span>
             <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.14em]">
-              Altere as ligacoes direto na estrutura
+              Toque nas ligacoes direto na estrutura
             </span>
           </div>
         </div>
@@ -297,13 +297,13 @@ export function AtomForge({
             disabled={isValidatingBuilder}
             className="rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isValidatingBuilder ? "Forjando..." : "Forjar"}
+            {isValidatingBuilder ? "Consultando a mesa..." : "Consultar a mesa"}
           </button>
         </div>
 
         <details className="rounded-[24px] border border-white/10 bg-slate-950/35 p-3 sm:p-4">
           <summary className="cursor-pointer list-none text-sm font-black uppercase tracking-[0.14em] text-slate-200">
-            Detalhes da estrutura
+            Leitura minuciosa da estrutura
           </summary>
           <p className="mt-2 text-[11px] leading-5 text-slate-500">
             Apoio para teclado e leitura fina das ligacoes. `Enter` alterna e as setas `↑` e `↓` navegam entre elas.
@@ -363,7 +363,7 @@ export function AtomForge({
               })
             ) : (
               <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-400">
-                Esta estrutura ainda nao possui ligacoes C-C editaveis.
+                Esta estrutura ainda nao apresenta ligacoes C-C que possam ser alteradas.
               </div>
             )}
           </div>
@@ -381,17 +381,17 @@ export function AtomForge({
           <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/8 pb-4">
             <div className="max-w-2xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Validacao estrutural
+                Resposta da mesa
               </p>
               <p className="mt-2 text-xl font-black tracking-tight text-slate-100">
                 {builderResult.canCreateMolecule
-                  ? "Estrutura valida e reconhecida pelo MVP."
-                  : "A estrutura ainda nao gerou uma molecula oficial valida."}
+                  ? "Estrutura reconhecida pela forja."
+                  : "A estrutura ainda nao foi aceita pela forja."}
               </p>
               <p className="mt-2 text-sm leading-6 text-slate-400">
                 {builderResult.canCreateMolecule
-                  ? "A mesa estabilizou a estrutura e converteu a forja em uma molecula oficial do capitulo."
-                  : "A estrutura ainda precisa de ajuste antes de gerar uma carta oficial para a fase."}
+                  ? "A mesa estabilizou sua leitura e a converteu em uma molecula reconhecida neste dominio."
+                  : "A estrutura ainda precisa de ajuste antes de se tornar uma carta reconhecida pela prova."}
               </p>
             </div>
             <div className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] ${
@@ -399,7 +399,7 @@ export function AtomForge({
                 ? "border border-emerald-400/30 bg-emerald-500/10 text-emerald-100"
                 : "border border-amber-400/30 bg-amber-500/10 text-amber-100"
             }`}>
-              {builderResult.canCreateMolecule ? "Forja estavel" : "Estrutura inconclusiva"}
+              {builderResult.canCreateMolecule ? "Leitura aceita" : "Leitura inconclusiva"}
             </div>
           </div>
 
@@ -434,17 +434,17 @@ export function AtomForge({
               </div>
               <div className="rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-300">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                  Molecula forjada
+                  Molecula reconhecida
                 </p>
                 <p className="mt-2 text-2xl font-black tracking-tight text-white">
                   {forgedMolecule.nomeQuimico}
                 </p>
                 <p className="mt-3">
-                  A validacao estrutural reconheceu esta carta como a saida coerente da mesa de forja. Na proxima etapa, voce so confirma se ela continua sendo a melhor resposta para o contexto da fase.
+                  A mesa reconheceu esta carta como uma leitura coerente. No proximo rito, voce confirma se ela continua sendo a melhor resposta para o contexto da prova.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className="rounded-full border border-emerald-300/25 bg-emerald-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100">
-                    Reconhecida pela forja
+                    Aceita pela mesa
                   </span>
                   <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/80">
                     Pronta para comparacao
