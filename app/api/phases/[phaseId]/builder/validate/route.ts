@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { builderStateSchema } from "@/lib/builder/schema";
+import { builderStateCompatibilitySchema } from "@/lib/builder/schema";
 import { validateBuilderStateForPhase } from "@/lib/builder/validate";
 import { phaseIdSchema } from "@/lib/content/schema";
 
@@ -19,7 +19,7 @@ export async function POST(
   }
 
   const json = await request.json().catch(() => null);
-  const parsedBuilderState = builderStateSchema.safeParse(json);
+  const parsedBuilderState = builderStateCompatibilitySchema.safeParse(json);
 
   if (!parsedBuilderState.success) {
     return NextResponse.json(

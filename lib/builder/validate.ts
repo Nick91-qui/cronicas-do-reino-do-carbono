@@ -11,6 +11,7 @@ import {
 
 import type {
   BlueprintBuilderState,
+  CanonicalBuilderState,
   BuilderBlueprintId,
   BuilderDerivedStructure,
   BuilderFilledSlot,
@@ -82,12 +83,26 @@ const blueprintDefinitions: Record<BuilderBlueprintId, { bondType: BondType; slo
   },
 };
 
+type BuilderStateKind = "graph" | "legacy" | "blueprint";
+
 function isLegacyBuilderState(builderState: BuilderState): builderState is LegacyBuilderState {
   return "bondType" in builderState && "carbonCount" in builderState;
 }
 
 function isGraphBuilderState(builderState: BuilderState): builderState is GraphBuilderState {
   return "layout" in builderState;
+}
+
+function getBuilderStateKind(builderState: BuilderState): BuilderStateKind {
+  if (isGraphBuilderState(builderState)) {
+    return "graph";
+  }
+
+  if (isLegacyBuilderState(builderState)) {
+    return "legacy";
+  }
+
+  return "blueprint";
 }
 
 function getRequiredFragmentId(bondType: BondType): FragmentId {
@@ -334,32 +349,14 @@ function validateGraphStructuralRules(builderState: GraphBuilderState, errors: s
 }
 
 export function resolveOfficialMoleculeId(builderState: BuilderState): MoleculeId | null {
-  if (isLegacyBuilderState(builderState)) {
-    return officialMoleculeMap[builderState.bondType][builderState.carbonCount] ?? null;
+  const kind = getBuilderStateKind(builderState);
+
+  if (kind === "graph") {
+    return resolveOfficialGraphMoleculeId(builderState);
   }
 
-  if (isGraphBuilderState(builderState)) {
-    const bondType = getGraphBondType(builderState);
-
-    if (bondType === "aromatic" && builderState.layout === "closed_ring" && builderState.carbonCount === 6) {
-      return "benzeno";
-    }
-
-    if (builderState.layout !== "open_chain") {
-      return null;
-    }
-
-    const doubleBondCount = builderState.bonds.filter((bond) => bond.order === 2).length;
-
-    if (doubleBondCount > 1) {
-      return null;
-    }
-
-    if (doubleBondCount === 0) {
-      return officialMoleculeMap.single[builderState.carbonCount] ?? null;
-    }
-
-    return officialMoleculeMap.double[builderState.carbonCount] ?? null;
+  if (kind === "legacy") {
+    return officialMoleculeMap[builderState.bondType][builderState.carbonCount] ?? null;
   }
 
   const signature = normalizeBlueprintSignature(builderState);
@@ -377,17 +374,36 @@ export function resolveOfficialMoleculeId(builderState: BuilderState): MoleculeI
   return null;
 }
 
-export function validateBuilderStateForPhase(
+function resolveOfficialGraphMoleculeId(builderState: CanonicalBuilderState): MoleculeId | null {
+  const bondType = getGraphBondType(builderState);
+
+  if (bondType === "aromatic" && builderState.layout === "closed_ring" && builderState.carbonCount === 6) {
+    return "benzeno";
+  }
+
+  if (builderState.layout !== "open_chain") {
+    return null;
+  }
+
+  const doubleBondCount = builderState.bonds.filter((bond) => bond.order === 2).length;
+
+  if (doubleBondCount > 1) {
+    return null;
+  }
+
+  if (doubleBondCount === 0) {
+    return officialMoleculeMap.single[builderState.carbonCount] ?? null;
+  }
+
+  return officialMoleculeMap.double[builderState.carbonCount] ?? null;
+}
+
+function validateLegacyOrBlueprintBuilderStateForPhase(
   phaseId: PhaseId,
-  builderState: BuilderState,
+  builderState: LegacyBuilderState | BlueprintBuilderState,
 ): BuilderValidationResult {
   const phase = getPhaseById(phaseId);
   const errors: string[] = [];
-
-  if (phase.technicalType === "choice") {
-    errors.push("Esta fase não suporta construção molecular.");
-  }
-
   let bondType: BondType;
   let carbonCount: number;
   let requiredFragments: FragmentId[];
@@ -396,16 +412,14 @@ export function validateBuilderStateForPhase(
     bondType = builderState.bondType;
     carbonCount = builderState.carbonCount;
     requiredFragments = [getRequiredFragmentId(bondType)];
-  } else if (isGraphBuilderState(builderState)) {
-    bondType = getGraphBondType(builderState);
-    carbonCount = builderState.carbonCount;
-    requiredFragments = builderState.bonds.some((bond) => bond.order === 2)
-      ? ["ligacao_dupla"]
-      : ["ligacao_simples"];
   } else {
     bondType = blueprintDefinitions[builderState.blueprintId].bondType;
     carbonCount = 1 + builderState.slots.filter((slot: BuilderFilledSlot) => slot.element === "C").length;
     requiredFragments = [getRequiredFragmentId(bondType)];
+  }
+
+  if (phase.technicalType === "choice") {
+    errors.push("Esta fase não suporta construção molecular.");
   }
 
   if (carbonCount > phase.resources.carbonAvailable) {
@@ -421,16 +435,12 @@ export function validateBuilderStateForPhase(
 
   const structuralValid = isLegacyBuilderState(builderState)
     ? validateLegacyStructuralRules(builderState, errors)
-    : isGraphBuilderState(builderState)
-      ? validateGraphStructuralRules(builderState, errors)
-      : validateBlueprintStructuralRules(builderState, errors);
+    : validateBlueprintStructuralRules(builderState, errors);
   const derivedStructure = structuralValid
     ? (
       isLegacyBuilderState(builderState)
         ? deriveLegacyStructure(builderState)
-        : isGraphBuilderState(builderState)
-          ? deriveGraphStructure(builderState)
-          : deriveBlueprintStructure(builderState)
+        : deriveBlueprintStructure(builderState)
     )
     : null;
   const resolvedMoleculeId = structuralValid ? resolveOfficialMoleculeId(builderState) : null;
@@ -447,4 +457,61 @@ export function validateBuilderStateForPhase(
     errors,
     derivedStructure,
   };
+}
+
+export function validateGraphBuilderStateForPhase(
+  phaseId: PhaseId,
+  builderState: CanonicalBuilderState,
+): BuilderValidationResult {
+  const phase = getPhaseById(phaseId);
+  const errors: string[] = [];
+  const carbonCount = builderState.carbonCount;
+  const requiredFragments: FragmentId[] = builderState.bonds.some((bond) => bond.order === 2)
+    ? ["ligacao_dupla"]
+    : ["ligacao_simples"];
+
+  if (phase.technicalType === "choice") {
+    errors.push("Esta fase não suporta construção molecular.");
+  }
+
+  if (carbonCount > phase.resources.carbonAvailable) {
+    errors.push("A estrutura usa mais carbonos do que a fase permite.");
+  }
+
+  for (const fragmentId of requiredFragments) {
+    if (!phase.resources.availableFragments.includes(fragmentId)) {
+      errors.push("A estrutura usa um tipo de ligação não desbloqueado nesta fase.");
+      break;
+    }
+  }
+
+  const structuralValid = validateGraphStructuralRules(builderState, errors);
+  const derivedStructure = structuralValid
+    ? deriveGraphStructure(builderState)
+    : null;
+  const resolvedMoleculeId = structuralValid ? resolveOfficialGraphMoleculeId(builderState) : null;
+
+  if (structuralValid && !resolvedMoleculeId) {
+    errors.push("A estrutura é válida, mas ainda não corresponde a uma molécula oficial disponível no MVP.");
+  }
+
+  return {
+    phaseId,
+    structuralValid,
+    canCreateMolecule: structuralValid && resolvedMoleculeId !== null && errors.length === 0,
+    resolvedMoleculeId,
+    errors,
+    derivedStructure,
+  };
+}
+
+export function validateBuilderStateForPhase(
+  phaseId: PhaseId,
+  builderState: BuilderState,
+): BuilderValidationResult {
+  if (isGraphBuilderState(builderState)) {
+    return validateGraphBuilderStateForPhase(phaseId, builderState);
+  }
+
+  return validateLegacyOrBlueprintBuilderStateForPhase(phaseId, builderState);
 }

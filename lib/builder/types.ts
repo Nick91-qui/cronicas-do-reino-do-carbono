@@ -1,5 +1,9 @@
 import type { BondType, MoleculeId, PhaseId } from "@/lib/content/types";
 
+/**
+ * Formatos antigos mantidos apenas por compatibilidade com versões anteriores
+ * do builder. A UI atual da mesa de forja usa GraphBuilderState.
+ */
 export type BuilderBlueprintId =
   | "tetra_single"
   | "trigonal_double"
@@ -21,11 +25,13 @@ export type BuilderFilledSlot = {
   element: BuilderElement | null;
 };
 
+/** @deprecated Formato legado. Não deve ser usado pela UI atual da forja. */
 export type BlueprintBuilderState = {
   blueprintId: BuilderBlueprintId;
   slots: BuilderFilledSlot[];
 };
 
+/** @deprecated Formato legado. Não deve ser usado pela UI atual da forja. */
 export type LegacyBuilderState = {
   carbonCount: number;
   bondType: BondType;
@@ -47,10 +53,17 @@ export type GraphBuilderState = {
   bonds: GraphBuilderBond[];
 };
 
+/** Formato canônico do builder usado pela UI atual do MVP. */
+export type CanonicalBuilderState = GraphBuilderState;
+
+/**
+ * União compatível aceita por validadores e rotas para não quebrar payloads
+ * históricos. Novos fluxos devem usar GraphBuilderState.
+ */
 export type BuilderState =
-  | BlueprintBuilderState
+  | GraphBuilderState
   | LegacyBuilderState
-  | GraphBuilderState;
+  | BlueprintBuilderState;
 
 export type BuilderSignatureEntry = {
   bondOrder: BuilderSlotBondOrder;

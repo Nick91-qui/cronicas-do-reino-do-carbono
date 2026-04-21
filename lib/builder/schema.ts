@@ -41,16 +41,26 @@ export const graphBuilderStateSchema = z.object({
   bonds: z.array(graphBuilderBondSchema),
 });
 
-export const builderStateSchema = z.union([
-  blueprintBuilderStateSchema,
-  legacyBuilderStateSchema,
+/** Schema canônico do builder usado pela UI atual do MVP. */
+export const canonicalBuilderStateSchema = graphBuilderStateSchema;
+
+/**
+ * Schema compatível com formatos históricos do builder. Mantido para evitar
+ * quebra de payloads legados enquanto o projeto converge no formato em grafo.
+ */
+export const builderStateCompatibilitySchema = z.union([
   graphBuilderStateSchema,
+  legacyBuilderStateSchema,
+  blueprintBuilderStateSchema,
 ]);
+
+export const builderStateSchema = builderStateCompatibilitySchema;
 
 export const builderValidationRequestSchema = z.object({
   phaseId: phaseIdSchema,
   builderState: builderStateSchema,
 });
 
+export type CanonicalBuilderStateInput = z.infer<typeof canonicalBuilderStateSchema>;
 export type BuilderStateInput = z.infer<typeof builderStateSchema>;
 export type BuilderValidationRequestInput = z.infer<typeof builderValidationRequestSchema>;
