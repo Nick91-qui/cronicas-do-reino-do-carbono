@@ -69,6 +69,7 @@ Stack atual preparada:
 
 - [ ] endurecer QA dos estados válidos e inválidos do builder
 - [ ] revisar cobertura de aromaticidade e fragmentos desbloqueáveis
+- [x] isolar compatibilidade legada do builder em módulo separado
 - [ ] revisar pontos de expansão já modelados para não contaminarem o MVP
 - [ ] remover `LegacyBuilderState` e `BlueprintBuilderState` após corte explícito de compatibilidade
 - [ ] executar plano de remoção documentado em `docs/tech/builder-legacy-removal.md`

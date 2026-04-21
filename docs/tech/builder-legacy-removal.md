@@ -13,6 +13,12 @@ Os formatos legados permanecem apenas por compatibilidade interna temporária e 
 
 ## Estado atual
 
+### Etapa já concluída
+
+- a compatibilidade histórica foi isolada em `lib/builder/compat/legacy-builder.ts`;
+- `lib/builder/validate.ts` mantém apenas o fluxo canônico em grafo e o dispatch para compatibilidade;
+- a suíte principal do builder cobre apenas `GraphBuilderState`.
+
 ### Formato canônico
 
 - `GraphBuilderState`
@@ -77,10 +83,12 @@ Ações:
 Arquivo:
 
 - `lib/builder/validate.ts`
+- `lib/builder/compat/legacy-builder.ts`
 
 Ações:
 
-- remover branches de `legacy` e `blueprint`;
+- remover o dispatch de compatibilidade de `lib/builder/validate.ts`;
+- remover `lib/builder/compat/legacy-builder.ts`;
 - remover regras de validação legadas;
 - remover resolução de moléculas para formatos legados;
 - manter somente o caminho canônico em grafo.
@@ -112,11 +120,12 @@ Ações:
 
 1. confirmar ausência de uso real dos formatos legados;
 2. ajustar testes para refletir apenas o formato canônico;
-3. trocar schema público para o formato canônico;
-4. remover lógica legada da validação;
-5. remover tipos e helpers mortos;
-6. rodar `typecheck`, `build` e suíte de testes completa;
-7. registrar a mudança nos documentos técnicos e de planejamento.
+3. mover a compatibilidade histórica para módulo isolado;
+4. trocar schema público para o formato canônico;
+5. remover lógica legada da validação;
+6. remover tipos e helpers mortos;
+7. rodar `typecheck`, `build` e suíte de testes completa;
+8. registrar a mudança nos documentos técnicos e de planejamento.
 
 ## Critério de aceite da remoção
 
