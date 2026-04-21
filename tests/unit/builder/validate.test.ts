@@ -39,8 +39,9 @@ describe("builder/validate", () => {
       bondType: "single",
     });
 
-    expect(result.structuralValid).toBe(true);
+    expect(result.structuralValid).toBe(false);
     expect(result.canCreateMolecule).toBe(false);
+    expect(result.resolvedMoleculeId).toBeNull();
     expect(result.errors).toContain("Esta fase não suporta construção molecular.");
   });
 
@@ -50,8 +51,8 @@ describe("builder/validate", () => {
       bondType: "single",
     });
 
-    expect(result.structuralValid).toBe(true);
-    expect(result.resolvedMoleculeId).toBe("etano");
+    expect(result.structuralValid).toBe(false);
+    expect(result.resolvedMoleculeId).toBeNull();
     expect(result.canCreateMolecule).toBe(false);
     expect(result.errors).toContain("A estrutura usa mais carbonos do que a fase permite.");
   });
@@ -62,8 +63,8 @@ describe("builder/validate", () => {
       bondType: "double",
     });
 
-    expect(result.structuralValid).toBe(true);
-    expect(result.resolvedMoleculeId).toBe("eteno");
+    expect(result.structuralValid).toBe(false);
+    expect(result.resolvedMoleculeId).toBeNull();
     expect(result.canCreateMolecule).toBe(false);
     expect(result.errors).toContain("A estrutura usa um tipo de ligação não desbloqueado nesta fase.");
   });
