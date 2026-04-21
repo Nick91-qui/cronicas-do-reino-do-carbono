@@ -24,6 +24,7 @@ test("package.json expõe scripts mínimos de QA", () => {
 
   assert.equal(packageJson.scripts.typecheck, "tsc --noEmit");
   assert.equal(packageJson.scripts.build, "next build");
-  assert.equal(packageJson.scripts.test, "npm run test:qa");
+  assert.equal(packageJson.scripts.test, "npm run test:qa && npm run test:unit");
   assert.equal(packageJson.scripts["test:qa"], "node --test tests/qa/*.test.js");
+  assert.equal(packageJson.scripts["test:unit"], "vitest run");
 });
