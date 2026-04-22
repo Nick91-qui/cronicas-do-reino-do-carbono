@@ -9,3 +9,12 @@
 body {
   @apply bg-background text-foreground antialiased;
 }
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}

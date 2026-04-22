@@ -566,7 +566,7 @@ export function PhaseExperience({
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <main className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 sm:py-8">
       <section className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.74),rgba(2,6,23,0.82))] p-5 shadow-[0_20px_70px_rgba(2,6,23,0.26)] backdrop-blur-xl sm:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
@@ -583,7 +583,7 @@ export function PhaseExperience({
             />
           </div>
 
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
                 {displayedStep === "result" ? "Desfecho" : stepCopy[displayedStep].eyebrow}
@@ -631,7 +631,7 @@ export function PhaseExperience({
       </section>
 
       <section
-        className={`mt-6 transition-all duration-200 ${
+        className={`mt-5 transition-all duration-200 sm:mt-6 ${
           isStepVisible
             ? "translate-x-0 opacity-100"
             : stepDirection === "forward"
@@ -640,7 +640,7 @@ export function PhaseExperience({
         }`}
       >
         {displayedStep === "intro" ? (
-          <div className="mx-auto grid max-w-5xl gap-5 xl:grid-cols-[1.2fr,0.8fr]">
+          <div className="mx-auto grid max-w-5xl gap-4 lg:gap-5 xl:grid-cols-[1.2fr,0.8fr]">
             <article className="rounded-[30px] border border-white/10 bg-white/5 p-6 shadow-[0_16px_50px_rgba(15,23,42,0.18)] backdrop-blur sm:p-8">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Chamado do reino
@@ -718,7 +718,7 @@ export function PhaseExperience({
         ) : null}
 
         {displayedStep === "read" ? (
-          <section className="grid gap-6 xl:grid-cols-[0.86fr,1.14fr]">
+          <section className="grid gap-5 xl:grid-cols-[0.86fr,1.14fr] xl:gap-6">
             <aside className="grid gap-4 self-start">
               <div className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -819,7 +819,7 @@ export function PhaseExperience({
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Cartas disponiveis
                   </p>
-                  <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
                     {molecules.map((molecule) => {
                       const isSelected = effectiveSelectedMoleculeId === molecule.id;
                       const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
@@ -955,7 +955,7 @@ export function PhaseExperience({
       </section>
 
       {currentStep !== "result" ? (
-        <section className="mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/25 px-4 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-5">
+        <section className="sticky bottom-3 z-10 mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/85 px-4 py-4 shadow-[0_18px_40px_rgba(2,6,23,0.28)] backdrop-blur sm:static sm:flex-row sm:items-center sm:justify-between sm:bg-slate-950/25 sm:px-5 sm:shadow-none">
           <button
             type="button"
             onClick={goBack}
@@ -965,7 +965,7 @@ export function PhaseExperience({
             Voltar
           </button>
 
-          <p className="text-sm text-slate-400">
+          <p className="text-sm leading-6 text-slate-400 sm:max-w-xl">
             {currentStep === "intro" && "Leia o chamado da prova e avance quando estiver pronto."}
             {currentStep === "forge" &&
               (canAdvanceFromForge
