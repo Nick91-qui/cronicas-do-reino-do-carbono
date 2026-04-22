@@ -533,6 +533,11 @@ export function PhaseExperience({
   }
 
   function goBack() {
+    if (currentStep === "intro") {
+      router.push(`/chapter/${phase.chapterId}`);
+      return;
+    }
+
     const currentIndex = availableSteps.indexOf(currentStep);
     if (currentIndex > 0) {
       navigateToStep(availableSteps[currentIndex - 1], "backward");
@@ -959,10 +964,10 @@ export function PhaseExperience({
           <button
             type="button"
             onClick={goBack}
-            disabled={currentStep === "intro"}
-            className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 text-lg font-black text-slate-100"
+            aria-label={currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"}
           >
-            Voltar
+            &lt;
           </button>
 
           <p className="text-sm leading-6 text-slate-400 sm:max-w-xl">
@@ -983,9 +988,10 @@ export function PhaseExperience({
                 (currentStep === "intro" && !canAdvanceFromIntro) ||
                 (currentStep === "forge" && !canAdvanceFromForge)
               }
-              className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300 text-lg font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Avançar"
             >
-              Avancar
+              &gt;
             </button>
           ) : (
             <button
@@ -994,10 +1000,9 @@ export function PhaseExperience({
               disabled={
                 isSubmitting ||
                 !canAdvanceFromRead ||
-                (supportsBuilder && !builderResult?.canCreateMolecule) ||
                 (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
               }
-              className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+              className="min-w-[11rem] rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
             </button>

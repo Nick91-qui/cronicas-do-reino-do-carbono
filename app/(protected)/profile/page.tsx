@@ -14,15 +14,15 @@ export default async function ProfilePage() {
   const totalCompletedPhases = progress.reduce((sum, chapter) => sum + chapter.completedPhaseCount, 0);
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-6 py-10">
-      <section className="relative overflow-hidden rounded-[32px] border border-cyan-300/20 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.14),transparent_24%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-8 shadow-[0_24px_80px_rgba(2,6,23,0.42)]">
+    <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
+      <section className="relative overflow-hidden rounded-[28px] border border-cyan-300/20 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.14),transparent_24%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-5 shadow-[0_24px_80px_rgba(2,6,23,0.42)] sm:rounded-[32px] sm:p-8">
         <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.04)_32%,transparent_60%)]" />
-        <div className="relative grid gap-6 lg:grid-cols-[1fr,0.9fr]">
+        <div className="relative grid gap-5 lg:grid-cols-[1fr,0.9fr] lg:gap-6">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300 sm:text-sm">
               Perfil do jogador
             </p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight text-white">
+            <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
               {player.displayName}
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
@@ -47,9 +47,9 @@ export default async function ProfilePage() {
         </div>
       </section>
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-[1fr,1fr]">
-        <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-          <h2 className="text-2xl font-black tracking-tight text-white">Identidade</h2>
+      <section className="mt-6 grid gap-4 lg:grid-cols-[1fr,1fr] lg:gap-6">
+        <section className="rounded-[24px] border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:rounded-[28px] sm:p-6">
+          <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">Identidade</h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
             <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
               <dt className="text-slate-500">Nome</dt>
@@ -70,8 +70,8 @@ export default async function ProfilePage() {
           </dl>
         </section>
 
-        <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-          <h2 className="text-2xl font-black tracking-tight text-white">Snapshot de inventario</h2>
+        <section className="rounded-[24px] border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:rounded-[28px] sm:p-6">
+          <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">Snapshot de inventario</h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
             <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
               <dt className="text-slate-500">Carbonos disponiveis</dt>

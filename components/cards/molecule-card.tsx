@@ -137,7 +137,7 @@ export function MoleculeCard({
   const artworkFit = molecule.visual.assets.artworkFit ?? "cover";
   const artworkPosition = molecule.visual.assets.artworkPosition ?? "center";
   const artworkScale = molecule.visual.assets.artworkScale ?? 1;
-  const cardHeight = variant === "expanded" ? "h-[560px]" : "h-[500px]";
+  const cardHeight = variant === "expanded" ? "h-[520px] sm:h-[560px]" : "h-[440px] sm:h-[500px]";
   const visibleProperties = variant === "expanded" ? 6 : 5;
   const hoverRingClass =
     hoverRingClassByPalette[molecule.visual.attributePalette];
@@ -177,7 +177,7 @@ export function MoleculeCard({
               <div className="flex h-full flex-col rounded-[18px] border border-slate-900/80 bg-white px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="mt-1 text-xl font-black tracking-tight text-slate-950">
+                    <h3 className="mt-1 text-lg font-black tracking-tight text-slate-950 sm:text-xl">
                       {molecule.nomeQuimico}
                     </h3>
                     <p className="mt-1 line-clamp-2 text-sm font-medium text-slate-500">
@@ -186,9 +186,9 @@ export function MoleculeCard({
                   </div>
                 </div>
 
-                <div className="mt-3 relative min-h-0 flex-1 overflow-hidden rounded-[20px] border border-slate-900/70 bg-slate-950 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                <div className="relative mt-3 min-h-0 flex-1 overflow-hidden rounded-[20px] border border-slate-900/70 bg-slate-950 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                   <div
-                    className="relative flex h-full min-h-[220px] items-center justify-center rounded-[16px] border border-white/10 bg-cover bg-center p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                    className="relative flex h-full min-h-[180px] items-center justify-center rounded-[16px] border border-white/10 bg-cover bg-center p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[220px]"
                     style={artStyle}
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_55%)]" />
@@ -204,12 +204,12 @@ export function MoleculeCard({
                       }}
                     />
 
-                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-end justify-between gap-2">
-                      <div className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80">
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap items-end justify-between gap-2">
+                      <div className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/80 sm:text-[10px]">
                         {molecule.classe}
                       </div>
                       {badgeLabel ? (
-                        <div className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+                        <div className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white sm:text-[10px]">
                           {badgeLabel}
                         </div>
                       ) : null}
@@ -280,7 +280,7 @@ export function MoleculeCard({
                   </div>
                 </div>
 
-                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                <div className="mt-3 grid gap-3">
                   <div className="rounded-[18px] border border-emerald-200 bg-emerald-50 px-3 py-3">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                       Pontos fortes

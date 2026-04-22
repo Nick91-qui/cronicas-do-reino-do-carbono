@@ -241,7 +241,7 @@ export function AtomForge({
                         type="button"
                         onClick={() => onSetLayout(nextLayout)}
                         disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                        className={`flex items-center justify-center rounded-2xl border px-4 py-3 text-sm font-black transition ${
+                        className={`flex min-h-12 items-center justify-center rounded-2xl border px-4 py-3 text-sm font-black transition ${
                           layout === nextLayout
                             ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
                             : "border-white/10 bg-slate-950/25 text-slate-300 hover:border-white/20"
@@ -356,7 +356,7 @@ export function AtomForge({
             type="button"
             onClick={onValidateBuilder}
             disabled={isValidatingBuilder}
-            className="rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
           >
             {isValidatingBuilder ? "Consultando a mesa..." : "Consultar a mesa"}
           </button>
@@ -397,7 +397,7 @@ export function AtomForge({
             </div>
           </div>
 
-          <div className={`mt-4 grid gap-3 ${forgedMolecule ? "xl:grid-cols-[0.32fr,0.68fr]" : "md:grid-cols-2"}`}>
+          <div className={`mt-4 grid gap-3 ${forgedMolecule ? "xl:grid-cols-[0.32fr,0.68fr]" : "sm:grid-cols-2"}`}>
             <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
                 Estrutural
