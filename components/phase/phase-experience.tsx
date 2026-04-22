@@ -72,7 +72,7 @@ type PhaseExperienceProps = {
   chapterProgress: ChapterProgressView;
 };
 
-type PhaseStep = "intro" | "forge" | "choice" | "justify" | "result";
+type PhaseStep = "intro" | "forge" | "read" | "result";
 
 const fragmentToBondType = {
   ligacao_simples: "single",
@@ -104,36 +104,23 @@ const resultTitleByKind: Record<
   inadequate: "Forja instavel",
 };
 
-const stepOrder: PhaseStep[] = [
-  "intro",
-  "forge",
-  "choice",
-  "justify",
-  "result",
-];
-
 const minimumForgeFeedbackMs = 900;
 
 const stepCopy: Record<Exclude<PhaseStep, "result">, { eyebrow: string; title: string; description: string }> = {
   intro: {
     eyebrow: "Chamado",
-    title: "Contexto da prova",
-    description: "Leia o chamado do reino, entenda a missao e avance quando estiver pronto para agir.",
+    title: "Chamado do rito",
+    description: "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
   },
   forge: {
     eyebrow: "Rito da forja",
     title: "Moldar a estrutura",
-    description: "Molde a estrutura pedida pela prova e confirme se a mesa reconhece sua leitura.",
+    description: "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
   },
-  choice: {
-    eyebrow: "Rito da escolha",
-    title: "Definir a molecula",
-    description: "Compare as cartas disponiveis e decida qual delas melhor responde ao chamado da prova.",
-  },
-  justify: {
+  read: {
     eyebrow: "Rito da leitura",
-    title: "Sustentar a resposta",
-    description: "Escolha ate 3 propriedades para demonstrar por que sua resposta merece ser aceita.",
+    title: "Classificar e sustentar",
+    description: "A carta em foco fica ao lado das propriedades para reduzir alternancia mental durante a classificacao.",
   },
 };
 
@@ -152,7 +139,7 @@ function formatSelectableProperty(property: SelectableProperty): string {
 }
 
 function isPhaseStep(value: string | null): value is PhaseStep {
-  return value === "intro" || value === "forge" || value === "choice" || value === "justify" || value === "result";
+  return value === "intro" || value === "forge" || value === "read" || value === "result";
 }
 
 function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boolean): PhaseStep {
@@ -161,15 +148,14 @@ function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boo
   }
 
   if (supportsMoleculeSelection) {
-    return "choice";
+    return "read";
   }
 
-  return "justify";
+  return "read";
 }
 
 function getAvailablePhaseSteps(
   supportsBuilder: boolean,
-  supportsMoleculeSelection: boolean,
   hasResult: boolean,
 ): PhaseStep[] {
   const steps: PhaseStep[] = ["intro"];
@@ -178,11 +164,7 @@ function getAvailablePhaseSteps(
     steps.push("forge");
   }
 
-  if (supportsMoleculeSelection) {
-    steps.push("choice");
-  }
-
-  steps.push("justify");
+  steps.push("read");
 
   if (hasResult) {
     steps.push("result");
@@ -288,12 +270,6 @@ export function PhaseExperience({
   const selectedMolecule =
     molecules.find((molecule) => molecule.id === effectiveSelectedMoleculeId) ??
     null;
-  const unlockedPhaseCount = chapterProgress.phases.filter(
-    (item) => item.isUnlocked,
-  ).length;
-  const completedPhaseCount = chapterProgress.phases.filter(
-    (item) => item.isCompleted,
-  ).length;
   const unlockedNextPhaseId =
     submitResult &&
     submitResult.persistence.chapterProgress.highestUnlockedPhaseNumber >
@@ -310,19 +286,26 @@ export function PhaseExperience({
   const canAdvanceFromForge = supportsBuilder
     ? Boolean(builderResult?.canCreateMolecule)
     : true;
-  const canAdvanceFromChoice = supportsMoleculeSelection
-    ? Boolean(effectiveSelectedMoleculeId)
-    : true;
-  const canAdvanceFromJustify = selectedProperties.length > 0;
+  const canAdvanceFromRead =
+    (!supportsMoleculeSelection || Boolean(effectiveSelectedMoleculeId)) &&
+    selectedProperties.length > 0;
   const displayedStep = renderedStep;
   const createdMolecule =
     molecules.find((molecule) => molecule.id === builderResult?.resolvedMoleculeId) ??
     null;
+  const focusedMolecule = selectedMolecule ?? createdMolecule;
   const availableSteps = getAvailablePhaseSteps(
     supportsBuilder,
-    supportsMoleculeSelection,
     Boolean(submitResult),
   );
+  const totalSteps = availableSteps.filter((step) => step !== "result").length;
+  const visibleProgressStep =
+    displayedStep === "result"
+      ? totalSteps
+      : Math.max(
+          1,
+          availableSteps.filter((step) => step !== "result").indexOf(displayedStep) + 1,
+        );
 
   function navigateToStep(
     nextStep: PhaseStep,
@@ -550,9 +533,9 @@ export function PhaseExperience({
   }
 
   function goBack() {
-    const currentIndex = stepOrder.indexOf(currentStep);
+    const currentIndex = availableSteps.indexOf(currentStep);
     if (currentIndex > 0) {
-      navigateToStep(stepOrder[currentIndex - 1], "backward");
+      navigateToStep(availableSteps[currentIndex - 1], "backward");
     }
   }
 
@@ -566,15 +549,7 @@ export function PhaseExperience({
     }
 
     if (currentStep === "forge") {
-      navigateToStep(
-        supportsMoleculeSelection ? "choice" : "justify",
-        "forward",
-      );
-      return;
-    }
-
-    if (currentStep === "choice") {
-      navigateToStep("justify", "forward");
+      navigateToStep("read", "forward");
     }
   }
 
@@ -591,99 +566,66 @@ export function PhaseExperience({
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-10">
-      <section className="relative overflow-hidden rounded-[32px] border border-cyan-300/20 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.18),transparent_32%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.16),transparent_28%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-8 shadow-[0_24px_80px_rgba(2,6,23,0.45)]">
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.04)_32%,transparent_60%)]" />
-        <div className="relative flex flex-wrap items-start justify-between gap-6">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">
-              Capitulo I · Prova {phase.number}
-            </p>
-            <h1 className="mt-3 text-4xl font-black tracking-tight text-white">
-              {phase.title}
-            </h1>
-            <p className="mt-4 text-base leading-7 text-slate-300">
-              {phase.narrative}
-            </p>
+    <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+      <section className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.74),rgba(2,6,23,0.82))] p-5 shadow-[0_20px_70px_rgba(2,6,23,0.26)] backdrop-blur-xl sm:p-6">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <span>Capitulo I · Prova {phase.number}</span>
+            <span>
+              Passo {visibleProgressStep} de {totalSteps}
+            </span>
           </div>
 
-          <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-slate-500">Estado da prova</p>
-              <p className="mt-1 font-semibold text-white">
-                {currentPhaseStatus?.isCompleted ? "Ja dominada" : "Aguardando sua leitura"}
+          <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.9),rgba(103,232,249,0.9))] transition-[width] duration-300"
+              style={{ width: `${(visibleProgressStep / totalSteps) * 100}%` }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
+                {displayedStep === "result" ? "Desfecho" : stepCopy[displayedStep].eyebrow}
+              </p>
+              <h1 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                {phase.title}
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+                {displayedStep === "result"
+                  ? "O resultado fica isolado no centro da tela para leitura imediata, sem competir com o restante da interface."
+                  : stepCopy[displayedStep].description}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-slate-500">Passagem pelo dominio</p>
-              <p className="mt-1 font-semibold text-white">
-                {completedPhaseCount}/{chapterProgress.phases.length} provas vencidas
-              </p>
-              <p className="text-slate-400">{unlockedPhaseCount} portoes respondendo</p>
+
+            <div className="flex flex-wrap gap-2">
+              {availableSteps
+                .filter((step) => step !== "result")
+                .map((step) => {
+                  const isActive = displayedStep === step;
+                  const isDone =
+                    step === "intro"
+                      ? true
+                      : step === "forge"
+                        ? canAdvanceFromForge
+                        : canAdvanceFromRead;
+
+                  return (
+                    <div
+                      key={step}
+                      className={`rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] backdrop-blur ${
+                        isActive
+                          ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
+                          : isDone
+                            ? "border-emerald-300/25 bg-emerald-500/10 text-emerald-100"
+                            : "border-white/10 bg-white/5 text-slate-400"
+                      }`}
+                    >
+                      {step === "intro" ? "Chamado" : step === "forge" ? "Forja" : "Leitura"}
+                    </div>
+                  );
+                })}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-6 rounded-[28px] border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
-              {displayedStep === "result"
-                ? "Desfecho"
-                : stepCopy[displayedStep].eyebrow}
-            </p>
-            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">
-              {displayedStep === "result"
-                ? "Desfecho da prova"
-                : stepCopy[displayedStep].title}
-            </h2>
-            <p className="mt-2 text-sm text-slate-300">
-              {displayedStep === "result"
-                ? "Revise o julgamento do reino, os sinais recebidos e o proximo destino."
-                : stepCopy[displayedStep].description}
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {stepOrder
-              .filter((step) => availableSteps.includes(step))
-              .map((step, index) => {
-                const isActive = currentStep === step;
-                const isDone =
-                  step === "intro"
-                    ? true
-                    : step === "forge"
-                      ? canAdvanceFromForge
-                      : step === "choice"
-                        ? canAdvanceFromChoice
-                        : step === "justify"
-                          ? canAdvanceFromJustify
-                          : Boolean(submitResult);
-
-                return (
-                  <div
-                    key={step}
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
-                      isActive
-                        ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
-                        : isDone
-                          ? "border-emerald-400/30 bg-emerald-500/10 text-emerald-100"
-                          : "border-white/10 bg-slate-950/35 text-slate-400"
-                    }`}
-                  >
-                    {displayedStep === "result" && step === "result"
-                      ? `${index + 1}. desfecho`
-                      : step === "intro"
-                        ? `${index + 1}. chamado`
-                        : step === "forge"
-                          ? `${index + 1}. forja`
-                          : step === "choice"
-                            ? `${index + 1}. escolha`
-                            : `${index + 1}. leitura`}
-                  </div>
-                );
-              })}
           </div>
         </div>
       </section>
@@ -698,47 +640,52 @@ export function PhaseExperience({
         }`}
       >
         {displayedStep === "intro" ? (
-          <div className="grid gap-6 xl:grid-cols-[1.15fr,0.85fr]">
-            <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <div className="mx-auto grid max-w-5xl gap-5 xl:grid-cols-[1.2fr,0.8fr]">
+            <article className="rounded-[30px] border border-white/10 bg-white/5 p-6 shadow-[0_16px_50px_rgba(15,23,42,0.18)] backdrop-blur sm:p-8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Chamado do reino
               </p>
-              <p className="mt-4 text-base leading-8 text-slate-200">
+              <p className="mt-5 text-base leading-8 text-slate-100">
                 {phase.narrative}
               </p>
             </article>
 
             <div className="grid gap-4">
-              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Missao
                 </p>
                 <p className="mt-3 text-sm leading-6 text-slate-200">
                   {phase.objective}
                 </p>
               </article>
-              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Conceito central
                 </p>
                 <p className="mt-3 text-sm leading-6 text-slate-200">
                   {phase.coreConcept}
                 </p>
               </article>
-              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  Recursos da fase
+              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Estado local da prova
                 </p>
-                <p className="mt-3 text-sm leading-6 text-slate-200">
-                  {phase.resources.carbonAvailable} carbono
-                  {phase.resources.carbonAvailable > 1 ? "s" : ""} ·{" "}
-                  {phase.resources.availableFragments
-                    .map(
-                      (fragmentId) =>
-                        bondTypeLabels[fragmentToBondType[fragmentId]],
-                    )
-                    .join(" · ")}
-                </p>
+                <div className="mt-3 grid gap-3 text-sm text-slate-200">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    {currentPhaseStatus?.isCompleted ? "Ja dominada" : "Aguardando sua leitura"}
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    {phase.resources.carbonAvailable} carbono
+                    {phase.resources.carbonAvailable > 1 ? "s" : ""} ·{" "}
+                    {phase.resources.availableFragments
+                      .map(
+                        (fragmentId) =>
+                          bondTypeLabels[fragmentToBondType[fragmentId]],
+                      )
+                      .join(" · ")}
+                  </div>
+                </div>
               </article>
             </div>
           </div>
@@ -770,283 +717,206 @@ export function PhaseExperience({
           />
         ) : null}
 
-        {displayedStep === "choice" ? (
-          <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:p-6">
-            <div className="grid gap-4 xl:grid-cols-[0.72fr,1.28fr]">
-              <aside className="grid gap-4 self-start">
-                <div className="rounded-[24px] border border-cyan-300/20 bg-[linear-gradient(180deg,rgba(14,116,144,0.16),rgba(15,23,42,0.16))] p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
-                    {createdMolecule ? "Leitura refinada" : "Leitura da prova"}
-                  </p>
-                  <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                    Escolha da molecula
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">
-                    {createdMolecule
-                      ? "Compare as cartas disponiveis e confirme se a molecula sugerida pela forja continua sendo a melhor resposta."
-                      : "Compare as cartas disponiveis e escolha a resposta principal da prova sem depender da mesa de forja."}
-                  </p>
-                </div>
-
-                {createdMolecule ? (
-                  <div className="rounded-[24px] border border-emerald-400/25 bg-emerald-500/10 p-5 text-sm text-emerald-100">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                      Sinal confirmado
-                    </p>
-                    <p className="mt-2 text-lg font-black">{createdMolecule.nomeQuimico}</p>
-                    <p className="mt-2 leading-6 text-emerald-50/90">
-                      A forja ja reconheceu esta molecula. Use esta etapa para confirmar a resposta final comparando a carta sugerida com as demais opcoes.
-                    </p>
+        {displayedStep === "read" ? (
+          <section className="grid gap-6 xl:grid-cols-[0.86fr,1.14fr]">
+            <aside className="grid gap-4 self-start">
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Carta em foco
+                </p>
+                {focusedMolecule ? (
+                  <div className="mt-4">
+                    <MoleculeCard
+                      molecule={focusedMolecule}
+                      isSelected
+                      isCreated={builderResult?.resolvedMoleculeId === focusedMolecule.id}
+                      selectable={supportsMoleculeSelection}
+                      variant="compact"
+                      onSelect={
+                        supportsMoleculeSelection
+                          ? () => setSelectedMoleculeId(focusedMolecule.id)
+                          : undefined
+                      }
+                    />
                   </div>
-                ) : null}
+                ) : (
+                  <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-400">
+                    {supportsMoleculeSelection
+                      ? "Selecione uma carta para comparar com as propriedades exigidas pela prova."
+                      : "A forja ainda nao gerou uma carta reconhecida para esta etapa."}
+                  </div>
+                )}
+              </div>
 
-                <div className="rounded-[24px] border border-white/10 bg-slate-950/35 p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Leitura atual
-                  </p>
-                  <div className="mt-3 space-y-3 text-sm text-slate-300">
-                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
-                      Molecula em foco:{" "}
-                      <span className="font-semibold text-white">
-                        {selectedMolecule?.nomeQuimico ?? "nenhuma"}
-                      </span>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
-                      Origem do sinal:{" "}
-                      <span className="font-semibold text-white">
-                        {createdMolecule ? "mesa de forja" : "comparacao direta"}
-                      </span>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
-                      {createdMolecule
-                        ? "A carta sugerida ja veio da forja. Aqui o foco e confirmar se ela segue a melhor resposta diante das outras cartas."
-                        : "Nesta fase, a decisao nasce da leitura das cartas disponiveis. Compare atributos, propriedades e contexto antes de escolher."}
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
-                      Objetivo da fase:{" "}
-                      <span className="font-semibold text-white">
-                        {phase.objective}
-                      </span>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 leading-6">
-                      Conceito em foco:{" "}
-                      <span className="font-semibold text-white">
-                        {phase.coreConcept}
-                      </span>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
-                      Estado da leitura:{" "}
-                      <span className="font-semibold text-white">
-                        {selectedMolecule ? "resposta pronta" : "escolha pendente"}
-                      </span>
-                    </div>
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Leitura atual
+                </p>
+                <div className="mt-3 grid gap-3 text-sm text-slate-200">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    Molecula:{" "}
+                    <span className="font-semibold text-white">
+                      {focusedMolecule?.nomeQuimico ?? "nenhuma"}
+                    </span>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    Origem:{" "}
+                    <span className="font-semibold text-white">
+                      {createdMolecule ? "mesa de forja" : "comparacao direta"}
+                    </span>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    Marcas:{" "}
+                    <span className="font-semibold text-white">
+                      {selectedProperties.length}/3
+                    </span>
                   </div>
                 </div>
-              </aside>
+              </div>
+            </aside>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                {molecules.map((molecule) => {
-                  const isSelected = effectiveSelectedMoleculeId === molecule.id;
-                  const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
+            <div className="grid gap-4">
+              <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                      Classificacao
+                    </p>
+                    <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
+                      Propriedades em foco
+                    </h3>
+                  </div>
+                  <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
+                    Escolha ate 3
+                  </div>
+                </div>
 
-                  return (
-                    <div
-                      key={molecule.id}
-                      className={`rounded-[28px] p-1 transition ${
-                        isSelected
-                          ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.4),rgba(59,130,246,0.18))] shadow-[0_16px_40px_rgba(14,165,233,0.18)]"
-                          : isCreated
-                            ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.28),rgba(20,184,166,0.14))]"
-                            : "bg-transparent"
+                <div className="mt-5 grid gap-3">
+                  {phase.expectedProperties.map((property) => (
+                    <button
+                      key={property}
+                      type="button"
+                      onClick={() => toggleProperty(property)}
+                      className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
+                        selectedProperties.includes(property)
+                          ? "border-cyan-300/35 bg-cyan-400/10 text-cyan-100"
+                          : "border-white/10 bg-slate-950/25 text-slate-200 hover:border-white/20"
                       }`}
                     >
-                      <div className="relative">
-                        {isSelected ? (
-                          <div className="pointer-events-none absolute left-4 top-4 z-10 rounded-full border border-cyan-300/40 bg-cyan-400/15 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-100">
-                            Escolhida
-                          </div>
-                        ) : null}
-                        {isCreated && !isSelected ? (
-                          <div className="pointer-events-none absolute left-4 top-4 z-10 rounded-full border border-emerald-300/40 bg-emerald-500/15 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100">
-                            Sugerida
-                          </div>
-                        ) : null}
-                        <MoleculeCard
-                          molecule={molecule}
-                          isSelected={isSelected}
-                          isCreated={isCreated}
-                          selectable={supportsMoleculeSelection}
-                          variant="compact"
-                          onSelect={
-                            supportsMoleculeSelection
-                              ? () => setSelectedMoleculeId(molecule.id)
-                              : undefined
-                          }
-                        />
-                      </div>
-                      {supportsMoleculeSelection ? (
-                        <div className="mt-3 flex items-center justify-between rounded-[22px] border border-white/10 bg-slate-950/45 px-4 py-3">
-                          <div>
-                            <p className="text-sm font-black text-white">
-                              {molecule.nomeQuimico}
-                            </p>
-                            <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                              {isCreated ? "reconhecida pela forja" : "comparacao direta"}
-                            </p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setSelectedMoleculeId(molecule.id)}
-                            className={`rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] transition ${
-                              isSelected
-                                ? "bg-cyan-300 text-slate-950"
-                                : "border border-white/15 bg-white/5 text-white hover:border-cyan-300/40 hover:bg-cyan-400/10"
-                            }`}
-                          >
-                            {isSelected ? "Resposta ativa" : "Escolher"}
-                          </button>
+                      <span className="font-semibold">
+                        {formatSelectableProperty(property)}
+                      </span>
+                      <span className="text-xs font-semibold uppercase tracking-[0.16em]">
+                        {selectedProperties.includes(property) ? "Marcada" : "Marcar"}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              {supportsMoleculeSelection ? (
+                <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    Cartas disponiveis
+                  </p>
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
+                    {molecules.map((molecule) => {
+                      const isSelected = effectiveSelectedMoleculeId === molecule.id;
+                      const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
+
+                      return (
+                        <div
+                          key={molecule.id}
+                          className={`rounded-[28px] p-1 transition ${
+                            isSelected
+                              ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.25),rgba(59,130,246,0.12))]"
+                              : isCreated
+                                ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.18),rgba(20,184,166,0.1))]"
+                                : "bg-transparent"
+                          }`}
+                        >
+                          <MoleculeCard
+                            molecule={molecule}
+                            isSelected={isSelected}
+                            isCreated={isCreated}
+                            selectable
+                            variant="compact"
+                            onSelect={() => setSelectedMoleculeId(molecule.id)}
+                          />
                         </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              ) : null}
+
+              <section className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Julgamento
+                </p>
+                <p className="mt-3 text-sm leading-6 text-slate-300">
+                  {phase.objective}
+                </p>
+
+                {submitError ? (
+                  <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+                    {submitError}
+                  </p>
+                ) : null}
+              </section>
             </div>
           </section>
         ) : null}
 
-        {displayedStep === "justify" ? (
-          <div className="grid gap-6 xl:grid-cols-[1fr,0.8fr]">
-            <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:p-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Leitura alquimica
-              </p>
-              <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                Propriedades em foco
-              </h3>
-              <div className="mt-5 grid gap-3">
-                {phase.expectedProperties.map((property) => (
-                  <button
-                    key={property}
-                    type="button"
-                    onClick={() => toggleProperty(property)}
-                    className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
-                      selectedProperties.includes(property)
-                        ? "border-cyan-300/40 bg-cyan-400/10 text-cyan-100"
-                        : "border-white/10 bg-slate-950/35 text-slate-200 hover:border-white/20"
-                    }`}
-                  >
-                    <span className="font-semibold">
-                      {formatSelectableProperty(property)}
-                    </span>
-                    <span className="text-xs font-semibold uppercase tracking-[0.16em]">
-                      {selectedProperties.includes(property) ? "Marcada" : "Marcar"}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:p-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Julgamento
-              </p>
-              <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                Resposta a registrar
-              </h3>
-              <div className="mt-5 grid gap-3 text-sm text-slate-300">
-                <div className="rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3">
-                  Molecula escolhida:{" "}
-                  <span className="font-semibold text-slate-100">
-                    {selectedMolecule?.nomeQuimico ??
-                      effectiveSelectedMoleculeId ??
-                      "nenhuma"}
-                  </span>
-                </div>
-                <div className="rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3">
-                  Marcas de leitura:{" "}
-                  <span className="font-semibold text-slate-100">
-                    {selectedProperties.length}/3
-                  </span>
-                </div>
-              </div>
-
-              {submitError ? (
-                <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
-                  {submitError}
-                </p>
-              ) : null}
-
-              <p className="mt-6 text-sm text-slate-400">
-                Use o botao abaixo para entregar sua leitura ao julgamento do reino.
-              </p>
-            </section>
-          </div>
-        ) : null}
-
         {displayedStep === "result" && submitResult ? (
-          <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:p-6">
-            <div className="grid gap-5 xl:grid-cols-[1.1fr,0.9fr]">
-              <div
-                className={`rounded-[26px] border p-5 sm:p-6 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">
-                  Julgamento do reino
-                </p>
-                <h3 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
-                  {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
-                </h3>
-                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em] opacity-90">
-                  {submitResult.evaluation.qualitativeResult}
-                </p>
-                <p className="mt-4 text-sm leading-7 text-white/90">
-                  {submitResult.evaluation.feedback}
-                </p>
-              </div>
+          <section className="mx-auto max-w-4xl rounded-[30px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.18)] backdrop-blur sm:p-6">
+            <div
+              className={`rounded-[28px] border p-6 sm:p-8 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">
+                Julgamento do reino
+              </p>
+              <h3 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+                {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-white/90">
+                {submitResult.evaluation.feedback}
+              </p>
 
-              <div className="grid gap-3">
-                <div className="rounded-[24px] border border-white/8 bg-slate-950/35 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Leitura rapida
+              <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p className="opacity-70">Forca obtida</p>
+                  <p className="mt-1 text-2xl font-black">{submitResult.evaluation.scoreAwarded}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p className="opacity-70">Sentenca</p>
+                  <p className="mt-1 text-lg font-semibold capitalize">
+                    {submitResult.evaluation.validationResult}
                   </p>
-                  <div className="mt-3 grid gap-3 text-sm text-slate-300 sm:grid-cols-2 xl:grid-cols-1">
-                    <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Forca obtida</p>
-                      <p className="mt-1 text-2xl font-black text-white">
-                        {submitResult.evaluation.scoreAwarded}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Sentenca da prova</p>
-                      <p className="mt-1 text-lg font-semibold capitalize text-white">
-                        {submitResult.evaluation.validationResult}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Molecula apresentada</p>
-                      <p className="mt-1 text-lg font-semibold text-white">
-                        {selectedMolecule?.nomeQuimico ?? "Nao definida"}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/5 p-3">
-                      <p className="text-slate-500">Marcas alinhadas</p>
-                      <p className="mt-1 text-lg font-semibold text-white">
-                        {submitResult.evaluation.expectedPropertiesMatched.length}
-                      </p>
-                    </div>
-                  </div>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p className="opacity-70">Molecula apresentada</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {focusedMolecule?.nomeQuimico ?? "Nao definida"}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                  <p className="opacity-70">Marcas alinhadas</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {submitResult.evaluation.expectedPropertiesMatched.length}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="mt-4 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
                 <p className="text-slate-500">Provas vencidas</p>
                 <p className="mt-1 text-lg font-semibold text-slate-100">
                   {submitResult.persistence.chapterProgress.completedPhaseCount}
                 </p>
               </div>
-              <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+              <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
                 <p className="text-slate-500">Prestigio no dominio</p>
                 <p className="mt-1 text-lg font-semibold text-slate-100">
                   {submitResult.persistence.chapterProgress.chapterScore}
@@ -1061,13 +931,9 @@ export function PhaseExperience({
                   .map((reward) => `${reward.rewardType}:${reward.rewardValue}`)
                   .join(", ")}
               </div>
-            ) : (
-              <div className="mt-4 rounded-2xl border border-white/8 bg-slate-950/35 px-4 py-3 text-sm text-slate-300">
-                Nenhum novo sinal foi concedido nesta passagem.
-              </div>
-            )}
+            ) : null}
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
               <button
                 type="button"
                 onClick={handleRetryFromResult}
@@ -1089,7 +955,7 @@ export function PhaseExperience({
       </section>
 
       {currentStep !== "result" ? (
-        <section className="mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/35 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+        <section className="mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/25 px-4 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-5">
           <button
             type="button"
             onClick={goBack}
@@ -1105,22 +971,17 @@ export function PhaseExperience({
               (canAdvanceFromForge
                 ? "A mesa reconheceu sua estrutura. Voce ja pode seguir."
                 : "Confirme sua estrutura para abrir o proximo rito.")}
-            {currentStep === "choice" &&
-              (canAdvanceFromChoice
-                ? "Sua leitura ja aponta uma molecula. Siga para sustentar a resposta."
-                : "Escolha uma molecula antes de prosseguir.")}
-            {currentStep === "justify" &&
-              "Marque as propriedades e entregue sua leitura ao julgamento do reino."}
+            {currentStep === "read" &&
+              "Escolha a carta, marque as propriedades e entregue a leitura no mesmo modulo."}
           </p>
 
-          {currentStep !== "justify" ? (
+          {currentStep !== "read" ? (
             <button
               type="button"
               onClick={goForward}
               disabled={
                 (currentStep === "intro" && !canAdvanceFromIntro) ||
-                (currentStep === "forge" && !canAdvanceFromForge) ||
-                (currentStep === "choice" && !canAdvanceFromChoice)
+                (currentStep === "forge" && !canAdvanceFromForge)
               }
               className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
             >
@@ -1132,7 +993,7 @@ export function PhaseExperience({
               onClick={handleSubmit}
               disabled={
                 isSubmitting ||
-                !canAdvanceFromJustify ||
+                !canAdvanceFromRead ||
                 (supportsBuilder && !builderResult?.canCreateMolecule) ||
                 (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
               }

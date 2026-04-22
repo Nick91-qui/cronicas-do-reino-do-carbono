@@ -10,12 +10,14 @@ import type {
 
 import type { EvaluatedPhaseSubmission, PhaseSubmitInput } from "@/lib/gameplay/types";
 
-function uniqueProperties(properties: SelectableProperty[]): SelectableProperty[] {
+function uniqueProperties(
+  properties: readonly SelectableProperty[],
+): SelectableProperty[] {
   return [...new Set(properties)];
 }
 
 function getExpectedMatches(
-  selectedProperties: SelectableProperty[],
+  selectedProperties: readonly SelectableProperty[],
   phase: Phase,
 ): SelectableProperty[] {
   const expected = new Set(phase.expectedProperties);
@@ -25,7 +27,7 @@ function getExpectedMatches(
 function getResultPayload(
   phase: Phase,
   selectedMoleculeId: MoleculeId | null,
-  selectedProperties: SelectableProperty[],
+  selectedProperties: readonly SelectableProperty[],
   qualitativeResult: QualitativeResult,
   validationResult: ValidationResult,
   scoreAwarded: 0 | 2 | 3,
@@ -41,7 +43,7 @@ function getResultPayload(
   return {
     phaseId: phase.id,
     selectedMoleculeId,
-    selectedProperties,
+    selectedProperties: [...selectedProperties],
     qualitativeResult,
     validationResult,
     scoreAwarded,

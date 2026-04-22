@@ -11,7 +11,7 @@ export type PhaseSubmitInput = {
   phaseId: PhaseId;
   builderState?: BuilderState;
   selectedMoleculeId?: MoleculeId;
-  selectedProperties: SelectableProperty[];
+  selectedProperties: readonly SelectableProperty[];
 };
 
 export type EvaluatedPhaseSubmission = {
