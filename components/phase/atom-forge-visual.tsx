@@ -117,16 +117,21 @@ export function AtomForgeVisual({
       : null;
 
   return (
-    <div className="rounded-[28px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.18),transparent_44%),linear-gradient(180deg,rgba(2,6,23,0.65),rgba(15,23,42,0.95))] p-4 sm:p-5">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-        Mesa de forja
-      </p>
+    <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,15,30,0.96),rgba(15,23,42,0.98))] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
+      <div className="flex items-center justify-between gap-3 border-b border-white/6 px-1 pb-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          Mesa de forja
+        </p>
+        <div className="rounded-full border border-white/8 bg-slate-950/70 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100">
+          {previewBondType}
+        </div>
+      </div>
       <div
-        className="relative mt-4 overflow-hidden rounded-[24px] border border-cyan-300/10 px-3 pb-4 pt-3 sm:p-5"
+        className="relative mt-3 overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-2.5 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-3"
         style={{
           backgroundImage: [
-            "linear-gradient(180deg, rgba(15,23,42,0.84), rgba(2,6,23,0.92))",
-            "radial-gradient(circle at center, rgba(34,211,238,0.1), transparent 42%)",
+            "linear-gradient(180deg, rgba(14,23,42,0.9), rgba(8,13,26,0.96))",
+            "radial-gradient(circle at center, rgba(34,211,238,0.08), transparent 42%)",
             "url('/visual/forge/mesa-de-forja.png')",
           ].join(", "),
           backgroundSize: "cover, cover, cover",
@@ -134,28 +139,23 @@ export function AtomForgeVisual({
           backgroundRepeat: "no-repeat, no-repeat, no-repeat",
         }}
       >
-        <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between gap-3 sm:inset-x-4 sm:top-4">
-          <div className="flex min-w-0 flex-wrap gap-2">
-            <div className="rounded-full border border-white/10 bg-slate-950/72 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-white/90 backdrop-blur">
-              {previewBondType}
+        {activeBondLabel ? (
+          <div className="pointer-events-none absolute right-3 top-3 z-10">
+            <div className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-100 backdrop-blur">
+              {activeBondLabel}
             </div>
-            {activeBondLabel ? (
-              <div className="rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-cyan-100 backdrop-blur">
-                {activeBondLabel}
-              </div>
-            ) : null}
           </div>
-        </div>
+        ) : null}
 
-        <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 flex flex-col gap-2 sm:inset-x-4 sm:bottom-4 sm:flex-row sm:flex-wrap">
-          <div className="rounded-2xl border border-white/10 bg-slate-950/72 px-3 py-2 text-[11px] text-slate-200 backdrop-blur sm:text-xs">
-            <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <div className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex flex-wrap gap-2 sm:inset-x-3 sm:bottom-3">
+          <div className="rounded-full border border-white/10 bg-slate-950/78 px-2.5 py-1.5 text-[10px] text-slate-200 backdrop-blur">
+            <span className="mr-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-500">
               Estrutural
             </span>
             <span className="font-semibold text-white">{previewFormulaEstrutural}</span>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-slate-950/72 px-3 py-2 text-[11px] text-slate-200 backdrop-blur sm:text-xs">
-            <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+          <div className="rounded-full border border-white/10 bg-slate-950/78 px-2.5 py-1.5 text-[10px] text-slate-200 backdrop-blur">
+            <span className="mr-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-500">
               Molecular
             </span>
             <span className="font-semibold text-white">{previewFormulaMolecular}</span>
@@ -335,7 +335,7 @@ export function AtomForgeVisual({
             })()}
           </div>
         ) : (
-          <div className="mt-8 overflow-x-auto pb-16 pt-10 sm:pb-14 sm:pt-8">
+          <div className="mt-5 overflow-x-auto pb-12 pt-6 sm:pb-14 sm:pt-6">
             {(() => {
               const { stageWidth, stageHeight, carbonRadius, points } =
                 getOpenChainGeometry(activeCarbonCount, normalizedBondOrders);
