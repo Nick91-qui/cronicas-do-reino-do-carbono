@@ -1,31 +1,6 @@
 import { z } from "zod";
 
-import { bondTypeSchema, phaseIdSchema } from "@/lib/content/schema";
-
-export const builderBlueprintIdSchema = z.enum([
-  "tetra_single",
-  "trigonal_double",
-  "linear_triple",
-  "linear_two_doubles",
-  "aromatic_ring",
-]);
-
-export const builderElementSchema = z.enum(["H", "C", "O"]);
-
-export const builderFilledSlotSchema = z.object({
-  slotId: z.string().min(1),
-  element: builderElementSchema.nullable(),
-});
-
-export const blueprintBuilderStateSchema = z.object({
-  blueprintId: builderBlueprintIdSchema,
-  slots: z.array(builderFilledSlotSchema),
-});
-
-export const legacyBuilderStateSchema = z.object({
-  carbonCount: z.number().int().positive(),
-  bondType: bondTypeSchema,
-});
+import { phaseIdSchema } from "@/lib/content/schema";
 
 export const builderLayoutSchema = z.enum(["open_chain", "closed_ring"]);
 
@@ -41,16 +16,16 @@ export const graphBuilderStateSchema = z.object({
   bonds: z.array(graphBuilderBondSchema),
 });
 
-export const builderStateSchema = z.union([
-  blueprintBuilderStateSchema,
-  legacyBuilderStateSchema,
-  graphBuilderStateSchema,
-]);
+/** Schema canônico do builder usado pela UI atual do MVP. */
+export const canonicalBuilderStateSchema = graphBuilderStateSchema;
+
+export const builderStateSchema = canonicalBuilderStateSchema;
 
 export const builderValidationRequestSchema = z.object({
   phaseId: phaseIdSchema,
   builderState: builderStateSchema,
 });
 
+export type CanonicalBuilderStateInput = z.infer<typeof canonicalBuilderStateSchema>;
 export type BuilderStateInput = z.infer<typeof builderStateSchema>;
 export type BuilderValidationRequestInput = z.infer<typeof builderValidationRequestSchema>;
