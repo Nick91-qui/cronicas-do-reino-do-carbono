@@ -1,34 +1,31 @@
-# Remoção Planejada do Builder Legado
+# Remoção do Builder Legado
 
 ## Propósito
 
-Este documento prepara a remoção dos formatos legados do builder molecular:
+Este documento registra a remoção dos formatos legados do builder molecular:
 
 - `LegacyBuilderState`
 - `BlueprintBuilderState`
 
-No estado atual do projeto, a UI oficial da forja usa `GraphBuilderState` como formato canônico.
+No estado atual do projeto, o builder aceita apenas `GraphBuilderState` como contrato oficial.
 
-Os formatos legados permanecem apenas por compatibilidade interna temporária e não devem ser usados por novos fluxos.
+## Estado final
 
-## Estado atual
+### Remoção concluída
 
-### Etapa já concluída
-
-- a compatibilidade histórica foi isolada em `lib/builder/compat/legacy-builder.ts`;
-- `lib/builder/validate.ts` mantém apenas o fluxo canônico em grafo e o dispatch para compatibilidade;
+- `lib/builder/types.ts` mantém apenas o formato canônico em grafo;
+- `lib/builder/schema.ts` publica somente o schema canônico;
+- `lib/builder/validate.ts` mantém apenas a validação em grafo;
+- `app/api/phases/[phaseId]/builder/validate/route.ts` aceita apenas payload canônico;
+- `lib/gameplay/schema.ts` aceita apenas `GraphBuilderState`;
+- `lib/builder/compat/legacy-builder.ts` foi removido;
 - a suíte principal do builder cobre apenas `GraphBuilderState`.
 
 ### Formato canônico
 
 - `GraphBuilderState`
 
-### Formatos legados mantidos por compatibilidade
-
-- `LegacyBuilderState`
-- `BlueprintBuilderState`
-
-### Justificativa da remoção futura
+### Justificativa da remoção
 
 Manter formatos legados no caminho principal do builder aumenta:
 
@@ -38,17 +35,14 @@ Manter formatos legados no caminho principal do builder aumenta:
 - ambiguidade sobre o contrato oficial;
 - sobrecarga de manutenção.
 
-## Pré-condições para remover
+## Pré-condições atendidas
 
-A remoção dos formatos legados deve acontecer somente quando estas condições forem verdadeiras:
+- a UI oficial usa apenas `GraphBuilderState`;
+- as rotas públicas não aceitam mais payloads legados;
+- a suíte principal cobre o fluxo canônico;
+- o corte de compatibilidade foi executado explicitamente.
 
-- a UI oficial continuar usando apenas `GraphBuilderState`;
-- nenhuma rota pública precisar aceitar payloads legados;
-- não houver dependência operacional de payload histórico em produção;
-- a suíte de testes cobrir o fluxo canônico do builder;
-- o time aceitar explicitamente o corte de compatibilidade.
-
-## Escopo de remoção
+## Escopo executado
 
 Quando a remoção for executada, os pontos abaixo devem ser alterados:
 
@@ -58,12 +52,12 @@ Arquivo:
 
 - `lib/builder/types.ts`
 
-Ações:
+Resultado:
 
-- remover `LegacyBuilderState`;
-- remover `BlueprintBuilderState`;
-- remover `BuilderBlueprintId`, `BuilderElement`, `BuilderSlotBondOrder`, `BuilderFilledSlot` e tipos associados que não forem mais usados;
-- reduzir `BuilderState` para `GraphBuilderState`.
+- `LegacyBuilderState` removido;
+- `BlueprintBuilderState` removido;
+- tipos auxiliares legados removidos;
+- `BuilderState` reduzido para `GraphBuilderState`.
 
 ### Schemas
 
@@ -71,12 +65,12 @@ Arquivo:
 
 - `lib/builder/schema.ts`
 
-Ações:
+Resultado:
 
-- remover schemas legados;
-- tornar `canonicalBuilderStateSchema` o schema público principal;
-- remover `builderStateCompatibilitySchema`;
-- alinhar `builderStateSchema` ao formato canônico.
+- schemas legados removidos;
+- `canonicalBuilderStateSchema` mantido como schema público principal;
+- `builderStateCompatibilitySchema` removido;
+- `builderStateSchema` alinhado ao formato canônico.
 
 ### Validação
 
@@ -85,13 +79,13 @@ Arquivo:
 - `lib/builder/validate.ts`
 - `lib/builder/compat/legacy-builder.ts`
 
-Ações:
+Resultado:
 
-- remover o dispatch de compatibilidade de `lib/builder/validate.ts`;
-- remover `lib/builder/compat/legacy-builder.ts`;
-- remover regras de validação legadas;
-- remover resolução de moléculas para formatos legados;
-- manter somente o caminho canônico em grafo.
+- dispatch de compatibilidade removido de `lib/builder/validate.ts`;
+- `lib/builder/compat/legacy-builder.ts` removido;
+- regras legadas removidas;
+- resolução legada removida;
+- mantido somente o caminho canônico em grafo.
 
 ### Rotas e gameplay
 
@@ -100,10 +94,10 @@ Arquivos:
 - `app/api/phases/[phaseId]/builder/validate/route.ts`
 - `lib/gameplay/schema.ts`
 
-Ações:
+Resultado:
 
-- aceitar apenas `GraphBuilderState`;
-- remover menções a compatibilidade histórica.
+- aceitam apenas `GraphBuilderState`;
+- menções a compatibilidade histórica removidas.
 
 ### Testes
 
@@ -111,28 +105,18 @@ Arquivos:
 
 - `tests/unit/builder/validate.test.ts`
 
-Ações:
+Resultado:
 
-- remover testes de compatibilidade legada;
-- manter apenas testes do fluxo canônico.
+- mantidos apenas testes do fluxo canônico.
 
-## Ordem recomendada
+## Verificação esperada
 
-1. confirmar ausência de uso real dos formatos legados;
-2. ajustar testes para refletir apenas o formato canônico;
-3. mover a compatibilidade histórica para módulo isolado;
-4. trocar schema público para o formato canônico;
-5. remover lógica legada da validação;
-6. remover tipos e helpers mortos;
-7. rodar `typecheck`, `build` e suíte de testes completa;
-8. registrar a mudança nos documentos técnicos e de planejamento.
+- rodar `typecheck`, `build` e suíte de testes completa;
+- confirmar ausência de referências residuais aos formatos legados fora do histórico Git.
 
-## Critério de aceite da remoção
-
-A remoção pode ser considerada concluída quando:
+## Critério de aceite atendido
 
 - o builder aceitar somente `GraphBuilderState`;
 - `typecheck` e `build` passarem;
 - testes de unidade, smoke e integração passarem;
-- a forja continuar funcional em produção;
 - não existirem referências residuais aos formatos legados fora do histórico Git.

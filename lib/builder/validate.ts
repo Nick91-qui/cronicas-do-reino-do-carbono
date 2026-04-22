@@ -8,11 +8,6 @@ import {
   getPreviewFormulaMolecular,
   normalizeBondKey,
 } from "@/lib/builder/graph-preview";
-import {
-  isLegacyBuilderState,
-  resolveOfficialLegacyMoleculeId,
-  validateLegacyOrBlueprintBuilderStateForPhase,
-} from "@/lib/builder/compat/legacy-builder";
 import type {
   BuilderDerivedStructure,
   BuilderState,
@@ -36,10 +31,6 @@ const officialMoleculeMap: Record<BondType, Partial<Record<number, MoleculeId>>>
     6: "benzeno",
   },
 };
-
-function isGraphBuilderState(builderState: BuilderState): builderState is GraphBuilderState {
-  return "layout" in builderState;
-}
 
 function deriveGraphStructure(builderState: GraphBuilderState): BuilderDerivedStructure {
   const hydrogensByCarbon = getGraphHydrogensByCarbon(builderState);
@@ -127,15 +118,7 @@ function validateGraphStructuralRules(builderState: GraphBuilderState, errors: s
 }
 
 export function resolveOfficialMoleculeId(builderState: BuilderState): MoleculeId | null {
-  if (isGraphBuilderState(builderState)) {
-    return resolveOfficialGraphMoleculeId(builderState);
-  }
-
-  if (isLegacyBuilderState(builderState)) {
-    return resolveOfficialLegacyMoleculeId(builderState);
-  }
-
-  return resolveOfficialLegacyMoleculeId(builderState);
+  return resolveOfficialGraphMoleculeId(builderState);
 }
 
 function resolveOfficialGraphMoleculeId(builderState: CanonicalBuilderState): MoleculeId | null {
@@ -212,9 +195,5 @@ export function validateBuilderStateForPhase(
   phaseId: PhaseId,
   builderState: BuilderState,
 ): BuilderValidationResult {
-  if (isGraphBuilderState(builderState)) {
-    return validateGraphBuilderStateForPhase(phaseId, builderState);
-  }
-
-  return validateLegacyOrBlueprintBuilderStateForPhase(phaseId, builderState);
+  return validateGraphBuilderStateForPhase(phaseId, builderState);
 }
