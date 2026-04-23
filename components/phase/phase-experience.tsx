@@ -1090,28 +1090,17 @@ export function PhaseExperience({
       </section>
 
       {currentStep !== "result" ? (
-        <section className="sticky bottom-3 z-10 mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-4 shadow-[0_18px_40px_rgba(2,6,23,0.28)] backdrop-blur supports-[padding:max(0px)]:pb-[max(1rem,env(safe-area-inset-bottom))] sm:static sm:flex-row sm:items-center sm:justify-between sm:bg-slate-950/25 sm:px-5 sm:py-4 sm:shadow-none sm:supports-[padding:max(0px)]:pb-4">
+        <section className="sticky bottom-3 z-10 mt-6 flex items-center justify-end gap-2 rounded-[20px] border border-white/10 bg-slate-950/90 px-3 py-3 shadow-[0_18px_40px_rgba(2,6,23,0.28)] backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:gap-3 sm:rounded-[24px] sm:bg-slate-950/25 sm:px-5 sm:py-4 sm:shadow-none sm:supports-[padding:max(0px)]:pb-4">
           <button
             type="button"
             onClick={goBack}
-            className="order-2 flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 text-lg font-black text-slate-100 sm:order-1 sm:w-11"
+            className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-xl border border-white/10 px-4 text-base font-black text-slate-100 sm:h-11 sm:min-w-[5rem] sm:rounded-2xl"
             aria-label={
               currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"
             }
           >
             &lt;
           </button>
-
-          <p className="order-1 text-sm leading-6 text-slate-400 sm:order-2 sm:max-w-xl">
-            {currentStep === "forge" &&
-              (canAdvanceFromForge
-                ? "A mesa reconheceu sua estrutura. Voce ja pode seguir."
-                : "Confirme sua estrutura para abrir o proximo rito.")}
-            {currentStep === "select" &&
-              "Escolha a carta que sera usada na leitura antes de marcar propriedades."}
-            {currentStep === "read" &&
-              "Com a carta definida, marque as propriedades e entregue a leitura."}
-          </p>
 
           {currentStep !== "read" ? (
             <button
@@ -1122,7 +1111,7 @@ export function PhaseExperience({
                 (currentStep === "forge" && !canAdvanceFromForge) ||
                 (currentStep === "select" && !canAdvanceFromSelect)
               }
-              className="order-3 flex h-11 w-full items-center justify-center rounded-2xl bg-cyan-300 text-lg font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:w-11"
+              className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-xl bg-cyan-300 px-4 text-base font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:min-w-[5rem] sm:rounded-2xl"
               aria-label="Avançar"
             >
               &gt;
@@ -1136,7 +1125,7 @@ export function PhaseExperience({
                 !canAdvanceFromRead ||
                 (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
               }
-              className="order-3 w-full rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto sm:min-w-[11rem]"
+              className="rounded-xl bg-cyan-300 px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:min-w-[11rem] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm"
             >
               {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
             </button>
