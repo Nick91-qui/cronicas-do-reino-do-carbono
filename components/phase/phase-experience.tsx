@@ -106,26 +106,33 @@ const resultTitleByKind: Record<
 
 const minimumForgeFeedbackMs = 900;
 
-const stepCopy: Record<Exclude<PhaseStep, "result">, { eyebrow: string; title: string; description: string }> = {
+const stepCopy: Record<
+  Exclude<PhaseStep, "result">,
+  { eyebrow: string; title: string; description: string }
+> = {
   intro: {
     eyebrow: "Chamado",
     title: "Chamado do rito",
-    description: "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
+    description:
+      "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
   },
   forge: {
     eyebrow: "Rito da forja",
     title: "Moldar a estrutura",
-    description: "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
+    description:
+      "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
   },
   select: {
     eyebrow: "Escolha da carta",
     title: "Definir a carta",
-    description: "A leitura separa primeiro a escolha da carta. So depois voce avanca para classificar suas propriedades.",
+    description:
+      "A leitura separa primeiro a escolha da carta. So depois voce avanca para classificar suas propriedades.",
   },
   read: {
     eyebrow: "Rito da leitura",
     title: "Classificar e sustentar",
-    description: "Com a carta ja definida, esta etapa fica dedicada apenas a marcar propriedades e sustentar o julgamento.",
+    description:
+      "Com a carta ja definida, esta etapa fica dedicada apenas a marcar propriedades e sustentar o julgamento.",
   },
 };
 
@@ -144,10 +151,19 @@ function formatSelectableProperty(property: SelectableProperty): string {
 }
 
 function isPhaseStep(value: string | null): value is PhaseStep {
-  return value === "intro" || value === "forge" || value === "select" || value === "read" || value === "result";
+  return (
+    value === "intro" ||
+    value === "forge" ||
+    value === "select" ||
+    value === "read" ||
+    value === "result"
+  );
 }
 
-function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boolean): PhaseStep {
+function getInitialStep(
+  supportsBuilder: boolean,
+  supportsMoleculeSelection: boolean,
+): PhaseStep {
   if (supportsBuilder) {
     return "forge";
   }
@@ -242,10 +258,7 @@ export function PhaseExperience({
     minimumCarbonCount,
     Number(carbonCount) || minimumCarbonCount,
   );
-  const activeCarbonCount = Math.min(
-    clampedCarbonValue,
-    maximumCarbonCount,
-  );
+  const activeCarbonCount = Math.min(clampedCarbonValue, maximumCarbonCount);
   const normalizedBondOrders = normalizeBondOrders(
     bondOrders,
     layout,
@@ -284,9 +297,9 @@ export function PhaseExperience({
     submitResult &&
     submitResult.persistence.chapterProgress.highestUnlockedPhaseNumber >
       phase.number
-      ? chapterProgress.phases.find(
+      ? (chapterProgress.phases.find(
           (item) => item.phaseNumber === phase.number + 1,
-        )?.phaseId ?? null
+        )?.phaseId ?? null)
       : null;
   const nextPhaseActionHref = unlockedNextPhaseId
     ? `/phase/${unlockedNextPhaseId}`
@@ -299,12 +312,12 @@ export function PhaseExperience({
   const canAdvanceFromSelect = supportsMoleculeSelection
     ? Boolean(effectiveSelectedMoleculeId)
     : true;
-  const canAdvanceFromRead =
-    selectedProperties.length > 0;
+  const canAdvanceFromRead = selectedProperties.length > 0;
   const displayedStep = renderedStep;
   const createdMolecule =
-    molecules.find((molecule) => molecule.id === builderResult?.resolvedMoleculeId) ??
-    null;
+    molecules.find(
+      (molecule) => molecule.id === builderResult?.resolvedMoleculeId,
+    ) ?? null;
   const focusedMolecule = selectedMolecule ?? createdMolecule;
   const availableSteps = getAvailablePhaseSteps(
     supportsBuilder,
@@ -317,7 +330,9 @@ export function PhaseExperience({
       ? totalSteps
       : Math.max(
           1,
-          availableSteps.filter((step) => step !== "result").indexOf(displayedStep) + 1,
+          availableSteps
+            .filter((step) => step !== "result")
+            .indexOf(displayedStep) + 1,
         );
 
   function navigateToStep(
@@ -346,8 +361,8 @@ export function PhaseExperience({
     setBondOrders((current) => {
       const next = normalizeBondOrders(current, layout, activeCarbonCount);
 
-      return current.length === next.length
-        && current.every((value, index) => value === next[index])
+      return current.length === next.length &&
+        current.every((value, index) => value === next[index])
         ? current
         : next;
     });
@@ -457,7 +472,9 @@ export function PhaseExperience({
       const remainingDelay = Math.max(0, minimumForgeFeedbackMs - elapsed);
 
       if (remainingDelay > 0) {
-        await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
+        await new Promise((resolve) =>
+          window.setTimeout(resolve, remainingDelay),
+        );
       }
 
       if (!response.ok) {
@@ -588,9 +605,12 @@ export function PhaseExperience({
 
   function updateBondOrder(index: number) {
     setBondOrders((current) => {
-      const normalized = normalizeBondOrders(current, layout, activeCarbonCount);
-      const nextOrder =
-        normalized[index] === 2 || !canUseDoubleBond ? 1 : 2;
+      const normalized = normalizeBondOrders(
+        current,
+        layout,
+        activeCarbonCount,
+      );
+      const nextOrder = normalized[index] === 2 || !canUseDoubleBond ? 1 : 2;
 
       return normalized.map((order, bondIndex) =>
         bondIndex === index ? nextOrder : order,
@@ -619,7 +639,9 @@ export function PhaseExperience({
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
-                {displayedStep === "result" ? "Desfecho" : stepCopy[displayedStep].eyebrow}
+                {displayedStep === "result"
+                  ? "Desfecho"
+                  : stepCopy[displayedStep].eyebrow}
               </p>
               <h1 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">
                 {phase.title}
@@ -714,7 +736,9 @@ export function PhaseExperience({
                 </p>
                 <div className="mt-3 grid gap-3 text-sm text-slate-200">
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    {currentPhaseStatus?.isCompleted ? "Ja dominada" : "Aguardando sua leitura"}
+                    {currentPhaseStatus?.isCompleted
+                      ? "Ja dominada"
+                      : "Aguardando sua leitura"}
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
                     {phase.resources.carbonAvailable} carbono
@@ -769,7 +793,9 @@ export function PhaseExperience({
                     <MoleculeCard
                       molecule={focusedMolecule}
                       isSelected
-                      isCreated={builderResult?.resolvedMoleculeId === focusedMolecule.id}
+                      isCreated={
+                        builderResult?.resolvedMoleculeId === focusedMolecule.id
+                      }
                       selectable={supportsMoleculeSelection}
                       variant="compact"
                       onSelect={
@@ -824,8 +850,10 @@ export function PhaseExperience({
 
               <div className="mt-4 grid gap-4 lg:grid-cols-2">
                 {molecules.map((molecule) => {
-                  const isSelected = effectiveSelectedMoleculeId === molecule.id;
-                  const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
+                  const isSelected =
+                    effectiveSelectedMoleculeId === molecule.id;
+                  const isCreated =
+                    builderResult?.resolvedMoleculeId === molecule.id;
 
                   return (
                     <div
@@ -866,7 +894,9 @@ export function PhaseExperience({
                     <MoleculeCard
                       molecule={focusedMolecule}
                       isSelected
-                      isCreated={builderResult?.resolvedMoleculeId === focusedMolecule.id}
+                      isCreated={
+                        builderResult?.resolvedMoleculeId === focusedMolecule.id
+                      }
                       selectable={supportsMoleculeSelection}
                       variant="compact"
                       onSelect={
@@ -944,7 +974,9 @@ export function PhaseExperience({
                         {formatSelectableProperty(property)}
                       </span>
                       <span className="text-xs font-semibold uppercase tracking-[0.16em]">
-                        {selectedProperties.includes(property) ? "Marcada" : "Marcar"}
+                        {selectedProperties.includes(property)
+                          ? "Marcada"
+                          : "Marcar"}
                       </span>
                     </button>
                   ))}
@@ -987,7 +1019,9 @@ export function PhaseExperience({
               <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
                   <p className="opacity-70">Forca obtida</p>
-                  <p className="mt-1 text-2xl font-black">{submitResult.evaluation.scoreAwarded}</p>
+                  <p className="mt-1 text-2xl font-black">
+                    {submitResult.evaluation.scoreAwarded}
+                  </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
                   <p className="opacity-70">Sentenca</p>
@@ -1046,7 +1080,9 @@ export function PhaseExperience({
                 href={nextPhaseActionHref ?? "/game"}
                 className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
               >
-                {nextPhaseActionHref ? "Seguir para a proxima prova" : "Voltar ao jogo"}
+                {nextPhaseActionHref
+                  ? "Seguir para a proxima prova"
+                  : "Voltar ao jogo"}
               </Link>
             </div>
           </section>
@@ -1059,13 +1095,14 @@ export function PhaseExperience({
             type="button"
             onClick={goBack}
             className="order-2 flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 text-lg font-black text-slate-100 sm:order-1 sm:w-11"
-            aria-label={currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"}
+            aria-label={
+              currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"
+            }
           >
             &lt;
           </button>
 
           <p className="order-1 text-sm leading-6 text-slate-400 sm:order-2 sm:max-w-xl">
-            {currentStep === "intro" && "Leia o chamado da prova e avance quando estiver pronto."}
             {currentStep === "forge" &&
               (canAdvanceFromForge
                 ? "A mesa reconheceu sua estrutura. Voce ja pode seguir."
