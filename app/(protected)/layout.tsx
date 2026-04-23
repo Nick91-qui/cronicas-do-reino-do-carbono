@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { LogoutButton } from "@/components/auth/logout-button";
 import { ProtectedHudNav } from "@/components/navigation/protected-hud-nav";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
@@ -51,10 +50,7 @@ export default async function ProtectedLayout({
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Saida de emergencia</p>
-              <div className="pt-2 xl:hidden">
-                <LogoutButton className="w-full" />
-              </div>
-              <p className="hidden text-sm text-slate-100 xl:block">Sessao segura pronta para retomada entre fases.</p>
+              <p className="pt-2 text-sm text-slate-100">Sessao segura pronta para retomada entre fases.</p>
             </div>
           </div>
         </div>
