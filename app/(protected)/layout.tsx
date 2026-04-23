@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LogoutButton } from "@/components/auth/logout-button";
+import { ProtectedHudNav } from "@/components/navigation/protected-hud-nav";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 
@@ -12,26 +13,54 @@ export default async function ProtectedLayout({
   const player = await requireAuthenticatedPlayer(prisma);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0 pr-2">
-            <p className="text-sm font-medium text-sky-300">Crônicas do Reino do Carbono</p>
-            <p className="truncate text-xs text-slate-400">
-              {player.displayName} · turma {player.classroomCode}
-            </p>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="pointer-events-none fixed inset-0">
+        <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.16),transparent_58%)]" />
+        <div className="absolute right-0 top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.14),transparent_62%)] blur-3xl" />
+      </div>
+
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-[rgba(5,8,18,0.72)] backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-sky-200/80">
+                <span className="hud-chip">Sala de vigilia</span>
+                <span className="hud-chip border-gold/20 text-gold/90">Turma {player.classroomCode}</span>
+              </div>
+              <div className="min-w-0">
+                <Link href="/game" className="font-display text-2xl tracking-[0.08em] text-white sm:text-3xl">
+                  Cronicas do Reino do Carbono
+                </Link>
+                <p className="truncate pt-1 text-sm text-slate-300">
+                  {player.displayName} segue pelas provas do dominio alquimico-cosmico.
+                </p>
+              </div>
+            </div>
+
+            <ProtectedHudNav />
           </div>
 
-          <nav className="grid grid-cols-2 gap-2 text-sm text-slate-300 sm:flex sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-2">
-            <Link href="/game" className="rounded-full border border-white/10 px-3 py-2 text-center hover:border-sky-300/35 hover:text-white sm:px-3 sm:py-1.5">Jogo</Link>
-            <Link href="/collection" className="rounded-full border border-white/10 px-3 py-2 text-center hover:border-sky-300/35 hover:text-white sm:px-3 sm:py-1.5">Coleção</Link>
-            <Link href="/profile" className="rounded-full border border-white/10 px-3 py-2 text-center hover:border-sky-300/35 hover:text-white sm:px-3 sm:py-1.5">Perfil</Link>
-            <LogoutButton />
-          </nav>
+          <div className="grid gap-2 text-xs text-slate-300 sm:grid-cols-3">
+            <div className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Estado do aprendiz</p>
+              <p className="pt-2 font-display text-xl text-white">{player.displayName}</p>
+            </div>
+            <div className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Juramento ativo</p>
+              <p className="pt-2 text-sm text-slate-100">Leitura estrutural, forja guiada e progresso persistente.</p>
+            </div>
+            <div className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Saida de emergencia</p>
+              <div className="pt-2 xl:hidden">
+                <LogoutButton className="w-full" />
+              </div>
+              <p className="hidden text-sm text-slate-100 xl:block">Sessao segura pronta para retomada entre fases.</p>
+            </div>
+          </div>
         </div>
       </header>
 
-      {children}
+      <div className="relative">{children}</div>
     </div>
   );
 }

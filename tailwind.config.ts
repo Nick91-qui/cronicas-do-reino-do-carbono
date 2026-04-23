@@ -8,11 +8,21 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        body: ["var(--font-body)"],
+        display: ["var(--font-display)"],
+      },
       colors: {
-        background: "#0b1020",
-        foreground: "#e5eefc",
-        accent: "#7dd3fc",
-        muted: "#94a3b8",
+        background: "rgb(var(--background) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        accent: "rgb(var(--line) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        gold: "rgb(var(--gold) / <alpha-value>)",
+        success: "rgb(var(--success) / <alpha-value>)",
+        danger: "rgb(var(--danger) / <alpha-value>)",
+      },
+      boxShadow: {
+        ritual: "0 24px 80px rgba(2, 6, 23, 0.5)",
       },
     },
   },
