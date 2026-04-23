@@ -94,6 +94,27 @@ Cada componente interativo deve prever:
 - sucesso;
 - concluído.
 
+### Convenção compartilhada de implementação
+
+Para evitar drift entre telas, o projeto deve concentrar estados recorrentes em classes globais reutilizáveis.
+
+Convenções atuais:
+
+- `.ritual-link`: navegação secundária e ações leves;
+- `.state-panel`: cards e painéis interativos com variações por `data-state`;
+- `.state-action`: CTA principal e ação secundária com variações por `data-tone`;
+- `.state-field`: campos de formulário com hover e foco consistentes;
+- `data-state="active" | "success" | "locked"` para seleção, concluído e bloqueado;
+- `data-tone="primary" | "secondary"` para hierarquia de ação.
+
+Essas convenções devem cobrir, no mínimo:
+
+- hover;
+- foco visível por teclado;
+- bloqueio;
+- seleção ou destaque ativo;
+- sucesso ou concluído quando aplicável.
+
 ## Sistema de oficina molecular
 
 ### Estrutura oficial

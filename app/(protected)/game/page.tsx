@@ -41,7 +41,8 @@ export default async function GamePage() {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href="/chapter/chapter-1"
-                className="inline-flex items-center justify-center rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 shadow-[0_20px_40px_rgba(245,158,11,0.24)]"
+                className="state-action px-6"
+                data-tone="primary"
               >
                 Abrir mapa do dominio
               </Link>
@@ -96,7 +97,8 @@ export default async function GamePage() {
                 <Link
                   key={phase.phaseId}
                   href={phase.isUnlocked ? `/phase/${phase.phaseId}` : "/chapter/chapter-1"}
-                  className={`group rounded-[24px] border p-4 transition ${stateClass} ${phase.isUnlocked ? "hover:-translate-y-0.5 hover:border-gold/30" : "opacity-80"}`}
+                  className={`state-panel group ${stateClass}`}
+                  data-state={phase.isCompleted ? "success" : phase.isUnlocked ? "active" : "locked"}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="font-display text-3xl text-white">{String(phase.phaseNumber).padStart(2, "0")}</span>

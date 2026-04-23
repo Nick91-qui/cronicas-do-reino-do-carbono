@@ -165,7 +165,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                     <input
                       name="classroomCode"
                       required
-                      className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-300/60 focus:bg-slate-950"
+                      className="state-field"
                     />
                   </label>
                   <label className="block text-sm">
@@ -173,7 +173,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                     <input
                       name="displayName"
                       required
-                      className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-300/60 focus:bg-slate-950"
+                      className="state-field"
                     />
                   </label>
                 </>
@@ -184,7 +184,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 <input
                   name="username"
                   required
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-300/60 focus:bg-slate-950"
+                  className="state-field"
                 />
               </label>
 
@@ -194,7 +194,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   type="password"
                   name="password"
                   required
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-300/60 focus:bg-slate-950"
+                  className="state-field"
                 />
               </label>
             </div>
@@ -208,7 +208,8 @@ export function AuthForm({ mode }: AuthFormProps) {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-4 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4"
+              className="state-action w-full py-3.5 sm:py-4"
+              data-tone="primary"
             >
               {isPending ? "Selando acesso..." : copyByMode[mode].submitLabel}
             </button>

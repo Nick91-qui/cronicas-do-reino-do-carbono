@@ -171,7 +171,9 @@ export default async function ChapterPage({
               <div className="relative mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:pl-12">
                 <Link
                   href={`/phase/${phase.phaseId}`}
-                  className={`inline-flex justify-center rounded-full px-5 py-3 text-sm font-black uppercase tracking-[0.14em] ${phase.isUnlocked ? "bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] text-slate-950" : "pointer-events-none border border-white/10 text-slate-500"}`}
+                  className="state-action"
+                  data-tone={phase.isUnlocked ? "primary" : "secondary"}
+                  data-state={phase.isUnlocked ? "active" : "locked"}
                 >
                   {stateCopy.actionLabel}
                 </Link>

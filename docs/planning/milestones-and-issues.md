@@ -120,10 +120,10 @@ Status: em andamento.
 - [x] reenquadrar `/collection` como grimório e biblioteca de cartas
 - [x] consolidar tokens visuais em `app/globals.css` e `tailwind.config.ts`
 - [x] formalizar superfícies reutilizáveis para cena, painel, feedback e status
-- [ ] revisar estados visuais obrigatórios conforme `docs/visual/ui-system.md`
+- [x] revisar estados visuais obrigatórios conforme `docs/visual/ui-system.md`
 - [ ] alinhar responsividade para desktop e mobile sem perder leitura de jogo
 - [ ] validar que o novo enquadramento não degrada clareza pedagógica
-- [ ] atualizar documentação visual se a implementação introduzir convenções novas estáveis
+- [x] atualizar documentação visual se a implementação introduzir convenções novas estáveis
 
 ### Milestone 8 — Integração completa do Capítulo I
 
