@@ -214,17 +214,17 @@ export function AtomForgeVisual({
                 C
               </button>
             </div>
-            <div className="flex items-center gap-1.5 rounded-[14px] border border-white/8 bg-slate-950/72 p-1.5 backdrop-blur">
+            <div className="flex items-center gap-1.5 rounded-[14px] bg-transparent p-1.5 backdrop-blur">
               {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
                 <button
                   key={nextLayout}
                   type="button"
                   onClick={() => onSetLayout(nextLayout)}
                   disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                  className={`flex h-8 w-8 items-center justify-center rounded-[10px] border transition sm:h-9 sm:w-9 ${
+                  className={`flex h-8 w-8 items-center justify-center rounded-full transition sm:h-9 sm:w-9 ${
                     layout === nextLayout
-                      ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
-                      : "border-white/8 bg-white/[0.03] text-slate-300 hover:border-white/20"
+                      ? "bg-[radial-gradient(circle_at_30%_30%,rgba(34,211,238,0.3),transparent_45%),linear-gradient(180deg,rgba(34,211,238,0.18),rgba(8,47,73,0.34))] text-cyan-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(34,211,238,0.18)]"
+                      : "bg-slate-950/78 text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/8"
                   } disabled:cursor-not-allowed disabled:opacity-30`}
                   aria-label={nextLayout === "open_chain" ? "Cadeia aberta" : "Cadeia fechada"}
                 >
