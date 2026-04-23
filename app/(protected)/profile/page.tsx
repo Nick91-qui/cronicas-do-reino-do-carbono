@@ -14,15 +14,15 @@ export default async function ProfilePage() {
   const totalCompletedPhases = progress.reduce((sum, chapter) => sum + chapter.completedPhaseCount, 0);
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
-      <section className="relative overflow-hidden rounded-[28px] border border-cyan-300/20 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.14),transparent_24%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] p-5 shadow-[0_24px_80px_rgba(2,6,23,0.42)] sm:rounded-[32px] sm:p-8">
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.04)_32%,transparent_60%)]" />
-        <div className="relative grid gap-5 lg:grid-cols-[1fr,0.9fr] lg:gap-6">
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
+      <section className="game-shell">
+        <div className="relative grid gap-6 xl:grid-cols-[1.15fr,0.85fr]">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300 sm:text-sm">
-              Perfil do jogador
-            </p>
-            <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="hud-chip">Perfil do aprendiz</span>
+              <span className="hud-chip border-gold/20 text-gold/90">Registro persistente</span>
+            </div>
+            <h1 className="mt-5 text-4xl tracking-[0.06em] text-white sm:text-5xl">
               {player.displayName}
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
@@ -30,62 +30,58 @@ export default async function ProfilePage() {
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Pontuacao total
-              </p>
-              <p className="mt-2 text-2xl font-black text-white">{totalScore}</p>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+            <div className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Pontuacao total</p>
+              <p className="pt-2 font-display text-3xl text-white">{totalScore}</p>
             </div>
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Fases concluidas
-              </p>
-              <p className="mt-2 text-2xl font-black text-white">{totalCompletedPhases}</p>
+            <div className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Fases concluidas</p>
+              <p className="pt-2 font-display text-3xl text-white">{totalCompletedPhases}</p>
             </div>
           </div>
         </div>
       </section>
 
       <section className="mt-6 grid gap-4 lg:grid-cols-[1fr,1fr] lg:gap-6">
-        <section className="rounded-[24px] border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:rounded-[28px] sm:p-6">
-          <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">Identidade</h2>
+        <section className="game-panel">
+          <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">Identidade</h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Nome</dt>
               <dd className="mt-1 text-slate-100">{player.displayName}</dd>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Username</dt>
               <dd className="mt-1 text-slate-100">{player.username}</dd>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Turma</dt>
               <dd className="mt-1 text-slate-100">{player.classroomCode}</dd>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Sessao expira em</dt>
               <dd className="mt-1 text-slate-100">{player.sessionExpiresAt.toLocaleString("pt-BR")}</dd>
             </div>
           </dl>
         </section>
 
-        <section className="rounded-[24px] border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:rounded-[28px] sm:p-6">
-          <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">Snapshot de inventario</h2>
+        <section className="game-panel">
+          <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">Snapshot de inventario</h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Carbonos disponiveis</dt>
               <dd className="mt-1 text-slate-100">{inventory.carbonAvailable}</dd>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Modo de hidrogenio</dt>
               <dd className="mt-1 text-slate-100">{inventory.hydrogenMode}</dd>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Fragmentos</dt>
               <dd className="mt-1 text-slate-100">{inventory.unlockedFragments.join(", ") || "Nenhum"}</dd>
             </div>
-            <div className="rounded-2xl border border-white/8 bg-slate-950/35 p-4">
+            <div className="game-panel-muted">
               <dt className="text-slate-500">Titulos</dt>
               <dd className="mt-1 text-slate-100">{inventory.unlockedTitles.join(", ") || "Nenhum"}</dd>
             </div>

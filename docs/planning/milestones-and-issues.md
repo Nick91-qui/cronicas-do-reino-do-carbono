@@ -112,7 +112,7 @@ Objetivos:
 
 ### Milestone 10 — Reposicionamento visual de site para jogo
 
-Status: planejado.
+Status: em andamento.
 
 - [x] revisar `app/(protected)/layout.tsx` como HUD persistente do jogo
 - [x] redesenhar `/game` como hub de progressão e sala do reino
@@ -191,7 +191,7 @@ Stack atual preparada:
 
 - [x] reduzir padrões visuais que ainda passam sensação de dashboard ou landing page
 - [x] consolidar HUD, trilha de progresso e superfícies diegéticas como linguagem oficial
-- [ ] revisar coerência entre hub, capítulo, fase, coleção e autenticação
+- [x] revisar coerência entre hub, capítulo, fase, coleção e autenticação
 - [ ] garantir que atmosfera visual não prejudique contraste, leitura e uso mobile
 
 ## Próxima sequência recomendada
