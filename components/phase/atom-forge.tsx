@@ -21,7 +21,6 @@ type AtomForgeProps = {
   canUseClosedRing: boolean;
   availableBondTypes: BondType[];
   normalizedBondOrders: GraphBuilderBondOrder[];
-  previewBondType: BondType;
   previewHydrogensByCarbon: number[];
   previewFormulaEstrutural: string;
   previewFormulaMolecular: string;
@@ -45,7 +44,6 @@ export function AtomForge({
   canUseClosedRing,
   availableBondTypes: _availableBondTypes,
   normalizedBondOrders,
-  previewBondType,
   previewHydrogensByCarbon,
   previewFormulaEstrutural,
   previewFormulaMolecular,
@@ -102,7 +100,6 @@ export function AtomForge({
               minimumCarbonCount={minimumCarbonCount}
               maximumCarbonCount={maximumCarbonCount}
               normalizedBondOrders={normalizedBondOrders}
-              previewBondType={previewBondType}
               previewHydrogensByCarbon={previewHydrogensByCarbon}
               previewFormulaEstrutural={previewFormulaEstrutural}
               previewFormulaMolecular={previewFormulaMolecular}

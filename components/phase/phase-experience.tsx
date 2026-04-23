@@ -743,7 +743,6 @@ export function PhaseExperience({
             canUseClosedRing={canUseClosedRing}
             availableBondTypes={availableBondTypes}
             normalizedBondOrders={normalizedBondOrders}
-            previewBondType={previewBondType}
             previewHydrogensByCarbon={previewHydrogensByCarbon}
             previewFormulaEstrutural={previewFormulaEstrutural}
             previewFormulaMolecular={previewFormulaMolecular}
@@ -1043,14 +1042,12 @@ export function PhaseExperience({
               >
                 Renovar leitura
               </button>
-              {nextPhaseActionHref ? (
-                <Link
-                  href={nextPhaseActionHref}
-                  className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
-                >
-                  Seguir para a proxima prova
-                </Link>
-              ) : null}
+              <Link
+                href={nextPhaseActionHref ?? "/game"}
+                className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
+              >
+                {nextPhaseActionHref ? "Seguir para a proxima prova" : "Voltar ao jogo"}
+              </Link>
             </div>
           </section>
         ) : null}
