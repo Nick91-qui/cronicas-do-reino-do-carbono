@@ -90,34 +90,59 @@ export function AtomForge({
   }
 
   return (
-    <section className="overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(12,18,34,0.96),rgba(7,11,24,0.98))] p-3 shadow-[0_16px_50px_rgba(15,23,42,0.2)] backdrop-blur-xl sm:rounded-[30px] sm:p-4">
-      <div className="grid gap-3">
-        <div className="grid gap-3">
-          <div className="grid gap-3">
-            <AtomForgeVisual
-              layout={layout}
-              activeCarbonCount={activeCarbonCount}
-              minimumCarbonCount={minimumCarbonCount}
-              maximumCarbonCount={maximumCarbonCount}
-              normalizedBondOrders={normalizedBondOrders}
-              previewHydrogensByCarbon={previewHydrogensByCarbon}
-              previewFormulaEstrutural={previewFormulaEstrutural}
-              previewFormulaMolecular={previewFormulaMolecular}
-              hoveredBondIndex={hoveredBondIndex}
-              recentlyChangedBondIndex={recentlyChangedBondIndex}
-              canUseDoubleBond={canUseDoubleBond}
-              canUseClosedRing={canUseClosedRing}
-              isValidatingBuilder={isValidatingBuilder}
-              onBondHover={setHoveredBondIndex}
-              onBondToggle={handleBondToggle}
-              onSetLayout={onSetLayout}
-              onCarbonStep={handleCarbonStep}
-              onValidateBuilder={onValidateBuilder}
-            />
+    <section className="game-panel overflow-hidden border-cyan-300/15 bg-[linear-gradient(180deg,rgba(7,12,24,0.98),rgba(3,7,18,0.98))] p-3 sm:p-4">
+      <div className="mb-4 grid gap-3 lg:grid-cols-[0.95fr,1.05fr]">
+        <article className="game-panel-muted">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Estado da bancada</p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Geometria</p>
+              <p className="mt-2 text-sm font-semibold text-white">
+                {layout === "closed_ring" ? "Cadeia fechada" : "Cadeia aberta"}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Carbonos ativos</p>
+              <p className="mt-2 text-sm font-semibold text-white">{activeCarbonCount}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Ligacoes elevadas</p>
+              <p className="mt-2 text-sm font-semibold text-white">
+                {normalizedBondOrders.filter((order) => order === 2).length}
+              </p>
+            </div>
           </div>
-        </div>
+        </article>
 
+        <article className="game-panel-muted">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Ritual de uso</p>
+          <div className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+            <p>Altere a geometria, ajuste carbonos e toque nas ligacoes para alternar saturacao.</p>
+            <p>A mesa confirma primeiro a estrutura. So depois a carta pode seguir para comparacao.</p>
+          </div>
+        </article>
       </div>
+
+      <AtomForgeVisual
+        layout={layout}
+        activeCarbonCount={activeCarbonCount}
+        minimumCarbonCount={minimumCarbonCount}
+        maximumCarbonCount={maximumCarbonCount}
+        normalizedBondOrders={normalizedBondOrders}
+        previewHydrogensByCarbon={previewHydrogensByCarbon}
+        previewFormulaEstrutural={previewFormulaEstrutural}
+        previewFormulaMolecular={previewFormulaMolecular}
+        hoveredBondIndex={hoveredBondIndex}
+        recentlyChangedBondIndex={recentlyChangedBondIndex}
+        canUseDoubleBond={canUseDoubleBond}
+        canUseClosedRing={canUseClosedRing}
+        isValidatingBuilder={isValidatingBuilder}
+        onBondHover={setHoveredBondIndex}
+        onBondToggle={handleBondToggle}
+        onSetLayout={onSetLayout}
+        onCarbonStep={handleCarbonStep}
+        onValidateBuilder={onValidateBuilder}
+      />
 
       {builderError ? (
         <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
@@ -126,7 +151,7 @@ export function AtomForge({
       ) : null}
 
       {builderResult ? (
-        <article className="mt-4 rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.72),rgba(15,23,42,0.72))] p-4 text-sm text-slate-300 sm:rounded-[24px] sm:p-5">
+        <article className="mt-4 rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.88),rgba(15,23,42,0.82))] p-4 text-sm text-slate-300 sm:rounded-[24px] sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/10 pb-4">
             <div className="max-w-2xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">

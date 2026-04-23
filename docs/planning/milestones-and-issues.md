@@ -114,12 +114,12 @@ Objetivos:
 
 Status: planejado.
 
-- [ ] revisar `app/(protected)/layout.tsx` como HUD persistente do jogo
-- [ ] redesenhar `/game` como hub de progressão e sala do reino
-- [ ] redesenhar `/chapter/[chapterId]` como mapa/trilha de provas
-- [ ] reenquadrar `/collection` como grimório e biblioteca de cartas
-- [ ] consolidar tokens visuais em `app/globals.css` e `tailwind.config.ts`
-- [ ] formalizar superfícies reutilizáveis para cena, painel, feedback e status
+- [x] revisar `app/(protected)/layout.tsx` como HUD persistente do jogo
+- [x] redesenhar `/game` como hub de progressão e sala do reino
+- [x] redesenhar `/chapter/[chapterId]` como mapa/trilha de provas
+- [x] reenquadrar `/collection` como grimório e biblioteca de cartas
+- [x] consolidar tokens visuais em `app/globals.css` e `tailwind.config.ts`
+- [x] formalizar superfícies reutilizáveis para cena, painel, feedback e status
 - [ ] revisar estados visuais obrigatórios conforme `docs/visual/ui-system.md`
 - [ ] alinhar responsividade para desktop e mobile sem perder leitura de jogo
 - [ ] validar que o novo enquadramento não degrada clareza pedagógica
@@ -189,8 +189,8 @@ Stack atual preparada:
 
 ### Direção visual e percepção de produto
 
-- [ ] reduzir padrões visuais que ainda passam sensação de dashboard ou landing page
-- [ ] consolidar HUD, trilha de progresso e superfícies diegéticas como linguagem oficial
+- [x] reduzir padrões visuais que ainda passam sensação de dashboard ou landing page
+- [x] consolidar HUD, trilha de progresso e superfícies diegéticas como linguagem oficial
 - [ ] revisar coerência entre hub, capítulo, fase, coleção e autenticação
 - [ ] garantir que atmosfera visual não prejudique contraste, leitura e uso mobile
 

@@ -619,14 +619,17 @@ export function PhaseExperience({
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
-      <section className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.74),rgba(2,6,23,0.82))] p-5 shadow-[0_20px_70px_rgba(2,6,23,0.26)] backdrop-blur-xl sm:p-6">
+    <main className="mx-auto w-full max-w-7xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
+      <section className="game-shell">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             <span>Capitulo I · Prova {phase.number}</span>
-            <span>
-              Passo {visibleProgressStep} de {totalSteps}
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="hud-chip">Rito em curso</span>
+              <span className="hud-chip border-gold/20 text-gold/90">
+                Passo {visibleProgressStep} de {totalSteps}
+              </span>
+            </div>
           </div>
 
           <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
@@ -643,7 +646,7 @@ export function PhaseExperience({
                   ? "Desfecho"
                   : stepCopy[displayedStep].eyebrow}
               </p>
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">
+              <h1 className="mt-2 text-3xl tracking-[0.05em] text-white sm:text-4xl">
                 {phase.title}
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
@@ -703,8 +706,8 @@ export function PhaseExperience({
         }`}
       >
         {displayedStep === "intro" ? (
-          <div className="mx-auto grid max-w-5xl gap-4 lg:gap-5 xl:grid-cols-[1.2fr,0.8fr]">
-            <article className="rounded-[30px] border border-white/10 bg-white/5 p-6 shadow-[0_16px_50px_rgba(15,23,42,0.18)] backdrop-blur sm:p-8">
+          <div className="mx-auto grid max-w-6xl gap-4 lg:gap-5 xl:grid-cols-[1.25fr,0.75fr]">
+            <article className="game-panel border-cyan-300/15 p-6 sm:p-8">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Chamado do reino
               </p>
@@ -714,7 +717,7 @@ export function PhaseExperience({
             </article>
 
             <div className="grid gap-4">
-              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+              <article className="game-panel">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Missao
                 </p>
@@ -722,7 +725,7 @@ export function PhaseExperience({
                   {phase.objective}
                 </p>
               </article>
-              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+              <article className="game-panel">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Conceito central
                 </p>
@@ -730,7 +733,7 @@ export function PhaseExperience({
                   {phase.coreConcept}
                 </p>
               </article>
-              <article className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+              <article className="game-panel">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Estado local da prova
                 </p>
@@ -784,7 +787,7 @@ export function PhaseExperience({
         {displayedStep === "select" ? (
           <section className="grid gap-5 xl:grid-cols-[0.82fr,1.18fr] xl:gap-6">
             <aside className="grid gap-4 self-start">
-              <div className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+              <div className="game-panel sm:p-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Carta em foco
                 </p>
@@ -812,7 +815,7 @@ export function PhaseExperience({
                 )}
               </div>
 
-              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+              <div className="game-panel">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Estado da escolha
                 </p>
@@ -833,7 +836,7 @@ export function PhaseExperience({
               </div>
             </aside>
 
-            <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+            <section className="game-panel sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -885,7 +888,7 @@ export function PhaseExperience({
         {displayedStep === "read" ? (
           <section className="grid gap-5 xl:grid-cols-[0.86fr,1.14fr] xl:gap-6">
             <aside className="grid gap-4 self-start">
-              <div className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+              <div className="game-panel sm:p-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Carta em foco
                 </p>
@@ -915,7 +918,7 @@ export function PhaseExperience({
                 )}
               </div>
 
-              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+              <div className="game-panel">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Leitura atual
                 </p>
@@ -943,7 +946,7 @@ export function PhaseExperience({
             </aside>
 
             <div className="grid gap-4">
-              <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+              <section className="game-panel sm:p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -983,7 +986,7 @@ export function PhaseExperience({
                 </div>
               </section>
 
-              <section className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+              <section className="game-panel">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Julgamento
                 </p>
@@ -1002,7 +1005,7 @@ export function PhaseExperience({
         ) : null}
 
         {displayedStep === "result" && submitResult ? (
-          <section className="mx-auto max-w-4xl rounded-[30px] border border-white/10 bg-white/5 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.18)] backdrop-blur sm:p-6">
+          <section className="game-shell mx-auto max-w-5xl p-4 sm:p-6">
             <div
               className={`rounded-[28px] border p-6 sm:p-8 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
             >
@@ -1072,13 +1075,13 @@ export function PhaseExperience({
               <button
                 type="button"
                 onClick={handleRetryFromResult}
-                className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-100"
+                className="ritual-link px-5 py-3 text-sm"
               >
                 Renovar leitura
               </button>
               <Link
                 href={nextPhaseActionHref ?? "/game"}
-                className="rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
+                className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
               >
                 {nextPhaseActionHref
                   ? "Seguir para a proxima prova"
@@ -1090,11 +1093,21 @@ export function PhaseExperience({
       </section>
 
       {currentStep !== "result" ? (
-        <section className="sticky bottom-3 z-10 mt-6 flex items-center justify-end gap-2 rounded-[20px] border border-white/10 bg-slate-950/90 px-3 py-3 shadow-[0_18px_40px_rgba(2,6,23,0.28)] backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:gap-3 sm:rounded-[24px] sm:bg-slate-950/25 sm:px-5 sm:py-4 sm:shadow-none sm:supports-[padding:max(0px)]:pb-4">
+        <section className="sticky bottom-3 z-10 mt-6 flex items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-[rgba(4,8,18,0.92)] px-3 py-3 shadow-[0_18px_40px_rgba(2,6,23,0.32)] backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:bg-[rgba(4,8,18,0.55)] sm:px-5 sm:py-4 sm:supports-[padding:max(0px)]:pb-4">
+          <div className="hidden text-xs uppercase tracking-[0.18em] text-slate-400 sm:block">
+            {displayedStep === "intro"
+              ? "Leia o chamado antes de entrar no rito."
+              : displayedStep === "forge"
+                ? "A estrutura precisa ser aceita pela mesa."
+                : displayedStep === "select"
+                  ? "Escolha uma carta antes de seguir."
+                  : "Marque propriedades e entregue o julgamento."}
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={goBack}
-            className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-xl border border-white/10 px-4 text-base font-black text-slate-100 sm:h-11 sm:min-w-[5rem] sm:rounded-2xl"
+            className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-full border border-white/10 px-4 text-base font-black text-slate-100 sm:h-11 sm:min-w-[5rem]"
             aria-label={
               currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"
             }
@@ -1111,7 +1124,7 @@ export function PhaseExperience({
                 (currentStep === "forge" && !canAdvanceFromForge) ||
                 (currentStep === "select" && !canAdvanceFromSelect)
               }
-              className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-xl bg-cyan-300 px-4 text-base font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:min-w-[5rem] sm:rounded-2xl"
+              className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-4 text-base font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:min-w-[5rem]"
               aria-label="Avançar"
             >
               &gt;
@@ -1125,11 +1138,12 @@ export function PhaseExperience({
                 !canAdvanceFromRead ||
                 (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
               }
-              className="rounded-xl bg-cyan-300 px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:min-w-[11rem] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm"
+              className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:min-w-[11rem] sm:px-4 sm:py-3 sm:text-sm"
             >
               {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
             </button>
           )}
+          </div>
         </section>
       ) : null}
     </main>

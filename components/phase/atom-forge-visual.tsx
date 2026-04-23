@@ -178,9 +178,9 @@ export function AtomForgeVisual({
       : null;
 
   return (
-    <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,15,30,0.96),rgba(15,23,42,0.98))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
+    <div className="rounded-[24px] border border-cyan-300/14 bg-[linear-gradient(180deg,rgba(9,15,30,0.98),rgba(15,23,42,1))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
       <div
-        className="relative overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-20 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-3"
+        className="relative overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-24 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-4"
         style={{
           backgroundImage: [
             "linear-gradient(180deg, rgba(14,23,42,0.9), rgba(8,13,26,0.96))",
@@ -234,6 +234,14 @@ export function AtomForgeVisual({
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-1.5 sm:flex sm:items-center">
+            <div className="rounded-full border border-white/10 bg-slate-950/78 px-3 py-2 text-[10px] uppercase tracking-[0.16em] text-slate-300">
+              {layout === "closed_ring" ? "Anel ativo" : "Cadeia ativa"}
+            </div>
+            <div className="rounded-full border border-white/10 bg-slate-950/78 px-3 py-2 text-[10px] uppercase tracking-[0.16em] text-slate-300">
+              {activeCarbonCount} C
+            </div>
+          </div>
         </div>
 
         {activeBondLabel ? (
@@ -566,12 +574,12 @@ export function AtomForgeVisual({
 
       </div>
 
-      <div className="flex justify-center pt-3">
+      <div className="flex justify-center pt-4">
         <button
           type="button"
           onClick={onValidateBuilder}
           disabled={isValidatingBuilder}
-          className="rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
+          className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isValidatingBuilder ? "Consultando a mesa..." : "Consultar a mesa"}
         </button>
