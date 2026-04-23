@@ -13,6 +13,8 @@ import type { BondType } from "@/lib/content/types";
 type AtomForgeVisualProps = {
   layout: BuilderLayout;
   activeCarbonCount: number;
+  minimumCarbonCount: number;
+  maximumCarbonCount: number;
   normalizedBondOrders: GraphBuilderBondOrder[];
   previewBondType: BondType;
   previewHydrogensByCarbon: number[];
@@ -21,9 +23,64 @@ type AtomForgeVisualProps = {
   hoveredBondIndex: number | null;
   recentlyChangedBondIndex: number | null;
   canUseDoubleBond: boolean;
+  canUseClosedRing: boolean;
+  isValidatingBuilder: boolean;
   onBondHover: (index: number | null) => void;
   onBondToggle: (index: number) => void;
+  onSetLayout: (layout: BuilderLayout) => void;
+  onCarbonStep: (direction: "decrease" | "increase") => void;
+  onValidateBuilder: () => void;
 };
+
+function LayoutGlyph({ layout }: { layout: BuilderLayout }) {
+  if (layout === "open_chain") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 44 20"
+        className="h-3.5 w-8"
+        fill="none"
+      >
+        <circle cx="6" cy="12.5" r="2.5" fill="currentColor" />
+        <circle cx="22" cy="6.5" r="2.5" fill="currentColor" />
+        <circle cx="38" cy="12.5" r="2.5" fill="currentColor" />
+        <line x1="9.2" y1="11.3" x2="18.6" y2="7.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <line x1="25.4" y1="7.7" x2="34.8" y2="11.3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      className="h-3.5 w-3.5"
+      fill="none"
+    >
+      <circle cx="10" cy="10" r="6.5" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function FlameGlyph() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-3.5 w-3.5"
+      fill="none"
+    >
+      <path
+        d="M12.4 3.8c.4 2.1-.4 3.5-1.7 4.9-1.1 1.2-2.3 2.3-2.3 4.2 0 2.1 1.6 3.7 3.7 3.7 2.6 0 4.5-2 4.5-4.8 0-2.4-1.3-4.2-4.2-8z"
+        fill="rgb(220 38 38)"
+      />
+      <path
+        d="M12 13.2c-.8 1-1.6 1.7-1.6 2.9 0 1 .8 1.8 1.8 1.8 1.2 0 2.1-.9 2.1-2.3 0-1.1-.6-1.9-2.3-2.4z"
+        fill="rgb(250 204 21)"
+      />
+    </svg>
+  );
+}
 
 function carbonHasDoubleBond(
   index: number,
@@ -94,6 +151,8 @@ function getRingStageClass(activeCarbonCount: number): string {
 export function AtomForgeVisual({
   layout,
   activeCarbonCount,
+  minimumCarbonCount,
+  maximumCarbonCount,
   normalizedBondOrders,
   previewBondType,
   previewHydrogensByCarbon,
@@ -102,8 +161,13 @@ export function AtomForgeVisual({
   hoveredBondIndex,
   recentlyChangedBondIndex,
   canUseDoubleBond,
+  canUseClosedRing,
+  isValidatingBuilder,
   onBondHover,
   onBondToggle,
+  onSetLayout,
+  onCarbonStep,
+  onValidateBuilder,
 }: AtomForgeVisualProps) {
   const activeBondIndex = hoveredBondIndex ?? recentlyChangedBondIndex;
   const activeBondLabel =
@@ -118,16 +182,8 @@ export function AtomForgeVisual({
 
   return (
     <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,15,30,0.96),rgba(15,23,42,0.98))] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
-      <div className="flex items-center justify-between gap-3 border-b border-white/6 px-1 pb-2">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-          Mesa de forja
-        </p>
-        <div className="rounded-full border border-white/8 bg-slate-950/70 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100">
-          {previewBondType}
-        </div>
-      </div>
       <div
-        className="relative mt-3 overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-2.5 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-3"
+        className="relative overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-2.5 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-3"
         style={{
           backgroundImage: [
             "linear-gradient(180deg, rgba(14,23,42,0.9), rgba(8,13,26,0.96))",
@@ -139,8 +195,53 @@ export function AtomForgeVisual({
           backgroundRepeat: "no-repeat, no-repeat, no-repeat",
         }}
       >
+        <div className="absolute inset-x-2 top-2 z-20 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
+          <div className="flex items-center gap-1.5 rounded-[14px] border border-white/8 bg-slate-950/72 p-1.5 backdrop-blur">
+            {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
+              <button
+                key={nextLayout}
+                type="button"
+                onClick={() => onSetLayout(nextLayout)}
+                disabled={nextLayout === "closed_ring" && !canUseClosedRing}
+                className={`flex h-8 w-8 items-center justify-center rounded-[10px] border transition sm:h-9 sm:w-9 ${
+                  layout === nextLayout
+                    ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
+                    : "border-white/8 bg-white/[0.03] text-slate-300 hover:border-white/20"
+                } disabled:cursor-not-allowed disabled:opacity-30`}
+                aria-label={nextLayout === "open_chain" ? "Cadeia aberta" : "Cadeia fechada"}
+              >
+                <LayoutGlyph layout={nextLayout} />
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <div className="rounded-full border border-white/8 bg-slate-950/70 px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-cyan-100">
+              {previewBondType}
+            </div>
+            <button
+              type="button"
+              onClick={() => onCarbonStep("decrease")}
+              disabled={activeCarbonCount <= minimumCarbonCount}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-orange-300/20 bg-[radial-gradient(circle_at_30%_30%,rgba(251,191,36,0.32),transparent_45%),linear-gradient(180deg,rgba(249,115,22,0.18),rgba(127,29,29,0.32))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(249,115,22,0.16)] transition hover:border-amber-300/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_24px_rgba(249,115,22,0.24)] disabled:cursor-not-allowed disabled:opacity-35 sm:h-9 sm:w-9"
+              aria-label="Diminuir carbonos"
+            >
+              <FlameGlyph />
+            </button>
+            <button
+              type="button"
+              onClick={() => onCarbonStep("increase")}
+              disabled={activeCarbonCount >= maximumCarbonCount}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-950/78 text-sm font-black text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35 sm:h-9 sm:w-9"
+              aria-label="Aumentar carbonos"
+            >
+              C
+            </button>
+          </div>
+        </div>
+
         {activeBondLabel ? (
-          <div className="pointer-events-none absolute right-3 top-3 z-10">
+          <div className="pointer-events-none absolute right-3 top-14 z-10 sm:top-16">
             <div className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-100 backdrop-blur">
               {activeBondLabel}
             </div>
@@ -467,6 +568,17 @@ export function AtomForgeVisual({
           </div>
         )}
 
+      </div>
+
+      <div className="flex justify-center pt-3">
+        <button
+          type="button"
+          onClick={onValidateBuilder}
+          disabled={isValidatingBuilder}
+          className="rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isValidatingBuilder ? "Consultando a mesa..." : "Consultar a mesa"}
+        </button>
       </div>
     </div>
   );

@@ -72,7 +72,7 @@ type PhaseExperienceProps = {
   chapterProgress: ChapterProgressView;
 };
 
-type PhaseStep = "intro" | "forge" | "read" | "result";
+type PhaseStep = "intro" | "forge" | "select" | "read" | "result";
 
 const fragmentToBondType = {
   ligacao_simples: "single",
@@ -117,10 +117,15 @@ const stepCopy: Record<Exclude<PhaseStep, "result">, { eyebrow: string; title: s
     title: "Moldar a estrutura",
     description: "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
   },
+  select: {
+    eyebrow: "Escolha da carta",
+    title: "Definir a carta",
+    description: "A leitura separa primeiro a escolha da carta. So depois voce avanca para classificar suas propriedades.",
+  },
   read: {
     eyebrow: "Rito da leitura",
     title: "Classificar e sustentar",
-    description: "A carta em foco fica ao lado das propriedades para reduzir alternancia mental durante a classificacao.",
+    description: "Com a carta ja definida, esta etapa fica dedicada apenas a marcar propriedades e sustentar o julgamento.",
   },
 };
 
@@ -139,7 +144,7 @@ function formatSelectableProperty(property: SelectableProperty): string {
 }
 
 function isPhaseStep(value: string | null): value is PhaseStep {
-  return value === "intro" || value === "forge" || value === "read" || value === "result";
+  return value === "intro" || value === "forge" || value === "select" || value === "read" || value === "result";
 }
 
 function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boolean): PhaseStep {
@@ -148,7 +153,7 @@ function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boo
   }
 
   if (supportsMoleculeSelection) {
-    return "read";
+    return "select";
   }
 
   return "read";
@@ -156,12 +161,17 @@ function getInitialStep(supportsBuilder: boolean, supportsMoleculeSelection: boo
 
 function getAvailablePhaseSteps(
   supportsBuilder: boolean,
+  supportsMoleculeSelection: boolean,
   hasResult: boolean,
 ): PhaseStep[] {
   const steps: PhaseStep[] = ["intro"];
 
   if (supportsBuilder) {
     steps.push("forge");
+  }
+
+  if (supportsMoleculeSelection) {
+    steps.push("select");
   }
 
   steps.push("read");
@@ -286,8 +296,10 @@ export function PhaseExperience({
   const canAdvanceFromForge = supportsBuilder
     ? Boolean(builderResult?.canCreateMolecule)
     : true;
+  const canAdvanceFromSelect = supportsMoleculeSelection
+    ? Boolean(effectiveSelectedMoleculeId)
+    : true;
   const canAdvanceFromRead =
-    (!supportsMoleculeSelection || Boolean(effectiveSelectedMoleculeId)) &&
     selectedProperties.length > 0;
   const displayedStep = renderedStep;
   const createdMolecule =
@@ -296,6 +308,7 @@ export function PhaseExperience({
   const focusedMolecule = selectedMolecule ?? createdMolecule;
   const availableSteps = getAvailablePhaseSteps(
     supportsBuilder,
+    supportsMoleculeSelection,
     Boolean(submitResult),
   );
   const totalSteps = availableSteps.filter((step) => step !== "result").length;
@@ -393,6 +406,16 @@ export function PhaseExperience({
       "forward",
     );
   }, [availableSteps, currentStep, supportsBuilder, supportsMoleculeSelection]);
+
+  useEffect(() => {
+    if (
+      currentStep === "read" &&
+      supportsMoleculeSelection &&
+      !canAdvanceFromSelect
+    ) {
+      navigateToStep("select", "backward");
+    }
+  }, [canAdvanceFromSelect, currentStep, supportsMoleculeSelection]);
 
   useEffect(() => {
     if (currentStep === renderedStep) {
@@ -554,6 +577,11 @@ export function PhaseExperience({
     }
 
     if (currentStep === "forge") {
+      navigateToStep(supportsMoleculeSelection ? "select" : "read", "forward");
+      return;
+    }
+
+    if (currentStep === "select") {
       navigateToStep("read", "forward");
     }
   }
@@ -613,7 +641,9 @@ export function PhaseExperience({
                       ? true
                       : step === "forge"
                         ? canAdvanceFromForge
-                        : canAdvanceFromRead;
+                        : step === "select"
+                          ? canAdvanceFromSelect
+                          : canAdvanceFromRead;
 
                   return (
                     <div
@@ -626,7 +656,13 @@ export function PhaseExperience({
                             : "border-white/10 bg-white/5 text-slate-400"
                       }`}
                     >
-                      {step === "intro" ? "Chamado" : step === "forge" ? "Forja" : "Leitura"}
+                      {step === "intro"
+                        ? "Chamado"
+                        : step === "forge"
+                          ? "Forja"
+                          : step === "select"
+                            ? "Carta"
+                            : "Leitura"}
                     </div>
                   );
                 })}
@@ -720,6 +756,103 @@ export function PhaseExperience({
             onUpdateBondOrder={updateBondOrder}
             onValidateBuilder={handleValidateBuilder}
           />
+        ) : null}
+
+        {displayedStep === "select" ? (
+          <section className="grid gap-5 xl:grid-cols-[0.82fr,1.18fr] xl:gap-6">
+            <aside className="grid gap-4 self-start">
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Carta em foco
+                </p>
+                {focusedMolecule ? (
+                  <div className="mt-4">
+                    <MoleculeCard
+                      molecule={focusedMolecule}
+                      isSelected
+                      isCreated={builderResult?.resolvedMoleculeId === focusedMolecule.id}
+                      selectable={supportsMoleculeSelection}
+                      variant="compact"
+                      onSelect={
+                        supportsMoleculeSelection
+                          ? () => setSelectedMoleculeId(focusedMolecule.id)
+                          : undefined
+                      }
+                    />
+                  </div>
+                ) : (
+                  <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-400">
+                    Selecione uma carta para abrir a leitura de propriedades.
+                  </div>
+                )}
+              </div>
+
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Estado da escolha
+                </p>
+                <div className="mt-3 grid gap-3 text-sm text-slate-200">
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    Molecula:{" "}
+                    <span className="font-semibold text-white">
+                      {focusedMolecule?.nomeQuimico ?? "nenhuma"}
+                    </span>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+                    Origem:{" "}
+                    <span className="font-semibold text-white">
+                      {createdMolecule ? "mesa de forja" : "comparacao direta"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    Escolha
+                  </p>
+                  <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
+                    Cartas disponiveis
+                  </h3>
+                </div>
+                <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
+                  Selecione 1 carta
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                {molecules.map((molecule) => {
+                  const isSelected = effectiveSelectedMoleculeId === molecule.id;
+                  const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
+
+                  return (
+                    <div
+                      key={molecule.id}
+                      className={`rounded-[28px] p-1 transition ${
+                        isSelected
+                          ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.25),rgba(59,130,246,0.12))]"
+                          : isCreated
+                            ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.18),rgba(20,184,166,0.1))]"
+                            : "bg-transparent"
+                      }`}
+                    >
+                      <MoleculeCard
+                        molecule={molecule}
+                        isSelected={isSelected}
+                        isCreated={isCreated}
+                        selectable
+                        variant="compact"
+                        onSelect={() => setSelectedMoleculeId(molecule.id)}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </section>
         ) : null}
 
         {displayedStep === "read" ? (
@@ -818,42 +951,6 @@ export function PhaseExperience({
                   ))}
                 </div>
               </section>
-
-              {supportsMoleculeSelection ? (
-                <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur sm:p-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Cartas disponiveis
-                  </p>
-                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                    {molecules.map((molecule) => {
-                      const isSelected = effectiveSelectedMoleculeId === molecule.id;
-                      const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
-
-                      return (
-                        <div
-                          key={molecule.id}
-                          className={`rounded-[28px] p-1 transition ${
-                            isSelected
-                              ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.25),rgba(59,130,246,0.12))]"
-                              : isCreated
-                                ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.18),rgba(20,184,166,0.1))]"
-                                : "bg-transparent"
-                          }`}
-                        >
-                          <MoleculeCard
-                            molecule={molecule}
-                            isSelected={isSelected}
-                            isCreated={isCreated}
-                            selectable
-                            variant="compact"
-                            onSelect={() => setSelectedMoleculeId(molecule.id)}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                </section>
-              ) : null}
 
               <section className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -976,8 +1073,10 @@ export function PhaseExperience({
               (canAdvanceFromForge
                 ? "A mesa reconheceu sua estrutura. Voce ja pode seguir."
                 : "Confirme sua estrutura para abrir o proximo rito.")}
+            {currentStep === "select" &&
+              "Escolha a carta que sera usada na leitura antes de marcar propriedades."}
             {currentStep === "read" &&
-              "Escolha a carta, marque as propriedades e entregue a leitura no mesmo modulo."}
+              "Com a carta definida, marque as propriedades e entregue a leitura."}
           </p>
 
           {currentStep !== "read" ? (
@@ -986,7 +1085,8 @@ export function PhaseExperience({
               onClick={goForward}
               disabled={
                 (currentStep === "intro" && !canAdvanceFromIntro) ||
-                (currentStep === "forge" && !canAdvanceFromForge)
+                (currentStep === "forge" && !canAdvanceFromForge) ||
+                (currentStep === "select" && !canAdvanceFromSelect)
               }
               className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300 text-lg font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Avançar"

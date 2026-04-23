@@ -192,6 +192,8 @@ Arquivo de referência:
 npm run db:dev:up
 ```
 
+Esse comando também atualiza `.env.local` com um override de desenvolvimento para `DATABASE_URL` e `APP_BASE_URL`, sem alterar o `.env` principal.
+
 2. se necessário, acompanhar logs:
 
 ```bash
@@ -214,7 +216,7 @@ Para desenvolvimento local, copie a base abaixo para `.env`:
 cp .env.example .env
 ```
 
-O `DATABASE_URL` padrão de desenvolvimento já aponta para o PostgreSQL local em `localhost:5432`.
+O `DATABASE_URL` padrão de desenvolvimento já aponta para o PostgreSQL local em `localhost:5432`. Se o `.env` principal estiver configurado para produção, `npm run db:dev:up` criará ou atualizará `.env.local` para forçar o uso do banco local durante o `next dev`.
 
 ### Preparar Prisma e seed
 

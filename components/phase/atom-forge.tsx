@@ -1,6 +1,5 @@
 "use client";
 
-import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
 
 import { MoleculeCard } from "@/components/cards/molecule-card";
@@ -36,62 +35,6 @@ type AtomForgeProps = {
   onValidateBuilder: () => void;
 };
 
-const bondTypeLabels: Record<BondType, string> = {
-  single: "Ligacao simples",
-  double: "Ligacao dupla",
-  aromatic: "Estrutura aromatica",
-};
-
-function LayoutGlyph({ layout }: { layout: BuilderLayout }) {
-  if (layout === "open_chain") {
-    return (
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 44 20"
-        className="h-5 w-11"
-        fill="none"
-      >
-        <circle cx="6" cy="12.5" r="2.5" fill="currentColor" />
-        <circle cx="22" cy="6.5" r="2.5" fill="currentColor" />
-        <circle cx="38" cy="12.5" r="2.5" fill="currentColor" />
-        <line x1="9.2" y1="11.3" x2="18.6" y2="7.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        <line x1="25.4" y1="7.7" x2="34.8" y2="11.3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      className="h-5 w-5"
-      fill="none"
-    >
-      <circle cx="10" cy="10" r="6.5" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  );
-}
-
-function FlameGlyph() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className="h-5 w-5"
-      fill="none"
-    >
-      <path
-        d="M12.4 3.8c.4 2.1-.4 3.5-1.7 4.9-1.1 1.2-2.3 2.3-2.3 4.2 0 2.1 1.6 3.7 3.7 3.7 2.6 0 4.5-2 4.5-4.8 0-2.4-1.3-4.2-4.2-8z"
-        fill="rgb(220 38 38)"
-      />
-      <path
-        d="M12 13.2c-.8 1-1.6 1.7-1.6 2.9 0 1 .8 1.8 1.8 1.8 1.2 0 2.1-.9 2.1-2.3 0-1.1-.6-1.9-2.3-2.4z"
-        fill="rgb(250 204 21)"
-      />
-    </svg>
-  );
-}
-
 export function AtomForge({
   layout,
   carbonCount,
@@ -100,7 +43,7 @@ export function AtomForge({
   maximumCarbonCount,
   canUseDoubleBond,
   canUseClosedRing,
-  availableBondTypes,
+  availableBondTypes: _availableBondTypes,
   normalizedBondOrders,
   previewBondType,
   previewHydrogensByCarbon,
@@ -136,41 +79,6 @@ export function AtomForge({
     setRecentlyChangedBondIndex(index);
   }
 
-  function handleBondKeyDown(
-    event: KeyboardEvent<HTMLButtonElement>,
-    index: number,
-  ) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      handleBondToggle(index);
-      return;
-    }
-
-    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
-      return;
-    }
-
-    event.preventDefault();
-
-    const bondButtons = Array.from(
-      document.querySelectorAll<HTMLButtonElement>("[data-bond-index]"),
-    );
-    const currentPosition = bondButtons.findIndex(
-      (button) => Number(button.dataset.bondIndex) === index,
-    );
-
-    if (currentPosition < 0) {
-      return;
-    }
-
-    const nextPosition =
-      event.key === "ArrowDown"
-        ? Math.min(bondButtons.length - 1, currentPosition + 1)
-        : Math.max(0, currentPosition - 1);
-
-    bondButtons[nextPosition]?.focus();
-  }
-
   function handleCarbonStep(direction: "decrease" | "increase") {
     const delta = direction === "increase" ? 1 : -1;
     const nextValue = Math.max(
@@ -186,22 +94,13 @@ export function AtomForge({
   return (
     <section className="overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(12,18,34,0.96),rgba(7,11,24,0.98))] p-3 shadow-[0_16px_50px_rgba(15,23,42,0.2)] backdrop-blur-xl sm:rounded-[30px] sm:p-4">
       <div className="grid gap-3">
-        <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr),260px] xl:items-start">
+        <div className="grid gap-3">
           <div className="grid gap-3">
-            <div className="rounded-[20px] border border-white/8 bg-white/[0.03] p-3">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                  Mesa de forja
-                </p>
-                <span className="rounded-full border border-cyan-300/18 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-100">
-                  {previewBondType}
-                </span>
-              </div>
-            </div>
-
             <AtomForgeVisual
               layout={layout}
               activeCarbonCount={activeCarbonCount}
+              minimumCarbonCount={minimumCarbonCount}
+              maximumCarbonCount={maximumCarbonCount}
               normalizedBondOrders={normalizedBondOrders}
               previewBondType={previewBondType}
               previewHydrogensByCarbon={previewHydrogensByCarbon}
@@ -210,78 +109,17 @@ export function AtomForge({
               hoveredBondIndex={hoveredBondIndex}
               recentlyChangedBondIndex={recentlyChangedBondIndex}
               canUseDoubleBond={canUseDoubleBond}
+              canUseClosedRing={canUseClosedRing}
+              isValidatingBuilder={isValidatingBuilder}
               onBondHover={setHoveredBondIndex}
               onBondToggle={handleBondToggle}
+              onSetLayout={onSetLayout}
+              onCarbonStep={handleCarbonStep}
+              onValidateBuilder={onValidateBuilder}
             />
           </div>
-
-          <div className="rounded-[20px] border border-white/8 bg-white/[0.03] p-4">
-            <div className="flex flex-col gap-5">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                  Cadeia
-                </p>
-                <div className="mt-3 flex flex-col gap-2">
-                  {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
-                    <button
-                      key={nextLayout}
-                      type="button"
-                      onClick={() => onSetLayout(nextLayout)}
-                      disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                      className={`flex items-center justify-center rounded-2xl border px-4 py-3 text-sm font-black transition ${
-                        layout === nextLayout
-                          ? "border-cyan-300/50 bg-cyan-400/15 text-cyan-100"
-                          : "border-white/10 bg-slate-950/25 text-slate-300 hover:border-white/20"
-                      } disabled:cursor-not-allowed disabled:opacity-30`}
-                      aria-label={nextLayout === "open_chain" ? "Cadeia aberta" : "Cadeia fechada"}
-                      >
-                        <LayoutGlyph layout={nextLayout} />
-                      </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                  Carbonos
-                </p>
-                <div className="mt-3 flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => handleCarbonStep("decrease")}
-                    disabled={activeCarbonCount <= minimumCarbonCount}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-orange-300/20 bg-[radial-gradient(circle_at_30%_30%,rgba(251,191,36,0.32),transparent_45%),linear-gradient(180deg,rgba(249,115,22,0.18),rgba(127,29,29,0.32))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(249,115,22,0.16)] transition hover:border-amber-300/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_24px_rgba(249,115,22,0.24)] disabled:cursor-not-allowed disabled:opacity-35"
-                    aria-label="Diminuir carbonos"
-                  >
-                    <FlameGlyph />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleCarbonStep("increase")}
-                    disabled={activeCarbonCount >= maximumCarbonCount}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-slate-950/70 text-base font-black text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35"
-                    aria-label="Aumentar carbonos"
-                  >
-                    C
-                  </button>
-                </div>
-                <span className="mt-3 block text-[11px] leading-5 text-slate-500">
-                  de {minimumCarbonCount} a {maximumCarbonCount} carbonos
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div className="flex justify-center pt-1">
-          <button
-            type="button"
-            onClick={onValidateBuilder}
-            disabled={isValidatingBuilder}
-            className="rounded-2xl bg-cyan-300 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isValidatingBuilder ? "Consultando a mesa..." : "Consultar a mesa"}
-          </button>
-        </div>
       </div>
 
       {builderError ? (
