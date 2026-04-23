@@ -178,9 +178,9 @@ export function AtomForgeVisual({
       : null;
 
   return (
-    <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,15,30,0.96),rgba(15,23,42,0.98))] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
+    <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,15,30,0.96),rgba(15,23,42,0.98))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
       <div
-        className="relative overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-2.5 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-3"
+        className="relative overflow-hidden rounded-[20px] border border-cyan-300/10 px-2 pb-3 pt-20 sm:rounded-[24px] sm:px-3 sm:pb-4 sm:pt-3"
         style={{
           backgroundImage: [
             "linear-gradient(180deg, rgba(14,23,42,0.9), rgba(8,13,26,0.96))",
@@ -192,14 +192,14 @@ export function AtomForgeVisual({
           backgroundRepeat: "no-repeat, no-repeat, no-repeat",
         }}
       >
-        <div className="absolute inset-x-2 top-2 z-20 flex items-start justify-between gap-2 sm:inset-x-3 sm:top-3">
+        <div className="absolute inset-x-2 top-2 z-20 flex flex-col items-stretch gap-2 sm:inset-x-3 sm:top-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col items-start gap-1.5">
-            <div className="flex items-center gap-1.5">
+            <div className="grid grid-cols-2 gap-1.5 sm:flex sm:items-center">
               <button
                 type="button"
                 onClick={() => onCarbonStep("decrease")}
                 disabled={activeCarbonCount <= minimumCarbonCount}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-orange-300/20 bg-[radial-gradient(circle_at_30%_30%,rgba(251,191,36,0.32),transparent_45%),linear-gradient(180deg,rgba(249,115,22,0.18),rgba(127,29,29,0.32))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(249,115,22,0.16)] transition hover:border-amber-300/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_24px_rgba(249,115,22,0.24)] disabled:cursor-not-allowed disabled:opacity-35 sm:h-9 sm:w-9"
+                className="flex h-9 w-full items-center justify-center rounded-full border border-orange-300/20 bg-[radial-gradient(circle_at_30%_30%,rgba(251,191,36,0.32),transparent_45%),linear-gradient(180deg,rgba(249,115,22,0.18),rgba(127,29,29,0.32))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(249,115,22,0.16)] transition hover:border-amber-300/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_24px_rgba(249,115,22,0.24)] disabled:cursor-not-allowed disabled:opacity-35 sm:h-9 sm:w-9"
                 aria-label="Diminuir carbonos"
               >
                 <FlameGlyph />
@@ -208,20 +208,20 @@ export function AtomForgeVisual({
                 type="button"
                 onClick={() => onCarbonStep("increase")}
                 disabled={activeCarbonCount >= maximumCarbonCount}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-950/78 text-sm font-black text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35 sm:h-9 sm:w-9"
+                className="flex h-9 w-full items-center justify-center rounded-full border border-white/10 bg-slate-950/78 text-sm font-black text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-35 sm:h-9 sm:w-9"
                 aria-label="Aumentar carbonos"
               >
                 C
               </button>
             </div>
-            <div className="flex items-center gap-1.5 rounded-[14px] bg-transparent p-1.5 backdrop-blur">
+            <div className="grid w-full grid-cols-2 gap-1.5 rounded-[14px] bg-transparent p-1.5 backdrop-blur sm:flex sm:w-auto sm:items-center">
               {(["open_chain", "closed_ring"] as const).map((nextLayout) => (
                 <button
                   key={nextLayout}
                   type="button"
                   onClick={() => onSetLayout(nextLayout)}
                   disabled={nextLayout === "closed_ring" && !canUseClosedRing}
-                  className={`flex h-8 w-8 items-center justify-center rounded-full transition sm:h-9 sm:w-9 ${
+                  className={`flex h-9 w-full items-center justify-center rounded-full transition sm:h-9 sm:w-9 ${
                     layout === nextLayout
                       ? "bg-[radial-gradient(circle_at_30%_30%,rgba(34,211,238,0.3),transparent_45%),linear-gradient(180deg,rgba(34,211,238,0.18),rgba(8,47,73,0.34))] text-cyan-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(34,211,238,0.18)]"
                       : "bg-slate-950/78 text-slate-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/8"
@@ -237,7 +237,7 @@ export function AtomForgeVisual({
         </div>
 
         {activeBondLabel ? (
-          <div className="pointer-events-none absolute right-3 top-14 z-10 sm:top-16">
+          <div className="pointer-events-none absolute right-2 top-2 z-10 sm:right-3 sm:top-16">
             <div className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-100 backdrop-blur">
               {activeBondLabel}
             </div>

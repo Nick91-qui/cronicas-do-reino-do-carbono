@@ -110,7 +110,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-col justify-center px-4 pt-10 sm:px-6 sm:pt-16">
+    <main className="mx-auto flex min-h-[100dvh] w-full max-w-5xl flex-col justify-center px-4 py-6 sm:px-6 sm:py-10 lg:py-16">
       <section className="grid overflow-hidden rounded-[28px] border border-cyan-300/20 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.14),transparent_24%),linear-gradient(180deg,rgba(15,23,42,0.98),rgba(2,6,23,0.98))] shadow-[0_24px_80px_rgba(2,6,23,0.42)] lg:grid-cols-[0.95fr,1.05fr] lg:rounded-[32px]">
         <div className="border-b border-white/10 p-5 sm:p-6 lg:hidden">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300">
@@ -148,14 +148,14 @@ export function AuthForm({ mode }: AuthFormProps) {
         </div>
 
         <div className="p-4 sm:p-6 lg:p-8">
-          <div className="rounded-[24px] border border-white/10 bg-white/5 p-5 shadow-2xl shadow-black/20 sm:rounded-[28px] sm:p-8">
+          <div className="rounded-[24px] border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/20 sm:rounded-[28px] sm:p-8">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
               {copyByMode[mode].eyebrow}
             </p>
             <h1 className="mt-3 text-2xl font-black tracking-tight text-white sm:text-3xl">{copyByMode[mode].title}</h1>
             <p className="mt-2 text-sm leading-6 text-slate-300">{copyByMode[mode].description}</p>
 
-            <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+            <form className="mt-6 space-y-4 sm:mt-8" onSubmit={handleSubmit}>
               {mode === "register" ? (
                 <>
                   <label className="block text-sm">
@@ -205,7 +205,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full rounded-2xl bg-cyan-300 px-4 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full rounded-2xl bg-cyan-300 px-4 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-70 sm:py-4"
               >
                 {isPending ? "Selando acesso..." : copyByMode[mode].submitLabel}
               </button>

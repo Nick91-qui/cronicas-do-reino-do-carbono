@@ -137,7 +137,7 @@ export function MoleculeCard({
   const artworkFit = molecule.visual.assets.artworkFit ?? "cover";
   const artworkPosition = molecule.visual.assets.artworkPosition ?? "center";
   const artworkScale = molecule.visual.assets.artworkScale ?? 1;
-  const cardHeight = variant === "expanded" ? "h-[520px] sm:h-[560px]" : "h-[440px] sm:h-[500px]";
+  const cardHeight = variant === "expanded" ? "h-[500px] sm:h-[560px]" : "h-[400px] sm:h-[500px]";
   const visibleProperties = variant === "expanded" ? 6 : 5;
   const hoverRingClass =
     hoverRingClassByPalette[molecule.visual.attributePalette];
@@ -164,7 +164,7 @@ export function MoleculeCard({
             handleFlip();
           }
         }}
-        className={`group relative w-full cursor-pointer outline-none transition-transform duration-300 hover:scale-[1.02] ${cardHeight}`}
+        className={`group relative w-full cursor-pointer outline-none transition-transform duration-300 motion-safe:hover:scale-[1.02] ${cardHeight}`}
       >
         <div
           className={`relative h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${isFlipped ? "[transform:rotateY(180deg)]" : ""}`}
@@ -177,7 +177,7 @@ export function MoleculeCard({
               <div className="flex h-full flex-col rounded-[18px] border border-slate-900/80 bg-white px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="mt-1 text-lg font-black tracking-tight text-slate-950 sm:text-xl">
+                    <h3 className="mt-1 text-base font-black tracking-tight text-slate-950 sm:text-xl">
                       {molecule.nomeQuimico}
                     </h3>
                     <p className="mt-1 line-clamp-2 text-sm font-medium text-slate-500">
@@ -188,7 +188,7 @@ export function MoleculeCard({
 
                 <div className="relative mt-3 min-h-0 flex-1 overflow-hidden rounded-[20px] border border-slate-900/70 bg-slate-950 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                   <div
-                    className="relative flex h-full min-h-[180px] items-center justify-center rounded-[16px] border border-white/10 bg-cover bg-center p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[220px]"
+                    className="relative flex h-full min-h-[160px] items-center justify-center rounded-[16px] border border-white/10 bg-cover bg-center p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[220px] sm:p-3"
                     style={artStyle}
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_55%)]" />
@@ -204,7 +204,7 @@ export function MoleculeCard({
                       }}
                     />
 
-                    <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap items-end justify-between gap-2">
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20 flex flex-wrap items-end justify-between gap-2 sm:bottom-3 sm:left-3 sm:right-3">
                       <div className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/80 sm:text-[10px]">
                         {molecule.classe}
                       </div>
@@ -217,7 +217,7 @@ export function MoleculeCard({
                   </div>
                 </div>
 
-                <div className="mt-3 rounded-[18px] border border-slate-900/70 bg-slate-50 px-3 py-2.5">
+                <div className="mt-2.5 rounded-[18px] border border-slate-900/70 bg-slate-50 px-2.5 py-2.5 sm:mt-3 sm:px-3">
                   <div className="flex flex-wrap gap-2">
                     {molecule.propriedades.slice(0, visibleProperties).map((property) => (
                       <span

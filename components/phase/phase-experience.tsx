@@ -599,7 +599,7 @@ export function PhaseExperience({
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 sm:py-8">
+    <main className="mx-auto w-full max-w-6xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
       <section className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.74),rgba(2,6,23,0.82))] p-5 shadow-[0_20px_70px_rgba(2,6,23,0.26)] backdrop-blur-xl sm:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
@@ -631,7 +631,7 @@ export function PhaseExperience({
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
               {availableSteps
                 .filter((step) => step !== "result")
                 .map((step) => {
@@ -648,7 +648,7 @@ export function PhaseExperience({
                   return (
                     <div
                       key={step}
-                      className={`rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] backdrop-blur ${
+                      className={`rounded-full border px-3 py-1.5 text-center text-[10px] font-black uppercase tracking-[0.16em] backdrop-blur ${
                         isActive
                           ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
                           : isDone
@@ -1054,17 +1054,17 @@ export function PhaseExperience({
       </section>
 
       {currentStep !== "result" ? (
-        <section className="sticky bottom-3 z-10 mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/85 px-4 py-4 shadow-[0_18px_40px_rgba(2,6,23,0.28)] backdrop-blur sm:static sm:flex-row sm:items-center sm:justify-between sm:bg-slate-950/25 sm:px-5 sm:shadow-none">
+        <section className="sticky bottom-3 z-10 mt-6 flex flex-col gap-3 rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-4 shadow-[0_18px_40px_rgba(2,6,23,0.28)] backdrop-blur supports-[padding:max(0px)]:pb-[max(1rem,env(safe-area-inset-bottom))] sm:static sm:flex-row sm:items-center sm:justify-between sm:bg-slate-950/25 sm:px-5 sm:py-4 sm:shadow-none sm:supports-[padding:max(0px)]:pb-4">
           <button
             type="button"
             onClick={goBack}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 text-lg font-black text-slate-100"
+            className="order-2 flex h-11 w-full items-center justify-center rounded-2xl border border-white/10 text-lg font-black text-slate-100 sm:order-1 sm:w-11"
             aria-label={currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"}
           >
             &lt;
           </button>
 
-          <p className="text-sm leading-6 text-slate-400 sm:max-w-xl">
+          <p className="order-1 text-sm leading-6 text-slate-400 sm:order-2 sm:max-w-xl">
             {currentStep === "intro" && "Leia o chamado da prova e avance quando estiver pronto."}
             {currentStep === "forge" &&
               (canAdvanceFromForge
@@ -1085,7 +1085,7 @@ export function PhaseExperience({
                 (currentStep === "forge" && !canAdvanceFromForge) ||
                 (currentStep === "select" && !canAdvanceFromSelect)
               }
-              className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300 text-lg font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+              className="order-3 flex h-11 w-full items-center justify-center rounded-2xl bg-cyan-300 text-lg font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:w-11"
               aria-label="Avançar"
             >
               &gt;
@@ -1099,7 +1099,7 @@ export function PhaseExperience({
                 !canAdvanceFromRead ||
                 (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
               }
-              className="min-w-[11rem] rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40"
+              className="order-3 w-full rounded-2xl bg-cyan-300 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto sm:min-w-[11rem]"
             >
               {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
             </button>
