@@ -74,6 +74,8 @@ logs
 *.webp
 *.gif
 *.svg
+!/app/icon.png
+!/app/apple-icon.png
 
 # Optional: lock files (geralmente você DEVE versionar, então cuidado!)
 # package-lock.json
