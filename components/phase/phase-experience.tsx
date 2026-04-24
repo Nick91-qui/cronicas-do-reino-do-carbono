@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { MoleculeCard } from "@/components/cards/molecule-card";
-import { AtomForge } from "@/components/phase/atom-forge";
+import { SynthesisLab } from "@/components/phase/synthesis-lab";
 
 import type {
   BuilderLayout,
@@ -72,7 +72,7 @@ type PhaseExperienceProps = {
   chapterProgress: ChapterProgressView;
 };
 
-type PhaseStep = "intro" | "forge" | "select" | "read" | "result";
+type PhaseStep = "intro" | "synthesis" | "select" | "read" | "result";
 
 const fragmentToBondType = {
   ligacao_simples: "single",
@@ -104,7 +104,7 @@ const resultTitleByKind: Record<
   inadequate: "Sintese instavel",
 };
 
-const minimumForgeFeedbackMs = 900;
+const minimumSynthesisFeedbackMs = 900;
 
 const stepCopy: Record<
   Exclude<PhaseStep, "result">,
@@ -116,7 +116,7 @@ const stepCopy: Record<
     description:
       "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
   },
-  forge: {
+  synthesis: {
     eyebrow: "Rito da sintese",
     title: "Moldar a estrutura",
     description:
@@ -153,7 +153,7 @@ function formatSelectableProperty(property: SelectableProperty): string {
 function isPhaseStep(value: string | null): value is PhaseStep {
   return (
     value === "intro" ||
-    value === "forge" ||
+    value === "synthesis" ||
     value === "select" ||
     value === "read" ||
     value === "result"
@@ -165,7 +165,7 @@ function getInitialStep(
   supportsMoleculeSelection: boolean,
 ): PhaseStep {
   if (supportsBuilder) {
-    return "forge";
+    return "synthesis";
   }
 
   if (supportsMoleculeSelection) {
@@ -183,7 +183,7 @@ function getAvailablePhaseSteps(
   const steps: PhaseStep[] = ["intro"];
 
   if (supportsBuilder) {
-    steps.push("forge");
+    steps.push("synthesis");
   }
 
   if (supportsMoleculeSelection) {
