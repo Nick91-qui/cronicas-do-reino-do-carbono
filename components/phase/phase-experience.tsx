@@ -761,6 +761,7 @@ export function PhaseExperience({
 
         {displayedStep === "synthesis" ? (
           <SynthesisLab
+            objective={phase.objective}
             layout={layout}
             carbonCount={carbonCount}
             activeCarbonCount={activeCarbonCount}
