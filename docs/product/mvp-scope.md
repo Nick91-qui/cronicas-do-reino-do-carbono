@@ -20,7 +20,7 @@ O MVP inclui:
 - uso em **web responsivo**;
 - entrada do jogador com **código da turma, nome e senha**;
 - persistência de progresso em banco de dados;
-- oficina molecular em modelo **híbrido semilivre**;
+- laboratório de síntese em modelo **híbrido semilivre**;
 - desbloqueio progressivo de moléculas e fases;
 - seleção de propriedades como justificativa;
 - correção automática;
@@ -127,13 +127,13 @@ Regras do MVP:
 - o histórico de tentativas deve ser persistido;
 - o jogador pode repetir a fase até alcançar a resposta correta.
 
-## Oficina molecular do MVP
+## Laboratório de síntese do MVP
 
 A construção molecular do MVP seguirá um modelo **híbrido semilivre**.
 
-### Princípios da oficina
+### Princípios do laboratório de síntese
 
-A oficina deve permitir:
+O laboratório de síntese deve permitir:
 
 - interação visual simples;
 - manipulação guiada de átomos e ligações;
@@ -341,7 +341,7 @@ O MVP será considerado bem-sucedido se conseguir demonstrar, de forma funcional
 
 - o aluno compreende o fluxo principal sem grande atrito;
 - as fases apresentam progressão pedagógica clara;
-- a oficina molecular é utilizável e coerente com os objetivos didáticos;
+- o laboratório de síntese é utilizável e coerente com os objetivos didáticos;
 - o sistema de escolha e justificativa ajuda a diferenciar estruturas e propriedades;
 - o conteúdo pode ser expandido futuramente sem reestruturar o produto inteiro.
 

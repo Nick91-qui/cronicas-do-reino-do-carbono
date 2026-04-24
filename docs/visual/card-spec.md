@@ -54,7 +54,7 @@ Deve ser renderizado por código:
 - pontos fortes;
 - limitações;
 - propriedades destacadas;
-- selos contextuais como desbloqueada, criada na oficina ou selecionada.
+- selos contextuais como desbloqueada, criada no laboratório de síntese ou selecionada.
 
 
 ## Modelo de dados visual da carta
@@ -240,7 +240,7 @@ visual: {
   attributePalette: "hydrocarbon",
   preferredLayout: "expanded",
   stateVariants: {
-    newly_created: { badgeLabel: "Forjada" },
+    newly_created: { badgeLabel: "Sintetizada" },
     selected: { badgeLabel: "Selecionada" },
   },
 }

@@ -492,7 +492,7 @@ Esta fase é ótima para discutir que “melhor” depende do problema a ser res
 
 ---
 
-## Fase 7 — A Oficina dos Polímeros
+## Fase 7 — O Laboratório de Síntese de Polímeros
 
 ### Objetivo pedagógico
 

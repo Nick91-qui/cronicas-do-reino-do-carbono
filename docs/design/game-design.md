@@ -11,7 +11,7 @@ O foco deste documento é o funcionamento do jogo, e não os detalhes narrativos
 O jogo foi desenhado para ensinar química orgânica introdutória por meio de um ciclo em que o aluno:
 
 - recebe um problema contextualizado;
-- constrói moléculas em uma oficina simplificada;
+- constrói moléculas em um laboratório de síntese simplificado;
 - analisa cartas de moléculas válidas;
 - escolhe a molécula mais adequada para o desafio;
 - justifica a escolha com base em propriedades;
@@ -37,7 +37,7 @@ O loop principal do MVP é:
 1. o jogador entra em uma fase;
 2. lê a narrativa e entende o desafio;
 3. visualiza os recursos disponíveis;
-4. utiliza a oficina molecular para montar uma estrutura;
+4. utiliza o laboratório de síntese para montar uma estrutura;
 5. ao criar uma molécula válida, recebe ou visualiza a carta correspondente;
 6. usa a carta como apoio para decidir qual molécula resolve melhor o problema;
 7. seleciona a molécula escolhida;
@@ -52,7 +52,7 @@ O fluxo base de fase no MVP será:
 1. **narrativa**
 2. **desafio**
 3. **recursos disponíveis**
-4. **oficina molecular**
+4. **laboratório de síntese**
 5. **carta da molécula criada**
 6. **seleção da resposta**
 7. **justificativa por propriedades**
@@ -90,17 +90,17 @@ Exemplo:
 
 O jogador constrói uma ou mais moléculas válidas, analisa as cartas geradas e depois escolhe qual delas deve usar como resposta para o desafio.
 
-Esse tipo é importante porque liga diretamente oficina molecular, leitura da carta e raciocínio estratégico.
+Esse tipo é importante porque liga diretamente laboratório de síntese, leitura da carta e raciocínio estratégico.
 
-## Oficina molecular
+## Laboratório de síntese
 
-### Papel da oficina
+### Papel do laboratório de síntese
 
-A oficina molecular é a principal mecânica de construção do MVP. Ela deve oferecer liberdade controlada suficiente para gerar aprendizagem estrutural sem se tornar um editor químico livre complexo.
+O laboratório de síntese é a principal mecânica de construção do MVP. Ele deve oferecer liberdade controlada suficiente para gerar aprendizagem estrutural sem se tornar um editor químico livre complexo.
 
 ### Modelo adotado
 
-O MVP usará uma oficina **híbrida semilivre guiada por blueprints**.
+O MVP usará um laboratório de síntese **híbrido semilivre guiado por blueprints**.
 
 Isso significa que:
 
@@ -112,7 +112,7 @@ Isso significa que:
 
 ### Blueprints oficiais do MVP
 
-A oficina deve trabalhar com quatro configurações base de blueprint:
+O laboratório de síntese deve trabalhar com quatro configurações base de blueprint:
 
 - Configuração A: quatro slots simples;
 - Configuração B: um slot duplo e dois slots simples;
@@ -123,7 +123,7 @@ Esses blueprints representam distribuições de valência e funcionam como forma
 
 ### Recursos manipuláveis
 
-Na oficina, o jogador poderá trabalhar com:
+No laboratório de síntese, o jogador poderá trabalhar com:
 
 - blueprint disponível na fase;
 - slots visuais vazios ou preenchidos;
@@ -144,7 +144,7 @@ Isso significa que:
 
 ### Sistema de interação por slots
 
-A oficina deve operar por preenchimento de slots:
+O laboratório de síntese deve operar por preenchimento de slots:
 
 - slots vazios aparecem como círculos ou encaixes visuais;
 - ao clicar em um slot, o jogador escolhe um elemento no inventário contextual;
@@ -189,14 +189,14 @@ Se houver erro estrutural, o jogo deve retornar uma mensagem curta, clara e obje
 - a estrutura colapsou;
 - não foi possível criar a molécula.
 
-### Camada visual da oficina
+### Camada visual do laboratório de síntese
 
-A oficina molecular deve ser apresentada como uma interface ritual-científica com:
+O laboratório de síntese deve ser apresentado como uma interface ritual-científica com:
 
 - carbono central em destaque;
 - slots distribuídos visualmente conforme o blueprint;
 - action bar destacada;
-- animação de forja em caso de sucesso;
+- animação de síntese em caso de sucesso;
 - leitura clara de estados vazios, preenchidos, válidos e inválidos.
 
 A especificação visual dessa camada deve permanecer alinhada com `docs/visual/ui-system.md` e `docs/visual/visual-direction.md`.
@@ -300,7 +300,7 @@ Fragmentos estruturais, como ligação dupla ou estrutura aromática, fazem part
 Eles servem para:
 
 - marcar avanço conceitual;
-- liberar novas possibilidades na oficina;
+- liberar novas possibilidades no laboratório de síntese;
 - introduzir novos tipos de estrutura;
 - reforçar o aprendizado por etapas.
 
@@ -311,7 +311,7 @@ No início, o jogador pode construir apenas estruturas com ligações simples.
 Ao desbloquear a ligação dupla:
 
 - recebe a explicação correspondente;
-- passa a poder selecionar essa opção na oficina;
+- passa a poder selecionar essa opção no laboratório de síntese;
 - amplia o conjunto de moléculas construíveis.
 
 ## Seleção da molécula-resposta
@@ -507,7 +507,7 @@ Toda mecânica deve ser compreensível e ter valor pedagógico claro.
 
 ### 2. Liberdade controlada
 
-A oficina deve permitir experimentação sem se transformar em sistema complexo demais para o MVP.
+O laboratório de síntese deve permitir experimentação sem se transformar em sistema complexo demais para o MVP.
 
 ### 3. Clareza de progressão
 

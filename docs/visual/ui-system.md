@@ -17,7 +17,7 @@ O MVP deve ser organizado em quatro camadas visuais:
 
 1. cena de fase;
 2. painéis de contexto;
-3. oficina molecular;
+3. laboratório de síntese;
 4. cartas e feedback.
 
 ## Componentes principais
@@ -29,7 +29,7 @@ Responsável por:
 - fundo da fase;
 - título do capítulo e da fase;
 - atmosfera visual;
-- enquadramento da oficina.
+- enquadramento do laboratório de síntese.
 
 ### LorePanel
 
@@ -76,7 +76,7 @@ Responsável por:
 
 Responsável por:
 
-- resultado da forja;
+- resultado da síntese;
 - feedback narrativo;
 - recompensas;
 - progressão para próxima fase.
@@ -115,18 +115,18 @@ Essas convenções devem cobrir, no mínimo:
 - seleção ou destaque ativo;
 - sucesso ou concluído quando aplicável.
 
-## Sistema de oficina molecular
+## Sistema de laboratório de síntese
 
 ### Estrutura oficial
 
-A oficina visual do MVP deve ser composta por:
+O laboratório de síntese visual do MVP deve ser composto por:
 
 - núcleo central de carbono;
 - blueprints selecionáveis;
 - slots vazios;
 - slots preenchidos;
 - action bar;
-- animação de forja;
+- animação de síntese;
 - retorno de estabilidade ou colapso.
 
 ### Regra de blueprint
@@ -177,7 +177,7 @@ Priorizar composição com cena central, painéis laterais e ação visível sem
 Reorganizar a interface em fluxo vertical:
 
 - narrativa;
-- oficina;
+- laboratório de síntese;
 - ação;
 - cartas;
 - feedback.

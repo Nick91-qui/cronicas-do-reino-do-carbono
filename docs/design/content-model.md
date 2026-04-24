@@ -488,7 +488,7 @@ const chapter1phase3: Phase = {
   rewards: {
     carbon: 1,
     unlockedMolecule: "propano",
-    unlockedTitle: "Forjador de Cadeias",
+    unlockedTitle: "Sintetista de Cadeias",
   },
   feedback: {
     excellent:
@@ -545,7 +545,7 @@ Exemplos:
 A estrutura aromática é modelada de duas formas:
 
 - como fragmento desbloqueável
-- como tipo estrutural especial disponível na oficina
+- como tipo estrutural especial disponível no laboratório de síntese
 
 ## Modelo de submissão da fase
 
@@ -663,7 +663,7 @@ const metano = {
         badgeLabel: "Desbloqueada",
       },
       newly_created: {
-        badgeLabel: "Forjada",
+        badgeLabel: "Sintetizada",
       },
       selected: {
         badgeLabel: "Selecionada",

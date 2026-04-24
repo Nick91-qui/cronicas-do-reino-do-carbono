@@ -95,7 +95,7 @@ Aumentar o peso visual dos estados interativos e do retorno das ações.
 Objetivos:
 
 - tornar mais distintos os estados normal, hover, ativo, selecionado, bloqueado, erro, sucesso e concluído;
-- reforçar feedback da forja, leitura de resultado e progressão;
+- reforçar feedback da síntese, leitura de resultado e progressão;
 - substituir feedbacks com aparência de formulário/app por linguagem de sistema do jogo.
 
 #### 5. Coleção e recompensa
