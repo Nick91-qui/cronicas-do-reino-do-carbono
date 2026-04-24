@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 import { getChapterProgressView } from "@/lib/progress/queries";
@@ -57,51 +58,44 @@ export default async function ChapterPage({
   const progressPercent = Math.round((completedCount / progress.totalPhases) * 100);
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
+    <ProtectedScene
+      eyebrow="Mapa do capitulo"
+      ambientLabel="Camara de cristalizacao"
+      imageSrc="/visual/protected/camara-cristalizacao.png"
+      imageAlt="Camara de cristalizacao do castelo."
+      title={progress.chapterTitle}
+      description={`O mapa do dominio mostra os portoes ja respondidos, os selos conquistados e a proxima prova que reconhece o nome de ${player.displayName}.`}
+      stats={
+        <>
+          <div className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Selos conquistados</p>
+            <p className="pt-2 font-display text-3xl text-white">{completedCount}</p>
+          </div>
+          <div className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Portoes abertos</p>
+            <p className="pt-2 font-display text-3xl text-white">{unlockedCount}</p>
+          </div>
+          <div className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Aprendiz em campo</p>
+            <p className="pt-2 text-sm text-slate-100">{player.displayName}</p>
+          </div>
+        </>
+      }
+    >
       <section className="game-shell">
-        <div className="relative grid gap-6 xl:grid-cols-[1.15fr,0.85fr]">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-chip">Mapa do capitulo</span>
-              <span className="hud-chip border-gold/20 text-gold/90">Capitulo I</span>
-            </div>
-            <h1 className="pt-5 text-4xl tracking-[0.06em] text-white sm:text-5xl">
-              {progress.chapterTitle}
-            </h1>
-            <p className="max-w-3xl pt-4 text-sm leading-7 text-slate-300 sm:text-base">
-              O mapa do dominio mostra os portoes ja respondidos, os selos conquistados e a proxima
-              prova que reconhece o nome de {player.displayName}.
-            </p>
-            <div className="mt-6 h-3 overflow-hidden rounded-full border border-white/10 bg-slate-950/70">
-              <div
-                className="h-full rounded-full bg-[linear-gradient(90deg,rgba(56,189,248,0.92),rgba(245,158,11,0.92))]"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-            <p className="pt-3 text-sm text-slate-300">
-              {completedCount} de {progress.totalPhases} provas dominadas. Portao mais distante:
-              {" "}prova {progress.highestUnlockedPhaseNumber}.
-            </p>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-            <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Selos conquistados</p>
-              <p className="pt-2 font-display text-3xl text-white">{completedCount}</p>
-            </div>
-            <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Portoes abertos</p>
-              <p className="pt-2 font-display text-3xl text-white">{unlockedCount}</p>
-            </div>
-            <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Aprendiz em campo</p>
-              <p className="pt-2 text-sm text-slate-100">{player.displayName}</p>
-            </div>
-          </div>
+        <div className="h-3 overflow-hidden rounded-full border border-white/10 bg-slate-950/70">
+          <div
+            className="h-full rounded-full bg-[linear-gradient(90deg,rgba(56,189,248,0.92),rgba(245,158,11,0.92))]"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
+        <p className="pt-3 text-sm text-slate-300">
+          {completedCount} de {progress.totalPhases} provas dominadas. Portao mais distante: prova{" "}
+          {progress.highestUnlockedPhaseNumber}.
+        </p>
       </section>
 
-      <section className="mt-6 grid gap-4">
+      <section className="grid gap-4">
         {progress.phases.map((phase) => {
           const stateCopy = getPhaseStateCopy(phase);
           const nodeClass = phase.isCompleted
@@ -185,6 +179,6 @@ export default async function ChapterPage({
           );
         })}
       </section>
-    </main>
+    </ProtectedScene>
   );
 }
