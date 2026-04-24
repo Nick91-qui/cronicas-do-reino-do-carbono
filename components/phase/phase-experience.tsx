@@ -111,8 +111,8 @@ const stepCopy: Record<
   { eyebrow: string; title: string; description: string }
 > = {
   intro: {
-    eyebrow: "Chamado",
-    title: "Chamado do rito",
+    eyebrow: "Prova",
+    title: "Prova do rito",
     description:
       "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
   },
@@ -682,7 +682,7 @@ export function PhaseExperience({
                       }`}
                     >
                       {step === "intro"
-                        ? "Chamado"
+                        ? "Prova"
                         : step === "synthesis"
                           ? "Sintese"
                           : step === "select"
