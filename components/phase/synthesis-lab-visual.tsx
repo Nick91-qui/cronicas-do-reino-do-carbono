@@ -581,7 +581,7 @@ export function SynthesisLabVisual({
           disabled={isValidatingBuilder}
           className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isValidatingBuilder ? "Consultando a mesa..." : "Consultar a mesa"}
+          {isValidatingBuilder ? "Realizando sintese..." : "Realizar sintese"}
         </button>
       </div>
     </div>
