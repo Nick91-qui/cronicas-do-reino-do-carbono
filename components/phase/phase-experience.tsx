@@ -314,11 +314,11 @@ export function PhaseExperience({
     : true;
   const canAdvanceFromRead = selectedProperties.length > 0;
   const displayedStep = renderedStep;
-  const createdMolecule =
+  const synthesizedMolecule =
     molecules.find(
       (molecule) => molecule.id === builderResult?.resolvedMoleculeId,
     ) ?? null;
-  const focusedMolecule = selectedMolecule ?? createdMolecule;
+  const focusedMolecule = selectedMolecule ?? synthesizedMolecule;
   const availableSteps = getAvailablePhaseSteps(
     supportsBuilder,
     supportsMoleculeSelection,
@@ -469,7 +469,7 @@ export function PhaseExperience({
         | null;
 
       const elapsed = Date.now() - startedAt;
-      const remainingDelay = Math.max(0, minimumForgeFeedbackMs - elapsed);
+      const remainingDelay = Math.max(0, minimumSynthesisFeedbackMs - elapsed);
 
       if (remainingDelay > 0) {
         await new Promise((resolve) =>
@@ -593,7 +593,7 @@ export function PhaseExperience({
       return;
     }
 
-    if (currentStep === "forge") {
+    if (currentStep === "synthesis") {
       navigateToStep(supportsMoleculeSelection ? "select" : "read", "forward");
       return;
     }
@@ -664,7 +664,7 @@ export function PhaseExperience({
                   const isDone =
                     step === "intro"
                       ? true
-                      : step === "forge"
+                      : step === "synthesis"
                         ? canAdvanceFromForge
                         : step === "select"
                           ? canAdvanceFromSelect
@@ -683,7 +683,7 @@ export function PhaseExperience({
                     >
                       {step === "intro"
                         ? "Chamado"
-                        : step === "forge"
+                        : step === "synthesis"
                           ? "Sintese"
                           : step === "select"
                             ? "Carta"
