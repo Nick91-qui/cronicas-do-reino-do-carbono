@@ -709,7 +709,7 @@ export function PhaseExperience({
           <div className="mx-auto grid max-w-6xl gap-4 lg:gap-5 xl:grid-cols-[1.25fr,0.75fr]">
             <article className="game-panel border-cyan-300/15 p-6 sm:p-8">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Chamado do reino
+                Prova do reino
               </p>
               <p className="mt-5 text-base leading-8 text-slate-100">
                 {phase.narrative}
