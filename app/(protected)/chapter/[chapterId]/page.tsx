@@ -24,7 +24,7 @@ function getPhaseStateCopy(phase: {
     return {
       seal: "Disponivel",
       toneClass: "border-cyan-300/25 bg-cyan-400/10 text-cyan-100",
-      summary: "O portao desta prova acaba de se abrir. A forja aguarda sua proxima decisao.",
+      summary: "O portao desta prova acaba de se abrir. O laboratorio de sintese aguarda sua proxima decisao.",
       meritLabel: phase.bestScore > 0 ? "Forca obtida" : "Prova a conquistar",
       actionLabel: "Enfrentar prova",
     };

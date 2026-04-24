@@ -99,9 +99,9 @@ const resultTitleByKind: Record<
   PersistedResponse["evaluation"]["qualitativeResult"],
   string
 > = {
-  excellent: "Forja exemplar",
+  excellent: "Sintese exemplar",
   adequate: "Passagem promissora",
-  inadequate: "Forja instavel",
+  inadequate: "Sintese instavel",
 };
 
 const minimumForgeFeedbackMs = 900;
@@ -117,7 +117,7 @@ const stepCopy: Record<
       "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
   },
   forge: {
-    eyebrow: "Rito da forja",
+    eyebrow: "Rito da sintese",
     title: "Moldar a estrutura",
     description:
       "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
@@ -480,7 +480,7 @@ export function PhaseExperience({
       if (!response.ok) {
         setBuilderError(
           (json as { error?: string } | null)?.error ??
-            "A mesa de forja nao conseguiu reconhecer sua estrutura.",
+            "A mesa de sintese nao conseguiu reconhecer sua estrutura.",
         );
         setBuilderResult(null);
         return;
@@ -684,7 +684,7 @@ export function PhaseExperience({
                       {step === "intro"
                         ? "Chamado"
                         : step === "forge"
-                          ? "Forja"
+                          ? "Sintese"
                           : step === "select"
                             ? "Carta"
                             : "Leitura"}
@@ -829,7 +829,7 @@ export function PhaseExperience({
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
                     Origem:{" "}
                     <span className="font-semibold text-white">
-                      {createdMolecule ? "mesa de forja" : "comparacao direta"}
+                      {createdMolecule ? "laboratorio de sintese" : "comparacao direta"}
                     </span>
                   </div>
                 </div>
@@ -913,7 +913,7 @@ export function PhaseExperience({
                   <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-400">
                     {supportsMoleculeSelection
                       ? "Selecione uma carta para comparar com as propriedades exigidas pela prova."
-                      : "A forja ainda nao gerou uma carta reconhecida para esta etapa."}
+                      : "O laboratorio de sintese ainda nao gerou uma carta reconhecida para esta etapa."}
                   </div>
                 )}
               </div>
@@ -932,7 +932,7 @@ export function PhaseExperience({
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
                     Origem:{" "}
                     <span className="font-semibold text-white">
-                      {createdMolecule ? "mesa de forja" : "comparacao direta"}
+                      {createdMolecule ? "laboratorio de sintese" : "comparacao direta"}
                     </span>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">

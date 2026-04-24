@@ -22,7 +22,7 @@ export default async function CollectionPage() {
               Cartas inscritas por {player.displayName}
             </h1>
             <p className="max-w-3xl pt-4 text-sm leading-7 text-slate-300 sm:text-base">
-              Esta sala guarda as moleculas ja reconhecidas pela forja. Cada carta funciona como memoria
+              Esta sala guarda as moleculas ja reconhecidas pelo laboratorio de sintese. Cada carta funciona como memoria
               de progresso, consulta tecnica e recompensa do capitulo.
             </p>
           </div>

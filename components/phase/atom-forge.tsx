@@ -159,8 +159,8 @@ export function AtomForge({
               </p>
               <p className="mt-2 text-lg font-black tracking-tight text-slate-100 sm:text-xl">
                 {builderResult.canCreateMolecule
-                  ? "Estrutura reconhecida pela forja."
-                  : "A estrutura ainda nao foi aceita pela forja."}
+                  ? "Estrutura reconhecida pelo laboratorio de sintese."
+                  : "A estrutura ainda nao foi aceita pelo laboratorio de sintese."}
               </p>
               <p className="mt-2 text-sm leading-6 text-slate-400">
                 {builderResult.canCreateMolecule

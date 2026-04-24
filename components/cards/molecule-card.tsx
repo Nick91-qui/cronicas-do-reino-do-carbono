@@ -104,7 +104,7 @@ function getBadgeLabel(props: MoleculeCardProps): string | null {
   if (props.isCreated) {
     return (
       props.molecule.visual.stateVariants?.newly_created?.badgeLabel ??
-      "Forjada"
+      "Sintetizada"
     );
   }
 

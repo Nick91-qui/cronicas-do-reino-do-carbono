@@ -9,7 +9,7 @@ export default function RegisterPage() {
       <div className="pb-8 text-center text-sm text-slate-400">
         Ja possui marca de aprendiz?{" "}
         <Link href="/login" className="font-semibold text-gold">
-          Retorne a oficina
+          Retorne ao laboratorio
         </Link>
       </div>
     </div>

@@ -6,7 +6,7 @@ const highlights = [
     description: "Enfrente desafios que exigem leitura atenta das ligacoes e dominio das formas do carbono.",
   },
   {
-    title: "Forja de Moleculas",
+    title: "Sintese de Moleculas",
     description: "Aprenda a reconhecer estruturas, escolher caminhos e agir como um aprendiz da materia.",
   },
   {
@@ -32,7 +32,7 @@ export default function HomePage() {
                 O Reino do Carbono aguarda um novo aprendiz.
               </h1>
               <p className="max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-                Atravesse a forja inicial, domine as primeiras estruturas e prove que sua mente e digna da arte alquimica.
+                Atravesse o laboratorio de sintese inicial, domine as primeiras estruturas e prove que sua mente e digna da arte alquimica.
               </p>
             </div>
 
@@ -41,7 +41,7 @@ export default function HomePage() {
                 href="/login"
                 className="rounded-2xl bg-cyan-300 px-6 py-3.5 text-center text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-cyan-200"
               >
-                Adentrar a forja
+                Entrar no laboratorio
               </Link>
               <Link
                 href="/register"
@@ -54,7 +54,7 @@ export default function HomePage() {
 
           <aside className="rounded-[28px] border border-cyan-300/15 bg-white/5 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.48)] backdrop-blur sm:rounded-[32px] sm:p-6">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80 sm:text-xs">
-              Chamado da Oficina Central
+              Chamado do Laboratorio Central
             </p>
             <p className="mt-4 text-xl font-black tracking-tight text-white sm:text-2xl">
               As ligacoes do reino nao obedecem ao acaso.

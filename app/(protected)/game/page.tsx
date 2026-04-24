@@ -31,7 +31,7 @@ export default async function GamePage() {
               <span className="hud-chip border-gold/20 text-gold/90">Capitulo I em curso</span>
             </div>
             <h1 className="pt-5 text-4xl tracking-[0.06em] text-white sm:text-5xl">
-              A forja chama {player.displayName} de volta ao circulo das provas.
+              O laboratorio de sintese chama {player.displayName} de volta ao circulo das provas.
             </h1>
             <p className="max-w-3xl pt-4 text-sm leading-7 text-slate-300 sm:text-base">
               O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas
@@ -111,7 +111,7 @@ export default async function GamePage() {
                     {phase.isCompleted
                       ? `Melhor pontuacao: ${phase.bestScore}`
                       : phase.isUnlocked
-                        ? "A forja desta etapa esta pronta para sua tentativa."
+                        ? "O laboratorio desta etapa esta pronto para sua tentativa."
                         : "A prova aguarda a quebra do selo anterior."}
                   </p>
                 </Link>
@@ -122,7 +122,7 @@ export default async function GamePage() {
 
         <div className="grid gap-4">
           <article className="game-panel">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">Estado da oficina</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">Estado do laboratorio</p>
             <dl className="mt-5 grid gap-3 text-sm text-slate-300">
               <div className="game-panel-muted">
                 <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Carbonos na bancada</dt>

@@ -25,7 +25,7 @@ const copyByMode: Record<
 > = {
   login: {
     eyebrow: "Rito de Retorno",
-    sideTitle: "Retorne a oficina e reassuma seu lugar diante da forja.",
+    sideTitle: "Retorne ao laboratorio de sintese e reassuma seu lugar diante das estruturas.",
     sideDescription:
       "Seu nome ja foi inscrito entre os aprendizes. Informe suas credenciais e volte ao ponto em que sua jornada alquimica foi interrompida.",
     sideHighlights: [
@@ -38,19 +38,19 @@ const copyByMode: Record<
         description: "Cruze o portal e volte direto as provas estruturais que aguardam sua proxima decisao.",
       },
     ],
-    title: "Retornar a oficina",
+    title: "Retornar ao laboratorio",
     description: "Informe seu nome de oficio e sua chave sigilosa para retomar os estudos alquimicos.",
     submitLabel: "Cruzar o portal",
     endpoint: "/api/auth/login",
   },
   register: {
     eyebrow: "Rito de Ingresso",
-    sideTitle: "Toda grande forja comeca quando um nome e aceito pelo reino.",
+    sideTitle: "Toda grande sintese comeca quando um nome e aceito pelo reino.",
     sideDescription:
-      "Apresente os sinais exigidos pela oficina, assuma seu nome no grimorio e receba a primeira marca de aprendiz.",
+      "Apresente os sinais exigidos pelo laboratorio, assuma seu nome no grimorio e receba a primeira marca de aprendiz.",
     sideHighlights: [
       {
-        title: "Codigo da oficina",
+        title: "Codigo do laboratorio",
         description: "Use o codigo da turma para ingressar no mesmo circulo de estudos conduzido pelo mestre.",
       },
       {
@@ -161,7 +161,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               {mode === "register" ? (
                 <>
                   <label className="block text-sm">
-                    <span className="mb-2 block text-slate-200">Codigo da oficina</span>
+                    <span className="mb-2 block text-slate-200">Codigo do laboratorio</span>
                     <input
                       name="classroomCode"
                       required
