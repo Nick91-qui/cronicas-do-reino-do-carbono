@@ -829,7 +829,7 @@ export function PhaseExperience({
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
                     Origem:{" "}
                     <span className="font-semibold text-white">
-                      {createdMolecule ? "laboratorio de sintese" : "comparacao direta"}
+                      {synthesizedMolecule ? "laboratorio de sintese" : "comparacao direta"}
                     </span>
                   </div>
                 </div>
@@ -932,7 +932,7 @@ export function PhaseExperience({
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
                     Origem:{" "}
                     <span className="font-semibold text-white">
-                      {createdMolecule ? "laboratorio de sintese" : "comparacao direta"}
+                      {synthesizedMolecule ? "laboratorio de sintese" : "comparacao direta"}
                     </span>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
