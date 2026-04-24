@@ -1,11 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { MoleculeCard } from "@/components/cards/molecule-card";
+import {
+  bondTypeLabels,
+  formatSelectableProperty,
+  fragmentToBondType,
+  getSceneImageByStep,
+  type PersistedResponse,
+  type PhaseStep,
+} from "@/components/phase/phase-experience-shared";
+import { PhaseResultPanel } from "@/components/phase/phase-result-panel";
+import { PhaseRitualConsole } from "@/components/phase/phase-ritual-console";
+import { PhaseStepHeader } from "@/components/phase/phase-step-header";
 import { SynthesisLab } from "@/components/phase/synthesis-lab";
 
 import type {
@@ -24,7 +33,6 @@ import {
   normalizeBondOrders,
 } from "@/lib/builder/graph-preview";
 import type {
-  BondType,
   Molecule,
   MoleculeId,
   Phase,
@@ -32,138 +40,13 @@ import type {
 } from "@/lib/content/types";
 import type { ChapterProgressView } from "@/lib/progress/queries";
 
-type PersistedResponse = {
-  evaluation: {
-    phaseId: string;
-    selectedMoleculeId: MoleculeId | null;
-    selectedProperties: SelectableProperty[];
-    qualitativeResult: "excellent" | "adequate" | "inadequate";
-    validationResult: "correct" | "incorrect";
-    scoreAwarded: 0 | 2 | 3;
-    expectedPropertiesMatched: SelectableProperty[];
-    feedback: string;
-  };
-  persistence: {
-    phaseSummary: {
-      isCompleted: boolean;
-      bestScore: number;
-      attemptCount: number;
-    };
-    chapterProgress: {
-      highestUnlockedPhaseNumber: number;
-      completedPhaseCount: number;
-      chapterScore: number;
-    };
-    inventory: {
-      carbonAvailable: number;
-      unlockedFragments: string[];
-      unlockedMolecules: string[];
-      unlockedTitles: string[];
-    };
-    grantedRewards: Array<{
-      rewardType: string;
-      rewardValue: string;
-    }>;
-  };
-};
-
 type PhaseExperienceProps = {
   phase: Phase;
   molecules: Molecule[];
   chapterProgress: ChapterProgressView;
 };
 
-type PhaseStep = "intro" | "synthesis" | "select" | "read" | "result";
-
-const fragmentToBondType = {
-  ligacao_simples: "single",
-  ligacao_dupla: "double",
-  estrutura_aromatica: "aromatic",
-} as const satisfies Record<string, BondType>;
-
-const bondTypeLabels: Record<BondType, string> = {
-  single: "Ligacao simples",
-  double: "Ligacao dupla",
-  aromatic: "Estrutura aromatica",
-};
-
-const resultToneClass: Record<
-  PersistedResponse["evaluation"]["qualitativeResult"],
-  string
-> = {
-  excellent: "border-emerald-400/35 bg-emerald-500/12 text-emerald-100",
-  adequate: "border-amber-400/35 bg-amber-500/12 text-amber-100",
-  inadequate: "border-rose-400/35 bg-rose-500/12 text-rose-100",
-};
-
-const resultTitleByKind: Record<
-  PersistedResponse["evaluation"]["qualitativeResult"],
-  string
-> = {
-  excellent: "Sintese exemplar",
-  adequate: "Passagem promissora",
-  inadequate: "Sintese instavel",
-};
-
 const minimumSynthesisFeedbackMs = 900;
-
-const stepCopy: Record<
-  Exclude<PhaseStep, "result">,
-  { eyebrow: string; title: string; description: string }
-> = {
-  intro: {
-    eyebrow: "Prova",
-    title: "Prova do rito",
-    description:
-      "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
-  },
-  synthesis: {
-    eyebrow: "Rito da sintese",
-    title: "Moldar a estrutura",
-    description:
-      "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
-  },
-  select: {
-    eyebrow: "Escolha da carta",
-    title: "Definir a carta",
-    description:
-      "A leitura separa primeiro a escolha da carta. So depois voce avanca para classificar suas propriedades.",
-  },
-  read: {
-    eyebrow: "Rito da leitura",
-    title: "Classificar e sustentar",
-    description:
-      "Com a carta ja definida, esta etapa fica dedicada apenas a marcar propriedades e sustentar o julgamento.",
-  },
-};
-
-function getSceneImageByStep(step: PhaseStep): {
-  src: string;
-  alt: string;
-  ambient: string;
-} {
-  if (step === "intro") {
-    return {
-      src: "/visual/protected/camara-cristalizacao.png",
-      alt: "Camara ritual do castelo.",
-      ambient: "Camara ritual",
-    };
-  }
-
-  if (step === "result") {
-    return {
-      src: "/visual/protected/salao-cristalizacao.png",
-      alt: "Salao de julgamento do castelo.",
-      ambient: "Salao de julgamento",
-    };
-  }
-
-  return {
-    src: "/visual/auth/laboratorio-da-sintese.png",
-    alt: "Laboratorio de sintese do castelo.",
-    ambient: "Laboratorio de sintese",
-  };
-}
 
 function getNextPhaseHref(
   chapterProgress: ChapterProgressView,
@@ -173,10 +56,6 @@ function getNextPhaseHref(
     (phase) => phase.phaseNumber === currentPhaseNumber + 1,
   );
   return nextPhase?.isUnlocked ? `/phase/${nextPhase.phaseId}` : null;
-}
-
-function formatSelectableProperty(property: SelectableProperty): string {
-  return property.replaceAll("_", " ");
 }
 
 function isPhaseStep(value: string | null): value is PhaseStep {
@@ -651,92 +530,16 @@ export function PhaseExperience({
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
-      <section className="relative isolate overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/55 shadow-[0_30px_120px_rgba(2,6,23,0.46)]">
-        <div className="absolute inset-0">
-          <Image src={scene.src} alt={scene.alt} fill priority sizes="100vw" className="object-cover object-center" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(4,7,15,0.92)_0%,rgba(4,7,15,0.76)_56%,rgba(4,7,15,0.88)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(103,232,249,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.12),transparent_20%)]" />
-        </div>
-
-        <div className="relative px-5 py-6 sm:px-8 sm:py-8">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-              <span>Capitulo I · Prova {phase.number}</span>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="hud-chip">Rito em curso</span>
-                <span className="hud-chip border-gold/20 text-gold/90">
-                  Passo {visibleProgressStep} de {totalSteps}
-                </span>
-              </div>
-            </div>
-
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.9),rgba(103,232,249,0.9))] transition-[width] duration-300"
-                style={{ width: `${(visibleProgressStep / totalSteps) * 100}%` }}
-              />
-            </div>
-
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-              <div className="max-w-3xl">
-                <div className="mb-3 inline-flex rounded-full border border-white/10 bg-slate-950/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100 backdrop-blur-md">
-                  {scene.ambient}
-                </div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
-                  {displayedStep === "result"
-                    ? "Desfecho"
-                    : stepCopy[displayedStep].eyebrow}
-                </p>
-                <h1 className="mt-2 text-3xl tracking-[0.05em] text-white sm:text-4xl">
-                  {phase.title}
-                </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-                  {displayedStep === "result"
-                    ? "O resultado fica isolado no centro da tela para leitura imediata, sem competir com o restante da interface."
-                    : stepCopy[displayedStep].description}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-                {availableSteps
-                  .filter((step) => step !== "result")
-                  .map((step) => {
-                    const isActive = displayedStep === step;
-                    const isDone =
-                      step === "intro"
-                        ? true
-                        : step === "synthesis"
-                          ? canAdvanceFromForge
-                          : step === "select"
-                            ? canAdvanceFromSelect
-                            : canAdvanceFromRead;
-
-                    return (
-                      <div
-                        key={step}
-                        className={`rounded-full border px-3 py-1.5 text-center text-[10px] font-black uppercase tracking-[0.16em] backdrop-blur ${
-                          isActive
-                            ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
-                            : isDone
-                              ? "border-emerald-300/25 bg-emerald-500/10 text-emerald-100"
-                              : "border-white/10 bg-white/5 text-slate-400"
-                        }`}
-                      >
-                        {step === "intro"
-                          ? "Prova"
-                          : step === "synthesis"
-                            ? "Sintese"
-                            : step === "select"
-                              ? "Carta"
-                              : "Leitura"}
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PhaseStepHeader
+        phaseNumber={phase.number}
+        phaseTitle={phase.title}
+        displayedStep={displayedStep}
+        availableSteps={availableSteps}
+        scene={scene}
+        canAdvanceFromForge={canAdvanceFromForge}
+        canAdvanceFromRead={canAdvanceFromRead}
+        canAdvanceFromSelect={canAdvanceFromSelect}
+      />
 
       <section
         className={`mt-5 transition-all duration-200 sm:mt-6 ${
@@ -1048,185 +851,31 @@ export function PhaseExperience({
         ) : null}
 
         {displayedStep === "result" && submitResult ? (
-          <section className="relative isolate mx-auto max-w-5xl overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/60 p-4 shadow-[0_30px_100px_rgba(2,6,23,0.42)] sm:p-6">
-            <div className="absolute inset-0">
-              <Image
-                src="/visual/protected/salao-cristalizacao.png"
-                alt="Salao de julgamento do castelo."
-                fill
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,7,15,0.32),rgba(4,7,15,0.82)_45%,rgba(4,7,15,0.94)_100%)]" />
-            </div>
-
-            <div className="relative">
-              <div
-                className={`rounded-[28px] border p-6 backdrop-blur-md sm:p-8 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">
-                  Julgamento do reino
-                </p>
-                <h3 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-                  {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
-                </h3>
-                <p className="mt-4 text-sm leading-7 text-white/90">
-                  {submitResult.evaluation.feedback}
-                </p>
-
-                <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                    <p className="opacity-70">Forca obtida</p>
-                    <p className="mt-1 text-2xl font-black">
-                      {submitResult.evaluation.scoreAwarded}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                    <p className="opacity-70">Sentenca</p>
-                    <p className="mt-1 text-lg font-semibold capitalize">
-                      {submitResult.evaluation.validationResult}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                    <p className="opacity-70">Molecula apresentada</p>
-                    <p className="mt-1 text-lg font-semibold">
-                      {focusedMolecule?.nomeQuimico ?? "Nao definida"}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                    <p className="opacity-70">Marcas alinhadas</p>
-                    <p className="mt-1 text-lg font-semibold">
-                      {submitResult.evaluation.expectedPropertiesMatched.length}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                  <p className="text-slate-500">Provas vencidas</p>
-                  <p className="mt-1 text-lg font-semibold text-slate-100">
-                    {submitResult.persistence.chapterProgress.completedPhaseCount}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                  <p className="text-slate-500">Prestigio no dominio</p>
-                  <p className="mt-1 text-lg font-semibold text-slate-100">
-                    {submitResult.persistence.chapterProgress.chapterScore}
-                  </p>
-                </div>
-              </div>
-
-              {submitResult.persistence.grantedRewards.length > 0 ? (
-                <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                  Sinais recebidos:{" "}
-                  {submitResult.persistence.grantedRewards
-                    .map((reward) => `${reward.rewardType}:${reward.rewardValue}`)
-                    .join(", ")}
-                </div>
-              ) : null}
-
-              <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={handleRetryFromResult}
-                  className="ritual-link px-5 py-3 text-sm"
-                >
-                  Renovar leitura
-                </button>
-                <Link
-                  href={nextPhaseActionHref ?? "/game"}
-                  className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
-                >
-                  {nextPhaseActionHref
-                    ? "Seguir para a proxima prova"
-                    : "Voltar ao jogo"}
-                </Link>
-              </div>
-            </div>
-          </section>
+          <PhaseResultPanel
+            focusedMolecule={focusedMolecule}
+            nextPhaseActionHref={nextPhaseActionHref}
+            submitResult={submitResult}
+            onRetry={handleRetryFromResult}
+          />
         ) : null}
       </section>
 
       {currentStep !== "result" ? (
-        <section className="sticky bottom-3 z-10 mt-6 supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:supports-[padding:max(0px)]:pb-0">
-          <div className="ritual-console px-3 py-3 sm:px-5 sm:py-4">
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-cyan-100/85">
-                  Console do rito
-                </p>
-                <p className="mt-1 hidden text-xs uppercase tracking-[0.18em] text-slate-400 sm:block">
-                  {displayedStep === "intro"
-                    ? "Leia o chamado antes de entrar no rito."
-                    : displayedStep === "synthesis"
-                      ? "A estrutura precisa ser aceita pela mesa."
-                      : displayedStep === "select"
-                        ? "Escolha uma carta antes de seguir."
-                        : "Marque propriedades e entregue o julgamento."}
-                </p>
-              </div>
-
-              <div className="hidden items-center gap-2 lg:flex">
-                {availableSteps
-                  .filter((step) => step !== "result")
-                  .map((step) => (
-                    <span
-                      key={`console-${step}`}
-                      className={`h-2.5 w-2.5 rounded-full ${
-                        displayedStep === step
-                          ? "bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.55)]"
-                          : "bg-white/15"
-                      }`}
-                    />
-                  ))}
-              </div>
-
-              <div className="flex items-center gap-2 sm:gap-3">
-                <button
-                  type="button"
-                  onClick={goBack}
-                  className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
-                  data-tone="back"
-                  aria-label={currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"}
-                >
-                  &lt;
-                </button>
-
-                {currentStep !== "read" ? (
-                  <button
-                    type="button"
-                    onClick={goForward}
-                    disabled={
-                      (currentStep === "intro" && !canAdvanceFromIntro) ||
-                      (currentStep === "synthesis" && !canAdvanceFromForge) ||
-                      (currentStep === "select" && !canAdvanceFromSelect)
-                    }
-                    className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
-                    data-tone="forward"
-                    aria-label="Avançar"
-                  >
-                    &gt;
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={
-                      isSubmitting ||
-                      !canAdvanceFromRead ||
-                      (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
-                    }
-                    className="ritual-console-action min-w-[10.5rem] px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] sm:min-w-[11rem] sm:px-4 sm:py-3 sm:text-sm"
-                    data-tone="forward"
-                  >
-                    {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
+        <PhaseRitualConsole
+          availableSteps={availableSteps}
+          canAdvanceFromForge={canAdvanceFromForge}
+          canAdvanceFromIntro={canAdvanceFromIntro}
+          canAdvanceFromRead={canAdvanceFromRead}
+          canAdvanceFromSelect={canAdvanceFromSelect}
+          currentStep={currentStep}
+          displayedStep={displayedStep}
+          effectiveSelectedMoleculeId={effectiveSelectedMoleculeId}
+          isSubmitting={isSubmitting}
+          onBack={goBack}
+          onForward={goForward}
+          onSubmit={handleSubmit}
+          supportsMoleculeSelection={supportsMoleculeSelection}
+        />
       ) : null}
     </main>
   );
