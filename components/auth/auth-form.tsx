@@ -110,112 +110,91 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <main className="mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col justify-center px-4 py-6 sm:px-6 sm:py-10 lg:py-16">
-      <section className="game-shell grid gap-4 lg:grid-cols-[1.02fr,0.98fr]">
-        <div className="grid gap-4">
-          <article className="game-panel border-cyan-300/15">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-chip">{copyByMode[mode].eyebrow}</span>
-              <span className="hud-chip border-gold/20 text-gold/90">Acesso ao reino</span>
-            </div>
-            <p className="pt-5 text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">
-              Cronicas do Reino do Carbono
-            </p>
-            <h1 className="pt-4 text-4xl tracking-[0.06em] text-white sm:text-5xl">
-              {copyByMode[mode].sideTitle}
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              {copyByMode[mode].sideDescription}
-            </p>
-          </article>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            {copyByMode[mode].sideHighlights.map((item) => (
-              <article key={item.title} className="game-panel-muted">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                  {item.title}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-200">{item.description}</p>
-              </article>
-            ))}
+    <section className="game-shell grid gap-4 lg:grid-cols-[1.02fr,0.98fr]">
+      <div className="grid gap-4">
+        <article className="game-panel border-cyan-300/15">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="hud-chip">{copyByMode[mode].eyebrow}</span>
+            <span className="hud-chip border-gold/20 text-gold/90">Acesso ao reino</span>
           </div>
+          <p className="pt-5 text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">
+            Cronicas do Reino do Carbono
+          </p>
+          <h1 className="pt-4 text-4xl tracking-[0.06em] text-white sm:text-5xl">
+            {copyByMode[mode].sideTitle}
+          </h1>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
+            {copyByMode[mode].sideDescription}
+          </p>
+        </article>
 
-          <article className="game-panel-muted">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Leitura de entrada</p>
-            <p className="mt-2 text-sm leading-6 text-slate-200">
-              A autenticacao agora compartilha a mesma moldura do jogo: sala ritual, grimorio de acesso
-              e contraste alto para leitura em desktop e mobile.
-            </p>
-          </article>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {copyByMode[mode].sideHighlights.map((item) => (
+            <article key={item.title} className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{item.title}</p>
+              <p className="mt-2 text-sm leading-6 text-slate-200">{item.description}</p>
+            </article>
+          ))}
         </div>
 
-        <div className="game-panel p-4 shadow-2xl shadow-black/20 sm:p-8">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
-            {copyByMode[mode].eyebrow}
+        <article className="game-panel-muted">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Leitura de entrada</p>
+          <p className="mt-2 text-sm leading-6 text-slate-200">
+            A autenticacao agora compartilha a mesma moldura do jogo: sala ritual, grimorio de acesso e
+            contraste alto para leitura em desktop e mobile.
           </p>
-          <h1 className="mt-3 text-2xl tracking-[0.05em] text-white sm:text-3xl">{copyByMode[mode].title}</h1>
-          <p className="mt-2 text-sm leading-6 text-slate-300">{copyByMode[mode].description}</p>
+        </article>
+      </div>
 
-          <form className="mt-6 space-y-4 sm:mt-8" onSubmit={handleSubmit}>
-            <div className="grid gap-4">
-              {mode === "register" ? (
-                <>
-                  <label className="block text-sm">
-                    <span className="mb-2 block text-slate-200">Codigo do laboratorio</span>
-                    <input
-                      name="classroomCode"
-                      required
-                      className="state-field"
-                    />
-                  </label>
-                  <label className="block text-sm">
-                    <span className="mb-2 block text-slate-200">Nome no grimorio</span>
-                    <input
-                      name="displayName"
-                      required
-                      className="state-field"
-                    />
-                  </label>
-                </>
-              ) : null}
+      <div className="game-panel p-4 shadow-2xl shadow-black/20 sm:p-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
+          {copyByMode[mode].eyebrow}
+        </p>
+        <h1 className="mt-3 text-2xl tracking-[0.05em] text-white sm:text-3xl">{copyByMode[mode].title}</h1>
+        <p className="mt-2 text-sm leading-6 text-slate-300">{copyByMode[mode].description}</p>
 
-              <label className="block text-sm">
-                <span className="mb-2 block text-slate-200">Nome de oficio</span>
-                <input
-                  name="username"
-                  required
-                  className="state-field"
-                />
-              </label>
-
-              <label className="block text-sm">
-                <span className="mb-2 block text-slate-200">Senha</span>
-                <input
-                  type="password"
-                  name="password"
-                  required
-                  className="state-field"
-                />
-              </label>
-            </div>
-
-            {error ? (
-              <p className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
-                {error}
-              </p>
+        <form className="mt-6 space-y-4 sm:mt-8" onSubmit={handleSubmit}>
+          <div className="grid gap-4">
+            {mode === "register" ? (
+              <>
+                <label className="block text-sm">
+                  <span className="mb-2 block text-slate-200">Codigo do laboratorio</span>
+                  <input name="classroomCode" required className="state-field" />
+                </label>
+                <label className="block text-sm">
+                  <span className="mb-2 block text-slate-200">Nome no grimorio</span>
+                  <input name="displayName" required className="state-field" />
+                </label>
+              </>
             ) : null}
 
-            <button
-              type="submit"
-              disabled={isPending}
-              className="state-action w-full py-3.5 sm:py-4"
-              data-tone="primary"
-            >
-              {isPending ? "Selando acesso..." : copyByMode[mode].submitLabel}
-            </button>
-          </form>
-        </div>
-      </section>
-    </main>
+            <label className="block text-sm">
+              <span className="mb-2 block text-slate-200">Nome de oficio</span>
+              <input name="username" required className="state-field" />
+            </label>
+
+            <label className="block text-sm">
+              <span className="mb-2 block text-slate-200">Senha</span>
+              <input type="password" name="password" required className="state-field" />
+            </label>
+          </div>
+
+          {error ? (
+            <p className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              {error}
+            </p>
+          ) : null}
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="state-action w-full py-3.5 sm:py-4"
+            data-tone="primary"
+          >
+            {isPending ? "Selando acesso..." : copyByMode[mode].submitLabel}
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }
