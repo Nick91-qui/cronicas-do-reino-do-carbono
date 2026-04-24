@@ -202,4 +202,57 @@ h6 {
   .state-field:focus-visible {
     background: rgba(2, 6, 23, 0.92);
   }
+
+  .ritual-console {
+    @apply relative overflow-hidden rounded-[26px] border backdrop-blur-xl;
+    border-color: rgba(var(--line-soft), 0.18);
+    background:
+      linear-gradient(120deg, rgba(255, 255, 255, 0.04), transparent 28%),
+      radial-gradient(circle at top left, rgba(var(--line), 0.16), transparent 26%),
+      radial-gradient(circle at bottom right, rgba(var(--gold), 0.12), transparent 24%),
+      linear-gradient(180deg, rgba(4, 8, 18, 0.94), rgba(6, 10, 22, 0.9));
+    box-shadow:
+      0 22px 48px rgba(2, 6, 23, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .ritual-console::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    opacity: 0.55;
+  }
+
+  .ritual-console-action {
+    @apply inline-flex items-center justify-center rounded-full transition duration-200;
+  }
+
+  .ritual-console-action[data-tone="back"] {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgb(var(--foreground));
+  }
+
+  .ritual-console-action[data-tone="back"]:hover {
+    border-color: rgba(var(--line-soft), 0.24);
+  }
+
+  .ritual-console-action[data-tone="forward"] {
+    background: linear-gradient(180deg, rgba(250, 204, 21, 0.96), rgba(245, 158, 11, 0.92));
+    color: rgb(15 23 42);
+    box-shadow: 0 16px 30px rgba(245, 158, 11, 0.2);
+  }
+
+  .ritual-console-action[data-tone="forward"]:hover {
+    filter: brightness(1.04);
+  }
+
+  .ritual-console-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+    filter: none;
+  }
 }
