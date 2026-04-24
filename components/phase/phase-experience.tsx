@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -135,6 +136,34 @@ const stepCopy: Record<
       "Com a carta ja definida, esta etapa fica dedicada apenas a marcar propriedades e sustentar o julgamento.",
   },
 };
+
+function getSceneImageByStep(step: PhaseStep): {
+  src: string;
+  alt: string;
+  ambient: string;
+} {
+  if (step === "intro") {
+    return {
+      src: "/visual/protected/camara-cristalizacao.png",
+      alt: "Camara ritual do castelo.",
+      ambient: "Camara ritual",
+    };
+  }
+
+  if (step === "result") {
+    return {
+      src: "/visual/protected/salao-cristalizacao.png",
+      alt: "Salao de julgamento do castelo.",
+      ambient: "Salao de julgamento",
+    };
+  }
+
+  return {
+    src: "/visual/auth/laboratorio-da-sintese.png",
+    alt: "Laboratorio de sintese do castelo.",
+    ambient: "Laboratorio de sintese",
+  };
+}
 
 function getNextPhaseHref(
   chapterProgress: ChapterProgressView,
@@ -618,9 +647,18 @@ export function PhaseExperience({
     });
   }
 
+  const scene = getSceneImageByStep(displayedStep);
+
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
-      <section className="game-shell">
+      <section className="relative isolate overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/55 shadow-[0_30px_120px_rgba(2,6,23,0.46)]">
+        <div className="absolute inset-0">
+          <Image src={scene.src} alt={scene.alt} fill priority sizes="100vw" className="object-cover object-center" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(4,7,15,0.92)_0%,rgba(4,7,15,0.76)_56%,rgba(4,7,15,0.88)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(103,232,249,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.12),transparent_20%)]" />
+        </div>
+
+        <div className="relative px-5 py-6 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             <span>Capitulo I · Prova {phase.number}</span>
@@ -641,6 +679,9 @@ export function PhaseExperience({
 
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
+              <div className="mb-3 inline-flex rounded-full border border-white/10 bg-slate-950/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100 backdrop-blur-md">
+                {scene.ambient}
+              </div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
                 {displayedStep === "result"
                   ? "Desfecho"
@@ -693,6 +734,7 @@ export function PhaseExperience({
                 })}
             </div>
           </div>
+        </div>
         </div>
       </section>
 
@@ -1006,47 +1048,59 @@ export function PhaseExperience({
         ) : null}
 
         {displayedStep === "result" && submitResult ? (
-          <section className="game-shell mx-auto max-w-5xl p-4 sm:p-6">
-            <div
-              className={`rounded-[28px] border p-6 sm:p-8 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
-            >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">
-                Julgamento do reino
-              </p>
-              <h3 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-                {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-white/90">
-                {submitResult.evaluation.feedback}
-              </p>
+          <section className="relative isolate mx-auto max-w-5xl overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/60 p-4 shadow-[0_30px_100px_rgba(2,6,23,0.42)] sm:p-6">
+            <div className="absolute inset-0">
+              <Image
+                src="/visual/protected/salao-cristalizacao.png"
+                alt="Salao de julgamento do castelo."
+                fill
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,7,15,0.32),rgba(4,7,15,0.82)_45%,rgba(4,7,15,0.94)_100%)]" />
+            </div>
 
-              <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                  <p className="opacity-70">Forca obtida</p>
-                  <p className="mt-1 text-2xl font-black">
-                    {submitResult.evaluation.scoreAwarded}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                  <p className="opacity-70">Sentenca</p>
-                  <p className="mt-1 text-lg font-semibold capitalize">
-                    {submitResult.evaluation.validationResult}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                  <p className="opacity-70">Molecula apresentada</p>
-                  <p className="mt-1 text-lg font-semibold">
-                    {focusedMolecule?.nomeQuimico ?? "Nao definida"}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-                  <p className="opacity-70">Marcas alinhadas</p>
-                  <p className="mt-1 text-lg font-semibold">
-                    {submitResult.evaluation.expectedPropertiesMatched.length}
-                  </p>
+            <div className="relative">
+              <div
+                className={`rounded-[28px] border p-6 backdrop-blur-md sm:p-8 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">
+                  Julgamento do reino
+                </p>
+                <h3 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+                  {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
+                </h3>
+                <p className="mt-4 text-sm leading-7 text-white/90">
+                  {submitResult.evaluation.feedback}
+                </p>
+
+                <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                    <p className="opacity-70">Forca obtida</p>
+                    <p className="mt-1 text-2xl font-black">
+                      {submitResult.evaluation.scoreAwarded}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                    <p className="opacity-70">Sentenca</p>
+                    <p className="mt-1 text-lg font-semibold capitalize">
+                      {submitResult.evaluation.validationResult}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                    <p className="opacity-70">Molecula apresentada</p>
+                    <p className="mt-1 text-lg font-semibold">
+                      {focusedMolecule?.nomeQuimico ?? "Nao definida"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
+                    <p className="opacity-70">Marcas alinhadas</p>
+                    <p className="mt-1 text-lg font-semibold">
+                      {submitResult.evaluation.expectedPropertiesMatched.length}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
             <div className="mt-4 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
@@ -1088,6 +1142,7 @@ export function PhaseExperience({
                   ? "Seguir para a proxima prova"
                   : "Voltar ao jogo"}
               </Link>
+            </div>
             </div>
           </section>
         ) : null}
