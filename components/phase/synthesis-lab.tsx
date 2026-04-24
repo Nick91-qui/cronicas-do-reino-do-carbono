@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { MoleculeCard } from "@/components/cards/molecule-card";
-import { AtomForgeVisual } from "@/components/phase/atom-forge-visual";
+import { SynthesisLabVisual } from "@/components/phase/synthesis-lab-visual";
 import type {
   BuilderLayout,
   BuilderValidationResult,
@@ -11,7 +11,7 @@ import type {
 } from "@/lib/builder/types";
 import type { BondType, Molecule } from "@/lib/content/types";
 
-type AtomForgeProps = {
+type SynthesisLabProps = {
   layout: BuilderLayout;
   carbonCount: string;
   activeCarbonCount: number;
@@ -27,14 +27,14 @@ type AtomForgeProps = {
   isValidatingBuilder: boolean;
   builderError: string | null;
   builderResult: BuilderValidationResult | null;
-  forgedMolecule: Molecule | null;
+  synthesizedMolecule: Molecule | null;
   onSetLayout: (layout: BuilderLayout) => void;
   onSetCarbonCount: (value: string) => void;
   onUpdateBondOrder: (index: number) => void;
   onValidateBuilder: () => void;
 };
 
-export function AtomForge({
+export function SynthesisLab({
   layout,
   carbonCount,
   activeCarbonCount,
@@ -50,12 +50,12 @@ export function AtomForge({
   isValidatingBuilder,
   builderError,
   builderResult,
-  forgedMolecule,
+  synthesizedMolecule,
   onSetLayout,
   onSetCarbonCount,
   onUpdateBondOrder,
   onValidateBuilder,
-}: AtomForgeProps) {
+}: SynthesisLabProps) {
   const [hoveredBondIndex, setHoveredBondIndex] = useState<number | null>(null);
   const [recentlyChangedBondIndex, setRecentlyChangedBondIndex] = useState<number | null>(null);
   const currentCarbonValue = Number(carbonCount) || activeCarbonCount;
@@ -123,7 +123,7 @@ export function AtomForge({
         </article>
       </div>
 
-      <AtomForgeVisual
+      <SynthesisLabVisual
         layout={layout}
         activeCarbonCount={activeCarbonCount}
         minimumCarbonCount={minimumCarbonCount}
@@ -177,7 +177,7 @@ export function AtomForge({
             </div>
           </div>
 
-          <div className={`mt-4 grid gap-3 ${forgedMolecule ? "xl:grid-cols-[0.32fr,0.68fr]" : "sm:grid-cols-2"}`}>
+          <div className={`mt-4 grid gap-3 ${synthesizedMolecule ? "xl:grid-cols-[0.32fr,0.68fr]" : "sm:grid-cols-2"}`}>
             <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
                 Estrutural
@@ -196,11 +196,11 @@ export function AtomForge({
             </div>
           </div>
 
-          {forgedMolecule ? (
+          {synthesizedMolecule ? (
             <div className="mt-5 grid gap-4 xl:grid-cols-[0.28fr,0.72fr] xl:items-start">
               <div className="rounded-[24px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(15,23,42,0.12))] p-3">
                 <MoleculeCard
-                  molecule={forgedMolecule}
+                  molecule={synthesizedMolecule}
                   isCreated
                   selectable={false}
                   variant="compact"
@@ -211,7 +211,7 @@ export function AtomForge({
                   Molecula reconhecida
                 </p>
                 <p className="mt-2 text-2xl font-black tracking-tight text-white">
-                  {forgedMolecule.nomeQuimico}
+                  {synthesizedMolecule.nomeQuimico}
                 </p>
                 <p className="mt-3">
                   A mesa reconheceu esta carta como uma leitura coerente. No proximo rito, voce confirma se ela continua sendo a melhor resposta para o contexto da prova.

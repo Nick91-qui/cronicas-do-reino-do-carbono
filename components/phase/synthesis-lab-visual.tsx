@@ -9,7 +9,7 @@ import {
 } from "@/lib/builder/graph-preview";
 import type { BuilderLayout, GraphBuilderBondOrder } from "@/lib/builder/types";
 
-type AtomForgeVisualProps = {
+type SynthesisLabVisualProps = {
   layout: BuilderLayout;
   activeCarbonCount: number;
   minimumCarbonCount: number;
@@ -146,7 +146,7 @@ function getRingStageClass(activeCarbonCount: number): string {
   return "min-h-[320px] max-w-[360px] pb-16 pt-12 sm:pb-14 sm:pt-10";
 }
 
-export function AtomForgeVisual({
+export function SynthesisLabVisual({
   layout,
   activeCarbonCount,
   minimumCarbonCount,
@@ -165,7 +165,7 @@ export function AtomForgeVisual({
   onSetLayout,
   onCarbonStep,
   onValidateBuilder,
-}: AtomForgeVisualProps) {
+}: SynthesisLabVisualProps) {
   const activeBondIndex = hoveredBondIndex ?? recentlyChangedBondIndex;
   const activeBondLabel =
     activeBondIndex !== null
@@ -185,7 +185,7 @@ export function AtomForgeVisual({
           backgroundImage: [
             "linear-gradient(180deg, rgba(14,23,42,0.9), rgba(8,13,26,0.96))",
             "radial-gradient(circle at center, rgba(34,211,238,0.08), transparent 42%)",
-            "url('/visual/forge/mesa-de-forja.png')",
+            "url('/visual/synthesis-lab/mesa-de-sintese.png')",
           ].join(", "),
           backgroundSize: "cover, cover, cover",
           backgroundPosition: "center, center, center bottom",
