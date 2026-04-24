@@ -759,8 +759,8 @@ export function PhaseExperience({
           </div>
         ) : null}
 
-        {displayedStep === "forge" ? (
-          <AtomForge
+        {displayedStep === "synthesis" ? (
+          <SynthesisLab
             layout={layout}
             carbonCount={carbonCount}
             activeCarbonCount={activeCarbonCount}
@@ -776,7 +776,7 @@ export function PhaseExperience({
             isValidatingBuilder={isValidatingBuilder}
             builderError={builderError}
             builderResult={builderResult}
-            forgedMolecule={createdMolecule}
+            synthesizedMolecule={synthesizedMolecule}
             onSetLayout={setLayout}
             onSetCarbonCount={setCarbonCount}
             onUpdateBondOrder={updateBondOrder}
