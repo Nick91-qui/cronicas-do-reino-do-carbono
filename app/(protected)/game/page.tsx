@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 import { getAllChaptersProgressView } from "@/lib/progress/queries";
@@ -22,58 +23,42 @@ export default async function GamePage() {
   const progressPercent = Math.round((completedCount / chapter1.totalPhases) * 100);
 
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-10">
-      <section className="game-shell">
-        <div className="relative grid gap-6 xl:grid-cols-[1.25fr,0.75fr]">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-chip">Sala do reino</span>
-              <span className="hud-chip border-gold/20 text-gold/90">Capitulo I em curso</span>
-            </div>
-            <h1 className="pt-5 text-4xl tracking-[0.06em] text-white sm:text-5xl">
-              O laboratorio de sintese chama {player.displayName} de volta ao circulo das provas.
-            </h1>
-            <p className="max-w-3xl pt-4 text-sm leading-7 text-slate-300 sm:text-base">
-              O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas
-              agora aparecem como sinais de campanha, nao como painel administrativo.
+    <ProtectedScene
+      eyebrow="Salao do reino"
+      ambientLabel="Conselho central"
+      imageSrc="/visual/protected/salao-cristalizacao.png"
+      imageAlt="Salao central do castelo."
+      title={`O salao central chama ${player.displayName} de volta ao circulo das provas.`}
+      description="O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas agora aparecem como sinais de campanha, nao como painel administrativo."
+      actions={
+        <>
+          <Link href="/chapter/chapter-1" className="state-action px-6" data-tone="primary">
+            Abrir mapa do dominio
+          </Link>
+          <Link href={`/phase/${nextPhaseId}`} className="ritual-link min-h-12 rounded-full px-6 py-3 text-sm">
+            Retomar prova {nextPhase?.phaseNumber}
+          </Link>
+        </>
+      }
+      stats={
+        <>
+          <div className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Dominio em curso</p>
+            <p className="pt-2 font-display text-2xl text-white">{chapter1.chapterTitle}</p>
+            <p className="pt-2 text-sm text-slate-300">
+              Prova seguinte: {nextPhase?.phaseNumber} · {nextPhase?.title}
             </p>
-
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Link
-                href="/chapter/chapter-1"
-                className="state-action px-6"
-                data-tone="primary"
-              >
-                Abrir mapa do dominio
-              </Link>
-              <Link
-                href={`/phase/${nextPhaseId}`}
-                className="ritual-link min-h-12 rounded-full px-6 py-3 text-sm"
-              >
-                Retomar prova {nextPhase?.phaseNumber}
-              </Link>
-            </div>
           </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Dominio em curso</p>
-              <p className="pt-2 font-display text-2xl text-white">{chapter1.chapterTitle}</p>
-              <p className="pt-2 text-sm text-slate-300">
-                Prova seguinte: {nextPhase?.phaseNumber} · {nextPhase?.title}
-              </p>
-            </div>
-            <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Passagem consolidada</p>
-              <p className="pt-2 font-display text-3xl text-white">{progressPercent}%</p>
-              <p className="pt-2 text-sm text-slate-300">
-                {completedCount} de {chapter1.totalPhases} provas com selo conquistado.
-              </p>
-            </div>
+          <div className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Passagem consolidada</p>
+            <p className="pt-2 font-display text-3xl text-white">{progressPercent}%</p>
+            <p className="pt-2 text-sm text-slate-300">
+              {completedCount} de {chapter1.totalPhases} provas com selo conquistado.
+            </p>
           </div>
-        </div>
-      </section>
-
+        </>
+      }
+    >
       <section className="grid gap-4 xl:grid-cols-[1.4fr,0.85fr]">
         <article className="game-panel">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -156,6 +141,6 @@ export default async function GamePage() {
           </article>
         </div>
       </section>
-    </main>
+    </ProtectedScene>
   );
 }
