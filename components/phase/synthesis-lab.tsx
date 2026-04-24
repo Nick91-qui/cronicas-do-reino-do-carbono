@@ -12,6 +12,7 @@ import type {
 import type { BondType, Molecule } from "@/lib/content/types";
 
 type SynthesisLabProps = {
+  objective: string;
   layout: BuilderLayout;
   carbonCount: string;
   activeCarbonCount: number;
@@ -35,6 +36,7 @@ type SynthesisLabProps = {
 };
 
 export function SynthesisLab({
+  objective,
   layout,
   carbonCount,
   activeCarbonCount,
@@ -115,11 +117,8 @@ export function SynthesisLab({
         </article>
 
         <article className="game-panel-muted">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Ritual de uso</p>
-          <div className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
-            <p>Altere a geometria, ajuste carbonos e toque nas ligacoes para alternar saturacao.</p>
-            <p>A mesa confirma primeiro a estrutura. So depois a carta pode seguir para comparacao.</p>
-          </div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Missao</p>
+          <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
         </article>
       </div>
 
