@@ -3,17 +3,17 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { MoleculeCard } from "@/components/cards/molecule-card";
 import {
-  bondTypeLabels,
-  formatSelectableProperty,
   fragmentToBondType,
   getSceneImageByStep,
   type PersistedResponse,
   type PhaseStep,
 } from "@/components/phase/phase-experience-shared";
+import { PhaseIntroPanel } from "@/components/phase/phase-intro-panel";
+import { PhaseReadPanel } from "@/components/phase/phase-read-panel";
 import { PhaseResultPanel } from "@/components/phase/phase-result-panel";
 import { PhaseRitualConsole } from "@/components/phase/phase-ritual-console";
+import { PhaseSelectPanel } from "@/components/phase/phase-select-panel";
 import { PhaseStepHeader } from "@/components/phase/phase-step-header";
 import { SynthesisLab } from "@/components/phase/synthesis-lab";
 
@@ -36,7 +36,6 @@ import type {
   Molecule,
   MoleculeId,
   Phase,
-  SelectableProperty,
 } from "@/lib/content/types";
 import type { ChapterProgressView } from "@/lib/progress/queries";
 
@@ -551,57 +550,7 @@ export function PhaseExperience({
         }`}
       >
         {displayedStep === "intro" ? (
-          <div className="mx-auto grid max-w-6xl gap-4 lg:gap-5 xl:grid-cols-[1.25fr,0.75fr]">
-            <article className="game-panel border-cyan-300/15 p-6 sm:p-8">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Prova do reino
-              </p>
-              <p className="mt-5 text-base leading-8 text-slate-100">
-                {phase.narrative}
-              </p>
-            </article>
-
-            <div className="grid gap-4">
-              <article className="game-panel">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Missao
-                </p>
-                <p className="mt-3 text-sm leading-6 text-slate-200">
-                  {phase.objective}
-                </p>
-              </article>
-              <article className="game-panel">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Conceito central
-                </p>
-                <p className="mt-3 text-sm leading-6 text-slate-200">
-                  {phase.coreConcept}
-                </p>
-              </article>
-              <article className="game-panel">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Estado local da prova
-                </p>
-                <div className="mt-3 grid gap-3 text-sm text-slate-200">
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    {currentPhaseStatus?.isCompleted
-                      ? "Ja dominada"
-                      : "Aguardando sua leitura"}
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    {phase.resources.carbonAvailable} carbono
-                    {phase.resources.carbonAvailable > 1 ? "s" : ""} ·{" "}
-                    {phase.resources.availableFragments
-                      .map(
-                        (fragmentId) =>
-                          bondTypeLabels[fragmentToBondType[fragmentId]],
-                      )
-                      .join(" · ")}
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
+          <PhaseIntroPanel phase={phase} currentPhaseStatus={currentPhaseStatus} />
         ) : null}
 
         {displayedStep === "synthesis" ? (
@@ -631,223 +580,33 @@ export function PhaseExperience({
         ) : null}
 
         {displayedStep === "select" ? (
-          <section className="grid gap-5 xl:grid-cols-[0.82fr,1.18fr] xl:gap-6">
-            <aside className="grid gap-4 self-start">
-              <div className="game-panel sm:p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Carta em foco
-                </p>
-                {focusedMolecule ? (
-                  <div className="mt-4">
-                    <MoleculeCard
-                      molecule={focusedMolecule}
-                      isSelected
-                      isCreated={
-                        builderResult?.resolvedMoleculeId === focusedMolecule.id
-                      }
-                      selectable={supportsMoleculeSelection}
-                      variant="compact"
-                      onSelect={
-                        supportsMoleculeSelection
-                          ? () => setSelectedMoleculeId(focusedMolecule.id)
-                          : undefined
-                      }
-                    />
-                  </div>
-                ) : (
-                  <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-400">
-                    Selecione uma carta para abrir a leitura de propriedades.
-                  </div>
-                )}
-              </div>
-
-              <div className="game-panel">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Estado da escolha
-                </p>
-                <div className="mt-3 grid gap-3 text-sm text-slate-200">
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    Molecula:{" "}
-                    <span className="font-semibold text-white">
-                      {focusedMolecule?.nomeQuimico ?? "nenhuma"}
-                    </span>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    Origem:{" "}
-                    <span className="font-semibold text-white">
-                      {synthesizedMolecule ? "laboratorio de sintese" : "comparacao direta"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </aside>
-
-            <section className="game-panel sm:p-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Escolha
-                  </p>
-                  <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                    Cartas disponiveis
-                  </h3>
-                </div>
-                <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
-                  Selecione 1 carta
-                </div>
-              </div>
-
-              <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                {molecules.map((molecule) => {
-                  const isSelected =
-                    effectiveSelectedMoleculeId === molecule.id;
-                  const isCreated =
-                    builderResult?.resolvedMoleculeId === molecule.id;
-
-                  return (
-                    <div
-                      key={molecule.id}
-                      className={`rounded-[28px] p-1 transition ${
-                        isSelected
-                          ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.25),rgba(59,130,246,0.12))]"
-                          : isCreated
-                            ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.18),rgba(20,184,166,0.1))]"
-                            : "bg-transparent"
-                      }`}
-                    >
-                      <MoleculeCard
-                        molecule={molecule}
-                        isSelected={isSelected}
-                        isCreated={isCreated}
-                        selectable
-                        variant="compact"
-                        onSelect={() => setSelectedMoleculeId(molecule.id)}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          </section>
+          <PhaseSelectPanel
+            builderResult={builderResult}
+            effectiveSelectedMoleculeId={effectiveSelectedMoleculeId}
+            focusedMolecule={focusedMolecule}
+            molecules={molecules}
+            onSelectMolecule={setSelectedMoleculeId}
+            supportsMoleculeSelection={supportsMoleculeSelection}
+            synthesizedMolecule={synthesizedMolecule}
+          />
         ) : null}
 
         {displayedStep === "read" ? (
-          <section className="grid gap-5 xl:grid-cols-[0.86fr,1.14fr] xl:gap-6">
-            <aside className="grid gap-4 self-start">
-              <div className="game-panel sm:p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Carta em foco
-                </p>
-                {focusedMolecule ? (
-                  <div className="mt-4">
-                    <MoleculeCard
-                      molecule={focusedMolecule}
-                      isSelected
-                      isCreated={
-                        builderResult?.resolvedMoleculeId === focusedMolecule.id
-                      }
-                      selectable={supportsMoleculeSelection}
-                      variant="compact"
-                      onSelect={
-                        supportsMoleculeSelection
-                          ? () => setSelectedMoleculeId(focusedMolecule.id)
-                          : undefined
-                      }
-                    />
-                  </div>
-                ) : (
-                  <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-400">
-                    {supportsMoleculeSelection
-                      ? "Selecione uma carta para comparar com as propriedades exigidas pela prova."
-                      : "O laboratorio de sintese ainda nao gerou uma carta reconhecida para esta etapa."}
-                  </div>
-                )}
-              </div>
-
-              <div className="game-panel">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Leitura atual
-                </p>
-                <div className="mt-3 grid gap-3 text-sm text-slate-200">
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    Molecula:{" "}
-                    <span className="font-semibold text-white">
-                      {focusedMolecule?.nomeQuimico ?? "nenhuma"}
-                    </span>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    Origem:{" "}
-                    <span className="font-semibold text-white">
-                      {synthesizedMolecule ? "laboratorio de sintese" : "comparacao direta"}
-                    </span>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-                    Marcas:{" "}
-                    <span className="font-semibold text-white">
-                      {selectedProperties.length}/3
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </aside>
-
-            <div className="grid gap-4">
-              <section className="game-panel sm:p-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                      Classificacao
-                    </p>
-                    <h3 className="mt-2 text-2xl font-black tracking-tight text-white">
-                      Propriedades em foco
-                    </h3>
-                  </div>
-                  <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
-                    Escolha ate 3
-                  </div>
-                </div>
-
-                <div className="mt-5 grid gap-3">
-                  {phase.expectedProperties.map((property) => (
-                    <button
-                      key={property}
-                      type="button"
-                      onClick={() => toggleProperty(property)}
-                      className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
-                        selectedProperties.includes(property)
-                          ? "border-cyan-300/35 bg-cyan-400/10 text-cyan-100"
-                          : "border-white/10 bg-slate-950/25 text-slate-200 hover:border-white/20"
-                      }`}
-                    >
-                      <span className="font-semibold">
-                        {formatSelectableProperty(property)}
-                      </span>
-                      <span className="text-xs font-semibold uppercase tracking-[0.16em]">
-                        {selectedProperties.includes(property)
-                          ? "Marcada"
-                          : "Marcar"}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-
-              <section className="game-panel">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Julgamento
-                </p>
-                <p className="mt-3 text-sm leading-6 text-slate-300">
-                  {phase.objective}
-                </p>
-
-                {submitError ? (
-                  <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
-                    {submitError}
-                  </p>
-                ) : null}
-              </section>
-            </div>
-          </section>
+          <PhaseReadPanel
+            builderResult={builderResult}
+            focusedMolecule={focusedMolecule}
+            phase={phase}
+            selectedProperties={selectedProperties}
+            submitError={submitError}
+            supportsMoleculeSelection={supportsMoleculeSelection}
+            synthesizedMolecule={synthesizedMolecule}
+            onSelectFocusedMolecule={
+              supportsMoleculeSelection && focusedMolecule
+                ? () => setSelectedMoleculeId(focusedMolecule.id)
+                : undefined
+            }
+            onToggleProperty={toggleProperty}
+          />
         ) : null}
 
         {displayedStep === "result" && submitResult ? (
