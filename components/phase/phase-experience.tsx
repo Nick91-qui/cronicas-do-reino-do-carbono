@@ -659,82 +659,82 @@ export function PhaseExperience({
         </div>
 
         <div className="relative px-5 py-6 sm:px-8 sm:py-8">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-            <span>Capitulo I · Prova {phase.number}</span>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-chip">Rito em curso</span>
-              <span className="hud-chip border-gold/20 text-gold/90">
-                Passo {visibleProgressStep} de {totalSteps}
-              </span>
-            </div>
-          </div>
-
-          <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.9),rgba(103,232,249,0.9))] transition-[width] duration-300"
-              style={{ width: `${(visibleProgressStep / totalSteps) * 100}%` }}
-            />
-          </div>
-
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-            <div className="max-w-3xl">
-              <div className="mb-3 inline-flex rounded-full border border-white/10 bg-slate-950/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100 backdrop-blur-md">
-                {scene.ambient}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+              <span>Capitulo I · Prova {phase.number}</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="hud-chip">Rito em curso</span>
+                <span className="hud-chip border-gold/20 text-gold/90">
+                  Passo {visibleProgressStep} de {totalSteps}
+                </span>
               </div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
-                {displayedStep === "result"
-                  ? "Desfecho"
-                  : stepCopy[displayedStep].eyebrow}
-              </p>
-              <h1 className="mt-2 text-3xl tracking-[0.05em] text-white sm:text-4xl">
-                {phase.title}
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-                {displayedStep === "result"
-                  ? "O resultado fica isolado no centro da tela para leitura imediata, sem competir com o restante da interface."
-                  : stepCopy[displayedStep].description}
-              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-              {availableSteps
-                .filter((step) => step !== "result")
-                .map((step) => {
-                  const isActive = displayedStep === step;
-                  const isDone =
-                    step === "intro"
-                      ? true
-                      : step === "synthesis"
-                        ? canAdvanceFromForge
-                        : step === "select"
-                          ? canAdvanceFromSelect
-                          : canAdvanceFromRead;
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-[linear-gradient(90deg,rgba(250,204,21,0.9),rgba(103,232,249,0.9))] transition-[width] duration-300"
+                style={{ width: `${(visibleProgressStep / totalSteps) * 100}%` }}
+              />
+            </div>
 
-                  return (
-                    <div
-                      key={step}
-                      className={`rounded-full border px-3 py-1.5 text-center text-[10px] font-black uppercase tracking-[0.16em] backdrop-blur ${
-                        isActive
-                          ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
-                          : isDone
-                            ? "border-emerald-300/25 bg-emerald-500/10 text-emerald-100"
-                            : "border-white/10 bg-white/5 text-slate-400"
-                      }`}
-                    >
-                      {step === "intro"
-                        ? "Prova"
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+              <div className="max-w-3xl">
+                <div className="mb-3 inline-flex rounded-full border border-white/10 bg-slate-950/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100 backdrop-blur-md">
+                  {scene.ambient}
+                </div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200/80">
+                  {displayedStep === "result"
+                    ? "Desfecho"
+                    : stepCopy[displayedStep].eyebrow}
+                </p>
+                <h1 className="mt-2 text-3xl tracking-[0.05em] text-white sm:text-4xl">
+                  {phase.title}
+                </h1>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+                  {displayedStep === "result"
+                    ? "O resultado fica isolado no centro da tela para leitura imediata, sem competir com o restante da interface."
+                    : stepCopy[displayedStep].description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+                {availableSteps
+                  .filter((step) => step !== "result")
+                  .map((step) => {
+                    const isActive = displayedStep === step;
+                    const isDone =
+                      step === "intro"
+                        ? true
                         : step === "synthesis"
-                          ? "Sintese"
+                          ? canAdvanceFromForge
                           : step === "select"
-                            ? "Carta"
-                            : "Leitura"}
-                    </div>
-                  );
-                })}
+                            ? canAdvanceFromSelect
+                            : canAdvanceFromRead;
+
+                    return (
+                      <div
+                        key={step}
+                        className={`rounded-full border px-3 py-1.5 text-center text-[10px] font-black uppercase tracking-[0.16em] backdrop-blur ${
+                          isActive
+                            ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
+                            : isDone
+                              ? "border-emerald-300/25 bg-emerald-500/10 text-emerald-100"
+                              : "border-white/10 bg-white/5 text-slate-400"
+                        }`}
+                      >
+                        {step === "intro"
+                          ? "Prova"
+                          : step === "synthesis"
+                            ? "Sintese"
+                            : step === "select"
+                              ? "Carta"
+                              : "Leitura"}
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 
@@ -1102,103 +1102,129 @@ export function PhaseExperience({
                 </div>
               </div>
 
-            <div className="mt-4 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                <p className="text-slate-500">Provas vencidas</p>
-                <p className="mt-1 text-lg font-semibold text-slate-100">
-                  {submitResult.persistence.chapterProgress.completedPhaseCount}
-                </p>
+              <div className="mt-4 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
+                  <p className="text-slate-500">Provas vencidas</p>
+                  <p className="mt-1 text-lg font-semibold text-slate-100">
+                    {submitResult.persistence.chapterProgress.completedPhaseCount}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
+                  <p className="text-slate-500">Prestigio no dominio</p>
+                  <p className="mt-1 text-lg font-semibold text-slate-100">
+                    {submitResult.persistence.chapterProgress.chapterScore}
+                  </p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                <p className="text-slate-500">Prestigio no dominio</p>
-                <p className="mt-1 text-lg font-semibold text-slate-100">
-                  {submitResult.persistence.chapterProgress.chapterScore}
-                </p>
-              </div>
-            </div>
 
-            {submitResult.persistence.grantedRewards.length > 0 ? (
-              <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                Sinais recebidos:{" "}
-                {submitResult.persistence.grantedRewards
-                  .map((reward) => `${reward.rewardType}:${reward.rewardValue}`)
-                  .join(", ")}
-              </div>
-            ) : null}
+              {submitResult.persistence.grantedRewards.length > 0 ? (
+                <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+                  Sinais recebidos:{" "}
+                  {submitResult.persistence.grantedRewards
+                    .map((reward) => `${reward.rewardType}:${reward.rewardValue}`)
+                    .join(", ")}
+                </div>
+              ) : null}
 
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <button
-                type="button"
-                onClick={handleRetryFromResult}
-                className="ritual-link px-5 py-3 text-sm"
-              >
-                Renovar leitura
-              </button>
-              <Link
-                href={nextPhaseActionHref ?? "/game"}
-                className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
-              >
-                {nextPhaseActionHref
-                  ? "Seguir para a proxima prova"
-                  : "Voltar ao jogo"}
-              </Link>
-            </div>
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleRetryFromResult}
+                  className="ritual-link px-5 py-3 text-sm"
+                >
+                  Renovar leitura
+                </button>
+                <Link
+                  href={nextPhaseActionHref ?? "/game"}
+                  className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
+                >
+                  {nextPhaseActionHref
+                    ? "Seguir para a proxima prova"
+                    : "Voltar ao jogo"}
+                </Link>
+              </div>
             </div>
           </section>
         ) : null}
       </section>
 
       {currentStep !== "result" ? (
-        <section className="sticky bottom-3 z-10 mt-6 flex items-center justify-between gap-3 rounded-[24px] border border-white/10 bg-[rgba(4,8,18,0.92)] px-3 py-3 shadow-[0_18px_40px_rgba(2,6,23,0.32)] backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:bg-[rgba(4,8,18,0.55)] sm:px-5 sm:py-4 sm:supports-[padding:max(0px)]:pb-4">
-          <div className="hidden text-xs uppercase tracking-[0.18em] text-slate-400 sm:block">
-            {displayedStep === "intro"
-              ? "Leia o chamado antes de entrar no rito."
-              : displayedStep === "synthesis"
-                ? "A estrutura precisa ser aceita pela mesa."
-                : displayedStep === "select"
-                  ? "Escolha uma carta antes de seguir."
-                  : "Marque propriedades e entregue o julgamento."}
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            onClick={goBack}
-            className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-full border border-white/10 px-4 text-base font-black text-slate-100 sm:h-11 sm:min-w-[5rem]"
-            aria-label={
-              currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"
-            }
-          >
-            &lt;
-          </button>
+        <section className="sticky bottom-3 z-10 mt-6 supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:supports-[padding:max(0px)]:pb-0">
+          <div className="ritual-console px-3 py-3 sm:px-5 sm:py-4">
+            <div className="relative flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-cyan-100/85">
+                  Console do rito
+                </p>
+                <p className="mt-1 hidden text-xs uppercase tracking-[0.18em] text-slate-400 sm:block">
+                  {displayedStep === "intro"
+                    ? "Leia o chamado antes de entrar no rito."
+                    : displayedStep === "synthesis"
+                      ? "A estrutura precisa ser aceita pela mesa."
+                      : displayedStep === "select"
+                        ? "Escolha uma carta antes de seguir."
+                        : "Marque propriedades e entregue o julgamento."}
+                </p>
+              </div>
 
-          {currentStep !== "read" ? (
-            <button
-              type="button"
-              onClick={goForward}
-              disabled={
-                (currentStep === "intro" && !canAdvanceFromIntro) ||
-                (currentStep === "synthesis" && !canAdvanceFromForge) ||
-                (currentStep === "select" && !canAdvanceFromSelect)
-              }
-              className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-4 text-base font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:min-w-[5rem]"
-              aria-label="Avançar"
-            >
-              &gt;
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={
-                isSubmitting ||
-                !canAdvanceFromRead ||
-                (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
-              }
-              className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:min-w-[11rem] sm:px-4 sm:py-3 sm:text-sm"
-            >
-              {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
-            </button>
-          )}
+              <div className="hidden items-center gap-2 lg:flex">
+                {availableSteps
+                  .filter((step) => step !== "result")
+                  .map((step) => (
+                    <span
+                      key={`console-${step}`}
+                      className={`h-2.5 w-2.5 rounded-full ${
+                        displayedStep === step
+                          ? "bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.55)]"
+                          : "bg-white/15"
+                      }`}
+                    />
+                  ))}
+              </div>
+
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  type="button"
+                  onClick={goBack}
+                  className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
+                  data-tone="back"
+                  aria-label={currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"}
+                >
+                  &lt;
+                </button>
+
+                {currentStep !== "read" ? (
+                  <button
+                    type="button"
+                    onClick={goForward}
+                    disabled={
+                      (currentStep === "intro" && !canAdvanceFromIntro) ||
+                      (currentStep === "synthesis" && !canAdvanceFromForge) ||
+                      (currentStep === "select" && !canAdvanceFromSelect)
+                    }
+                    className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
+                    data-tone="forward"
+                    aria-label="Avançar"
+                  >
+                    &gt;
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={
+                      isSubmitting ||
+                      !canAdvanceFromRead ||
+                      (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
+                    }
+                    className="ritual-console-action min-w-[10.5rem] px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] sm:min-w-[11rem] sm:px-4 sm:py-3 sm:text-sm"
+                    data-tone="forward"
+                  >
+                    {isSubmitting ? "Entregando leitura..." : "Entregar resposta"}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </section>
       ) : null}
