@@ -7,9 +7,9 @@ import { useEffect, useRef, useState } from "react";
 import { LogoutButton } from "@/components/auth/logout-button";
 
 const items = [
-  { href: "/game", label: "Jogo" },
+  { href: "/game", label: "Salao" },
   { href: "/collection", label: "Grimorio" },
-  { href: "/profile", label: "Perfil" },
+  { href: "/profile", label: "Aposentos" },
 ];
 
 export function ProtectedHudNav() {
@@ -46,8 +46,9 @@ export function ProtectedHudNav() {
         aria-label="Abrir menu"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((current) => !current)}
-        className="ritual-link h-12 w-12 p-0"
+        className="inline-flex h-12 items-center gap-3 rounded-full border border-white/10 bg-slate-950/55 px-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-100 shadow-[0_12px_32px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:border-cyan-200/35"
       >
+        <span className="hidden sm:inline">Mapa</span>
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
           <path
             d="M4 7h16M4 12h16M4 17h16"
@@ -60,7 +61,11 @@ export function ProtectedHudNav() {
       </button>
 
       {isOpen ? (
-        <div className="absolute right-0 top-14 z-40 min-w-[220px] rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,15,28,0.98),rgba(4,8,18,0.98))] p-3 shadow-[0_24px_60px_rgba(2,6,23,0.44)] backdrop-blur-xl">
+        <div className="absolute right-0 top-14 z-40 min-w-[250px] rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,15,28,0.98),rgba(4,8,18,0.98))] p-3 shadow-[0_24px_60px_rgba(2,6,23,0.44)] backdrop-blur-xl">
+          <div className="mb-3 rounded-[18px] border border-cyan-300/10 bg-cyan-400/5 px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-100">Mapa do castelo</p>
+            <p className="mt-1 text-sm text-slate-300">Escolha a ala que deseja visitar sem sair da campanha.</p>
+          </div>
           <div className="grid gap-2">
             {items.map((item) => {
               const isActive =
