@@ -1097,7 +1097,7 @@ export function PhaseExperience({
           <div className="hidden text-xs uppercase tracking-[0.18em] text-slate-400 sm:block">
             {displayedStep === "intro"
               ? "Leia o chamado antes de entrar no rito."
-              : displayedStep === "forge"
+              : displayedStep === "synthesis"
                 ? "A estrutura precisa ser aceita pela mesa."
                 : displayedStep === "select"
                   ? "Escolha uma carta antes de seguir."
@@ -1121,7 +1121,7 @@ export function PhaseExperience({
               onClick={goForward}
               disabled={
                 (currentStep === "intro" && !canAdvanceFromIntro) ||
-                (currentStep === "forge" && !canAdvanceFromForge) ||
+                (currentStep === "synthesis" && !canAdvanceFromForge) ||
                 (currentStep === "select" && !canAdvanceFromSelect)
               }
               className="flex h-9 min-w-[4.5rem] items-center justify-center rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-4 text-base font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-40 sm:h-11 sm:min-w-[5rem]"
