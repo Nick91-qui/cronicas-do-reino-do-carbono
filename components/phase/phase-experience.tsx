@@ -36,6 +36,7 @@ import type {
   Molecule,
   MoleculeId,
   Phase,
+  SelectableProperty,
 } from "@/lib/content/types";
 import type { ChapterProgressView } from "@/lib/progress/queries";
 
@@ -149,7 +150,7 @@ export function PhaseExperience({
     chapterProgress.phases.find((item) => item.phaseId === phase.id) ?? null;
   const effectiveSelectedMoleculeId = supportsMoleculeSelection
     ? selectedMoleculeId || builderResult?.resolvedMoleculeId || ""
-    : undefined;
+    : "";
   const availableBondTypes = phase.resources.availableFragments.map(
     (fragmentId) => fragmentToBondType[fragmentId],
   );
