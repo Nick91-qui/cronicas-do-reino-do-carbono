@@ -59,14 +59,30 @@ export function SynthesizedCardOverlay({
           type="button"
           onClick={onExpand}
           aria-label={`Reabrir carta de ${molecule.nomeQuimico}`}
-          className="group block h-32 w-24 overflow-hidden rounded-[20px] border border-emerald-300/24 bg-[linear-gradient(180deg,rgba(16,185,129,0.16),rgba(15,23,42,0.9))] p-1.5 shadow-[0_12px_30px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:-translate-y-1 hover:border-emerald-200/40 sm:h-36 sm:w-28"
+          className="group block w-20 overflow-hidden rounded-[20px] border border-emerald-300/24 bg-[linear-gradient(180deg,rgba(16,185,129,0.16),rgba(15,23,42,0.9))] p-1.5 shadow-[0_12px_30px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:-translate-y-1 hover:border-emerald-200/40 sm:w-24"
         >
-          <div className="relative h-full overflow-hidden rounded-[16px]">
-            <div className="pointer-events-none absolute left-1/2 top-0 origin-top -translate-x-1/2 scale-[0.38] sm:scale-[0.42]">
-              <div className="-mb-[236px] -ml-[82px] -mr-[82px] -mt-[72px] sm:-mb-[224px] sm:-ml-[74px] sm:-mr-[74px] sm:-mt-[64px]">
-                <MoleculeCard molecule={molecule} isCreated selectable={false} variant="compact" />
-              </div>
-            </div>
+          <div
+            className="relative aspect-square overflow-hidden rounded-[16px] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+            style={{
+              backgroundImage: [
+                "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.82), transparent 18%)",
+                "radial-gradient(circle at 68% 35%, rgba(255,255,255,0.35), transparent 14%)",
+                `linear-gradient(135deg, ${molecule.visual.accentFrom}, ${molecule.visual.accentTo})`,
+              ].join(", "),
+            }}
+          >
+            <img
+              src={molecule.visual.assets.artworkAsset}
+              alt={molecule.nomeQuimico}
+              className={`h-full w-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.45)] ${
+                molecule.visual.assets.artworkFit === "contain" ? "object-contain" : "object-cover"
+              }`}
+              style={{
+                objectPosition: molecule.visual.assets.artworkPosition ?? "center",
+                transform: `scale(${molecule.visual.assets.artworkScale ?? 1})`,
+                transformOrigin: "center",
+              }}
+            />
           </div>
         </button>
       </div>
