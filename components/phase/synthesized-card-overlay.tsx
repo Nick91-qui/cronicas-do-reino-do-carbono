@@ -58,9 +58,19 @@ export function SynthesizedCardOverlay({
         <button
           type="button"
           onClick={onExpand}
-          className="rounded-full border border-emerald-300/24 bg-[linear-gradient(180deg,rgba(16,185,129,0.16),rgba(15,23,42,0.9))] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-100 shadow-[0_12px_30px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:border-emerald-200/40"
+          aria-label={`Reabrir carta de ${molecule.nomeQuimico}`}
+          className="group block w-24 rounded-[20px] border border-emerald-300/24 bg-[linear-gradient(180deg,rgba(16,185,129,0.16),rgba(15,23,42,0.9))] p-2 shadow-[0_12px_30px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:-translate-y-1 hover:border-emerald-200/40 sm:w-28"
         >
-          Reabrir carta
+          <div className="overflow-hidden rounded-[16px]">
+            <div className="pointer-events-none origin-top scale-[0.38] sm:scale-[0.42]">
+              <div className="-mb-[220px] -ml-[82px] -mr-[82px] -mt-[72px] sm:-mb-[208px] sm:-ml-[74px] sm:-mr-[74px] sm:-mt-[64px]">
+                <MoleculeCard molecule={molecule} isCreated selectable={false} variant="compact" />
+              </div>
+            </div>
+          </div>
+          <p className="mt-2 truncate text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-100/90">
+            {molecule.nomeQuimico}
+          </p>
         </button>
       </div>
     </>
