@@ -14,7 +14,7 @@ type MoleculeCardProps = {
   isCreated?: boolean;
   selectable?: boolean;
   onSelect?: (() => void) | undefined;
-  variant?: "compact" | "expanded";
+  variant?: "selection" | "compact" | "expanded";
 };
 
 const attributeLabels: Record<keyof MoleculeAttributes, string> = {
@@ -137,8 +137,14 @@ export function MoleculeCard({
   const artworkFit = molecule.visual.assets.artworkFit ?? "cover";
   const artworkPosition = molecule.visual.assets.artworkPosition ?? "center";
   const artworkScale = molecule.visual.assets.artworkScale ?? 1;
-  const cardHeight = variant === "expanded" ? "h-[500px] sm:h-[560px]" : "h-[400px] sm:h-[500px]";
-  const visibleProperties = variant === "expanded" ? 6 : 5;
+  const isExpanded = variant === "expanded";
+  const isSelection = variant === "selection";
+  const cardHeight = isExpanded
+    ? "h-[500px] sm:h-[560px]"
+    : isSelection
+      ? "h-[312px] sm:h-[348px]"
+      : "h-[400px] sm:h-[500px]";
+  const visibleProperties = isExpanded ? 6 : isSelection ? 3 : 5;
   const hoverRingClass =
     hoverRingClassByPalette[molecule.visual.attributePalette];
 
@@ -173,22 +179,44 @@ export function MoleculeCard({
             className={`absolute inset-0 overflow-hidden rounded-[24px] border-2 p-[3px] shadow-[0_18px_60px_rgba(15,23,42,0.35)] transition-all duration-300 group-hover:ring-2 [backface-visibility:hidden] ${hoverRingClass}`}
             style={shellStyle}
           >
-            <div className="h-full rounded-[20px] bg-slate-950/90 p-3 text-slate-950">
-              <div className="flex h-full flex-col rounded-[18px] border border-slate-900/80 bg-white px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+            <div
+              className={`h-full rounded-[20px] bg-slate-950/90 text-slate-950 ${isSelection ? "p-2" : "p-3"}`}
+            >
+              <div
+                className={`flex h-full flex-col rounded-[18px] border border-slate-900/80 bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] ${
+                  isSelection ? "px-2.5 py-2.5" : "px-3 py-3"
+                }`}
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="mt-1 text-base font-black tracking-tight text-slate-950 sm:text-xl">
+                    <h3
+                      className={`mt-1 font-black tracking-tight text-slate-950 ${
+                        isSelection ? "text-sm sm:text-base" : "text-base sm:text-xl"
+                      }`}
+                    >
                       {molecule.nomeQuimico}
                     </h3>
-                    <p className="mt-1 line-clamp-2 text-sm font-medium text-slate-500">
+                    <p
+                      className={`mt-1 line-clamp-2 font-medium text-slate-500 ${
+                        isSelection ? "text-[11px]" : "text-sm"
+                      }`}
+                    >
                       {molecule.nomeEpico}
                     </p>
                   </div>
                 </div>
 
-                <div className="relative mt-3 min-h-0 flex-1 overflow-hidden rounded-[20px] border border-slate-900/70 bg-slate-950 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                <div
+                  className={`relative min-h-0 flex-1 overflow-hidden rounded-[20px] border border-slate-900/70 bg-slate-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ${
+                    isSelection ? "mt-2 p-1.5" : "mt-3 p-2"
+                  }`}
+                >
                   <div
-                    className="relative flex h-full min-h-[160px] items-center justify-center rounded-[16px] border border-white/10 bg-cover bg-center p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:min-h-[220px] sm:p-3"
+                    className={`relative flex h-full items-center justify-center rounded-[16px] border border-white/10 bg-cover bg-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ${
+                      isSelection
+                        ? "min-h-[126px] p-2 sm:min-h-[150px]"
+                        : "min-h-[160px] p-2.5 sm:min-h-[220px] sm:p-3"
+                    }`}
                     style={artStyle}
                   >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_55%)]" />
@@ -204,12 +232,30 @@ export function MoleculeCard({
                       }}
                     />
 
-                    <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20 flex flex-wrap items-end justify-between gap-2 sm:bottom-3 sm:left-3 sm:right-3">
-                      <div className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/80 sm:text-[10px]">
+                    <div
+                      className={`absolute z-20 flex flex-wrap items-end justify-between ${
+                        isSelection
+                          ? "bottom-2 left-2 right-2 gap-1.5"
+                          : "bottom-2.5 left-2.5 right-2.5 gap-2 sm:bottom-3 sm:left-3 sm:right-3"
+                      }`}
+                    >
+                      <div
+                        className={`rounded-full border border-white/25 bg-slate-950/55 font-semibold uppercase tracking-[0.18em] text-white/80 ${
+                          isSelection
+                            ? "px-2 py-1 text-[8px]"
+                            : "px-3 py-1 text-[9px] sm:text-[10px]"
+                        }`}
+                      >
                         {molecule.classe}
                       </div>
                       {badgeLabel ? (
-                        <div className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white sm:text-[10px]">
+                        <div
+                          className={`rounded-full border border-white/25 bg-white/15 font-semibold uppercase tracking-[0.18em] text-white ${
+                            isSelection
+                              ? "px-2 py-1 text-[8px]"
+                              : "px-3 py-1 text-[9px] sm:text-[10px]"
+                          }`}
+                        >
                           {badgeLabel}
                         </div>
                       ) : null}
@@ -217,12 +263,20 @@ export function MoleculeCard({
                   </div>
                 </div>
 
-                <div className="mt-2.5 rounded-[18px] border border-slate-900/70 bg-slate-50 px-2.5 py-2.5 sm:mt-3 sm:px-3">
+                <div
+                  className={`rounded-[18px] border border-slate-900/70 bg-slate-50 ${
+                    isSelection
+                      ? "mt-2 px-2 py-2"
+                      : "mt-2.5 px-2.5 py-2.5 sm:mt-3 sm:px-3"
+                  }`}
+                >
                   <div className="flex flex-wrap gap-2">
                     {molecule.propriedades.slice(0, visibleProperties).map((property) => (
                       <span
                         key={property}
-                        className={`rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.08em] ${propertyBadgeClassByPalette[molecule.visual.attributePalette]}`}
+                        className={`rounded-full border font-semibold uppercase tracking-[0.08em] ${propertyBadgeClassByPalette[molecule.visual.attributePalette]} ${
+                          isSelection ? "px-2 py-1 text-[8px]" : "px-2.5 py-1 text-[9px]"
+                        }`}
                       >
                         {formatProperty(property)}
                       </span>
@@ -237,21 +291,33 @@ export function MoleculeCard({
             className={`absolute inset-0 overflow-hidden rounded-[24px] border-2 p-[3px] shadow-[0_18px_60px_rgba(15,23,42,0.35)] transition-all duration-300 group-hover:ring-2 [backface-visibility:hidden] [transform:rotateY(180deg)] ${hoverRingClass}`}
             style={shellStyle}
           >
-            <div className="h-full rounded-[20px] bg-slate-950/90 p-3 text-slate-950">
-              <div className="flex h-full flex-col rounded-[18px] border border-slate-900/80 bg-white px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+            <div
+              className={`h-full rounded-[20px] bg-slate-950/90 text-slate-950 ${isSelection ? "p-2" : "p-3"}`}
+            >
+              <div
+                className={`flex h-full flex-col rounded-[18px] border border-slate-900/80 bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] ${
+                  isSelection ? "px-2.5 py-2.5" : "px-3 py-3"
+                }`}
+              >
                 <div className="flex items-start justify-end gap-3">
                   {selectable ? (
                     <button
                       type="button"
                       onClick={handleSelect}
-                      className={`shrink-0 rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] transition ${isSelected ? "bg-slate-950 text-white" : "border border-slate-300 bg-white text-slate-900 hover:border-slate-950"}`}
+                      className={`shrink-0 rounded-full font-black uppercase tracking-[0.16em] transition ${
+                        isSelection ? "px-3 py-1.5 text-[9px]" : "px-4 py-2 text-[10px]"
+                      } ${isSelected ? "bg-slate-950 text-white" : "border border-slate-300 bg-white text-slate-900 hover:border-slate-950"}`}
                     >
                       {isSelected ? "Selecionada" : "Escolher"}
                     </button>
                   ) : null}
                 </div>
 
-                <div className="mt-3 rounded-[18px] border border-slate-900/70 bg-white px-3 py-3">
+                <div
+                  className={`rounded-[18px] border border-slate-900/70 bg-white ${
+                    isSelection ? "mt-2 px-2.5 py-2.5" : "mt-3 px-3 py-3"
+                  }`}
+                >
                   <div className="space-y-2">
                     {Object.entries(molecule.atributos).map(([key, value]) => (
                       <div key={key} className="flex items-center gap-2.5">
