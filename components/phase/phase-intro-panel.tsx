@@ -1,14 +1,10 @@
-import { bondTypeLabels, fragmentToBondType } from "@/components/phase/phase-experience-shared";
-
 import type { Phase } from "@/lib/content/types";
-import type { ChapterProgressView } from "@/lib/progress/queries";
 
 type PhaseIntroPanelProps = {
   phase: Phase;
-  currentPhaseStatus: ChapterProgressView["phases"][number] | null;
 };
 
-export function PhaseIntroPanel({ phase, currentPhaseStatus }: PhaseIntroPanelProps) {
+export function PhaseIntroPanel({ phase }: PhaseIntroPanelProps) {
   return (
     <div className="mx-auto grid max-w-6xl gap-4 lg:gap-5 xl:grid-cols-[1.25fr,0.75fr]">
       <article className="game-panel border-cyan-300/15 p-6 sm:p-8">
