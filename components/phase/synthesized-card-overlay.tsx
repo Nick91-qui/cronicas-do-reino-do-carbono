@@ -68,9 +68,6 @@ export function SynthesizedCardOverlay({
               </div>
             </div>
           </div>
-          <p className="mt-2 truncate text-center text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-100/90">
-            {molecule.nomeQuimico}
-          </p>
         </button>
       </div>
     </>
