@@ -117,13 +117,13 @@ Deve comunicar:
 - o estado energético da construção;
 - o foco central no átomo ou estrutura ativa.
 
-### Oficina molecular
+### Laboratório de síntese
 
 Deve parecer um mecanismo ritual-científico:
 
 - carbono central como hub;
 - slots como encaixes luminosos;
-- ação de forja com feedback forte;
+- ação de síntese com feedback forte;
 - blueprint visualmente distinto por geometria.
 
 ### Cartas de molécula

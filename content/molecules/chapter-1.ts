@@ -37,7 +37,7 @@ function buildVisual(
         badgeLabel,
       },
       newly_created: {
-        badgeLabel: "Forjada",
+        badgeLabel: "Sintetizada",
       },
       selected: {
         badgeLabel: "Selecionada",

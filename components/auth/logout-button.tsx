@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function LogoutButton() {
+export function LogoutButton({ className = "" }: { className?: string }) {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
 
@@ -19,7 +19,7 @@ export function LogoutButton() {
       type="button"
       onClick={handleLogout}
       disabled={isPending}
-      className="rounded-xl border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:border-sky-400/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+      className={`rounded-xl border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:border-sky-400/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-70 ${className}`.trim()}
     >
       {isPending ? "Saindo..." : "Sair"}
     </button>

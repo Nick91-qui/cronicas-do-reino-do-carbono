@@ -33,7 +33,7 @@ Ela deve incluir:
 - cabeçalho de fase;
 - lore panel;
 - missão;
-- oficina molecular;
+- laboratório de síntese;
 - action bar;
 - cartas disponíveis;
 - justificativa por propriedades;

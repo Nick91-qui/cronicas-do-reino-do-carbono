@@ -54,7 +54,7 @@ A implementação técnica do MVP deve suportar:
 - acesso autenticado ao jogo;
 - progressão linear por capítulo e fase;
 - renderização do conteúdo oficial do Capítulo I;
-- oficina molecular híbrida semilivre guiada por blueprints;
+- laboratório de síntese híbrido semilivre guiado por blueprints;
 - validação de molécula construída;
 - seleção de molécula-resposta;
 - seleção de 1 a 3 propriedades como justificativa;
@@ -351,7 +351,7 @@ A UI do MVP deve obedecer às seguintes regras:
 - textos, números, barras e estados interativos permanecem em código;
 - assets bitmap são usados para molduras, ilustrações, texturas e ornamentação;
 - cartas de molécula seguem modelo híbrido orientado a dados;
-- a oficina por blueprints deve tornar visíveis slots, estados de preenchimento e ação de forja.
+- o laboratório de síntese por blueprints deve tornar visíveis slots, estados de preenchimento e ação de síntese.
 
 ### 10.3 Estado no frontend
 
@@ -444,7 +444,7 @@ O fluxo de cadastro deve incluir pelo menos:
 
 ### 13.1 Modelo do builder
 
-O MVP adota uma oficina molecular híbrida semilivre.
+O MVP adota um laboratório de síntese híbrido semilivre.
 
 Isso significa que:
 

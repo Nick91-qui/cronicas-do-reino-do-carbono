@@ -348,7 +348,7 @@ Construir e escolher a molécula mais adequada para alimentar a Tocha do Portão
 - massa e entalpia de combustão podem aparecer como apoio de leitura na carta;
 - o propano é a resposta ideal por representar melhor o contexto do desafio;
 - `metano` e etano continuam corretos como combustíveis, mas menos representativos para esta fase;
-- o aluno só desbloqueia a carta do propano se efetivamente construir propano na oficina.
+- o aluno só desbloqueia a carta do propano se efetivamente construir propano no laboratório de síntese.
 
 ### Recompensas
 
@@ -356,7 +356,7 @@ Construir e escolher a molécula mais adequada para alimentar a Tocha do Portão
 - carta desbloqueada:
   - `propano`
 - título desbloqueado:
-  - Forjador de Cadeias
+  - Sintetista de Cadeias
 
 ### Feedback excellent
 
@@ -663,7 +663,7 @@ Essa molécula não é a mais apropriada para iniciar transformações rápidas.
 
 ### Título
 
-A Oficina dos Polímeros
+O Laboratório de Síntese de Polímeros
 
 ### Conceito central
 
@@ -679,7 +679,7 @@ Escolha
 
 ### Narrativa curta
 
-Na Oficina dos Polímeros, o jogador encontra um novo problema: identificar qual molécula pode abrir caminho para a formação de longas cadeias materiais.
+No Laboratório de Síntese de Polímeros, o jogador encontra um novo problema: identificar qual molécula pode abrir caminho para a formação de longas cadeias materiais.
 
 ### Objetivo do desafio
 
@@ -867,7 +867,7 @@ Essa molécula não representa a estabilidade especial exigida pela Coroa Aromá
 | 4    | O Véu dos Vapores        | Construção + escolha | metano    | etano           | volatilidade e tamanho da cadeia               |
 | 5    | A Ruptura da Saturação   | Construção           | eteno     | —               | introdução à ligação dupla                     |
 | 6    | A Porta da Transformação | Construção + escolha | eteno     | propeno         | reatividade dos alcenos                        |
-| 7    | A Oficina dos Polímeros  | Escolha              | eteno     | propeno, buteno | polimerização por adição                       |
+| 7    | O Laboratório de Síntese de Polímeros  | Escolha              | eteno     | propeno, buteno | polimerização por adição                       |
 | 8    | A Coroa Aromática        | Construção + escolha | benzeno   | —               | aromaticidade e estabilidade especial          |
 
 ## Observação geral de design

@@ -56,7 +56,7 @@ Nesse mundo:
 
 ## Papel do jogador
 
-O jogador é tratado como um **forjador molecular em formação**, alguém que aprende a construir, reconhecer e utilizar estruturas químicas dentro do Reino do Carbono.
+O jogador é tratado como um **estudante de síntese orgânica**, alguém que aprende a construir, reconhecer e utilizar estruturas químicas dentro do Reino do Carbono.
 
 Esse papel deve transmitir:
 
@@ -239,7 +239,7 @@ Preferir verbos diretos com leve sabor narrativo.
 
 #### Exemplos aceitáveis com tom temático leve
 
-- Forjar molécula
+- Sintetizar molécula
 - Prosseguir
 - Desbloquear carta
 
@@ -307,7 +307,7 @@ Os títulos desbloqueados ao longo da campanha fazem parte da fantasia de progre
 
 - Centelha de Carbono
 - Guardião do Metano
-- Forjador de Cadeias
+- Sintetista de Cadeias
 - O Volátil
 - Arauto da Insaturação
 - Mestre da Ruptura
@@ -447,7 +447,7 @@ Figuras ligadas a transformação, reatividade e introdução de novos recursos.
 
 Personagens ligados à aplicação prática das moléculas, como combustíveis e polímeros.
 
-### Oficina molecular
+### Laboratório de síntese
 
 Espaço de construção simplificada onde o jogador monta estruturas e testa combinações.
 

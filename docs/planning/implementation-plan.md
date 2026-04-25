@@ -32,8 +32,9 @@ Estado consolidado:
 - Bloco 3 — Autenticação e banco de dados: concluído em versão funcional;
 - Bloco 4 — Loop central de gameplay: concluído em versão funcional;
 - Bloco 5 — Progresso, inventário e recompensas: concluído em versão funcional;
-- Bloco 6 — Integração do Capítulo I: majoritariamente implementado, ainda exigindo validação final de aderência e polimento;
-- Bloco 7 — Estabilização, QA e implantação: pendente.
+- Bloco 6 — Integração do Capítulo I: concluído no escopo do MVP;
+- Bloco 7 — Estabilização, QA e implantação: concluído no fluxo central aceito;
+- Bloco 8 — Reposicionamento visual de site para jogo: próximo ciclo recomendado.
 
 Este documento continua válido como plano, mas não deve mais ser lido como se o projeto estivesse prestes a iniciar o Bloco 1.
 
@@ -83,7 +84,8 @@ A ordem geral é:
 4. loop central de gameplay;
 5. progresso, inventário e recompensas;
 6. integração progressiva do Capítulo I;
-7. estabilização, QA e deploy.
+7. estabilização, QA e deploy;
+8. reposicionamento visual da experiência para leitura prioritária de jogo.
 
 ### 3.2 Interpretação prática
 
@@ -107,6 +109,7 @@ A implementação está organizada nos seguintes blocos:
 - **Bloco 5 — Progresso, inventário e recompensas**
 - **Bloco 6 — Integração do Capítulo I**
 - **Bloco 7 — Estabilização, QA e implantação**
+- **Bloco 8 — Reposicionamento visual de site para jogo**
 
 ---
 
@@ -340,7 +343,37 @@ Refinar o MVP para disponibilização em ambiente de produção com confiabilida
 
 ---
 
-## 12. Dependências entre blocos
+## 12. Bloco 8 — Reposicionamento visual de site para jogo
+
+### Objetivo
+
+Reposicionar a percepção do MVP para que a experiência seja lida prioritariamente como jogo, preservando o núcleo funcional já validado.
+
+### Entregas principais
+
+- HUD autenticada em lugar de navegação com aparência de app;
+- hub principal `/game` reenquadrado como sala do reino e ponto de progressão;
+- capítulo reenquadrado como trilha de provas, portais e estados de avanço;
+- coleção reenquadrada como grimório e biblioteca de recompensas;
+- tokens visuais compartilhados para superfícies, molduras, brilho e estados;
+- revisão dos estados obrigatórios de UI conforme `docs/visual/ui-system.md`.
+
+### Critérios de sucesso
+
+- as rotas protegidas passam a compartilhar linguagem visual coerente de jogo;
+- progresso, bloqueio, conquista e ação ficam visíveis sem depender de metáforas de dashboard;
+- a nova camada visual preserva contraste, leitura pedagógica e uso mobile;
+- o ciclo não introduz regressão no loop central, autenticação ou persistência.
+
+### Dependências
+
+- conclusão do Bloco 7;
+- aderência explícita a `docs/visual/visual-direction.md`;
+- aderência explícita a `docs/visual/ui-system.md`.
+
+---
+
+## 13. Dependências entre blocos
 
 A sequência mínima recomendada é:
 
@@ -350,15 +383,64 @@ A sequência mínima recomendada é:
 - Bloco 4 antes da integração completa do capítulo;
 - Bloco 5 antes da validação final de progressão;
 - Bloco 6 antes do hardening final;
-- Bloco 7 como fechamento do MVP.
+- Bloco 7 como fechamento do MVP funcional;
+- Bloco 8 após o fechamento funcional, usando a base estável para reenquadramento visual sem reabrir o núcleo sistêmico.
 
 Embora haja espaço para trabalho paralelo em partes da UI e do conteúdo, o projeto deve respeitar essa ordem lógica para evitar retrabalho.
 
 ---
 
-## 13. Riscos principais
+## 14. Estratégia do ciclo visual pós-MVP
 
-### 13.1 Builder molecular
+### Objetivo
+
+Após o fechamento funcional do MVP, o próximo ciclo deve reposicionar a percepção do produto para que a experiência seja lida antes como jogo e apenas secundariamente como aplicação web.
+
+Esse ciclo não existe para refazer o núcleo sistêmico já validado. Ele existe para:
+
+- reenquadrar a moldura visual do jogo;
+- aproximar implementação e direção visual oficial;
+- reduzir padrões de dashboard, landing page e app administrativo;
+- aumentar a coerência entre hub, capítulo, fase, coleção e autenticação.
+
+### Princípio de execução
+
+O Bloco 8 deve preservar como base estável:
+
+- rotas;
+- autenticação;
+- persistência;
+- conteúdo oficial;
+- avaliação de fase;
+- progressão já aceita.
+
+O trabalho deve se concentrar em interface, composição, estados visuais e linguagem sistêmica.
+
+### Ordem interna recomendada
+
+O ciclo visual deve seguir a seguinte prioridade:
+
+1. moldura global autenticada e HUD;
+2. hub principal `/game` como sala do reino e ponto de progressão;
+3. capítulo como trilha de provas e portais;
+4. coleção como grimório e biblioteca de recompensas;
+5. consolidação de tokens, superfícies e estados visuais compartilhados;
+6. refinamento de feedback e leitura de progressão nas fases.
+
+### Critério de sucesso do ciclo
+
+Ao final do Bloco 8, o MVP deve:
+
+- preservar legibilidade pedagógica e responsividade;
+- apresentar continuidade visual entre as rotas protegidas;
+- comunicar progresso, bloqueio, conquista e ação com linguagem de jogo;
+- reduzir claramente a leitura de interface genérica de site.
+
+---
+
+## 15. Riscos principais
+
+### 15.1 Builder molecular
 
 Risco:
 
@@ -369,7 +451,7 @@ Mitigação:
 - validar cedo no Bloco 2;
 - manter o modelo semilivre dentro dos limites do MVP.
 
-### 13.2 Deriva entre conteúdo e implementação
+### 15.2 Deriva entre conteúdo e implementação
 
 Risco:
 
@@ -381,7 +463,7 @@ Mitigação:
 - alinhar naming e tipos à documentação oficial;
 - revisar integração fase por fase.
 
-### 13.3 Complexidade de persistência
+### 15.3 Complexidade de persistência
 
 Risco:
 
@@ -393,7 +475,7 @@ Mitigação:
 - usar modelo operacional explícito;
 - aplicar atualizações críticas em transação quando necessário.
 
-### 13.4 Escopo excessivo
+### 15.4 Escopo excessivo
 
 Risco:
 
@@ -404,9 +486,21 @@ Mitigação:
 - seguir rigidamente o escopo oficial;
 - adiar extensões para revisões futuras.
 
+### 15.5 Percepção visual genérica
+
+Risco:
+
+- o MVP permanecer funcional, mas continuar sendo percebido como aplicação web tematizada em vez de jogo.
+
+Mitigação:
+
+- executar o Bloco 8 como ciclo explícito;
+- consolidar HUD, progressão visual e superfícies compartilhadas;
+- validar a implementação contra `docs/visual/visual-direction.md` e `docs/visual/ui-system.md`.
+
 ---
 
-## 14. Relação com os Demais Documentos
+## 16. Relação com os Demais Documentos
 
 Para evitar sobreposição entre documentos de `docs/planning/`, este arquivo deve permanecer no nível estratégico.
 
@@ -418,7 +512,7 @@ Itens operacionais, tarefas de curto prazo e acompanhamento de fechamento não d
 
 ---
 
-## 15. Definição de pronto
+## 17. Definição de pronto
 
 O MVP será considerado pronto quando:
 
@@ -428,11 +522,12 @@ O MVP será considerado pronto quando:
 - tentativas, progresso, inventário e recompensas estiverem persistindo corretamente;
 - a progressão por `correct` estiver funcionando sem ambiguidades;
 - testes cobrirem as áreas críticas definidas no spec técnico;
-- o deploy em produção estiver ativo e funcional para um jogador novo.
+- o deploy em produção estiver ativo e funcional para um jogador novo;
+- a linguagem visual principal das rotas protegidas estiver coerente com a direção oficial de jogo.
 
 ---
 
-## 16. Resultado esperado deste plano
+## 18. Resultado esperado deste plano
 
 Ao seguir este plano, o projeto deve chegar a um MVP:
 

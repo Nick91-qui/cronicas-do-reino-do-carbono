@@ -136,12 +136,12 @@ export const chapter1Phases: Phase[] = [
       "massa e entalpia de combustão podem aparecer como apoio de leitura na carta",
       "o propano é a resposta ideal por representar melhor o contexto do desafio",
       "metano e etano continuam corretos como combustíveis, mas menos representativos para esta fase",
-      "o aluno só desbloqueia a carta do propano se efetivamente construir propano na oficina",
+      "o aluno só desbloqueia a carta do propano se efetivamente construir propano no laboratório de síntese",
     ],
     rewards: {
       carbon: 1,
       unlockedMolecule: "propano",
-      unlockedTitle: "Forjador de Cadeias",
+      unlockedTitle: "Sintetista de Cadeias",
     },
     feedback: {
       excellent:
@@ -300,12 +300,12 @@ export const chapter1Phases: Phase[] = [
     id: "chapter-1-phase-7",
     chapterId: "chapter-1",
     number: 7,
-    title: "A Oficina dos Polímeros",
+    title: "O Laboratório de Síntese de Polímeros",
     coreConcept: "Uso de alcenos como precursores de polímeros.",
     technicalType: "choice",
     displayType: "Escolha",
     narrative:
-      "Na Oficina dos Polímeros, o jogador encontra um novo problema: identificar qual molécula pode abrir caminho para a formação de longas cadeias materiais.",
+      "No Laboratório de Síntese de Polímeros, o jogador encontra um novo problema: identificar qual molécula pode abrir caminho para a formação de longas cadeias materiais.",
     objective:
       "Escolher a molécula mais adequada para servir de precursor de um polímero.",
     resources: {

@@ -4,8 +4,255 @@
 
 :root {
   color-scheme: dark;
+  --background: 8 12 24;
+  --foreground: 233 239 251;
+  --muted: 153 171 198;
+  --line: 109 168 255;
+  --line-soft: 147 197 253;
+  --gold: 240 185 78;
+  --success: 74 222 128;
+  --danger: 248 113 113;
+  --surface-core: 12 19 35;
+  --surface-panel: 18 27 48;
+  --surface-panel-strong: 25 37 66;
+  --surface-frost: 246 248 255;
+  --font-body: "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-display: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+html {
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.18), transparent 28%),
+    radial-gradient(circle at 80% 10%, rgba(245, 158, 11, 0.16), transparent 20%),
+    linear-gradient(180deg, rgb(var(--background)), rgb(4 7 15));
 }
 
 body {
   @apply bg-background text-foreground antialiased;
+  background:
+    radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 24%),
+    radial-gradient(circle at bottom, rgba(234, 179, 8, 0.08), transparent 22%),
+    linear-gradient(180deg, rgba(8, 12, 24, 0.96), rgba(4, 7, 15, 1));
+  font-family: var(--font-body);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: rgba(125, 211, 252, 0.35);
+  color: rgb(var(--foreground));
+}
+
+@layer components {
+  .game-shell {
+    @apply relative overflow-hidden rounded-[30px] border p-5 sm:p-7;
+    border-color: rgba(var(--line), 0.2);
+    background:
+      linear-gradient(140deg, rgba(255, 255, 255, 0.04), transparent 35%),
+      radial-gradient(circle at top left, rgba(var(--line), 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(var(--gold), 0.14), transparent 22%),
+      linear-gradient(180deg, rgba(var(--surface-panel), 0.98), rgba(var(--surface-core), 0.98));
+    box-shadow:
+      0 24px 80px rgba(2, 6, 23, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .game-panel {
+    @apply rounded-[26px] border p-5 sm:p-6;
+    border-color: rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(180deg, rgba(var(--surface-panel), 0.94), rgba(var(--surface-core), 0.98));
+    box-shadow:
+      0 18px 50px rgba(2, 6, 23, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .game-panel-muted {
+    @apply rounded-3xl border p-4;
+    border-color: rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(180deg, rgba(var(--surface-panel-strong), 0.8), rgba(var(--surface-core), 0.75));
+  }
+
+  .hud-chip {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em];
+    border-color: rgba(var(--line-soft), 0.22);
+    background: rgba(15, 23, 42, 0.72);
+    color: rgba(var(--foreground), 0.88);
+  }
+
+  .ritual-link {
+    @apply inline-flex items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(var(--foreground), 0.78);
+  }
+
+  .ritual-link:hover {
+    border-color: rgba(var(--line-soft), 0.3);
+    color: rgb(var(--foreground));
+  }
+
+  .ritual-link:focus-visible,
+  .state-panel:focus-visible,
+  .state-action:focus-visible,
+  .state-field:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 1px rgba(var(--line-soft), 0.4),
+      0 0 0 4px rgba(var(--line), 0.16);
+  }
+
+  .ritual-link[data-active="true"] {
+    border-color: rgba(var(--gold), 0.36);
+    background:
+      linear-gradient(180deg, rgba(var(--gold), 0.18), rgba(var(--line), 0.1));
+    color: rgb(var(--foreground));
+    box-shadow: 0 0 0 1px rgba(var(--gold), 0.08), 0 14px 30px rgba(2, 6, 23, 0.24);
+  }
+
+  .state-panel {
+    @apply rounded-[24px] border p-4 transition duration-200;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .state-panel:hover {
+    transform: translateY(-1px);
+    border-color: rgba(var(--line-soft), 0.2);
+  }
+
+  .state-panel[data-state="active"] {
+    border-color: rgba(var(--line), 0.24);
+    background:
+      linear-gradient(180deg, rgba(var(--line), 0.12), rgba(255, 255, 255, 0.03));
+    box-shadow: 0 18px 40px rgba(2, 6, 23, 0.22);
+  }
+
+  .state-panel[data-state="success"] {
+    border-color: rgba(var(--success), 0.26);
+    background:
+      linear-gradient(180deg, rgba(var(--success), 0.12), rgba(255, 255, 255, 0.03));
+  }
+
+  .state-panel[data-state="locked"] {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(var(--foreground), 0.66);
+    opacity: 0.78;
+  }
+
+  .state-action {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-black uppercase tracking-[0.14em] transition duration-200;
+  }
+
+  .state-action[data-tone="primary"] {
+    background: linear-gradient(180deg, rgba(250, 204, 21, 0.96), rgba(245, 158, 11, 0.92));
+    color: rgb(15 23 42);
+    box-shadow: 0 18px 36px rgba(245, 158, 11, 0.22);
+  }
+
+  .state-action[data-tone="primary"]:hover {
+    filter: brightness(1.04);
+  }
+
+  .state-action[data-tone="secondary"] {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgb(var(--foreground));
+  }
+
+  .state-action[data-tone="secondary"]:hover {
+    border-color: rgba(var(--line-soft), 0.26);
+  }
+
+  .state-action:disabled,
+  .state-action[data-state="locked"] {
+    cursor: not-allowed;
+    opacity: 0.42;
+    filter: none;
+  }
+
+  .state-field {
+    @apply w-full rounded-2xl border px-4 py-3 text-slate-100 outline-none transition duration-200;
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(2, 6, 23, 0.78);
+  }
+
+  .state-field:hover {
+    border-color: rgba(var(--line-soft), 0.2);
+  }
+
+  .state-field:focus-visible {
+    background: rgba(2, 6, 23, 0.92);
+  }
+
+  .ritual-console {
+    @apply relative overflow-hidden rounded-[26px] border backdrop-blur-xl;
+    border-color: rgba(var(--line-soft), 0.18);
+    background:
+      linear-gradient(120deg, rgba(255, 255, 255, 0.04), transparent 28%),
+      radial-gradient(circle at top left, rgba(var(--line), 0.16), transparent 26%),
+      radial-gradient(circle at bottom right, rgba(var(--gold), 0.12), transparent 24%),
+      linear-gradient(180deg, rgba(4, 8, 18, 0.94), rgba(6, 10, 22, 0.9));
+    box-shadow:
+      0 22px 48px rgba(2, 6, 23, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .ritual-console::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    opacity: 0.55;
+  }
+
+  .ritual-console-action {
+    @apply inline-flex items-center justify-center rounded-full transition duration-200;
+  }
+
+  .ritual-console-action[data-tone="back"] {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgb(var(--foreground));
+  }
+
+  .ritual-console-action[data-tone="back"]:hover {
+    border-color: rgba(var(--line-soft), 0.24);
+  }
+
+  .ritual-console-action[data-tone="forward"] {
+    background: linear-gradient(180deg, rgba(250, 204, 21, 0.96), rgba(245, 158, 11, 0.92));
+    color: rgb(15 23 42);
+    box-shadow: 0 16px 30px rgba(245, 158, 11, 0.2);
+  }
+
+  .ritual-console-action[data-tone="forward"]:hover {
+    filter: brightness(1.04);
+  }
+
+  .ritual-console-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+    filter: none;
+  }
 }
