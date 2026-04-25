@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 import { getPlayerInventorySnapshot } from "@/lib/inventory/service";
 import { getAllChaptersProgressView } from "@/lib/progress/queries";
+import { blobAssets } from "@/lib/assets/blob";
 
 export default async function ProfilePage() {
   const player = await requireAuthenticatedPlayer(prisma);
@@ -18,7 +19,7 @@ export default async function ProfilePage() {
     <ProtectedScene
       eyebrow="Perfil do aprendiz"
       ambientLabel="Aposentos do aprendiz"
-      imageSrc="/visual/protected/quarto-aprendiz.png"
+      imageSrc={blobAssets.protectedApprenticeRoom}
       imageAlt="Aposentos do aprendiz no castelo."
       title={player.displayName}
       description="Visao geral da identidade, do progresso acumulado e do inventario persistente do jogador."

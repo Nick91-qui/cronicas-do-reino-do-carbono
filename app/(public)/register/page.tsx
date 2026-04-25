@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { AuthScene } from "@/components/auth/auth-scene";
 import { AuthForm } from "@/components/auth/auth-form";
+import { blobAssets } from "@/lib/assets/blob";
 
 export default function RegisterPage() {
   return (
@@ -11,7 +12,7 @@ export default function RegisterPage() {
       description="Quem escolhe registrar atravessa o portao para a ala de sintese, onde o castelo apresenta os instrumentos, regras e marcas do primeiro rito."
       backLabel="Voltar ao portao"
       ambientLabel="Laboratorio de iniciacao"
-      imageSrc="/visual/auth/laboratorio-da-sintese.png"
+      imageSrc={blobAssets.authSynthesisLab}
       imageAlt="Laboratorio de sintese no interior do castelo."
     >
       <div className="space-y-6">

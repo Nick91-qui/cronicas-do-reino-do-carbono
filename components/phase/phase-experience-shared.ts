@@ -1,4 +1,5 @@
 import type { BondType, MoleculeId, SelectableProperty } from "@/lib/content/types";
+import { blobAssets } from "@/lib/assets/blob";
 
 export type PersistedResponse = {
   evaluation: {
@@ -98,7 +99,7 @@ export function getSceneImageByStep(step: PhaseStep): {
 } {
   if (step === "intro") {
     return {
-      src: "/visual/protected/camara-cristalizacao.png",
+      src: blobAssets.protectedCrystalChamber,
       alt: "Camara ritual do castelo.",
       ambient: "Camara ritual",
     };
@@ -106,14 +107,14 @@ export function getSceneImageByStep(step: PhaseStep): {
 
   if (step === "result") {
     return {
-      src: "/visual/protected/salao-cristalizacao.png",
+      src: blobAssets.protectedGrandHall,
       alt: "Salao de julgamento do castelo.",
       ambient: "Salao de julgamento",
     };
   }
 
   return {
-    src: "/visual/auth/laboratorio-da-sintese.png",
+    src: blobAssets.authSynthesisLab,
     alt: "Laboratorio de sintese do castelo.",
     ambient: "Laboratorio de sintese",
   };

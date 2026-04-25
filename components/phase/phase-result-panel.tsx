@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Molecule } from "@/lib/content/types";
 import type { PersistedResponse } from "@/components/phase/phase-experience-shared";
 import { resultTitleByKind, resultToneClass } from "@/components/phase/phase-experience-shared";
+import { blobAssets } from "@/lib/assets/blob";
 
 type PhaseResultPanelProps = {
   focusedMolecule: Molecule | null;
@@ -22,7 +23,7 @@ export function PhaseResultPanel({
     <section className="relative isolate mx-auto max-w-5xl overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/60 p-4 shadow-[0_30px_100px_rgba(2,6,23,0.42)] sm:p-6">
       <div className="absolute inset-0">
         <Image
-          src="/visual/protected/salao-cristalizacao.png"
+          src={blobAssets.protectedGrandHall}
           alt="Salao de julgamento do castelo."
           fill
           sizes="100vw"

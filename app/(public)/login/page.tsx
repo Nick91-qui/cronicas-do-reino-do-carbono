@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { AuthScene } from "@/components/auth/auth-scene";
 import { AuthForm } from "@/components/auth/auth-form";
+import { blobAssets } from "@/lib/assets/blob";
 
 export default function LoginPage() {
   return (
@@ -11,7 +12,7 @@ export default function LoginPage() {
       description="Quem escolhe entrar atravessa o portao principal e cai direto no salao de consulta do castelo, onde os registros da jornada permanecem guardados."
       backLabel="Voltar ao portao"
       ambientLabel="Biblioteca dos aprendizes"
-      imageSrc="/visual/auth/biblioteca.png"
+      imageSrc={blobAssets.authLibrary}
       imageAlt="Biblioteca ritual do castelo."
     >
       <div className="space-y-6">

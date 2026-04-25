@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 import { getAllChaptersProgressView } from "@/lib/progress/queries";
 import { getPlayerInventorySnapshot } from "@/lib/inventory/service";
+import { blobAssets } from "@/lib/assets/blob";
 
 export default async function GamePage() {
   const player = await requireAuthenticatedPlayer(prisma);
@@ -26,7 +27,7 @@ export default async function GamePage() {
     <ProtectedScene
       eyebrow="Salao do reino"
       ambientLabel="Conselho central"
-      imageSrc="/visual/protected/salao-cristalizacao.png"
+      imageSrc={blobAssets.protectedGrandHall}
       imageAlt="Salao central do castelo."
       title={`O salao central chama ${player.displayName} de volta ao circulo das provas.`}
       description="O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas agora aparecem como sinais de campanha, nao como painel administrativo."

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { blobAssets } from "@/lib/assets/blob";
+
 type Destination = "/login" | "/register";
 
 const menuOptions: Array<{
@@ -62,7 +64,7 @@ export function CastleLanding() {
           ].join(" ")}
         >
           <Image
-            src="/visual/landing/castelo-inicial.png"
+            src={blobAssets.landingCastle}
             alt="Castelo central do Reino do Carbono."
             fill
             priority

@@ -1,5 +1,6 @@
 "use client";
 
+import { blobAssets } from "@/lib/assets/blob";
 import {
   formatCarbonGroup,
   getOpenChainBondSegments,
@@ -185,7 +186,7 @@ export function SynthesisLabVisual({
           backgroundImage: [
             "linear-gradient(180deg, rgba(14,23,42,0.9), rgba(8,13,26,0.96))",
             "radial-gradient(circle at center, rgba(34,211,238,0.08), transparent 42%)",
-            "url('/visual/synthesis-lab/mesa-de-sintese.png')",
+            `url('${blobAssets.synthesisWorkbench}')`,
           ].join(", "),
           backgroundSize: "cover, cover, cover",
           backgroundPosition: "center, center, center bottom",

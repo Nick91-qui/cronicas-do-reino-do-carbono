@@ -5,6 +5,7 @@ import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 import { getChapterProgressView } from "@/lib/progress/queries";
+import { blobAssets } from "@/lib/assets/blob";
 
 function getPhaseStateCopy(phase: {
   isCompleted: boolean;
@@ -61,7 +62,7 @@ export default async function ChapterPage({
     <ProtectedScene
       eyebrow="Mapa do capitulo"
       ambientLabel="Camara de cristalizacao"
-      imageSrc="/visual/protected/camara-cristalizacao.png"
+      imageSrc={blobAssets.protectedCrystalChamber}
       imageAlt="Camara de cristalizacao do castelo."
       title={progress.chapterTitle}
       description={`O mapa do dominio mostra os portoes ja respondidos, os selos conquistados e a proxima prova que reconhece o nome de ${player.displayName}.`}

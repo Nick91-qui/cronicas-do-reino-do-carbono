@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ProtectedHudNav } from "@/components/navigation/protected-hud-nav";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
+import { blobAssets } from "@/lib/assets/blob";
 
 export default async function ProtectedLayout({
   children,
@@ -18,7 +19,7 @@ export default async function ProtectedLayout({
           className="absolute inset-0 opacity-20"
           style={{
             backgroundImage:
-              "linear-gradient(180deg, rgba(4,7,15,0.74), rgba(4,7,15,0.96)), url('/visual/protected/salao-cristalizacao.png')",
+              `linear-gradient(180deg, rgba(4,7,15,0.74), rgba(4,7,15,0.96)), url('${blobAssets.protectedGrandHall}')`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}

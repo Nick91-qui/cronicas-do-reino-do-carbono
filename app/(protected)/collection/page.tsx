@@ -4,6 +4,7 @@ import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
 import { getPlayerCollection } from "@/lib/collection/service";
+import { blobAssets } from "@/lib/assets/blob";
 
 export default async function CollectionPage() {
   const player = await requireAuthenticatedPlayer(prisma);
@@ -14,7 +15,7 @@ export default async function CollectionPage() {
     <ProtectedScene
       eyebrow="Grimorio vivo"
       ambientLabel="Biblioteca ritual"
-      imageSrc="/visual/auth/biblioteca.png"
+      imageSrc={blobAssets.authLibrary}
       imageAlt="Biblioteca ritual do castelo."
       title={`Cartas inscritas por ${player.displayName}`}
       description="Esta sala guarda as moleculas ja reconhecidas pelo laboratorio de sintese. Cada carta funciona como memoria de progresso, consulta tecnica e recompensa do capitulo."
