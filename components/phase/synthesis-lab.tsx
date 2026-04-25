@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { MoleculeCard } from "@/components/cards/molecule-card";
+import { SynthesizedCardOverlay } from "@/components/phase/synthesized-card-overlay";
 import { SynthesisLabVisual } from "@/components/phase/synthesis-lab-visual";
 import type {
   BuilderLayout,
@@ -60,7 +60,20 @@ export function SynthesisLab({
 }: SynthesisLabProps) {
   const [hoveredBondIndex, setHoveredBondIndex] = useState<number | null>(null);
   const [recentlyChangedBondIndex, setRecentlyChangedBondIndex] = useState<number | null>(null);
+  const [isSynthesizedCardOpen, setIsSynthesizedCardOpen] = useState(false);
+  const [isSynthesizedCardMinimized, setIsSynthesizedCardMinimized] = useState(false);
   const currentCarbonValue = Number(carbonCount) || activeCarbonCount;
+
+  useEffect(() => {
+    if (builderResult?.canCreateMolecule && synthesizedMolecule) {
+      setIsSynthesizedCardOpen(true);
+      setIsSynthesizedCardMinimized(false);
+      return;
+    }
+
+    setIsSynthesizedCardOpen(false);
+    setIsSynthesizedCardMinimized(false);
+  }, [builderResult?.canCreateMolecule, synthesizedMolecule?.id]);
 
   useEffect(() => {
     if (recentlyChangedBondIndex === null) {
@@ -122,26 +135,38 @@ export function SynthesisLab({
         </article>
       </div>
 
-      <SynthesisLabVisual
-        layout={layout}
-        activeCarbonCount={activeCarbonCount}
-        minimumCarbonCount={minimumCarbonCount}
-        maximumCarbonCount={maximumCarbonCount}
-        normalizedBondOrders={normalizedBondOrders}
-        previewHydrogensByCarbon={previewHydrogensByCarbon}
-        previewFormulaEstrutural={previewFormulaEstrutural}
-        previewFormulaMolecular={previewFormulaMolecular}
-        hoveredBondIndex={hoveredBondIndex}
-        recentlyChangedBondIndex={recentlyChangedBondIndex}
-        canUseDoubleBond={canUseDoubleBond}
-        canUseClosedRing={canUseClosedRing}
-        isValidatingBuilder={isValidatingBuilder}
-        onBondHover={setHoveredBondIndex}
-        onBondToggle={handleBondToggle}
-        onSetLayout={onSetLayout}
-        onCarbonStep={handleCarbonStep}
-        onValidateBuilder={onValidateBuilder}
-      />
+      <div className="relative">
+        <SynthesisLabVisual
+          layout={layout}
+          activeCarbonCount={activeCarbonCount}
+          minimumCarbonCount={minimumCarbonCount}
+          maximumCarbonCount={maximumCarbonCount}
+          normalizedBondOrders={normalizedBondOrders}
+          previewHydrogensByCarbon={previewHydrogensByCarbon}
+          previewFormulaEstrutural={previewFormulaEstrutural}
+          previewFormulaMolecular={previewFormulaMolecular}
+          hoveredBondIndex={hoveredBondIndex}
+          recentlyChangedBondIndex={recentlyChangedBondIndex}
+          canUseDoubleBond={canUseDoubleBond}
+          canUseClosedRing={canUseClosedRing}
+          isValidatingBuilder={isValidatingBuilder}
+          onBondHover={setHoveredBondIndex}
+          onBondToggle={handleBondToggle}
+          onSetLayout={onSetLayout}
+          onCarbonStep={handleCarbonStep}
+          onValidateBuilder={onValidateBuilder}
+        />
+
+        {synthesizedMolecule ? (
+          <SynthesizedCardOverlay
+            molecule={synthesizedMolecule}
+            isVisible={isSynthesizedCardOpen}
+            isMinimized={isSynthesizedCardMinimized}
+            onExpand={() => setIsSynthesizedCardMinimized(false)}
+            onMinimize={() => setIsSynthesizedCardMinimized(true)}
+          />
+        ) : null}
+      </div>
 
       {builderError ? (
         <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
@@ -196,34 +221,16 @@ export function SynthesisLab({
           </div>
 
           {synthesizedMolecule ? (
-            <div className="mt-5 grid gap-4 xl:grid-cols-[0.28fr,0.72fr] xl:items-start">
-              <div className="rounded-[24px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(15,23,42,0.12))] p-3">
-                <MoleculeCard
-                  molecule={synthesizedMolecule}
-                  isCreated
-                  selectable={false}
-                  variant="compact"
-                />
-              </div>
-              <div className="rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-300">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                  Molecula reconhecida
-                </p>
-                <p className="mt-2 text-2xl font-black tracking-tight text-white">
-                  {synthesizedMolecule.nomeQuimico}
-                </p>
-                <p className="mt-3">
-                  A mesa reconheceu esta carta como uma leitura coerente. No proximo rito, voce confirma se ela continua sendo a melhor resposta para o contexto da prova.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-emerald-300/25 bg-emerald-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100">
-                    Aceita pela mesa
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/80">
-                    Pronta para comparacao
-                  </span>
-                </div>
-              </div>
+            <div className="mt-5 rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-300">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
+                Molecula reconhecida
+              </p>
+              <p className="mt-2 text-2xl font-black tracking-tight text-white">
+                {synthesizedMolecule.nomeQuimico}
+              </p>
+              <p className="mt-3">
+                A carta emergiu sobre a bancada. Voce pode virá-la, minimizá-la e reabri-la a qualquer momento antes de seguir para a leitura.
+              </p>
             </div>
           ) : null}
         </article>
