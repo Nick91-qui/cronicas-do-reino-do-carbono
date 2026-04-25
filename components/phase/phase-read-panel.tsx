@@ -53,16 +53,10 @@ export function PhaseReadPanel({
         </div>
 
         <div className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Leitura atual</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Resumo</p>
           <div className="mt-3 grid gap-3 text-sm text-slate-200">
             <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
               Molecula: <span className="font-semibold text-white">{focusedMolecule?.nomeQuimico ?? "nenhuma"}</span>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-              Origem:{" "}
-              <span className="font-semibold text-white">
-                {synthesizedMolecule ? "laboratorio de sintese" : "comparacao direta"}
-              </span>
             </div>
             <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
               Marcas: <span className="font-semibold text-white">{selectedProperties.length}/3</span>
@@ -105,7 +99,7 @@ export function PhaseReadPanel({
         </section>
 
         <section className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Julgamento</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Objetivo</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{phase.objective}</p>
 
           {submitError ? (

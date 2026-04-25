@@ -34,19 +34,12 @@ export function PhaseStepHeader({
 
       <div className="relative px-5 py-6 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             <span>Capitulo I · Prova {phaseNumber}</span>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-chip">Rito em curso</span>
-              <span className="hud-chip border-gold/20 text-gold/90">{scene.ambient}</span>
-            </div>
           </div>
 
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
-              <p className="mb-3 inline-flex rounded-full border border-white/10 bg-slate-950/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100 backdrop-blur-md">
-                {displayedStep === "result" ? "Desfecho" : stepCopy[displayedStep].eyebrow}
-              </p>
               <h1 className="text-3xl tracking-[0.05em] text-white sm:text-4xl">{phaseTitle}</h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
                 {displayedStep === "result"

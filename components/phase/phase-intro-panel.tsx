@@ -18,30 +18,15 @@ export function PhaseIntroPanel({ phase, currentPhaseStatus }: PhaseIntroPanelPr
 
       <div className="grid gap-4">
         <article className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Missao</p>
-          <p className="mt-3 text-sm leading-6 text-slate-200">{phase.objective}</p>
-        </article>
-        <article className="game-panel">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Conceito central</p>
           <p className="mt-3 text-sm leading-6 text-slate-200">{phase.coreConcept}</p>
         </article>
-        <article className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-            Estado local da prova
-          </p>
-          <div className="mt-3 grid gap-3 text-sm text-slate-200">
-            <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-              {currentPhaseStatus?.isCompleted ? "Ja dominada" : "Aguardando sua leitura"}
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-              {phase.resources.carbonAvailable} carbono
-              {phase.resources.carbonAvailable > 1 ? "s" : ""} ·{" "}
-              {phase.resources.availableFragments
-                .map((fragmentId) => bondTypeLabels[fragmentToBondType[fragmentId]])
-                .join(" · ")}
-            </div>
-          </div>
-        </article>
+        {phase.objective ? (
+          <article className="game-panel">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Objetivo</p>
+            <p className="mt-3 text-sm leading-6 text-slate-200">{phase.objective}</p>
+          </article>
+        ) : null}
       </div>
     </div>
   );
