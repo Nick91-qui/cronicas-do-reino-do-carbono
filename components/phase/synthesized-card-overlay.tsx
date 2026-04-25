@@ -59,11 +59,11 @@ export function SynthesizedCardOverlay({
           type="button"
           onClick={onExpand}
           aria-label={`Reabrir carta de ${molecule.nomeQuimico}`}
-          className="group block w-24 rounded-[20px] border border-emerald-300/24 bg-[linear-gradient(180deg,rgba(16,185,129,0.16),rgba(15,23,42,0.9))] p-2 shadow-[0_12px_30px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:-translate-y-1 hover:border-emerald-200/40 sm:w-28"
+          className="group block h-32 w-24 overflow-hidden rounded-[20px] border border-emerald-300/24 bg-[linear-gradient(180deg,rgba(16,185,129,0.16),rgba(15,23,42,0.9))] p-1.5 shadow-[0_12px_30px_rgba(2,6,23,0.34)] backdrop-blur-md transition hover:-translate-y-1 hover:border-emerald-200/40 sm:h-36 sm:w-28"
         >
-          <div className="overflow-hidden rounded-[16px]">
-            <div className="pointer-events-none origin-top scale-[0.38] sm:scale-[0.42]">
-              <div className="-mb-[220px] -ml-[82px] -mr-[82px] -mt-[72px] sm:-mb-[208px] sm:-ml-[74px] sm:-mr-[74px] sm:-mt-[64px]">
+          <div className="relative h-full overflow-hidden rounded-[16px]">
+            <div className="pointer-events-none absolute left-1/2 top-0 origin-top -translate-x-1/2 scale-[0.38] sm:scale-[0.42]">
+              <div className="-mb-[236px] -ml-[82px] -mr-[82px] -mt-[72px] sm:-mb-[224px] sm:-ml-[74px] sm:-mr-[74px] sm:-mt-[64px]">
                 <MoleculeCard molecule={molecule} isCreated selectable={false} variant="compact" />
               </div>
             </div>
