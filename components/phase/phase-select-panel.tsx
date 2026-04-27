@@ -116,48 +116,44 @@ export function PhaseSelectPanel({
 
       {focusedMolecule ? (
         <>
-          <div
-            className={`fixed inset-0 z-40 transition duration-300 ${
-              isSelectedCardMinimized ? "opacity-0" : "opacity-100"
-            }`}
-            onClick={() => setIsSelectedCardMinimized(true)}
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,15,30,0.12),rgba(8,15,30,0.42)_58%,rgba(8,15,30,0.18)_100%)] backdrop-blur-[2px]" />
-          </div>
+          {!isSelectedCardMinimized ? (
+            <>
+              <div
+                className="fixed inset-0 z-40 opacity-100 transition duration-300"
+                onClick={() => setIsSelectedCardMinimized(true)}
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,15,30,0.12),rgba(8,15,30,0.42)_58%,rgba(8,15,30,0.18)_100%)] backdrop-blur-[2px]" />
+              </div>
 
-          <div
-            className={`fixed inset-x-3 bottom-6 z-50 flex justify-center transition-all duration-500 sm:inset-x-6 ${
-              isSelectedCardMinimized
-                ? "translate-y-10 scale-95 opacity-0"
-                : "translate-y-0 scale-100 opacity-100"
-            }`}
-          >
-            <div className="pointer-events-auto w-full max-w-sm" onClick={(event) => event.stopPropagation()}>
-              <div className="mb-3 flex justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsSelectedCardMinimized(true)}
-                  className="rounded-full border border-white/10 bg-slate-950/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-100 backdrop-blur-md transition hover:border-cyan-200/35"
-                >
-                  Minimizar
-                </button>
+              <div className="fixed inset-x-3 bottom-6 z-50 flex justify-center transition-all duration-500 sm:inset-x-6">
+                <div className="w-full max-w-sm" onClick={(event) => event.stopPropagation()}>
+                  <div className="mb-3 flex justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsSelectedCardMinimized(true)}
+                      className="rounded-full border border-white/10 bg-slate-950/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-100 backdrop-blur-md transition hover:border-cyan-200/35"
+                    >
+                      Minimizar
+                    </button>
+                  </div>
+                  <div className="rounded-[28px] border border-cyan-300/24 bg-[linear-gradient(180deg,rgba(34,211,238,0.12),rgba(15,23,42,0.18))] p-3 shadow-[0_24px_80px_rgba(2,6,23,0.48)]">
+                    <MoleculeCard
+                      molecule={focusedMolecule}
+                      isSelected
+                      isCreated={builderResult?.resolvedMoleculeId === focusedMolecule.id}
+                      selectable={supportsMoleculeSelection}
+                      variant="compact"
+                      onSelect={
+                        supportsMoleculeSelection
+                          ? () => onSelectMolecule(focusedMolecule.id)
+                          : undefined
+                      }
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="rounded-[28px] border border-cyan-300/24 bg-[linear-gradient(180deg,rgba(34,211,238,0.12),rgba(15,23,42,0.18))] p-3 shadow-[0_24px_80px_rgba(2,6,23,0.48)]">
-                <MoleculeCard
-                  molecule={focusedMolecule}
-                  isSelected
-                  isCreated={builderResult?.resolvedMoleculeId === focusedMolecule.id}
-                  selectable={supportsMoleculeSelection}
-                  variant="compact"
-                  onSelect={
-                    supportsMoleculeSelection
-                      ? () => onSelectMolecule(focusedMolecule.id)
-                      : undefined
-                  }
-                />
-              </div>
-            </div>
-          </div>
+            </>
+          ) : null}
 
           <div
             className={`fixed bottom-4 right-4 z-50 transition-all duration-300 sm:bottom-5 sm:right-5 ${
