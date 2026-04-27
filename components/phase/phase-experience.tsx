@@ -551,7 +551,7 @@ export function PhaseExperience({
         }`}
       >
         {displayedStep === "intro" ? (
-          <PhaseIntroPanel phase={phase} currentPhaseStatus={currentPhaseStatus} />
+          <PhaseIntroPanel phase={phase} />
         ) : null}
 
         {displayedStep === "synthesis" ? (

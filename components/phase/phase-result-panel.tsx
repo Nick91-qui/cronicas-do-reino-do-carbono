@@ -36,20 +36,15 @@ export function PhaseResultPanel({
         <div
           className={`rounded-[28px] border p-6 backdrop-blur-md sm:p-8 ${resultToneClass[submitResult.evaluation.qualitativeResult]}`}
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-80">Julgamento do reino</p>
           <h3 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
             {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
           </h3>
           <p className="mt-4 text-sm leading-7 text-white/90">{submitResult.evaluation.feedback}</p>
 
-          <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+          <div className="mt-6 grid gap-3 text-sm sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
               <p className="opacity-70">Forca obtida</p>
               <p className="mt-1 text-2xl font-black">{submitResult.evaluation.scoreAwarded}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-              <p className="opacity-70">Sentenca</p>
-              <p className="mt-1 text-lg font-semibold capitalize">{submitResult.evaluation.validationResult}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
               <p className="opacity-70">Molecula apresentada</p>
@@ -64,21 +59,6 @@ export function PhaseResultPanel({
           </div>
         </div>
 
-        <div className="mt-4 grid gap-3 text-sm text-slate-300 md:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-            <p className="text-slate-500">Provas vencidas</p>
-            <p className="mt-1 text-lg font-semibold text-slate-100">
-              {submitResult.persistence.chapterProgress.completedPhaseCount}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-            <p className="text-slate-500">Prestigio no dominio</p>
-            <p className="mt-1 text-lg font-semibold text-slate-100">
-              {submitResult.persistence.chapterProgress.chapterScore}
-            </p>
-          </div>
-        </div>
-
         {submitResult.persistence.grantedRewards.length > 0 ? (
           <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
             Sinais recebidos:{" "}
@@ -90,7 +70,7 @@ export function PhaseResultPanel({
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button type="button" onClick={onRetry} className="ritual-link px-5 py-3 text-sm">
-            Renovar leitura
+            Tentar novamente
           </button>
           <Link
             href={nextPhaseActionHref ?? "/game"}
