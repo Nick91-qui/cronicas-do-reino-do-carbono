@@ -152,6 +152,8 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 
 Preencher ao final de cada rodada relevante de QA:
 
+Itens não marcados neste checklist representam débito real de validação ou correção, e não apenas ausência de atualização documental.
+
 ### Rodada registrada — 2026-04-21
 
 - Data: 2026-04-21

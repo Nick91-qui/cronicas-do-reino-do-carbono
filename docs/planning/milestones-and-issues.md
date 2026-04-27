@@ -26,7 +26,7 @@ Referências:
 - [x] Milestone 6 — Persistência de tentativas e progresso
 - [x] Milestone 7 — Inventário, coleção e recompensas
 - [x] Milestone 8 — Integração completa do Capítulo I
-- [x] Milestone 9 — QA, segurança e deploy
+- [x] Milestone 9 — QA, segurança e deploy no fluxo central
 - [ ] Milestone 10 — Reposicionamento visual de site para jogo
 
 ## Estratégia de mudança
@@ -138,7 +138,7 @@ Status: concluído.
 
 ### Milestone 9 — QA, segurança e deploy
 
-Status: concluído.
+Status: concluído no fluxo central, com follow-ups abertos.
 
 - [x] definir stack oficial de testes automatizados
 - [x] criar testes unitários mínimos para builder e avaliação de fase
@@ -196,7 +196,7 @@ Stack atual preparada:
 
 ## Próxima sequência recomendada
 
-1. abrir o Milestone 10 com redesign do `layout` autenticado e da tela `/game`
+1. concluir o Milestone 10 a partir do redesign do `layout` autenticado e da tela `/game`
 2. transformar a navegação global em HUD e definir tokens compartilhados de jogo
 3. reenquadrar `/chapter/[chapterId]` e `/collection` dentro da nova linguagem
 4. revisar estados visuais de fase, feedback e progressão contra `docs/visual/ui-system.md`

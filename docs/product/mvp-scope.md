@@ -18,7 +18,7 @@ O MVP inclui:
 - uma campanha inicial com **8 fases**;
 - foco em **hidrocarbonetos**;
 - uso em **web responsivo**;
-- entrada do jogador com **código da turma, nome e senha**;
+- entrada do jogador com **código da turma, nome de exibição, username e senha**;
 - persistência de progresso em banco de dados;
 - laboratório de síntese em modelo **híbrido semilivre**;
 - desbloqueio progressivo de moléculas e fases;
@@ -254,8 +254,8 @@ O conteúdo estático do jogo **não** será gerenciado pelo banco no MVP.
 
 O conteúdo oficial do jogo será mantido em arquivos locais do projeto, como:
 
-- `src/data`
-- ou estrutura equivalente
+- `content/`
+- e módulos equivalentes em código quando necessário
 
 Isso inclui:
 
@@ -268,7 +268,9 @@ Isso inclui:
 
 ### Regra oficial
 
-O conteúdo será alterado diretamente por código.
+As regras oficiais de negócio do conteúdo permanecem definidas primeiro em `docs/` e são então materializadas em `content/` como implementação tipada derivada.
+
+O conteúdo será alterado diretamente por código quando a mudança já estiver alinhada com a documentação normativa.
 
 O MVP não terá:
 
@@ -286,7 +288,8 @@ O MVP terá entrada formal de jogador.
 O acesso será feito por:
 
 - **código da turma**
-- **nome**
+- **nome de exibição**
+- **username**
 - **senha**
 
 Esse modelo busca equilibrar:

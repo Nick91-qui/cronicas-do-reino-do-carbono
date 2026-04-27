@@ -30,7 +30,24 @@
 
 ### Papel dos arquivos locais
 
-Arquivos locais são a fonte oficial para:
+Os arquivos locais se dividem em duas camadas:
+
+- `docs/` como regra oficial de negócio;
+- `content/` como implementação tipada derivada do conteúdo jogável.
+
+No escopo do MVP, a regra oficial vive primeiro na documentação normativa e depois é materializada em código e conteúdo tipado.
+
+### Papel da documentação normativa
+
+Os documentos normativos oficiais do MVP são:
+
+- `docs/tech/technical-spec.md`;
+- `docs/design/content-model.md`;
+- `docs/design/phases.md`;
+- `docs/product/mvp-scope.md`;
+- `README.md`.
+
+Eles definem a fonte oficial para:
 
 - capítulos;
 - fases;
@@ -124,10 +141,12 @@ inadequate -> incorrect -> 0
 
 ## Status da Missão
 
-- **Estado atual:** MVP em implementação avançada com fundação, conteúdo estático, builder, autenticação, loop de fase, progresso e inventário já materializados no repositório
-- **Fonte única da verdade:** `README.md` e pasta `docs/`
+- **Estado atual:** MVP validado no fluxo central do jogador, com foco atual no **Milestone 10 — Reposicionamento visual de site para jogo**
+- **Fonte oficial de regra de negócio:** `README.md` e documentos normativos em `docs/`
+- **Implementação tipada derivada do conteúdo:** `content/`
 - **Legado removido:** `archive/` excluído para evitar ambiguidade
-- **Próximo passo imediato:** consolidar o **Milestone 8 — Integração completa do Capítulo I** e avançar no **Milestone 9 — QA, segurança e deploy**
+- **Milestone 9:** concluído no fluxo central, com follow-ups abertos de QA fino, autenticação/autorização e persistência
+- **Próximo passo imediato:** concluir responsividade e clareza pedagógica do **Milestone 10**
 
 ## Estrutura documental visual
 
@@ -152,10 +171,10 @@ Ela também define o vínculo entre conteúdo estático e apresentação por mei
 
 Executar a fase atual do projeto com foco em:
 
-- validar ponta a ponta as 8 fases oficiais já integradas em conteúdo local;
-- revisar coerência entre `content/` e `docs/design/phases.md`;
-- ampliar QA dos fluxos críticos de builder, submissão, progresso e recompensas;
-- preparar critérios mínimos de smoke test e aceite para produção;
+- alinhar responsividade desktop/mobile sem perder leitura de jogo;
+- validar que o enquadramento visual novo não degrada clareza pedagógica;
+- ampliar QA dos fluxos críticos ainda em aberto de builder, autenticação e persistência;
+- revisar continuamente coerência entre `content/` e documentos normativos;
 - atualizar continuamente a documentação de status quando a implementação avançar.
 
 ## Restrições para futuras sessões
@@ -164,4 +183,4 @@ Executar a fase atual do projeto com foco em:
 - Não mover conteúdo estático para o banco por conveniência.
 - Não aceitar submissões sem justificativa quando a fase exigir propriedades.
 - Não criar lógica química relevante apenas no cliente.
-- Em caso de conflito, priorizar `docs/tech/technical-spec.md`, `docs/design/content-model.md` e `docs/design/phases.md`.
+- Em caso de conflito, priorizar nesta ordem: `docs/tech/technical-spec.md`, `docs/design/content-model.md`, `docs/design/phases.md`, `content/` e demais arquivos de `docs/`.
