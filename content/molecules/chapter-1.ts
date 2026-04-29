@@ -20,7 +20,7 @@ function buildVisual(
 ) {
   return {
     assets: {
-      artworkAsset: `/visual/cards/art/molecule-${id}-main.png`,
+      artworkAsset: `https://thhbntdet8mivemz.public.blob.vercel-storage.com/reino-carbono/cards/art/molecule-${id}-main.png`,
       artworkFit: artworkConfig?.fit,
       artworkPosition: artworkConfig?.position,
       artworkScale: artworkConfig?.scale,
