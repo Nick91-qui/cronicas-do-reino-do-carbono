@@ -24,7 +24,7 @@ const copyByMode: Record<
   }
 > = {
   login: {
-    eyebrow: "Rito de Retorno",
+    eyebrow: "Portão de Retorno",
     sideTitle:
       "Retorne ao laboratorio de sintese e reassuma seu lugar diante das estruturas.",
     sideDescription:
@@ -184,7 +184,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               <span className="mb-2 block text-slate-200">
                 {mode === "register"
                   ? "Nome de oficio (login)"
-                  : "Nome de oficio"}
+                  : "Nome de oficio (login)"}
               </span>
               <input name="username" required className="state-field" />
             </label>
