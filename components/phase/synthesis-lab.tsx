@@ -130,7 +130,7 @@ export function SynthesisLab({
         </article>
 
         <article className="game-panel-muted">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Missao</p>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
         </article>
       </div>

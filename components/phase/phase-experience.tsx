@@ -586,6 +586,7 @@ export function PhaseExperience({
             effectiveSelectedMoleculeId={effectiveSelectedMoleculeId}
             focusedMolecule={focusedMolecule}
             molecules={molecules}
+            objective={phase.objective}
             onSelectMolecule={setSelectedMoleculeId}
             supportsMoleculeSelection={supportsMoleculeSelection}
             synthesizedMolecule={synthesizedMolecule}

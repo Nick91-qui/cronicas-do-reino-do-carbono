@@ -99,7 +99,7 @@ export function PhaseReadPanel({
         </section>
 
         <section className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Objetivo</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{phase.objective}</p>
 
           {submitError ? (

@@ -10,6 +10,7 @@ type PhaseSelectPanelProps = {
   effectiveSelectedMoleculeId: MoleculeId | "";
   focusedMolecule: Molecule | null;
   molecules: Molecule[];
+  objective: string;
   onSelectMolecule: (moleculeId: MoleculeId) => void;
   supportsMoleculeSelection: boolean;
   synthesizedMolecule: Molecule | null;
@@ -20,6 +21,7 @@ export function PhaseSelectPanel({
   effectiveSelectedMoleculeId,
   focusedMolecule,
   molecules,
+  objective,
   onSelectMolecule,
   supportsMoleculeSelection,
   synthesizedMolecule,
@@ -34,84 +36,91 @@ export function PhaseSelectPanel({
 
   return (
     <section className="relative">
-      <section className="game-panel sm:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Escolha</p>
-            <h3 className="mt-2 text-2xl font-black tracking-tight text-white">Cartas disponiveis</h3>
-          </div>
-          <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
-            Selecione 1 carta
-          </div>
-        </div>
+      <section className="grid gap-4">
+        <article className="game-panel">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
+          <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
+        </article>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4">
-          {molecules.map((molecule) => {
-            const isSelected = effectiveSelectedMoleculeId === molecule.id;
-            const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
-            const artworkFit = molecule.visual.assets.artworkFit ?? "cover";
-            const artworkPosition = molecule.visual.assets.artworkPosition ?? "center";
-            const artworkScale = molecule.visual.assets.artworkScale ?? 1;
+        <section className="game-panel sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Escolha</p>
+              <h3 className="mt-2 text-2xl font-black tracking-tight text-white">Cartas disponiveis</h3>
+            </div>
+            <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
+              Selecione 1 carta
+            </div>
+          </div>
 
-            return (
-              <button
-                type="button"
-                key={molecule.id}
-                onClick={() => onSelectMolecule(molecule.id)}
-                aria-pressed={isSelected}
-                className={`group mx-auto flex w-full max-w-[168px] flex-col rounded-[24px] p-1 text-left transition sm:max-w-[196px] lg:max-w-[208px] sm:rounded-[28px] ${
-                  isSelected
-                    ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.25),rgba(59,130,246,0.12))]"
-                    : isCreated
-                      ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.18),rgba(20,184,166,0.1))]"
-                      : "bg-transparent"
-                }`}
-              >
-                <div className="overflow-hidden rounded-[20px] border border-white/10 bg-slate-950/70 p-2 shadow-[0_16px_40px_rgba(2,6,23,0.24)] transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan-200/30">
-                  <div className="mb-2 min-w-0 px-1">
-                    <p className="line-clamp-2 text-sm font-black tracking-tight text-white">
-                      {molecule.nomeQuimico}
-                    </p>
-                  </div>
-                  <div
-                    className="relative aspect-square overflow-hidden rounded-[16px] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                    style={{
-                      backgroundImage: [
-                        "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.82), transparent 18%)",
-                        "radial-gradient(circle at 68% 35%, rgba(255,255,255,0.35), transparent 14%)",
-                        `linear-gradient(135deg, ${molecule.visual.accentFrom}, ${molecule.visual.accentTo})`,
-                      ].join(", "),
-                    }}
-                  >
-                    <img
-                      src={molecule.visual.assets.artworkAsset}
-                      alt={molecule.nomeQuimico}
-                      className={`h-full w-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.45)] ${
-                        artworkFit === "contain" ? "object-contain" : "object-cover"
-                      }`}
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4">
+            {molecules.map((molecule) => {
+              const isSelected = effectiveSelectedMoleculeId === molecule.id;
+              const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
+              const artworkFit = molecule.visual.assets.artworkFit ?? "cover";
+              const artworkPosition = molecule.visual.assets.artworkPosition ?? "center";
+              const artworkScale = molecule.visual.assets.artworkScale ?? 1;
+
+              return (
+                <button
+                  type="button"
+                  key={molecule.id}
+                  onClick={() => onSelectMolecule(molecule.id)}
+                  aria-pressed={isSelected}
+                  className={`group mx-auto flex w-full max-w-[168px] flex-col rounded-[24px] p-1 text-left transition sm:max-w-[196px] lg:max-w-[208px] sm:rounded-[28px] ${
+                    isSelected
+                      ? "bg-[linear-gradient(135deg,rgba(34,211,238,0.25),rgba(59,130,246,0.12))]"
+                      : isCreated
+                        ? "bg-[linear-gradient(135deg,rgba(52,211,153,0.18),rgba(20,184,166,0.1))]"
+                        : "bg-transparent"
+                  }`}
+                >
+                  <div className="overflow-hidden rounded-[20px] border border-white/10 bg-slate-950/70 p-2 shadow-[0_16px_40px_rgba(2,6,23,0.24)] transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan-200/30">
+                    <div className="mb-2 min-w-0 px-1">
+                      <p className="line-clamp-2 text-sm font-black tracking-tight text-white">
+                        {molecule.nomeQuimico}
+                      </p>
+                    </div>
+                    <div
+                      className="relative aspect-square overflow-hidden rounded-[16px] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                       style={{
-                        objectPosition: artworkPosition,
-                        transform: `scale(${artworkScale})`,
-                        transformOrigin: "center",
+                        backgroundImage: [
+                          "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.82), transparent 18%)",
+                          "radial-gradient(circle at 68% 35%, rgba(255,255,255,0.35), transparent 14%)",
+                          `linear-gradient(135deg, ${molecule.visual.accentFrom}, ${molecule.visual.accentTo})`,
+                        ].join(", "),
                       }}
-                    />
+                    >
+                      <img
+                        src={molecule.visual.assets.artworkAsset}
+                        alt={molecule.nomeQuimico}
+                        className={`h-full w-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.45)] ${
+                          artworkFit === "contain" ? "object-contain" : "object-cover"
+                        }`}
+                        style={{
+                          objectPosition: artworkPosition,
+                          transform: `scale(${artworkScale})`,
+                          transformOrigin: "center",
+                        }}
+                      />
 
-                    <div className="pointer-events-none absolute inset-x-2 bottom-2 flex justify-between gap-2">
-                      <span className="rounded-full border border-white/20 bg-slate-950/60 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/85">
-                        {molecule.classe}
-                      </span>
-                      {isSelected ? (
-                        <span className="rounded-full border border-cyan-200/30 bg-cyan-300/15 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
-                          Ativa
+                      <div className="pointer-events-none absolute inset-x-2 bottom-2 flex justify-between gap-2">
+                        <span className="rounded-full border border-white/20 bg-slate-950/60 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/85">
+                          {molecule.classe}
                         </span>
-                      ) : null}
+                        {isSelected ? (
+                          <span className="rounded-full border border-cyan-200/30 bg-cyan-300/15 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                            Ativa
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
       </section>
 
       {focusedMolecule ? (
