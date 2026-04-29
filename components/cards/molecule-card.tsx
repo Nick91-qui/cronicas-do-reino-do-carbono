@@ -346,44 +346,6 @@ export function MoleculeCard({
                   </div>
                 </div>
 
-                <div className="mt-3 grid gap-3">
-                  <div className="rounded-[18px] border border-emerald-200 bg-emerald-50 px-3 py-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      Pontos fortes
-                    </p>
-                    <ul className="mt-2 space-y-2 text-xs leading-6 text-slate-800">
-                      {molecule.pontosFortes.slice(0, 3).map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-start gap-2 rounded-2xl border border-emerald-200/80 bg-white/65 px-2.5 py-2"
-                        >
-                          <span className="mt-0.5 shrink-0 text-[11px] font-black text-emerald-700">
-                            +
-                          </span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-[18px] border border-rose-200 bg-rose-50 px-3 py-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      Limitações
-                    </p>
-                    <ul className="mt-2 space-y-2 text-xs leading-6 text-slate-800">
-                      {molecule.limitacoes.slice(0, 3).map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-start gap-2 rounded-2xl border border-rose-200/80 bg-white/65 px-2.5 py-2"
-                        >
-                          <span className="mt-0.5 shrink-0 text-[11px] font-black text-rose-700">
-                            -
-                          </span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
               </div>
             </div>
           </article>
