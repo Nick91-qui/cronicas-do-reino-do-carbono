@@ -43,6 +43,7 @@ pnpm-debug.log*
 .idea
 *.swp
 *.swo
+.codex
 
 # OS files
 .DS_Store
