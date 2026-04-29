@@ -3,7 +3,10 @@ import Link from "next/link";
 
 import type { Molecule } from "@/lib/content/types";
 import type { PersistedResponse } from "@/components/phase/phase-experience-shared";
-import { resultTitleByKind, resultToneClass } from "@/components/phase/phase-experience-shared";
+import {
+  resultTitleByKind,
+  resultToneClass,
+} from "@/components/phase/phase-experience-shared";
 import { blobAssets } from "@/lib/assets/blob";
 
 type PhaseResultPanelProps = {
@@ -39,16 +42,22 @@ export function PhaseResultPanel({
           <h3 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
             {resultTitleByKind[submitResult.evaluation.qualitativeResult]}
           </h3>
-          <p className="mt-4 text-sm leading-7 text-white/90">{submitResult.evaluation.feedback}</p>
+          <p className="mt-4 text-sm leading-7 text-white/90">
+            {submitResult.evaluation.feedback}
+          </p>
 
           <div className="mt-6 grid gap-3 text-sm sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
               <p className="opacity-70">Forca obtida</p>
-              <p className="mt-1 text-2xl font-black">{submitResult.evaluation.scoreAwarded}</p>
+              <p className="mt-1 text-2xl font-black">
+                {submitResult.evaluation.scoreAwarded}
+              </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
               <p className="opacity-70">Molecula apresentada</p>
-              <p className="mt-1 text-lg font-semibold">{focusedMolecule?.nomeQuimico ?? "Nao definida"}</p>
+              <p className="mt-1 text-lg font-semibold">
+                {focusedMolecule?.nomeQuimico ?? "Nao definida"}
+              </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
               <p className="opacity-70">Marcas alinhadas</p>
@@ -69,14 +78,20 @@ export function PhaseResultPanel({
         ) : null}
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <button type="button" onClick={onRetry} className="ritual-link px-5 py-3 text-sm">
+          <button
+            type="button"
+            onClick={onRetry}
+            className="ritual-link px-5 py-3 text-sm"
+          >
             Tentar novamente
           </button>
           <Link
             href={nextPhaseActionHref ?? "/game"}
             className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
           >
-            {nextPhaseActionHref ? "Seguir para a proxima prova" : "Voltar ao jogo"}
+            {nextPhaseActionHref
+              ? "Seguir para a proxima prova"
+              : "Voltar ao salão"}
           </Link>
         </div>
       </div>

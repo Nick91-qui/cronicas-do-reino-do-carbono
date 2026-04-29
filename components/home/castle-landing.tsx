@@ -91,13 +91,17 @@ export function CastleLanding() {
         <div
           className={[
             "absolute left-1/2 top-[16%] h-[74%] w-[42%] origin-right rounded-l-[44%] rounded-br-[10%] border border-amber-200/20 bg-[linear-gradient(180deg,rgba(56,34,20,0.96),rgba(23,13,7,0.98))] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_20px_50px_rgba(0,0,0,0.35)] transition-transform duration-[1100ms] ease-[cubic-bezier(0.2,0.9,0.2,1)]",
-            isTransitioning ? "-translate-x-[102%] -rotate-[8deg]" : "-translate-x-full",
+            isTransitioning
+              ? "-translate-x-[102%] -rotate-[8deg]"
+              : "-translate-x-full",
           ].join(" ")}
         />
         <div
           className={[
             "absolute left-1/2 top-[16%] h-[74%] w-[42%] origin-left rounded-r-[44%] rounded-bl-[10%] border border-amber-200/20 bg-[linear-gradient(180deg,rgba(56,34,20,0.96),rgba(23,13,7,0.98))] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_20px_50px_rgba(0,0,0,0.35)] transition-transform duration-[1100ms] ease-[cubic-bezier(0.2,0.9,0.2,1)]",
-            isTransitioning ? "translate-x-[2%] rotate-[8deg]" : "translate-x-0",
+            isTransitioning
+              ? "translate-x-[2%] rotate-[8deg]"
+              : "translate-x-0",
           ].join(" ")}
         />
         <div
@@ -110,16 +114,9 @@ export function CastleLanding() {
 
       <section className="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 pb-12 pt-10 text-center sm:px-6">
         <div className="max-w-4xl">
-          <p className="mx-auto inline-flex rounded-full border border-cyan-300/25 bg-slate-950/50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100 shadow-[0_8px_30px_rgba(2,6,23,0.34)] backdrop-blur-md">
-            Menu Principal do Castelo
-          </p>
           <h1 className="mt-6 font-display text-5xl tracking-[0.08em] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)] sm:text-6xl lg:text-7xl">
             Cronicas do Reino do Carbono
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-200 sm:text-base">
-            Uma entrada mais proxima de menu de jogo: castelo ao centro, acoes concentradas e passagem
-            direta para o interior do reino quando o portao se abre.
-          </p>
         </div>
 
         <div className="mt-10 grid w-full max-w-2xl gap-4 sm:grid-cols-2">
@@ -137,11 +134,15 @@ export function CastleLanding() {
                 isTransitioning ? "cursor-wait opacity-80" : "",
               ].join(" ")}
             >
-              <span className="block text-xl font-black uppercase tracking-[0.16em]">{option.label}</span>
+              <span className="block text-xl font-black uppercase tracking-[0.16em]">
+                {option.label}
+              </span>
               <span
                 className={[
                   "mt-2 block text-sm leading-6",
-                  option.tone === "primary" ? "text-slate-900/80" : "text-slate-300",
+                  option.tone === "primary"
+                    ? "text-slate-900/80"
+                    : "text-slate-300",
                 ].join(" ")}
               >
                 {option.description}

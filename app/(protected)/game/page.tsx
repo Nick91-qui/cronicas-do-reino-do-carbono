@@ -18,16 +18,27 @@ export default async function GamePage() {
   const nextPhaseId =
     chapter1.phases.find((phase) => phase.isUnlocked && !phase.isCompleted)
       ?.phaseId ?? chapter1.phases[0].phaseId;
-  const nextPhase = chapter1.phases.find((phase) => phase.phaseId === nextPhaseId);
-  const completedCount = chapter1.phases.filter((phase) => phase.isCompleted).length;
-  const unlockedCount = chapter1.phases.filter((phase) => phase.isUnlocked).length;
-  const progressPercent = Math.round((completedCount / chapter1.totalPhases) * 100);
+  const nextPhase = chapter1.phases.find(
+    (phase) => phase.phaseId === nextPhaseId,
+  );
+  const completedCount = chapter1.phases.filter(
+    (phase) => phase.isCompleted,
+  ).length;
+  const unlockedCount = chapter1.phases.filter(
+    (phase) => phase.isUnlocked,
+  ).length;
+  const progressPercent = Math.round(
+    (completedCount / chapter1.totalPhases) * 100,
+  );
 
   return (
     <>
       <section className="mx-auto w-full max-w-7xl px-4 pt-6 sm:px-6 sm:pt-8">
         <div className="rounded-[28px] border border-white/10 bg-[rgba(5,8,18,0.78)] px-5 py-5 shadow-[0_20px_60px_rgba(2,6,23,0.28)] backdrop-blur-xl sm:px-8">
-          <Link href="/game" className="font-display text-2xl tracking-[0.08em] text-white sm:text-3xl">
+          <Link
+            href="/game"
+            className="font-display text-2xl tracking-[0.08em] text-white sm:text-3xl"
+          >
             Cronicas do Reino do Carbono
           </Link>
           <p className="truncate pt-1 text-sm text-slate-300">
@@ -42,13 +53,20 @@ export default async function GamePage() {
         imageSrc={blobAssets.protectedGrandHall}
         imageAlt="Salao central do castelo."
         title={`O salao central chama ${player.displayName} de volta ao circulo das provas.`}
-        description="O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas agora aparecem como sinais de campanha, nao como painel administrativo."
+        description="O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas estão disponíveis para vosso aprendizado."
         actions={
           <>
-            <Link href="/chapter/chapter-1" className="state-action px-6" data-tone="primary">
+            <Link
+              href="/chapter/chapter-1"
+              className="state-action px-6"
+              data-tone="primary"
+            >
               Abrir mapa do dominio
             </Link>
-            <Link href={`/phase/${nextPhaseId}`} className="ritual-link min-h-12 rounded-full px-6 py-3 text-sm">
+            <Link
+              href={`/phase/${nextPhaseId}`}
+              className="ritual-link min-h-12 rounded-full px-6 py-3 text-sm"
+            >
               Retomar prova {nextPhase?.phaseNumber}
             </Link>
           </>
@@ -56,17 +74,26 @@ export default async function GamePage() {
         stats={
           <>
             <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Dominio em curso</p>
-              <p className="pt-2 font-display text-2xl text-white">{chapter1.chapterTitle}</p>
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                Dominio em curso
+              </p>
+              <p className="pt-2 font-display text-2xl text-white">
+                {chapter1.chapterTitle}
+              </p>
               <p className="pt-2 text-sm text-slate-300">
                 Prova seguinte: {nextPhase?.phaseNumber} · {nextPhase?.title}
               </p>
             </div>
             <div className="game-panel-muted">
-              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Passagem consolidada</p>
-              <p className="pt-2 font-display text-3xl text-white">{progressPercent}%</p>
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                Passagem consolidada
+              </p>
+              <p className="pt-2 font-display text-3xl text-white">
+                {progressPercent}%
+              </p>
               <p className="pt-2 text-sm text-slate-300">
-                {completedCount} de {chapter1.totalPhases} provas com selo conquistado.
+                {completedCount} de {chapter1.totalPhases} provas com selo
+                conquistado.
               </p>
             </div>
           </>
@@ -76,15 +103,25 @@ export default async function GamePage() {
           <article className="game-panel">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">Trilha de progressao</p>
-                <h2 className="pt-2 text-3xl tracking-[0.05em] text-white">Mapa ritual das provas</h2>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
+                  Trilha de progressao
+                </p>
+                <h2 className="pt-2 text-3xl tracking-[0.05em] text-white">
+                  Mapa ritual das provas
+                </h2>
               </div>
-              <div className="hud-chip">{unlockedCount} portoes respondendo</div>
+              <div className="hud-chip">
+                {unlockedCount} portoes respondendo
+              </div>
             </div>
 
             <div className="mt-6 grid gap-3 md:grid-cols-2 2xl:grid-cols-4">
               {chapter1.phases.map((phase) => {
-                const stateLabel = phase.isCompleted ? "Dominada" : phase.isUnlocked ? "Ativa" : "Selada";
+                const stateLabel = phase.isCompleted
+                  ? "Dominada"
+                  : phase.isUnlocked
+                    ? "Ativa"
+                    : "Selada";
                 const stateClass = phase.isCompleted
                   ? "border-emerald-400/24 bg-emerald-500/10"
                   : phase.isUnlocked
@@ -94,17 +131,31 @@ export default async function GamePage() {
                 return (
                   <Link
                     key={phase.phaseId}
-                    href={phase.isUnlocked ? `/phase/${phase.phaseId}` : "/chapter/chapter-1"}
+                    href={
+                      phase.isUnlocked
+                        ? `/phase/${phase.phaseId}`
+                        : "/chapter/chapter-1"
+                    }
                     className={`state-panel group ${stateClass}`}
-                    data-state={phase.isCompleted ? "success" : phase.isUnlocked ? "active" : "locked"}
+                    data-state={
+                      phase.isCompleted
+                        ? "success"
+                        : phase.isUnlocked
+                          ? "active"
+                          : "locked"
+                    }
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <span className="font-display text-3xl text-white">{String(phase.phaseNumber).padStart(2, "0")}</span>
+                      <span className="font-display text-3xl text-white">
+                        {String(phase.phaseNumber).padStart(2, "0")}
+                      </span>
                       <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-200">
                         {stateLabel}
                       </span>
                     </div>
-                    <h3 className="pt-4 text-lg font-semibold text-white">{phase.title}</h3>
+                    <h3 className="pt-4 text-lg font-semibold text-white">
+                      {phase.title}
+                    </h3>
                     <p className="pt-2 text-sm text-slate-300">
                       {phase.isCompleted
                         ? `Melhor pontuacao: ${phase.bestScore}`
@@ -120,35 +171,53 @@ export default async function GamePage() {
 
           <div className="grid gap-4">
             <article className="game-panel">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">Estado do laboratorio</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
+                Estado do laboratorio
+              </p>
               <dl className="mt-5 grid gap-3 text-sm text-slate-300">
                 <div className="game-panel-muted">
-                  <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Carbonos na bancada</dt>
-                  <dd className="pt-2 font-display text-3xl text-white">{inventory.carbonAvailable}</dd>
-                </div>
-                <div className="game-panel-muted">
-                  <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Fragmentos dominados</dt>
-                  <dd className="pt-2 text-slate-100">
-                    {inventory.unlockedFragments.join(", ") || "Nenhum vestigio inscrito"}
+                  <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                    Carbonos na bancada
+                  </dt>
+                  <dd className="pt-2 font-display text-3xl text-white">
+                    {inventory.carbonAvailable}
                   </dd>
                 </div>
                 <div className="game-panel-muted">
-                  <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Moleculas inscritas</dt>
-                  <dd className="pt-2 font-display text-2xl text-white">{inventory.unlockedMolecules.length}</dd>
+                  <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                    Fragmentos dominados
+                  </dt>
+                  <dd className="pt-2 text-slate-100">
+                    {inventory.unlockedFragments.join(", ") ||
+                      "Nenhum vestigio inscrito"}
+                  </dd>
+                </div>
+                <div className="game-panel-muted">
+                  <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                    Moleculas inscritas
+                  </dt>
+                  <dd className="pt-2 font-display text-2xl text-white">
+                    {inventory.unlockedMolecules.length}
+                  </dd>
                 </div>
               </dl>
             </article>
 
             <article className="game-panel">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">Leitura estrategica</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
+                Leitura estrategica
+              </p>
               <div className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
                 <p>
-                  Portao mais distante alcancado: prova {chapter1.highestUnlockedPhaseNumber}. O dominio responde
-                  melhor quando voce alterna estudo da fase com consulta ao grimorio.
+                  Portao mais distante alcancado: prova{" "}
+                  {chapter1.highestUnlockedPhaseNumber}.
                 </p>
                 <p>
-                  Prestigio acumulado: <span className="font-semibold text-white">{chapter1.chapterScore}</span>.
-                  Cada selo mantido fortalece a leitura das estruturas futuras.
+                  Prestigio acumulado:{" "}
+                  <span className="font-semibold text-white">
+                    {chapter1.chapterScore}
+                  </span>
+                  .
                 </p>
               </div>
             </article>

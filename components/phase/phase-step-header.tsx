@@ -27,7 +27,14 @@ export function PhaseStepHeader({
   return (
     <section className="relative isolate overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/55 shadow-[0_30px_120px_rgba(2,6,23,0.46)]">
       <div className="absolute inset-0">
-        <Image src={scene.src} alt={scene.alt} fill priority sizes="100vw" className="object-cover object-center" />
+        <Image
+          src={scene.src}
+          alt={scene.alt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(4,7,15,0.92)_0%,rgba(4,7,15,0.76)_56%,rgba(4,7,15,0.88)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(103,232,249,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.12),transparent_20%)]" />
       </div>
@@ -40,10 +47,12 @@ export function PhaseStepHeader({
 
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
-              <h1 className="text-3xl tracking-[0.05em] text-white sm:text-4xl">{phaseTitle}</h1>
+              <h1 className="text-3xl tracking-[0.05em] text-white sm:text-4xl">
+                {phaseTitle}
+              </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
                 {displayedStep === "result"
-                  ? "O resultado fica isolado no centro da tela para leitura imediata, sem competir com o restante da interface."
+                  ? "Você completou a tarefa! Prepare-se para os próximos desafios!"
                   : stepCopy[displayedStep].description}
               </p>
             </div>

@@ -17,8 +17,8 @@ export const chapter1Phases: Phase[] = [
     technicalType: "construction",
     displayType: "Construção",
     narrative:
-      "No início da jornada, o jogador recebe seu primeiro átomo de carbono e precisa compreender a regra fundamental do reino: o carbono só alcança estabilidade quando completa corretamente suas ligações.",
-    objective: "Construir a primeira molécula estável do jogo.",
+      "Receba seu primeiro átomo de carbono e compreenda a regra fundamental do reino: o carbono só alcança estabilidade quando completa corretamente suas ligações.",
+    objective: "Construir sua primeira molécula estável.",
     resources: {
       carbonAvailable: 1,
       hydrogenMode: "implicit_infinite",
@@ -63,7 +63,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "construction",
     displayType: "Construção",
     narrative:
-      "Depois de dominar a primeira molécula, o jogador aprende que carbonos podem se unir entre si, formando cadeias maiores e abrindo novas possibilidades estruturais.",
+      "Depois de dominar a primeira molécula, você aprendeu que carbonos podem se unir entre si, formando cadeias maiores e abrindo novas possibilidades estruturais.",
     objective:
       "Construir uma molécula estável com dois carbonos ligados por ligação simples.",
     resources: {
@@ -111,7 +111,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "construction_choice",
     displayType: "Construção + escolha",
     narrative:
-      "Diante de uma tocha ancestral, o jogador precisa identificar qual das cadeias disponíveis melhor sustenta a chama e representa o uso energético dos hidrocarbonetos.",
+      "Diante de uma tocha ancestral, você precisa identificar qual das cadeias disponíveis melhor sustenta a chama e representa o uso energético dos hidrocarbonetos.",
     objective:
       "Construir e escolher a molécula mais adequada para alimentar a Tocha do Portão Norte.",
     resources: {
@@ -162,7 +162,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "choice",
     displayType: "Escolha",
     narrative:
-      "Em um vale coberto por névoa, o jogador precisa reconhecer qual molécula consegue se dispersar com mais facilidade e atravessar o ambiente com maior eficiência.",
+      "Em um vale coberto por névoa, você precisa reconhecer qual molécula consegue se dispersar com mais facilidade e atravessar o ambiente com maior eficiência.",
     objective:
       "Escolher a molécula mais adequada para atravessar o Véu dos Vapores.",
     resources: {
@@ -207,7 +207,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "construction",
     displayType: "Construção",
     narrative:
-      "Ao avançar no reino, o jogador descobre que nem toda molécula precisa permanecer saturada. A ligação dupla surge como um novo recurso estrutural e introduz uma nova lógica de reatividade.",
+      "Ao avançar no reino, você descobre que nem toda molécula precisa permanecer saturada. A ligação dupla surge como um novo recurso estrutural e introduz uma nova lógica de reatividade.",
     objective:
       "Construir uma molécula de dois carbonos mais reativa que o etano.",
     resources: {
@@ -255,7 +255,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "construction_choice",
     displayType: "Construção + escolha",
     narrative:
-      "Diante de uma porta selada por runas, o jogador precisa reconhecer que certas moléculas são valiosas não por sua estabilidade, mas por sua capacidade de reagir e originar novas estruturas.",
+      "Diante de uma porta selada por runas, você precisa reconhecer que certas moléculas são valiosas não por sua estabilidade, mas por sua capacidade de reagir e originar novas estruturas.",
     objective:
       "Construir e escolher a molécula mais adequada para iniciar uma transformação química.",
     resources: {
@@ -305,7 +305,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "choice",
     displayType: "Escolha",
     narrative:
-      "No Laboratório de Síntese de Polímeros, o jogador encontra um novo problema: identificar qual molécula pode abrir caminho para a formação de longas cadeias materiais.",
+      "No Laboratório de Síntese de Polímeros, você encontra um novo problema: identificar qual molécula pode abrir caminho para a formação de longas cadeias materiais.",
     objective:
       "Escolher a molécula mais adequada para servir de precursor de um polímero.",
     resources: {
@@ -363,7 +363,7 @@ export const chapter1Phases: Phase[] = [
     technicalType: "construction_choice",
     displayType: "Construção + escolha",
     narrative:
-      "No centro do reino, o jogador encontra uma estrutura diferente de tudo o que viu até agora: uma organização carbônica especial, estável e distinta das insaturações comuns.",
+      "No centro do reino, você encontra uma estrutura diferente de tudo o que viu até agora: uma organização carbônica especial, estável e distinta das insaturações comuns.",
     objective:
       "Construir e escolher a molécula que representa estabilidade especial em uma estrutura carbônica avançada.",
     resources: {

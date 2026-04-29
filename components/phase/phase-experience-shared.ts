@@ -1,4 +1,8 @@
-import type { BondType, MoleculeId, SelectableProperty } from "@/lib/content/types";
+import type {
+  BondType,
+  MoleculeId,
+  SelectableProperty,
+} from "@/lib/content/types";
 import { blobAssets } from "@/lib/assets/blob";
 
 export type PersistedResponse = {
@@ -50,13 +54,19 @@ export const bondTypeLabels: Record<BondType, string> = {
   aromatic: "Estrutura aromatica",
 };
 
-export const resultToneClass: Record<PersistedResponse["evaluation"]["qualitativeResult"], string> = {
+export const resultToneClass: Record<
+  PersistedResponse["evaluation"]["qualitativeResult"],
+  string
+> = {
   excellent: "border-emerald-400/35 bg-emerald-500/12 text-emerald-100",
   adequate: "border-amber-400/35 bg-amber-500/12 text-amber-100",
   inadequate: "border-rose-400/35 bg-rose-500/12 text-rose-100",
 };
 
-export const resultTitleByKind: Record<PersistedResponse["evaluation"]["qualitativeResult"], string> = {
+export const resultTitleByKind: Record<
+  PersistedResponse["evaluation"]["qualitativeResult"],
+  string
+> = {
   excellent: "Sintese exemplar",
   adequate: "Passagem promissora",
   inadequate: "Sintese instavel",
@@ -70,25 +80,23 @@ export const stepCopy: Record<
     eyebrow: "Prova",
     title: "Prova do rito",
     description:
-      "A prova apresenta apenas a narrativa, a missao e o conceito central antes de abrir a acao.",
+      "Prepare-se para passar pela prova! Ue seus conhecimentos para  completar os desafios!",
   },
   synthesis: {
     eyebrow: "Rito da sintese",
     title: "Moldar a estrutura",
-    description:
-      "A montagem ocupa o centro da cena. A prova so avanca quando a mesa confirma a estrutura.",
+    description: "Use a mesa de síntese para criar a molécula mais adequada",
   },
   select: {
     eyebrow: "Escolha da carta",
     title: "Definir a carta",
-    description:
-      "A leitura separa primeiro a escolha da carta. So depois voce avanca para classificar suas propriedades.",
+    description: "Escolha da carta mais adequada.",
   },
   read: {
     eyebrow: "Rito da leitura",
     title: "Classificar e sustentar",
     description:
-      "Com a carta ja definida, esta etapa fica dedicada apenas a marcar propriedades e sustentar o julgamento.",
+      "Marque as propriedades que justificam a escolha desta molécula.",
   },
 };
 
