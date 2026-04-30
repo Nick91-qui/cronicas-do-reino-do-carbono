@@ -1,8 +1,10 @@
-import { NextResponse } from "next/server";
-
 import { canonicalBuilderStateSchema } from "@/lib/builder/schema";
+import { getAuthenticatedPlayer } from "@/lib/auth/session";
 import { validateBuilderStateForPhase } from "@/lib/builder/validate";
 import { phaseIdSchema } from "@/lib/content/schema";
+import { prisma } from "@/lib/db/prisma";
+import { jsonNoStore } from "@/lib/http/response";
+import { logServerError } from "@/lib/observability/logger";
 
 export async function POST(
   request: Request,
@@ -12,26 +14,45 @@ export async function POST(
   const parsedPhaseId = phaseIdSchema.safeParse(rawPhaseId);
 
   if (!parsedPhaseId.success) {
-    return NextResponse.json(
+    return jsonNoStore(
       { error: "Parâmetro de fase inválido." },
       { status: 400 },
     );
   }
 
-  const json = await request.json().catch(() => null);
-  const parsedBuilderState = canonicalBuilderStateSchema.safeParse(json);
+  const authenticatedPlayer = await getAuthenticatedPlayer(prisma);
 
-  if (!parsedBuilderState.success) {
-    return NextResponse.json(
-      {
-        error: "Payload do builder inválido.",
-        details: parsedBuilderState.error.flatten(),
-      },
-      { status: 400 },
-    );
+  if (!authenticatedPlayer) {
+    return jsonNoStore({ error: "Autenticação obrigatória." }, { status: 401 });
   }
 
-  const result = validateBuilderStateForPhase(parsedPhaseId.data, parsedBuilderState.data);
+  try {
+    const json = await request.json().catch(() => null);
+    const parsedBuilderState = canonicalBuilderStateSchema.safeParse(json);
 
-  return NextResponse.json(result, { status: 200 });
+    if (!parsedBuilderState.success) {
+      return jsonNoStore(
+        {
+          error: "Payload do builder inválido.",
+          details: parsedBuilderState.error.flatten(),
+        },
+        { status: 400 },
+      );
+    }
+
+    const result = validateBuilderStateForPhase(
+      parsedPhaseId.data,
+      parsedBuilderState.data,
+    );
+
+    return jsonNoStore(result, { status: 200 });
+  } catch (error) {
+    logServerError("phases.builder.validate", error, {
+      phaseId: parsedPhaseId.data,
+    });
+    return jsonNoStore(
+      { error: "Falha interna ao validar estrutura do builder." },
+      { status: 500 },
+    );
+  }
 }

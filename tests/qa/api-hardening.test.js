@@ -12,6 +12,7 @@ test("Rotas críticas usam resposta sem cache", () => {
     "app/api/auth/register/route.ts",
     "app/api/auth/login/route.ts",
     "app/api/auth/logout/route.ts",
+    "app/api/phases/[phaseId]/builder/validate/route.ts",
     "app/api/phases/[phaseId]/submit/route.ts",
     "app/api/progress/route.ts",
     "app/api/progress/[chapterId]/route.ts",
@@ -27,6 +28,7 @@ test("Rotas críticas usam resposta sem cache", () => {
 
 test("Rotas protegidas exigem autenticação no servidor", () => {
   const files = [
+    "app/api/phases/[phaseId]/builder/validate/route.ts",
     "app/api/phases/[phaseId]/submit/route.ts",
     "app/api/progress/route.ts",
     "app/api/progress/[chapterId]/route.ts",
@@ -43,6 +45,7 @@ test("Rotas protegidas exigem autenticação no servidor", () => {
 
 test("Rotas sensíveis registram erro de servidor quando ocorre falha inesperada", () => {
   const files = [
+    "app/api/phases/[phaseId]/builder/validate/route.ts",
     "app/api/auth/register/route.ts",
     "app/api/auth/login/route.ts",
     "app/api/auth/logout/route.ts",

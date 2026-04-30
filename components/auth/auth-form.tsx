@@ -71,40 +71,47 @@ export function AuthForm({ mode }: AuthFormProps) {
     setIsPending(true);
     setError(null);
 
-    const formData = new FormData(event.currentTarget);
-    const payload =
-      mode === "register"
-        ? {
-            classroomCode: String(formData.get("classroomCode") ?? ""),
-            displayName: String(formData.get("displayName") ?? ""),
-            username: String(formData.get("username") ?? ""),
-            password: String(formData.get("password") ?? ""),
-          }
-        : {
-            username: String(formData.get("username") ?? ""),
-            password: String(formData.get("password") ?? ""),
-          };
+    try {
+      const formData = new FormData(event.currentTarget);
+      const payload =
+        mode === "register"
+          ? {
+              classroomCode: String(formData.get("classroomCode") ?? ""),
+              displayName: String(formData.get("displayName") ?? ""),
+              username: String(formData.get("username") ?? ""),
+              password: String(formData.get("password") ?? ""),
+            }
+          : {
+              username: String(formData.get("username") ?? ""),
+              password: String(formData.get("password") ?? ""),
+            };
 
-    const response = await fetch(copyByMode[mode].endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+      const response = await fetch(copyByMode[mode].endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    const json = (await response.json().catch(() => null)) as {
-      error?: string;
-    } | null;
+      const json = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
 
-    if (!response.ok) {
-      setError(json?.error ?? "Falha na autenticação.");
+      if (!response.ok) {
+        setError(json?.error ?? "Falha na autenticação.");
+        return;
+      }
+
+      router.push("/game");
+      router.refresh();
+    } catch {
+      setError(
+        "Nao foi possivel falar com o reino agora. Verifique sua conexao e tente novamente.",
+      );
+    } finally {
       setIsPending(false);
-      return;
     }
-
-    router.push("/game");
-    router.refresh();
   }
 
   return (

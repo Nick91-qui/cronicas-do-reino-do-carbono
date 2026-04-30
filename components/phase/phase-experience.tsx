@@ -48,6 +48,15 @@ type PhaseExperienceProps = {
 
 const minimumSynthesisFeedbackMs = 900;
 
+async function waitForMinimumFeedbackDuration(startedAt: number) {
+  const elapsed = Date.now() - startedAt;
+  const remainingDelay = Math.max(0, minimumSynthesisFeedbackMs - elapsed);
+
+  if (remainingDelay > 0) {
+    await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
+  }
+}
+
 function getNextPhaseHref(
   chapterProgress: ChapterProgressView,
   currentPhaseNumber: number,
@@ -376,14 +385,7 @@ export function PhaseExperience({
         | { error?: string }
         | null;
 
-      const elapsed = Date.now() - startedAt;
-      const remainingDelay = Math.max(0, minimumSynthesisFeedbackMs - elapsed);
-
-      if (remainingDelay > 0) {
-        await new Promise((resolve) =>
-          window.setTimeout(resolve, remainingDelay),
-        );
-      }
+      await waitForMinimumFeedbackDuration(startedAt);
 
       if (!response.ok) {
         setBuilderError(
@@ -400,6 +402,12 @@ export function PhaseExperience({
       if (result.resolvedMoleculeId && supportsMoleculeSelection) {
         setSelectedMoleculeId(result.resolvedMoleculeId);
       }
+    } catch {
+      await waitForMinimumFeedbackDuration(startedAt);
+      setBuilderResult(null);
+      setBuilderError(
+        "A mesa de sintese nao respondeu. Verifique sua conexao e tente novamente.",
+      );
     } finally {
       setIsValidatingBuilder(false);
     }
@@ -443,31 +451,37 @@ export function PhaseExperience({
       payload.selectedMoleculeId = effectiveSelectedMoleculeId;
     }
 
-    const response = await fetch(`/api/phases/${phase.id}/submit`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const response = await fetch(`/api/phases/${phase.id}/submit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    const json = (await response.json().catch(() => null)) as
-      | PersistedResponse
-      | { error?: string }
-      | null;
+      const json = (await response.json().catch(() => null)) as
+        | PersistedResponse
+        | { error?: string }
+        | null;
 
-    if (!response.ok) {
+      if (!response.ok) {
+        setSubmitError(
+          (json as { error?: string } | null)?.error ??
+            "O reino nao conseguiu registrar sua resposta nesta tentativa.",
+        );
+        return;
+      }
+
+      setSubmitResult(json as PersistedResponse);
+      router.refresh();
+    } catch {
       setSubmitError(
-        (json as { error?: string } | null)?.error ??
-          "O reino nao conseguiu registrar sua resposta nesta tentativa.",
+        "Nao foi possivel registrar sua tentativa agora. Verifique sua conexao e tente novamente.",
       );
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    setSubmitResult(json as PersistedResponse);
-    setIsSubmitting(false);
-    router.refresh();
   }
 
   function handleRetryFromResult() {
