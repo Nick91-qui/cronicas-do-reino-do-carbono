@@ -180,7 +180,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 </label>
                 <label className="block text-sm">
                   <span className="mb-2 block text-slate-200">
-                    Nome no grimorio (Nome de usuario)
+                    Nome no grimorio (unico)
                   </span>
                   <input name="displayName" required className="state-field" />
                 </label>

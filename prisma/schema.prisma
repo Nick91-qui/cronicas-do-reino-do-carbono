@@ -36,7 +36,7 @@ model Classroom {
 model Player {
   id             String               @id @default(cuid())
   classroomId    String
-  displayName    String
+  displayName    String               @unique
   username       String               @unique
   passwordHash   String
   createdAt      DateTime             @default(now())

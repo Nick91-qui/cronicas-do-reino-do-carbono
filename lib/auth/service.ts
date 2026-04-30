@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import { Prisma, type PrismaClient } from "@prisma/client";
 
 import { ensurePlayerInventorySnapshot } from "@/lib/inventory/service";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
@@ -13,8 +13,22 @@ function normalizeClassroomCode(classroomCode: string): string {
   return classroomCode.trim().toUpperCase();
 }
 
+function normalizeDisplayName(displayName: string): string {
+  return displayName.trim();
+}
+
+function isUniqueConstraintError(error: unknown, fieldName: string): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002" &&
+    Array.isArray(error.meta?.target) &&
+    error.meta.target.includes(fieldName)
+  );
+}
+
 export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
   const classroomCode = normalizeClassroomCode(input.classroomCode);
+  const displayName = normalizeDisplayName(input.displayName);
   const username = normalizeUsername(input.username);
 
   const classroom = await db.classroom.findUnique({ where: { code: classroomCode } });
@@ -29,33 +43,60 @@ export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
     throw new Error("Username já está em uso.");
   }
 
+  const existingDisplayName = await db.player.findFirst({
+    where: {
+      displayName: {
+        equals: displayName,
+        mode: "insensitive",
+      },
+    },
+  });
+
+  if (existingDisplayName) {
+    throw new Error("Nome no grimório já está em uso.");
+  }
+
   const passwordHash = hashPassword(input.password);
 
-  const player = await db.$transaction(async (tx) => {
-    const createdPlayer = await tx.player.create({
-      data: {
-        classroomId: classroom.id,
-        displayName: input.displayName.trim(),
-        username,
-        passwordHash,
-      },
-    });
+  let player;
 
-    await ensurePlayerInventorySnapshot(tx, createdPlayer.id);
-
-    await tx.playerAnalyticsEvent.create({
-      data: {
-        playerId: createdPlayer.id,
-        eventType: "player_registered",
-        payloadJson: {
-          classroomCode,
+  try {
+    player = await db.$transaction(async (tx) => {
+      const createdPlayer = await tx.player.create({
+        data: {
+          classroomId: classroom.id,
+          displayName,
           username,
+          passwordHash,
         },
-      },
-    });
+      });
 
-    return createdPlayer;
-  });
+      await ensurePlayerInventorySnapshot(tx, createdPlayer.id);
+
+      await tx.playerAnalyticsEvent.create({
+        data: {
+          playerId: createdPlayer.id,
+          eventType: "player_registered",
+          payloadJson: {
+            classroomCode,
+            username,
+          },
+        },
+      });
+
+      return createdPlayer;
+    });
+  } catch (error) {
+    if (isUniqueConstraintError(error, "username")) {
+      throw new Error("Username já está em uso.");
+    }
+
+    if (isUniqueConstraintError(error, "displayName")) {
+      throw new Error("Nome no grimório já está em uso.");
+    }
+
+    throw error;
+  }
 
   const session = await createSessionForPlayer(db, player.id);
 
