@@ -175,6 +175,10 @@ Arquivo de referência:
 
 - `.env.production.example`
 
+O fluxo operacional recomendado para produção usa uma variável de ambiente separada no shell:
+
+- `DATABASE_URL_PROD`
+
 ## Setup local
 
 ### Pré-requisitos
@@ -230,6 +234,32 @@ npm run prisma:seed
 
 O seed inicial cria a turma `TURMA-ALFA`.
 
+### Operação local vs produção
+
+Regra prática:
+
+- `.env` deve permanecer apontando para o banco local;
+- `DATABASE_URL_PROD` deve ser usada apenas para operações explícitas de produção;
+- produção usa `prisma migrate deploy`, nunca `prisma migrate dev` ou `prisma migrate reset`.
+
+Exemplo de configuração temporária no shell:
+
+```bash
+export DATABASE_URL_PROD="postgresql://usuario:senha@host/database?sslmode=require&channel_binding=require"
+```
+
+Consultar status das migrations de produção:
+
+```bash
+npm run db:prod:status
+```
+
+Aplicar migrations pendentes em produção com confirmação explícita:
+
+```bash
+npm run db:prod:migrate
+```
+
 ### Rodar a aplicação
 
 ```bash
@@ -239,7 +269,14 @@ npm run dev
 
 ## Fluxo de produção
 
-Em produção, substitua o `.env` local por valores equivalentes aos de `.env.production.example` e aponte `DATABASE_URL` para o Neon.
+O `.env` do workspace não deve ser reutilizado para produção.
+
+Use:
+
+- `.env` para desenvolvimento local;
+- `.env.production.example` apenas como referência;
+- `DATABASE_URL_PROD` para operações manuais de produção;
+- variáveis da Vercel para o ambiente implantado.
 
 ## Observação importante
 
