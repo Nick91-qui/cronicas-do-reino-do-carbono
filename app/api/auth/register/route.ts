@@ -12,7 +12,7 @@ const REGISTER_CLIENT_ERRORS = new Set([
 ]);
 const registerRateLimiter = createFixedWindowRateLimiter({
   limit: 3,
-  windowMs: 1000 * 60 * 10,
+  windowMs: 1000 * 60,
 });
 
 export async function POST(request: Request) {
