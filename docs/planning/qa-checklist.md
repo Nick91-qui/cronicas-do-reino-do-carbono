@@ -61,14 +61,17 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 - [ ] cadastro com username já existente falha com mensagem adequada.
 - [x] login com credenciais válidas funciona.
 - [ ] login com senha inválida falha com mensagem adequada.
+- [x] login e cadastro respondem com `429` sob excesso de tentativas na mesma janela.
 - [x] rotas protegidas redirecionam visitante não autenticado para `/login`.
 - [x] logout encerra a sessão corretamente.
+- [x] sessão expirada deixa de autenticar e é removida do armazenamento operacional.
 
 ### Navegação principal
 
 - [x] página inicial carrega sem erro.
 - [x] `/game` carrega com progresso e inventário do jogador.
 - [x] `/chapter/chapter-1` exibe as 8 fases do capítulo.
+- [x] `/chapter/[chapterId]` resolve capítulo válido a partir do conteúdo oficial, sem string fixa no handler.
 - [x] fases bloqueadas não ficam acessíveis diretamente por URL.
 - [x] `/collection` exibe cartas desbloqueadas sem erro.
 - [ ] `/profile` carrega sem erro.

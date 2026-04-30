@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
+import { getPrimaryChapter } from "@/lib/content/loaders";
 import { getAllChaptersProgressView } from "@/lib/progress/queries";
 import { getPlayerInventorySnapshot } from "@/lib/inventory/service";
 import { blobAssets } from "@/lib/assets/blob";
@@ -14,21 +16,29 @@ export default async function GamePage() {
     getPlayerInventorySnapshot(prisma, player.playerId),
   ]);
 
-  const chapter1 = progress[0];
+  const primaryChapter = getPrimaryChapter();
+  const chapterProgress = progress.find(
+    (chapter) => chapter.chapterId === primaryChapter.id,
+  );
+
+  if (!chapterProgress || chapterProgress.phases.length === 0) {
+    notFound();
+  }
+
   const nextPhaseId =
-    chapter1.phases.find((phase) => phase.isUnlocked && !phase.isCompleted)
-      ?.phaseId ?? chapter1.phases[0].phaseId;
-  const nextPhase = chapter1.phases.find(
+    chapterProgress.phases.find((phase) => phase.isUnlocked && !phase.isCompleted)
+      ?.phaseId ?? chapterProgress.phases[0].phaseId;
+  const nextPhase = chapterProgress.phases.find(
     (phase) => phase.phaseId === nextPhaseId,
   );
-  const completedCount = chapter1.phases.filter(
+  const completedCount = chapterProgress.phases.filter(
     (phase) => phase.isCompleted,
   ).length;
-  const unlockedCount = chapter1.phases.filter(
+  const unlockedCount = chapterProgress.phases.filter(
     (phase) => phase.isUnlocked,
   ).length;
   const progressPercent = Math.round(
-    (completedCount / chapter1.totalPhases) * 100,
+    (completedCount / chapterProgress.totalPhases) * 100,
   );
 
   return (
@@ -57,7 +67,7 @@ export default async function GamePage() {
         actions={
           <>
             <Link
-              href="/chapter/chapter-1"
+              href={`/chapter/${chapterProgress.chapterId}`}
               className="state-action px-6"
               data-tone="primary"
             >
@@ -78,7 +88,7 @@ export default async function GamePage() {
                 Dominio em curso
               </p>
               <p className="pt-2 font-display text-2xl text-white">
-                {chapter1.chapterTitle}
+                {chapterProgress.chapterTitle}
               </p>
               <p className="pt-2 text-sm text-slate-300">
                 Prova seguinte: {nextPhase?.phaseNumber} · {nextPhase?.title}
@@ -92,7 +102,7 @@ export default async function GamePage() {
                 {progressPercent}%
               </p>
               <p className="pt-2 text-sm text-slate-300">
-                {completedCount} de {chapter1.totalPhases} provas com selo
+                {completedCount} de {chapterProgress.totalPhases} provas com selo
                 conquistado.
               </p>
             </div>
@@ -116,7 +126,7 @@ export default async function GamePage() {
             </div>
 
             <div className="mt-6 grid gap-3 md:grid-cols-2 2xl:grid-cols-4">
-              {chapter1.phases.map((phase) => {
+              {chapterProgress.phases.map((phase) => {
                 const stateLabel = phase.isCompleted
                   ? "Dominada"
                   : phase.isUnlocked
@@ -134,7 +144,7 @@ export default async function GamePage() {
                     href={
                       phase.isUnlocked
                         ? `/phase/${phase.phaseId}`
-                        : "/chapter/chapter-1"
+                        : `/chapter/${chapterProgress.chapterId}`
                     }
                     className={`state-panel group ${stateClass}`}
                     data-state={
@@ -210,12 +220,12 @@ export default async function GamePage() {
               <div className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
                 <p>
                   Portao mais distante alcancado: prova{" "}
-                  {chapter1.highestUnlockedPhaseNumber}.
+                  {chapterProgress.highestUnlockedPhaseNumber}.
                 </p>
                 <p>
                   Prestigio acumulado:{" "}
                   <span className="font-semibold text-white">
-                    {chapter1.chapterScore}
+                    {chapterProgress.chapterScore}
                   </span>
                   .
                 </p>

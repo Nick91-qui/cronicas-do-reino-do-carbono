@@ -46,6 +46,16 @@ export function getAllChapters(): Chapter[] {
   return chapters;
 }
 
+export function getPrimaryChapter(): Chapter {
+  const [chapter] = chapters;
+
+  if (!chapter) {
+    throw new Error("Nenhum capítulo foi carregado no conteúdo oficial.");
+  }
+
+  return chapter;
+}
+
 export function getChapterById(chapterId: ChapterId): Chapter {
   return assertChapterExists(chapterId);
 }

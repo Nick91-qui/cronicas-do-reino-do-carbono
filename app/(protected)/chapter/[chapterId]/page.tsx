@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
+import { getChapterById } from "@/lib/content/loaders";
 import { getChapterProgressView } from "@/lib/progress/queries";
 import { blobAssets } from "@/lib/assets/blob";
 
@@ -47,13 +48,16 @@ export default async function ChapterPage({
   params: Promise<{ chapterId: string }>;
 }) {
   const { chapterId } = await params;
+  let chapter;
 
-  if (chapterId !== "chapter-1") {
+  try {
+    chapter = getChapterById(chapterId as never);
+  } catch {
     notFound();
   }
 
   const player = await requireAuthenticatedPlayer(prisma);
-  const progress = await getChapterProgressView(prisma, player.playerId, "chapter-1");
+  const progress = await getChapterProgressView(prisma, player.playerId, chapter.id);
   const completedCount = progress.phases.filter((phase) => phase.isCompleted).length;
   const unlockedCount = progress.phases.filter((phase) => phase.isUnlocked).length;
   const progressPercent = Math.round((completedCount / progress.totalPhases) * 100);

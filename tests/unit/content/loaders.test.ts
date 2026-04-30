@@ -8,6 +8,7 @@ import {
   getMoleculeById,
   getPhaseById,
   getPhasesByChapterId,
+  getPrimaryChapter,
   validateContentIntegrity,
 } from "@/lib/content/loaders";
 
@@ -38,6 +39,7 @@ describe("content/loaders", () => {
     expect(getAllChapters()).toHaveLength(1);
     expect(getAllPhases()).toHaveLength(8);
     expect(getAllMolecules()).toHaveLength(7);
+    expect(getPrimaryChapter().id).toBe("chapter-1");
     expect(getPhaseById("chapter-1-phase-8").excellentAnswer).toBe("benzeno");
     expect(getMoleculeById("eteno").classe).toBe("alceno");
   });

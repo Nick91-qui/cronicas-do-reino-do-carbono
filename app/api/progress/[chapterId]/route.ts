@@ -1,4 +1,5 @@
 import { getAuthenticatedPlayer } from "@/lib/auth/session";
+import { getChapterById } from "@/lib/content/loaders";
 import { prisma } from "@/lib/db/prisma";
 import { jsonNoStore } from "@/lib/http/response";
 import { getChapterProgressView } from "@/lib/progress/queries";
@@ -14,11 +15,14 @@ export async function GET(
   }
 
   const { chapterId } = await context.params;
+  let chapter;
 
-  if (chapterId !== "chapter-1") {
+  try {
+    chapter = getChapterById(chapterId as never);
+  } catch {
     return jsonNoStore({ error: "Capítulo inválido." }, { status: 400 });
   }
 
-  const progress = await getChapterProgressView(prisma, player.playerId, "chapter-1");
+  const progress = await getChapterProgressView(prisma, player.playerId, chapter.id);
   return jsonNoStore(progress, { status: 200 });
 }

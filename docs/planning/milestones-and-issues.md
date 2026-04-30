@@ -171,20 +171,21 @@ Stack atual preparada:
 
 ### Autenticação e autorização
 
-- [ ] revisar endurecimento de sessão
+- [x] revisar endurecimento de sessão
 - [ ] revisar autorização nas rotas de escrita
-- [ ] revisar fluxos de erro de cadastro, login e logout
+- [x] revisar fluxos de erro de cadastro, login e logout
+- [x] aplicar rate limiting básico em login e cadastro
 
 ### Persistência e idempotência
 
-- [ ] ampliar validação transacional e cobertura de replay
-- [ ] revisar idempotência de recompensas
+- [x] ampliar validação transacional e cobertura de replay
+- [x] revisar idempotência de recompensas
 - [ ] revisar comportamento em cenários de falha parcial
 
 ### Conteúdo e aderência documental
 
 - [ ] revisar aderência fina entre `content/` e `docs/design/`
-- [ ] evitar drift entre implementação e documentação oficial
+- [x] evitar drift entre implementação e documentação oficial
 - [ ] atualizar documentação explicitamente quando houver divergência real
 
 ### Direção visual e percepção de produto
