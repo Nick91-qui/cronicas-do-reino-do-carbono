@@ -14,7 +14,6 @@ test("Exemplos de ambiente expõem os segredos e endpoints mínimos do projeto",
   for (const source of [envExample, envProductionExample]) {
     assert.match(source, /DATABASE_URL=/);
     assert.match(source, /APP_BASE_URL=/);
-    assert.match(source, /AUTH_SECRET=/);
     assert.match(source, /SESSION_SECRET=/);
   }
 });

@@ -1100,7 +1100,6 @@ As variáveis provavelmente necessárias incluem:
 
 - `DATABASE_URL`
 - `APP_BASE_URL`
-- `AUTH_SECRET`
 - `SESSION_SECRET`
 
 Outras variáveis podem ser incluídas conforme a implementação exata da sessão.

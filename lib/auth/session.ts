@@ -1,6 +1,6 @@
 import { createHmac, randomBytes } from "node:crypto";
 
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -8,6 +8,8 @@ import { getEnv } from "@/lib/validation/env";
 
 const SESSION_COOKIE_NAME = "crc_session";
 const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7;
+
+type DbClient = PrismaClient | Prisma.TransactionClient;
 
 type CookieGetter = {
   get(name: string): { value: string } | undefined;
@@ -59,7 +61,7 @@ export type AuthenticatedPlayer = {
   sessionExpiresAt: Date;
 };
 
-export async function createSessionForPlayer(db: PrismaClient, playerId: string) {
+export async function createSessionForPlayer(db: DbClient, playerId: string) {
   const token = createSessionToken();
   const sessionId = hashSessionToken(token);
   const expiresAt = new Date(Date.now() + SESSION_DURATION_MS);
@@ -90,7 +92,7 @@ function readSessionToken(cookieStore: CookieGetter): string | null {
   return cookieStore.get(SESSION_COOKIE_NAME)?.value ?? null;
 }
 
-export async function getAuthenticatedPlayer(db: PrismaClient): Promise<AuthenticatedPlayer | null> {
+export async function getAuthenticatedPlayer(db: DbClient): Promise<AuthenticatedPlayer | null> {
   const cookieStore = await cookies();
   const token = readSessionToken(cookieStore);
 
@@ -109,7 +111,12 @@ export async function getAuthenticatedPlayer(db: PrismaClient): Promise<Authenti
     },
   });
 
-  if (!session || session.expiresAt <= new Date()) {
+  if (!session) {
+    return null;
+  }
+
+  if (session.expiresAt <= new Date()) {
+    await db.session.deleteMany({ where: { id: session.id } });
     return null;
   }
 
@@ -123,7 +130,7 @@ export async function getAuthenticatedPlayer(db: PrismaClient): Promise<Authenti
   };
 }
 
-export async function requireAuthenticatedPlayer(db: PrismaClient): Promise<AuthenticatedPlayer> {
+export async function requireAuthenticatedPlayer(db: DbClient): Promise<AuthenticatedPlayer> {
   const player = await getAuthenticatedPlayer(db);
 
   if (!player) {
@@ -133,7 +140,7 @@ export async function requireAuthenticatedPlayer(db: PrismaClient): Promise<Auth
   return player;
 }
 
-export async function deleteCurrentSession(db: PrismaClient, cookieStore: CookieGetter) {
+export async function deleteCurrentSession(db: DbClient, cookieStore: CookieGetter) {
   const token = readSessionToken(cookieStore);
 
   if (!token) {

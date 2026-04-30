@@ -1,5 +1,6 @@
 import { registerPlayer } from "@/lib/auth/service";
 import { registerInputSchema } from "@/lib/auth/schema";
+import { getClientAddress, createFixedWindowRateLimiter } from "@/lib/http/rate-limit";
 import { jsonNoStore } from "@/lib/http/response";
 import { logServerError } from "@/lib/observability/logger";
 import { setSessionCookie } from "@/lib/auth/session";
@@ -9,8 +10,26 @@ const REGISTER_CLIENT_ERRORS = new Set([
   "Turma inválida. Cadastre uma turma antes de registrar jogadores.",
   "Username já está em uso.",
 ]);
+const registerRateLimiter = createFixedWindowRateLimiter({
+  limit: 3,
+  windowMs: 1000 * 60 * 10,
+});
 
 export async function POST(request: Request) {
+  const rateLimit = registerRateLimiter.consume(`register:${getClientAddress(request)}`);
+
+  if (!rateLimit.allowed) {
+    return jsonNoStore(
+      { error: "Muitas tentativas de cadastro. Aguarde um pouco antes de tentar novamente." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds),
+        },
+      },
+    );
+  }
+
   const json = await request.json().catch(() => null);
   const parsedPayload = registerInputSchema.safeParse(json);
 
