@@ -95,7 +95,17 @@ O valor padrão continua sendo `player`.
 - [x] visão detalhada de jogador
 - [x] filtros e busca server-side na listagem principal
 - [x] paginação
-- [ ] ações mutáveis deliberadas
+- [x] decisão tomada: manter a superfície somente leitura no MVP
+
+## 7.1 Decisão consolidada para o MVP
+
+A versão atual da área `operator` é considerada suficiente para o MVP como superfície de observabilidade interna.
+
+Fica decidido que:
+
+- a área permanece somente leitura;
+- nenhuma ação administrativa mutável entra no MVP;
+- qualquer expansão futura para escrita depende de caso operacional real, trilha de auditoria mínima e revisão explícita de autorização.
 
 ---
 

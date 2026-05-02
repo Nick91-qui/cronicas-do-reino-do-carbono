@@ -238,11 +238,12 @@ export default async function OperatorPage(props: {
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Proximo passo recomendado
+                Decisao operacional
               </p>
               <p className="pt-2 text-slate-100">
-                Evoluir filtros, busca e detalhamento por jogador antes de
-                considerar qualquer acao mutavel.
+                O observatorio interno permanece somente leitura durante o MVP.
+                Qualquer acao mutavel fica adiada ate existir necessidade real,
+                auditoria minima e governanca explicita.
               </p>
             </div>
           </div>
