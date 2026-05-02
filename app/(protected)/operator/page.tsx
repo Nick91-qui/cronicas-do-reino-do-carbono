@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db/prisma";
 import { blobAssets } from "@/lib/assets/blob";
 
 const recentActivityWindowDays = 7;
+const playersPerPage = 12;
 
 function formatRelativeWindow(days: number) {
   return `${days} dia${days === 1 ? "" : "s"}`;
@@ -14,6 +15,7 @@ function formatRelativeWindow(days: number) {
 
 type OperatorSearchParams = Promise<{
   classroom?: string;
+  page?: string;
   q?: string;
   role?: string;
 }>;
@@ -30,6 +32,46 @@ function isPlayerRole(value: string): value is PlayerRole {
   return value === PlayerRole.player || value === PlayerRole.operator;
 }
 
+function normalizePage(value: string | string[] | undefined) {
+  const raw = normalizeSingleValue(value);
+  const parsed = Number.parseInt(raw, 10);
+
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return 1;
+  }
+
+  return parsed;
+}
+
+function buildOperatorPageHref(input: {
+  classroomCode: string;
+  page: number;
+  roleFilter: PlayerRole | null;
+  searchTerm: string;
+}) {
+  const params = new URLSearchParams();
+
+  if (input.searchTerm) {
+    params.set("q", input.searchTerm);
+  }
+
+  if (input.classroomCode) {
+    params.set("classroom", input.classroomCode);
+  }
+
+  if (input.roleFilter) {
+    params.set("role", input.roleFilter);
+  }
+
+  if (input.page > 1) {
+    params.set("page", String(input.page));
+  }
+
+  const query = params.toString();
+
+  return query ? `/operator?${query}` : "/operator";
+}
+
 export default async function OperatorPage(props: {
   searchParams: OperatorSearchParams;
 }) {
@@ -42,6 +84,7 @@ export default async function OperatorPage(props: {
   const classroomCode = normalizeSingleValue(searchParams.classroom).toUpperCase();
   const rawRole = normalizeSingleValue(searchParams.role).toLowerCase();
   const roleFilter = isPlayerRole(rawRole) ? rawRole : null;
+  const requestedPage = normalizePage(searchParams.page);
   const playerWhere: Prisma.PlayerWhereInput = {
     ...(searchTerm
       ? {
@@ -67,7 +110,7 @@ export default async function OperatorPage(props: {
     completedPlayerRows,
     activePlayerRows,
     classrooms,
-    filteredPlayers,
+    filteredPlayersCount,
   ] = await Promise.all([
     prisma.player.count(),
     prisma.classroom.count(),
@@ -88,16 +131,42 @@ export default async function OperatorPage(props: {
         name: true,
       },
     }),
-    prisma.player.findMany({
+    prisma.player.count({
       where: playerWhere,
-      orderBy: { updatedAt: "desc" },
-      take: 24,
-      include: {
-        classroom: true,
-        chapterProgress: true,
-      },
     }),
   ]);
+  const totalPages = Math.max(1, Math.ceil(filteredPlayersCount / playersPerPage));
+  const safeCurrentPage = Math.min(requestedPage, totalPages);
+  const filteredPlayers = await prisma.player.findMany({
+    where: playerWhere,
+    orderBy: { updatedAt: "desc" },
+    skip: (safeCurrentPage - 1) * playersPerPage,
+    take: playersPerPage,
+    include: {
+      classroom: true,
+      chapterProgress: true,
+    },
+  });
+  const previousPageHref =
+    safeCurrentPage > 1
+      ? buildOperatorPageHref({
+          searchTerm,
+          classroomCode,
+          roleFilter,
+          page: safeCurrentPage - 1,
+        })
+      : null;
+  const nextPageHref =
+    safeCurrentPage < totalPages
+      ? buildOperatorPageHref({
+          searchTerm,
+          classroomCode,
+          roleFilter,
+          page: safeCurrentPage + 1,
+        })
+      : null;
+  const pageStart = filteredPlayersCount === 0 ? 0 : (safeCurrentPage - 1) * playersPerPage + 1;
+  const pageEnd = Math.min(safeCurrentPage * playersPerPage, filteredPlayersCount);
 
   return (
     <ProtectedScene
@@ -190,7 +259,7 @@ export default async function OperatorPage(props: {
               </h2>
             </div>
             <div className="hud-chip">
-              {filteredPlayers.length} registros exibidos
+              {filteredPlayersCount} registros encontrados
             </div>
           </div>
 
@@ -261,6 +330,35 @@ export default async function OperatorPage(props: {
             <span className="hud-chip">
               papel: {roleFilter ?? "todos"}
             </span>
+            <span className="hud-chip">
+              pagina: {safeCurrentPage}/{totalPages}
+            </span>
+          </div>
+
+          <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-slate-800/80 bg-slate-950/50 px-4 py-3 text-sm text-slate-300 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Exibindo {pageStart}-{pageEnd} de {filteredPlayersCount} jogadores.
+            </p>
+            <div className="flex gap-3">
+              {previousPageHref ? (
+                <Link href={previousPageHref} className="ritual-link px-4 py-2 text-sm">
+                  Pagina anterior
+                </Link>
+              ) : (
+                <span className="rounded-full border border-slate-800 px-4 py-2 text-slate-500">
+                  Pagina anterior
+                </span>
+              )}
+              {nextPageHref ? (
+                <Link href={nextPageHref} className="ritual-link px-4 py-2 text-sm">
+                  Proxima pagina
+                </Link>
+              ) : (
+                <span className="rounded-full border border-slate-800 px-4 py-2 text-slate-500">
+                  Proxima pagina
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="mt-6 grid gap-3">

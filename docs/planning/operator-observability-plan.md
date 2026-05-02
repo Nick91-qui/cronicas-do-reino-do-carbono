@@ -94,7 +94,7 @@ O valor padrão continua sendo `player`.
 - [x] primeira página interna de leitura com resumo e jogadores recentes
 - [x] visão detalhada de jogador
 - [x] filtros e busca server-side na listagem principal
-- [ ] paginação
+- [x] paginação
 - [ ] ações mutáveis deliberadas
 
 ---
