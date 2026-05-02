@@ -16,6 +16,7 @@
     "db:dev:up": "sh scripts/podman-db-up.sh",
     "db:dev:down": "sh scripts/podman-db-down.sh",
     "db:dev:logs": "sh scripts/podman-db-logs.sh",
+    "db:promote-operator": "node scripts/promote-operator.mjs",
     "db:prod:status": "sh scripts/prisma-prod-status.sh",
     "db:prod:migrate": "sh scripts/prisma-prod-migrate.sh",
     "prisma:generate": "prisma generate",

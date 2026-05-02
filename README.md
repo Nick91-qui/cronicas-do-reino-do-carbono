@@ -260,6 +260,18 @@ Aplicar migrations pendentes em produção com confirmação explícita:
 npm run db:prod:migrate
 ```
 
+Promover um usuário existente para `operator` no banco atual:
+
+```bash
+npm run db:promote-operator -- seu-login
+```
+
+Se a operação for em produção, exporte antes o `DATABASE_URL_PROD` e rode o comando apontando explicitamente para ele:
+
+```bash
+DATABASE_URL="$DATABASE_URL_PROD" npm run db:promote-operator -- seu-login
+```
+
 ### Rodar a aplicação
 
 ```bash
