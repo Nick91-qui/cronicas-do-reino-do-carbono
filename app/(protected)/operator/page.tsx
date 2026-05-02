@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PlayerRole, Prisma } from "@prisma/client";
 
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { requireOperator } from "@/lib/auth/session";
@@ -11,18 +12,62 @@ function formatRelativeWindow(days: number) {
   return `${days} dia${days === 1 ? "" : "s"}`;
 }
 
-export default async function OperatorPage() {
+type OperatorSearchParams = Promise<{
+  classroom?: string;
+  q?: string;
+  role?: string;
+}>;
+
+function normalizeSingleValue(value: string | string[] | undefined) {
+  if (Array.isArray(value)) {
+    return value[0]?.trim() ?? "";
+  }
+
+  return value?.trim() ?? "";
+}
+
+function isPlayerRole(value: string): value is PlayerRole {
+  return value === PlayerRole.player || value === PlayerRole.operator;
+}
+
+export default async function OperatorPage(props: {
+  searchParams: OperatorSearchParams;
+}) {
   const operator = await requireOperator(prisma);
+  const searchParams = await props.searchParams;
   const recentActivityThreshold = new Date(
     Date.now() - recentActivityWindowDays * 24 * 60 * 60 * 1000,
   );
+  const searchTerm = normalizeSingleValue(searchParams.q);
+  const classroomCode = normalizeSingleValue(searchParams.classroom).toUpperCase();
+  const rawRole = normalizeSingleValue(searchParams.role).toLowerCase();
+  const roleFilter = isPlayerRole(rawRole) ? rawRole : null;
+  const playerWhere: Prisma.PlayerWhereInput = {
+    ...(searchTerm
+      ? {
+          OR: [
+            { displayName: { contains: searchTerm, mode: "insensitive" } },
+            { username: { contains: searchTerm, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+    ...(classroomCode
+      ? {
+          classroom: {
+            code: classroomCode,
+          },
+        }
+      : {}),
+    ...(roleFilter ? { role: roleFilter } : {}),
+  };
 
   const [
     totalPlayers,
     totalClassrooms,
     completedPlayerRows,
     activePlayerRows,
-    latestPlayers,
+    classrooms,
+    filteredPlayers,
   ] = await Promise.all([
     prisma.player.count(),
     prisma.classroom.count(),
@@ -36,9 +81,17 @@ export default async function OperatorPage() {
       distinct: ["playerId"],
       select: { playerId: true },
     }),
+    prisma.classroom.findMany({
+      orderBy: [{ name: "asc" }, { code: "asc" }],
+      select: {
+        code: true,
+        name: true,
+      },
+    }),
     prisma.player.findMany({
+      where: playerWhere,
       orderBy: { updatedAt: "desc" },
-      take: 12,
+      take: 24,
       include: {
         classroom: true,
         chapterProgress: true,
@@ -130,19 +183,94 @@ export default async function OperatorPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
-                Jogadores recentes
+                Busca operacional
               </p>
               <h2 className="pt-2 text-3xl tracking-[0.05em] text-white">
-                Leitura resumida do reino
+                Leitura filtrada do reino
               </h2>
             </div>
             <div className="hud-chip">
-              {latestPlayers.length} registros exibidos
+              {filteredPlayers.length} registros exibidos
             </div>
           </div>
 
+          <form className="mt-6 grid gap-3 lg:grid-cols-[minmax(0,1.6fr),minmax(0,1fr),minmax(0,0.9fr),auto]">
+            <label className="grid gap-2 text-sm text-slate-300">
+              <span className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                Buscar jogador
+              </span>
+              <input
+                type="search"
+                name="q"
+                defaultValue={searchTerm}
+                placeholder="Nome no grimorio ou login"
+                className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400"
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm text-slate-300">
+              <span className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                Turma
+              </span>
+              <select
+                name="classroom"
+                defaultValue={classroomCode}
+                className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400"
+              >
+                <option value="">Todas as turmas</option>
+                {classrooms.map((classroom) => (
+                  <option key={classroom.code} value={classroom.code}>
+                    {classroom.name} ({classroom.code})
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="grid gap-2 text-sm text-slate-300">
+              <span className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                Papel
+              </span>
+              <select
+                name="role"
+                defaultValue={roleFilter ?? ""}
+                className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400"
+              >
+                <option value="">Todos os papeis</option>
+                <option value={PlayerRole.player}>player</option>
+                <option value={PlayerRole.operator}>operator</option>
+              </select>
+            </label>
+
+            <div className="flex gap-3 lg:items-end">
+              <button type="submit" className="ritual-link px-4 py-3 text-sm">
+                Aplicar filtros
+              </button>
+              <Link href="/operator" className="ritual-link px-4 py-3 text-sm">
+                Limpar
+              </Link>
+            </div>
+          </form>
+
+          <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-300">
+            <span className="hud-chip">
+              busca: {searchTerm ? `"${searchTerm}"` : "todas"}
+            </span>
+            <span className="hud-chip">
+              turma: {classroomCode || "todas"}
+            </span>
+            <span className="hud-chip">
+              papel: {roleFilter ?? "todos"}
+            </span>
+          </div>
+
           <div className="mt-6 grid gap-3">
-            {latestPlayers.map((player) => {
+            {filteredPlayers.length === 0 ? (
+              <article className="game-panel-muted text-sm text-slate-300">
+                Nenhum jogador encontrado com os filtros atuais.
+              </article>
+            ) : null}
+
+            {filteredPlayers.map((player) => {
               const chapterProgress = player.chapterProgress[0] ?? null;
 
               return (

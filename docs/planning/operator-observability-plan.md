@@ -84,7 +84,7 @@ O valor padrão continua sendo `player`.
 1. adicionar guard server-side para `operator`
 2. criar rota/página interna de listagem de jogadores
 3. criar visão detalhada de jogador
-4. revisar necessidade de filtros e paginação
+4. revisar necessidade de filtros, busca e paginação
 5. decidir se a segunda versão incluirá ações mutáveis
 
 ### Status atual
@@ -93,7 +93,8 @@ O valor padrão continua sendo `player`.
 - [x] guard server-side para `operator`
 - [x] primeira página interna de leitura com resumo e jogadores recentes
 - [x] visão detalhada de jogador
-- [ ] filtros e paginação
+- [x] filtros e busca server-side na listagem principal
+- [ ] paginação
 - [ ] ações mutáveis deliberadas
 
 ---
