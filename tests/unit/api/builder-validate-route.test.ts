@@ -1,17 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
-  getAuthenticatedPlayerMock,
+  requireApiAuthenticatedPlayerMock,
   validateBuilderStateForPhaseMock,
   logServerErrorMock,
 } = vi.hoisted(() => ({
-  getAuthenticatedPlayerMock: vi.fn(),
+  requireApiAuthenticatedPlayerMock: vi.fn(),
   validateBuilderStateForPhaseMock: vi.fn(),
   logServerErrorMock: vi.fn(),
 }));
 
 vi.mock("@/lib/auth/session", () => ({
-  getAuthenticatedPlayer: getAuthenticatedPlayerMock,
+  ApiAuthenticationRequiredError: class ApiAuthenticationRequiredError extends Error {
+    constructor() {
+      super("Autenticação obrigatória.");
+    }
+  },
+  requireApiAuthenticatedPlayer: requireApiAuthenticatedPlayerMock,
 }));
 
 vi.mock("@/lib/builder/validate", () => ({
@@ -27,16 +32,19 @@ vi.mock("@/lib/db/prisma", () => ({
 }));
 
 import { POST } from "@/app/api/phases/[phaseId]/builder/validate/route";
+import { ApiAuthenticationRequiredError } from "@/lib/auth/session";
 
 describe("api/phases/[phaseId]/builder/validate", () => {
   beforeEach(() => {
-    getAuthenticatedPlayerMock.mockReset();
+    requireApiAuthenticatedPlayerMock.mockReset();
     validateBuilderStateForPhaseMock.mockReset();
     logServerErrorMock.mockReset();
   });
 
   it("exige autenticação", async () => {
-    getAuthenticatedPlayerMock.mockResolvedValue(null);
+    requireApiAuthenticatedPlayerMock.mockRejectedValue(
+      new ApiAuthenticationRequiredError(),
+    );
 
     const response = await POST(
       new Request("http://localhost/api/phases/chapter-1-phase-1/builder/validate", {
@@ -61,7 +69,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
   });
 
   it("retorna payload inválido com no-store", async () => {
-    getAuthenticatedPlayerMock.mockResolvedValue({
+    requireApiAuthenticatedPlayerMock.mockResolvedValue({
       playerId: "player-1",
     });
 
@@ -88,7 +96,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
   });
 
   it("retorna a validação estruturada quando autenticado", async () => {
-    getAuthenticatedPlayerMock.mockResolvedValue({
+    requireApiAuthenticatedPlayerMock.mockResolvedValue({
       playerId: "player-1",
     });
     validateBuilderStateForPhaseMock.mockReturnValue({
@@ -135,7 +143,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
   });
 
   it("registra falha inesperada do validador", async () => {
-    getAuthenticatedPlayerMock.mockResolvedValue({
+    requireApiAuthenticatedPlayerMock.mockResolvedValue({
       playerId: "player-1",
     });
     validateBuilderStateForPhaseMock.mockImplementation(() => {

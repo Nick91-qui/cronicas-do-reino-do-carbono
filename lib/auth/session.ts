@@ -62,6 +62,13 @@ export type AuthenticatedPlayer = {
   sessionExpiresAt: Date;
 };
 
+export class ApiAuthenticationRequiredError extends Error {
+  constructor() {
+    super("Autenticação obrigatória.");
+    this.name = "ApiAuthenticationRequiredError";
+  }
+}
+
 export async function createSessionForPlayer(db: DbClient, playerId: string) {
   const token = createSessionToken();
   const sessionId = hashSessionToken(token);
@@ -137,6 +144,16 @@ export async function requireAuthenticatedPlayer(db: DbClient): Promise<Authenti
 
   if (!player) {
     redirect("/login");
+  }
+
+  return player;
+}
+
+export async function requireApiAuthenticatedPlayer(db: DbClient): Promise<AuthenticatedPlayer> {
+  const player = await getAuthenticatedPlayer(db);
+
+  if (!player) {
+    throw new ApiAuthenticationRequiredError();
   }
 
   return player;

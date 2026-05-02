@@ -40,60 +40,98 @@ type SummaryRecord = {
 };
 
 function createProgressDb(options?: {
+  failOnAnalytics?: boolean;
   previousSummary?: SummaryRecord | null;
   summariesByChapter?: SummaryRecord[];
 }) {
   const previousSummary = options?.previousSummary ?? null;
-  let upsertedSummary: SummaryRecord | null = null;
-  let upsertedChapterProgress: Record<string, unknown> | null = null;
-  const createdAttempts: Array<Record<string, unknown>> = [];
-  const createdAnalyticsEvents: Array<Record<string, unknown>> = [];
-
-  const tx = {
-    playerPhaseAttempt: {
-      create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => {
-        createdAttempts.push(data);
-        return { id: "attempt-1" };
-      }),
-    },
-    playerPhaseSummary: {
-      findUnique: vi.fn(async () => previousSummary),
-      upsert: vi.fn(async ({ create, update }: { create: SummaryRecord; update: Partial<SummaryRecord> }) => {
-        upsertedSummary = previousSummary ? { ...previousSummary, ...update } : create;
-        return upsertedSummary;
-      }),
-      findMany: vi.fn(async () => {
-        if (options?.summariesByChapter) {
-          return options.summariesByChapter;
-        }
-
-        return upsertedSummary ? [upsertedSummary] : [];
-      }),
-    },
-    playerChapterProgress: {
-      upsert: vi.fn(async ({ create, update }: { create: Record<string, unknown>; update: Record<string, unknown> }) => {
-        upsertedChapterProgress = previousSummary ? update : create;
-        return upsertedChapterProgress;
-      }),
-    },
-    playerAnalyticsEvent: {
-      createMany: vi.fn(async ({ data }: { data: Array<Record<string, unknown>> }) => {
-        createdAnalyticsEvents.push(...data);
-        return { count: data.length };
-      }),
-    },
-  };
+  let committedSummary: SummaryRecord | null = null;
+  let committedChapterProgress: Record<string, unknown> | null = null;
+  const committedAttempts: Array<Record<string, unknown>> = [];
+  const committedAnalyticsEvents: Array<Record<string, unknown>> = [];
 
   return {
     db: {
       $transaction: async (
-        callback: (client: typeof tx) => Promise<unknown>,
-      ) => callback(tx),
+        callback: (
+          client: {
+            playerPhaseAttempt: {
+              create: ReturnType<typeof vi.fn>;
+            };
+            playerPhaseSummary: {
+              findUnique: ReturnType<typeof vi.fn>;
+              upsert: ReturnType<typeof vi.fn>;
+              findMany: ReturnType<typeof vi.fn>;
+            };
+            playerChapterProgress: {
+              upsert: ReturnType<typeof vi.fn>;
+            };
+            playerAnalyticsEvent: {
+              createMany: ReturnType<typeof vi.fn>;
+            };
+          },
+        ) => Promise<unknown>,
+      ) => {
+        let stagedSummary = committedSummary;
+        let stagedChapterProgress = committedChapterProgress;
+        const stagedAttempts: Array<Record<string, unknown>> = [];
+        const stagedAnalyticsEvents: Array<Record<string, unknown>> = [];
+
+        const tx = {
+          playerPhaseAttempt: {
+            create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => {
+              stagedAttempts.push(data);
+              return { id: "attempt-1" };
+            }),
+          },
+          playerPhaseSummary: {
+            findUnique: vi.fn(async () => previousSummary),
+            upsert: vi.fn(
+              async ({ create, update }: { create: SummaryRecord; update: Partial<SummaryRecord> }) => {
+                stagedSummary = previousSummary ? { ...previousSummary, ...update } : create;
+                return stagedSummary;
+              },
+            ),
+            findMany: vi.fn(async () => {
+              if (options?.summariesByChapter) {
+                return options.summariesByChapter;
+              }
+
+              return stagedSummary ? [stagedSummary] : [];
+            }),
+          },
+          playerChapterProgress: {
+            upsert: vi.fn(
+              async ({ create, update }: { create: Record<string, unknown>; update: Record<string, unknown> }) => {
+                stagedChapterProgress = previousSummary ? update : create;
+                return stagedChapterProgress;
+              },
+            ),
+          },
+          playerAnalyticsEvent: {
+            createMany: vi.fn(async ({ data }: { data: Array<Record<string, unknown>> }) => {
+              if (options?.failOnAnalytics) {
+                throw new Error("analytics failed");
+              }
+
+              stagedAnalyticsEvents.push(...data);
+              return { count: data.length };
+            }),
+          },
+        };
+
+        const result = await callback(tx);
+        committedSummary = stagedSummary;
+        committedChapterProgress = stagedChapterProgress;
+        committedAttempts.push(...stagedAttempts);
+        committedAnalyticsEvents.push(...stagedAnalyticsEvents);
+        return result;
+      },
     } as never,
-    createdAttempts,
-    createdAnalyticsEvents,
-    getSummary: () => upsertedSummary,
-    getChapterProgress: () => upsertedChapterProgress,
+    createdAttempts: committedAttempts,
+    createdAnalyticsEvents: committedAnalyticsEvents,
+    getSummary: () => committedSummary,
+    getChapterProgress: () => committedChapterProgress,
   };
 }
 
@@ -244,5 +282,47 @@ describe("progress/service", () => {
       "phase_evaluated",
       "phase_replayed",
     ]);
+  });
+
+  it("não comita estado parcial quando uma etapa tardia da transação falha", async () => {
+    const { db, createdAttempts, createdAnalyticsEvents, getSummary, getChapterProgress } =
+      createProgressDb({
+        failOnAnalytics: true,
+      });
+
+    await expect(
+      persistPhaseEvaluation(db, {
+        playerId: "player-1",
+        submission: {
+          phaseId: "chapter-1-phase-1",
+          builderState: {
+            layout: "open_chain",
+            carbonCount: 1,
+            bonds: [],
+          },
+          selectedProperties: ["cadeia_curta"],
+        },
+        evaluation: {
+          phaseId: "chapter-1-phase-1",
+          selectedMoleculeId: "metano",
+          selectedProperties: ["cadeia_curta"],
+          builderState: {
+            layout: "open_chain",
+            carbonCount: 1,
+            bonds: [],
+          },
+          qualitativeResult: "excellent",
+          validationResult: "correct",
+          scoreAwarded: 3,
+          expectedPropertiesMatched: ["cadeia_curta"],
+          feedback: "ok",
+        },
+      }),
+    ).rejects.toThrow("analytics failed");
+
+    expect(createdAttempts).toEqual([]);
+    expect(createdAnalyticsEvents).toEqual([]);
+    expect(getSummary()).toBeNull();
+    expect(getChapterProgress()).toBeNull();
   });
 });

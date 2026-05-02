@@ -38,8 +38,13 @@ test("Rotas protegidas exigem autenticação no servidor", () => {
 
   for (const file of files) {
     const source = readProjectFile(file);
-    assert.match(source, /Autenticação obrigatória\./);
-    assert.match(source, /getAuthenticatedPlayer/);
+    if (file.includes("/phases/")) {
+      assert.match(source, /requireApiAuthenticatedPlayer/);
+      assert.match(source, /ApiAuthenticationRequiredError/);
+    } else {
+      assert.match(source, /Autenticação obrigatória\./);
+      assert.match(source, /getAuthenticatedPlayer/);
+    }
   }
 });
 

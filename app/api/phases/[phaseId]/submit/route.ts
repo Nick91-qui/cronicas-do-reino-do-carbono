@@ -1,4 +1,7 @@
-import { getAuthenticatedPlayer } from "@/lib/auth/session";
+import {
+  ApiAuthenticationRequiredError,
+  requireApiAuthenticatedPlayer,
+} from "@/lib/auth/session";
 import { phaseIdSchema } from "@/lib/content/schema";
 import { prisma } from "@/lib/db/prisma";
 import { submitPhaseForPlayer } from "@/lib/gameplay/submit-phase";
@@ -23,12 +26,6 @@ export async function POST(
     return jsonNoStore({ error: "Parâmetro de fase inválido." }, { status: 400 });
   }
 
-  const authenticatedPlayer = await getAuthenticatedPlayer(prisma);
-
-  if (!authenticatedPlayer) {
-    return jsonNoStore({ error: "Autenticação obrigatória." }, { status: 401 });
-  }
-
   const json = await request.json().catch(() => null);
   const parsedPayload = phaseSubmitSchema.safeParse(json);
 
@@ -47,6 +44,7 @@ export async function POST(
   }
 
   try {
+    const authenticatedPlayer = await requireApiAuthenticatedPlayer(prisma);
     const result = await submitPhaseForPlayer(
       prisma,
       authenticatedPlayer.playerId,
@@ -55,6 +53,10 @@ export async function POST(
 
     return jsonNoStore(result, { status: 200 });
   } catch (error) {
+    if (error instanceof ApiAuthenticationRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 401 });
+    }
+
     if (error instanceof Error && PHASE_SUBMIT_CLIENT_ERRORS.has(error.message)) {
       return jsonNoStore({ error: error.message }, { status: 400 });
     }

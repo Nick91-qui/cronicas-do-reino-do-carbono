@@ -1,5 +1,8 @@
 import { canonicalBuilderStateSchema } from "@/lib/builder/schema";
-import { getAuthenticatedPlayer } from "@/lib/auth/session";
+import {
+  ApiAuthenticationRequiredError,
+  requireApiAuthenticatedPlayer,
+} from "@/lib/auth/session";
 import { validateBuilderStateForPhase } from "@/lib/builder/validate";
 import { phaseIdSchema } from "@/lib/content/schema";
 import { prisma } from "@/lib/db/prisma";
@@ -20,13 +23,8 @@ export async function POST(
     );
   }
 
-  const authenticatedPlayer = await getAuthenticatedPlayer(prisma);
-
-  if (!authenticatedPlayer) {
-    return jsonNoStore({ error: "Autenticação obrigatória." }, { status: 401 });
-  }
-
   try {
+    await requireApiAuthenticatedPlayer(prisma);
     const json = await request.json().catch(() => null);
     const parsedBuilderState = canonicalBuilderStateSchema.safeParse(json);
 
@@ -47,6 +45,10 @@ export async function POST(
 
     return jsonNoStore(result, { status: 200 });
   } catch (error) {
+    if (error instanceof ApiAuthenticationRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 401 });
+    }
+
     logServerError("phases.builder.validate", error, {
       phaseId: parsedPhaseId.data,
     });
