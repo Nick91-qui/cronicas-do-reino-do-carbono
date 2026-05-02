@@ -87,6 +87,15 @@ O valor padrão continua sendo `player`.
 4. revisar necessidade de filtros e paginação
 5. decidir se a segunda versão incluirá ações mutáveis
 
+### Status atual
+
+- [x] role persistida no banco
+- [x] guard server-side para `operator`
+- [x] primeira página interna de leitura com resumo e jogadores recentes
+- [ ] visão detalhada de jogador
+- [ ] filtros e paginação
+- [ ] ações mutáveis deliberadas
+
 ---
 
 ## 8. Critério de aceite

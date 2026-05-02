@@ -32,6 +32,7 @@ describe("auth/session", () => {
           player: {
             id: "player-1",
             classroomId: "class-1",
+            role: "player",
             classroom: { code: "ABC123" },
             displayName: "Jogador",
             username: "jogador",
@@ -62,6 +63,7 @@ describe("auth/session", () => {
           player: {
             id: "player-1",
             classroomId: "class-1",
+            role: "operator",
             classroom: { code: "ABC123" },
             displayName: "Jogador",
             username: "jogador",
@@ -76,6 +78,7 @@ describe("auth/session", () => {
       playerId: "player-1",
       classroomId: "class-1",
       classroomCode: "ABC123",
+      role: "operator",
       displayName: "Jogador",
       username: "jogador",
     });

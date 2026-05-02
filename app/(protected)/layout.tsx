@@ -8,7 +8,7 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await requireAuthenticatedPlayer(prisma);
+  const player = await requireAuthenticatedPlayer(prisma);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -29,7 +29,7 @@ export default async function ProtectedLayout({
       <div className="relative">
         <header className="sticky top-0 z-30 border-b border-white/10 bg-[rgba(5,8,18,0.78)] backdrop-blur-xl">
           <div className="mx-auto flex w-full max-w-7xl justify-end px-4 py-4 sm:px-6">
-            <ProtectedHudNav />
+            <ProtectedHudNav showOperator={player.role === "operator"} />
           </div>
         </header>
 

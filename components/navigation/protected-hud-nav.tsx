@@ -12,10 +12,17 @@ const items = [
   { href: "/profile", label: "Aposentos" },
 ];
 
-export function ProtectedHudNav() {
+type ProtectedHudNavProps = {
+  showOperator?: boolean;
+};
+
+export function ProtectedHudNav({ showOperator = false }: ProtectedHudNavProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const navigationItems = showOperator
+    ? [...items, { href: "/operator", label: "Observatorio" }]
+    : items;
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -67,7 +74,7 @@ export function ProtectedHudNav() {
             <p className="mt-1 text-sm text-slate-300">Escolha a ala que deseja visitar sem sair da campanha.</p>
           </div>
           <div className="grid gap-2">
-            {items.map((item) => {
+            {navigationItems.map((item) => {
               const isActive =
                 pathname === item.href || (item.href !== "/game" && pathname.startsWith(`${item.href}/`));
 

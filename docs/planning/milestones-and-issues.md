@@ -191,7 +191,7 @@ Stack atual preparada:
 ### Observabilidade interna
 
 - [x] modelar papel persistido de `operator` no banco
-- [ ] definir primeira página interna somente leitura para feedback dos dados dos usuários
+- [x] definir primeira página interna somente leitura para feedback dos dados dos usuários
 - [ ] decidir consultas mínimas, filtros e regras de acesso para a superfície interna
 
 ### Direção visual e percepção de produto

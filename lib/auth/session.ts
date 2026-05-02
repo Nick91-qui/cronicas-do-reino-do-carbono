@@ -56,6 +56,7 @@ export type AuthenticatedPlayer = {
   playerId: string;
   classroomId: string;
   classroomCode: string;
+  role: "player" | "operator";
   displayName: string;
   username: string;
   sessionExpiresAt: Date;
@@ -124,6 +125,7 @@ export async function getAuthenticatedPlayer(db: DbClient): Promise<Authenticate
     playerId: session.player.id,
     classroomId: session.player.classroomId,
     classroomCode: session.player.classroom.code,
+    role: session.player.role,
     displayName: session.player.displayName,
     username: session.player.username,
     sessionExpiresAt: session.expiresAt,
@@ -135,6 +137,16 @@ export async function requireAuthenticatedPlayer(db: DbClient): Promise<Authenti
 
   if (!player) {
     redirect("/login");
+  }
+
+  return player;
+}
+
+export async function requireOperator(db: DbClient): Promise<AuthenticatedPlayer> {
+  const player = await requireAuthenticatedPlayer(db);
+
+  if (player.role !== "operator") {
+    redirect("/game");
   }
 
   return player;
