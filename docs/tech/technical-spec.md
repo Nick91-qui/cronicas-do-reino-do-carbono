@@ -262,7 +262,17 @@ O sistema deve:
 - proteger dados privados do jogador;
 - impedir alterações indevidas em registros de outro jogador.
 
-### 8.3 Entrega de fase
+### 8.3 Papel interno de operador
+
+O sistema pode manter um papel interno de `operator` persistido no banco para liberar, em ciclos futuros, páginas internas de observabilidade somente leitura.
+
+Regras atuais:
+
+- o papel padrão de novos registros é `player`;
+- `operator` não concede, por si só, permissões de escrita administrativa no MVP;
+- qualquer área interna baseada em `operator` deve começar como leitura operacional antes de incluir ações mutáveis.
+
+### 8.4 Entrega de fase
 
 O sistema deve:
 
@@ -270,7 +280,7 @@ O sistema deve:
 - apresentar o conteúdo oficial da fase correta;
 - fornecer narrativa, objetivo, recursos, moléculas disponíveis e feedback.
 
-### 8.4 Interação de gameplay
+### 8.5 Interação de gameplay
 
 O sistema deve:
 
@@ -281,7 +291,7 @@ O sistema deve:
 - permitir seleção de propriedades justificadoras;
 - submeter a resposta ao backend.
 
-### 8.5 Persistência
+### 8.6 Persistência
 
 O sistema deve:
 
@@ -746,11 +756,23 @@ Campos sugeridos:
 
 - `id`
 - `classroomId`
+- `role`
 - `displayName`
 - `username`
 - `passwordHash`
 - `createdAt`
 - `updatedAt`
+
+#### `PlayerRole`
+
+Enum operacional para distinguir o jogador padrão de um operador interno.
+
+Valores iniciais:
+
+- `player`
+- `operator`
+
+No escopo atual, `operator` existe para proteger futuras páginas internas de leitura operacional. Isso não implica painel administrativo completo no MVP.
 
 #### `Session`
 

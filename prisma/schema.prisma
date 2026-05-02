@@ -24,6 +24,11 @@ enum ValidationResult {
   incorrect
 }
 
+enum PlayerRole {
+  player
+  operator
+}
+
 model Classroom {
   id        String   @id @default(cuid())
   code      String   @unique
@@ -36,6 +41,7 @@ model Classroom {
 model Player {
   id             String               @id @default(cuid())
   classroomId    String
+  role           PlayerRole           @default(player)
   displayName    String               @unique
   username       String               @unique
   passwordHash   String

@@ -304,7 +304,20 @@ O MVP não inclui, neste momento:
 - login social;
 - autenticação por provedores externos;
 - recuperação sofisticada de conta;
-- múltiplos perfis administrativos.
+- múltiplos perfis administrativos expostos por interface.
+
+### Papel interno de operador
+
+Embora o MVP não inclua painel administrativo como produto, a base técnica pode manter um papel interno mínimo de **operador** para proteger telas futuras de leitura operacional.
+
+Esse papel não representa, neste momento:
+
+- dashboard docente completo;
+- gestão ampla por interface;
+- edição de conteúdo;
+- administração livre do sistema.
+
+Seu objetivo é apenas permitir evolução controlada de ferramentas internas de observabilidade e suporte.
 
 ## Papel do professor no MVP
 

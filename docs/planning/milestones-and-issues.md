@@ -188,6 +188,12 @@ Stack atual preparada:
 - [x] evitar drift entre implementação e documentação oficial
 - [ ] atualizar documentação explicitamente quando houver divergência real
 
+### Observabilidade interna
+
+- [x] modelar papel persistido de `operator` no banco
+- [ ] definir primeira página interna somente leitura para feedback dos dados dos usuários
+- [ ] decidir consultas mínimas, filtros e regras de acesso para a superfície interna
+
 ### Direção visual e percepção de produto
 
 - [x] reduzir padrões visuais que ainda passam sensação de dashboard ou landing page

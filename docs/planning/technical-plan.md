@@ -299,6 +299,8 @@ Fechar lacunas residuais de operação, suporte e manutenção do sistema em amb
 - revisar escopo e formato do logging mínimo do servidor;
 - definir política simples para limpeza de sessão expirada;
 - revisar e documentar variáveis de ambiente realmente usadas;
+- introduzir papel persistido de `operator` para futuras telas internas de leitura operacional;
+- planejar uma primeira superfície interna somente leitura para feedback de dados dos usuários;
 - tratar ou registrar explicitamente o aviso do Vitest/Vite;
 - alinhar checklist de QA com os novos endurecimentos técnicos.
 
@@ -338,6 +340,7 @@ Fechar lacunas residuais de operação, suporte e manutenção do sistema em amb
 - revisar variante síncrona de hashing de senha;
 - revisar tipagem/modelagem de campos mais frouxos no schema;
 - formalizar melhorias de observabilidade;
+- modelar proteção futura de observabilidade interna com papel `operator`;
 - documentar decisões residuais do ciclo.
 
 ---
