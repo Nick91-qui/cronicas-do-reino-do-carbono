@@ -27,6 +27,7 @@ export function PhaseSelectPanel({
   synthesizedMolecule,
 }: PhaseSelectPanelProps) {
   const [isSelectedCardMinimized, setIsSelectedCardMinimized] = useState(false);
+  const hasSelectedMolecule = Boolean(effectiveSelectedMoleculeId);
 
   useEffect(() => {
     if (focusedMolecule) {
@@ -40,6 +41,11 @@ export function PhaseSelectPanel({
         <article className="game-panel">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
+          <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/25 px-4 py-3 text-sm text-slate-300">
+            {hasSelectedMolecule
+              ? `Carta ativa: ${focusedMolecule?.nomeQuimico ?? "selecionada"}. Avance quando estiver satisfeito com a escolha.`
+              : "Selecione uma carta para continuar para a etapa de leitura."}
+          </div>
         </article>
 
         <section className="game-panel sm:p-5">
@@ -47,13 +53,16 @@ export function PhaseSelectPanel({
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Escolha</p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-white">Cartas disponiveis</h3>
+              <p className="mt-2 text-sm text-slate-300">
+                Toque em uma carta para ativar sua escolha antes da justificativa.
+              </p>
             </div>
             <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
               Selecione 1 carta
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4">
             {molecules.map((molecule) => {
               const isSelected = effectiveSelectedMoleculeId === molecule.id;
               const isCreated = builderResult?.resolvedMoleculeId === molecule.id;
@@ -79,6 +88,13 @@ export function PhaseSelectPanel({
                     <div className="mb-2 min-w-0 px-1">
                       <p className="line-clamp-2 text-sm font-black tracking-tight text-white">
                         {molecule.nomeQuimico}
+                      </p>
+                      <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                        {isSelected
+                          ? "Carta ativa"
+                          : isCreated
+                            ? "Sugerida pela sintese"
+                            : "Disponivel"}
                       </p>
                     </div>
                     <div
@@ -112,6 +128,10 @@ export function PhaseSelectPanel({
                           <span className="rounded-full border border-cyan-200/30 bg-cyan-300/15 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
                             Ativa
                           </span>
+                        ) : isCreated ? (
+                          <span className="rounded-full border border-emerald-200/30 bg-emerald-300/15 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-emerald-100">
+                            Sugestao
+                          </span>
                         ) : null}
                       </div>
                     </div>
@@ -131,18 +151,21 @@ export function PhaseSelectPanel({
                 className="fixed inset-0 z-40 opacity-100 transition duration-300"
                 onClick={() => setIsSelectedCardMinimized(true)}
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,15,30,0.12),rgba(8,15,30,0.42)_58%,rgba(8,15,30,0.18)_100%)] backdrop-blur-[2px]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(8,15,30,0.08),rgba(8,15,30,0.34)_58%,rgba(8,15,30,0.16)_100%)] backdrop-blur-[1px]" />
               </div>
 
               <div className="fixed inset-x-3 bottom-6 z-50 flex justify-center transition-all duration-500 sm:inset-x-6">
                 <div className="w-full max-w-sm" onClick={(event) => event.stopPropagation()}>
-                  <div className="mb-3 flex justify-center gap-2">
+                  <div className="mb-3 flex items-center justify-between gap-2 rounded-full border border-white/10 bg-slate-950/75 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-slate-200 backdrop-blur-md">
+                    <span className="truncate">
+                      {focusedMolecule.nomeQuimico}
+                    </span>
                     <button
                       type="button"
                       onClick={() => setIsSelectedCardMinimized(true)}
-                      className="rounded-full border border-white/10 bg-slate-950/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-100 backdrop-blur-md transition hover:border-cyan-200/35"
+                      className="rounded-full border border-white/10 bg-slate-950/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-100 transition hover:border-cyan-200/35"
                     >
-                      Minimizar
+                      Recolher
                     </button>
                   </div>
                   <div className="rounded-[28px] border border-cyan-300/24 bg-[linear-gradient(180deg,rgba(34,211,238,0.12),rgba(15,23,42,0.18))] p-3 shadow-[0_24px_80px_rgba(2,6,23,0.48)]">
@@ -198,6 +221,9 @@ export function PhaseSelectPanel({
                   }}
                 />
               </div>
+              <span className="mt-1 block truncate text-center text-[9px] font-semibold uppercase tracking-[0.16em] text-cyan-100">
+                Carta ativa
+              </span>
             </button>
           </div>
         </>
