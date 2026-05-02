@@ -22,6 +22,34 @@ export function PhaseResultPanel({
   submitResult,
   onRetry,
 }: PhaseResultPanelProps) {
+  const hasRewards = submitResult.persistence.grantedRewards.length > 0;
+  const nextActionLabel = nextPhaseActionHref
+    ? "A prova seguinte ja esta pronta."
+    : "Seu capitulo foi atualizado no mapa principal.";
+
+  function formatRewardLabel(reward: {
+    rewardType: string;
+    rewardValue: string;
+  }) {
+    if (reward.rewardType === "carbon") {
+      return `Carbono +${reward.rewardValue}`;
+    }
+
+    if (reward.rewardType === "fragment") {
+      return `Fragmento: ${reward.rewardValue}`;
+    }
+
+    if (reward.rewardType === "molecule") {
+      return `Molecula: ${reward.rewardValue}`;
+    }
+
+    if (reward.rewardType === "title") {
+      return `Titulo: ${reward.rewardValue}`;
+    }
+
+    return `${reward.rewardType}: ${reward.rewardValue}`;
+  }
+
   return (
     <section className="relative isolate mx-auto max-w-5xl overflow-hidden rounded-[34px] border border-white/10 bg-slate-950/60 p-4 shadow-[0_30px_100px_rgba(2,6,23,0.42)] sm:p-6">
       <div className="absolute inset-0">
@@ -46,6 +74,10 @@ export function PhaseResultPanel({
             {submitResult.evaluation.feedback}
           </p>
 
+          <div className="mt-4 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/90">
+            {nextActionLabel}
+          </div>
+
           <div className="mt-6 grid gap-3 text-sm sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
               <p className="opacity-70">Forca obtida</p>
@@ -60,7 +92,7 @@ export function PhaseResultPanel({
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-              <p className="opacity-70">Marcas alinhadas</p>
+              <p className="opacity-70">Propriedades corretas</p>
               <p className="mt-1 text-lg font-semibold">
                 {submitResult.evaluation.expectedPropertiesMatched.length}
               </p>
@@ -68,14 +100,27 @@ export function PhaseResultPanel({
           </div>
         </div>
 
-        {submitResult.persistence.grantedRewards.length > 0 ? (
-          <div className="mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-            Sinais recebidos:{" "}
-            {submitResult.persistence.grantedRewards
-              .map((reward) => `${reward.rewardType}:${reward.rewardValue}`)
-              .join(", ")}
-          </div>
-        ) : null}
+        <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+            Recompensas desta tentativa
+          </p>
+          {hasRewards ? (
+            <div className="mt-3 flex flex-wrap gap-2 text-sm text-emerald-100">
+              {submitResult.persistence.grantedRewards.map((reward) => (
+                <span
+                  key={`${reward.rewardType}-${reward.rewardValue}`}
+                  className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5"
+                >
+                  {formatRewardLabel(reward)}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-slate-300">
+              Nenhuma recompensa nova foi registrada nesta tentativa.
+            </p>
+          )}
+        </div>
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button

@@ -27,6 +27,8 @@ export function PhaseReadPanel({
   onSelectFocusedMolecule,
   onToggleProperty,
 }: PhaseReadPanelProps) {
+  const hasSelectedProperties = selectedProperties.length > 0;
+
   return (
     <section className="grid gap-5 xl:grid-cols-[0.86fr,1.14fr] xl:gap-6">
       <aside className="grid gap-4 self-start">
@@ -53,13 +55,31 @@ export function PhaseReadPanel({
         </div>
 
         <div className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Resumo</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Antes de entregar</p>
           <div className="mt-3 grid gap-3 text-sm text-slate-200">
             <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
               Molecula: <span className="font-semibold text-white">{focusedMolecule?.nomeQuimico ?? "nenhuma"}</span>
             </div>
             <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
-              Marcas: <span className="font-semibold text-white">{selectedProperties.length}/3</span>
+              Propriedades marcadas: <span className="font-semibold text-white">{selectedProperties.length}/3</span>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
+              {hasSelectedProperties ? (
+                <div className="flex flex-wrap gap-2">
+                  {selectedProperties.map((property) => (
+                    <span
+                      key={property}
+                      className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100"
+                    >
+                      {formatSelectableProperty(property)}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <span className="text-slate-400">
+                  Marque ao menos uma propriedade para liberar a entrega.
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -71,6 +91,9 @@ export function PhaseReadPanel({
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Classificacao</p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-white">Propriedades em foco</h3>
+              <p className="mt-2 text-sm text-slate-300">
+                Escolha apenas as propriedades que realmente sustentam sua resposta.
+              </p>
             </div>
             <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
               Escolha ate 3
@@ -101,6 +124,12 @@ export function PhaseReadPanel({
         <section className="game-panel">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{phase.objective}</p>
+
+          <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/25 px-4 py-3 text-sm text-slate-300">
+            {hasSelectedProperties
+              ? "Quando terminar, use Entregar para registrar sua leitura."
+              : "Selecione ao menos uma propriedade para concluir esta etapa."}
+          </div>
 
           {submitError ? (
             <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
