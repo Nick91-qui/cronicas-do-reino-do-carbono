@@ -180,7 +180,7 @@ Stack atual preparada:
 
 - [x] ampliar validação transacional e cobertura de replay
 - [x] revisar idempotência de recompensas
-- [ ] revisar comportamento em cenários de falha parcial
+- [x] revisar comportamento em cenários de falha parcial
 
 ### Conteúdo e aderência documental
 

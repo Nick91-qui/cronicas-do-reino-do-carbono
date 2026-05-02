@@ -325,4 +325,46 @@ describe("progress/service", () => {
     expect(getSummary()).toBeNull();
     expect(getChapterProgress()).toBeNull();
   });
+
+  it("não comita estado parcial quando a aplicação de recompensas falha", async () => {
+    applyPhaseCompletionRewardsMock.mockRejectedValue(new Error("reward persistence failed"));
+
+    const { db, createdAttempts, createdAnalyticsEvents, getSummary, getChapterProgress } =
+      createProgressDb();
+
+    await expect(
+      persistPhaseEvaluation(db, {
+        playerId: "player-1",
+        submission: {
+          phaseId: "chapter-1-phase-1",
+          builderState: {
+            layout: "open_chain",
+            carbonCount: 1,
+            bonds: [],
+          },
+          selectedProperties: ["cadeia_curta"],
+        },
+        evaluation: {
+          phaseId: "chapter-1-phase-1",
+          selectedMoleculeId: "metano",
+          selectedProperties: ["cadeia_curta"],
+          builderState: {
+            layout: "open_chain",
+            carbonCount: 1,
+            bonds: [],
+          },
+          qualitativeResult: "excellent",
+          validationResult: "correct",
+          scoreAwarded: 3,
+          expectedPropertiesMatched: ["cadeia_curta"],
+          feedback: "ok",
+        },
+      }),
+    ).rejects.toThrow("reward persistence failed");
+
+    expect(createdAttempts).toEqual([]);
+    expect(createdAnalyticsEvents).toEqual([]);
+    expect(getSummary()).toBeNull();
+    expect(getChapterProgress()).toBeNull();
+  });
 });
