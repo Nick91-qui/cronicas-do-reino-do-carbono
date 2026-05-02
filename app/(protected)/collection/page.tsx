@@ -18,7 +18,7 @@ export default async function CollectionPage() {
       imageSrc={blobAssets.authLibrary}
       imageAlt="Biblioteca ritual do castelo."
       title={`Cartas inscritas por ${player.displayName}`}
-      description="Esta sala guarda as moleculas ja reconhecidas pelo laboratorio de sintese."
+      description="Esta sala reune as moleculas que voce ja desbloqueou e funciona como consulta rapida para revisar descobertas do capitulo."
       stats={
         <>
           <div className="game-panel-muted">
@@ -35,8 +35,8 @@ export default async function CollectionPage() {
             </p>
             <p className="pt-2 text-sm text-slate-100">
               {hasUnlockedMolecules
-                ? "As paginas ativas respondem ao toque e mostram a leitura completa no verso."
-                : "As paginas ainda aguardam o primeiro selo de descoberta."}
+                ? "Toque em cada carta para alternar entre leitura rapida e leitura detalhada."
+                : "Conclua a primeira prova correta para despertar a primeira carta do grimorio."}
             </p>
           </div>
         </>
@@ -62,8 +62,8 @@ export default async function CollectionPage() {
               </p>
               <p className="pt-2 text-slate-100">
                 {hasUnlockedMolecules
-                  ? "Colecao aberta para comparacao, estudo e memoria das fases concluidas."
-                  : "Conclua provas do dominio para materializar as primeiras cartas oficiais."}
+                  ? "Use o grimorio para revisar o que ja foi descoberto e comparar as cartas liberadas."
+                  : "As cartas surgem conforme as provas corretas liberam novas descobertas."}
               </p>
             </div>
             <div className="game-panel-muted">
@@ -71,14 +71,23 @@ export default async function CollectionPage() {
                 Regra de leitura
               </p>
               <p className="pt-2 text-slate-100">
-                Toque nas cartas para virar o grimorio e consultar atributos,
-                pontos fortes e limitacoes.
+                Toque nas cartas para ver atributos, pontos fortes e limitacoes no verso.
+              </p>
+            </div>
+            <div className="game-panel-muted">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                Proximo desbloqueio
+              </p>
+              <p className="pt-2 text-slate-100">
+                {hasUnlockedMolecules
+                  ? "Continue avancando nas provas do capitulo para ampliar o grimorio."
+                  : "Seu proximo desbloqueio virá da primeira prova concluida com resposta correta."}
               </p>
             </div>
           </div>
         </aside>
 
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
           {hasUnlockedMolecules ? (
             collection.molecules.map((molecule) => (
               <article
@@ -90,7 +99,7 @@ export default async function CollectionPage() {
                   <span className="hud-chip border-gold/20 text-gold/90">
                     Carta desperta
                   </span>
-                  <span className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                  <span className="hidden text-[11px] uppercase tracking-[0.18em] text-slate-500 sm:inline">
                     Toque para virar
                   </span>
                 </div>

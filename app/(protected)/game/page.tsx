@@ -62,8 +62,8 @@ export default async function GamePage() {
         ambientLabel="Conselho central"
         imageSrc={blobAssets.protectedGrandHall}
         imageAlt="Salao central do castelo."
-        title={`O salao central chama ${player.displayName} de volta ao circulo das provas.`}
-        description="O dominio das primeiras cadeias do carbono segue aberto. Seus selos, recursos e descobertas estão disponíveis para vosso aprendizado."
+        title={`Seu proximo passo no reino, ${player.displayName}.`}
+        description="Retome a prova aberta do capitulo, acompanhe seu avanço e consulte seus recursos sem perder a trilha de aprendizado."
         actions={
           <>
             <Link
@@ -71,13 +71,13 @@ export default async function GamePage() {
               className="state-action px-6"
               data-tone="primary"
             >
-              Abrir mapa do dominio
+              Ver mapa do capitulo
             </Link>
             <Link
               href={`/phase/${nextPhaseId}`}
               className="ritual-link min-h-12 rounded-full px-6 py-3 text-sm"
             >
-              Retomar prova {nextPhase?.phaseNumber}
+              Ir para prova {nextPhase?.phaseNumber}
             </Link>
           </>
         }
@@ -102,8 +102,7 @@ export default async function GamePage() {
                 {progressPercent}%
               </p>
               <p className="pt-2 text-sm text-slate-300">
-                {completedCount} de {chapterProgress.totalPhases} provas com selo
-                conquistado.
+                {completedCount} de {chapterProgress.totalPhases} provas concluidas.
               </p>
             </div>
           </>
@@ -170,8 +169,8 @@ export default async function GamePage() {
                       {phase.isCompleted
                         ? `Melhor pontuacao: ${phase.bestScore}`
                         : phase.isUnlocked
-                          ? "O laboratorio desta etapa esta pronto para sua tentativa."
-                          : "A prova aguarda a quebra do selo anterior."}
+                          ? "Esta prova ja pode ser iniciada."
+                          : "Conclua a prova anterior para abrir este portal."}
                     </p>
                   </Link>
                 );
@@ -215,15 +214,23 @@ export default async function GamePage() {
 
             <article className="game-panel">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
-                Leitura estrategica
+                O que fazer agora
               </p>
               <div className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
                 <p>
-                  Portao mais distante alcancado: prova{" "}
-                  {chapterProgress.highestUnlockedPhaseNumber}.
+                  Proxima etapa sugerida:{" "}
+                  <span className="font-semibold text-white">
+                    prova {nextPhase?.phaseNumber}
+                    {nextPhase ? ` · ${nextPhase.title}` : ""}
+                  </span>
+                  .
                 </p>
                 <p>
-                  Prestigio acumulado:{" "}
+                  Se travar em uma prova, volte ao mapa do capitulo para revisar
+                  o que ja foi concluido e o que ainda esta aberto.
+                </p>
+                <p>
+                  Pontuacao acumulada:{" "}
                   <span className="font-semibold text-white">
                     {chapterProgress.chapterScore}
                   </span>

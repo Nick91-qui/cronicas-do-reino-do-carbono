@@ -17,7 +17,7 @@ function getPhaseStateCopy(phase: {
     return {
       seal: "Dominada",
       toneClass: "border-emerald-400/25 bg-emerald-500/10 text-emerald-100",
-      summary: "Esta prova ja reconhece seu nome entre os que dominam suas estruturas.",
+      summary: "A prova foi concluida. Voce pode revisitá-la para revisar a ideia central e melhorar sua leitura do capitulo.",
       meritLabel: "Forca obtida",
       actionLabel: "Revisitar prova",
     };
@@ -27,7 +27,7 @@ function getPhaseStateCopy(phase: {
     return {
       seal: "Disponivel",
       toneClass: "border-cyan-300/25 bg-cyan-400/10 text-cyan-100",
-      summary: "O portao desta prova acaba de se abrir. O laboratorio de sintese aguarda sua proxima decisao.",
+      summary: "Esta e a proxima prova ativa. Entre nela para responder o desafio atual e manter a progressao do capitulo.",
       meritLabel: phase.bestScore > 0 ? "Forca obtida" : "Prova a conquistar",
       actionLabel: "Enfrentar prova",
     };
@@ -36,9 +36,9 @@ function getPhaseStateCopy(phase: {
   return {
     seal: "Selada",
     toneClass: "border-white/10 bg-white/5 text-slate-300",
-    summary: "Os sigilos desta prova ainda nao responderam ao seu nome.",
+    summary: "Esta prova ainda nao esta aberta. Conclua a fase anterior para liberar o acesso.",
     meritLabel: "Portao velado",
-    actionLabel: "Portao ainda selado",
+    actionLabel: "Voltar ao mapa",
   };
 }
 
@@ -95,7 +95,7 @@ export default async function ChapterPage({
           />
         </div>
         <p className="pt-3 text-sm text-slate-300">
-          {completedCount} de {progress.totalPhases} provas dominadas. Portao mais distante: prova{" "}
+          {completedCount} de {progress.totalPhases} provas concluidas. Proxima prova disponivel:{" "}
           {progress.highestUnlockedPhaseNumber}.
         </p>
       </section>
@@ -161,7 +161,7 @@ export default async function ChapterPage({
                     <p className="mt-2 text-xs text-slate-400">
                       {phase.bestQualitativeResult
                         ? `Resultado mais alto: ${phase.bestQualitativeResult}`
-                        : "A avaliacao qualitativa aparecera apos sua primeira resposta."}
+                        : "A avaliacao qualitativa aparecera apos a primeira tentativa."}
                     </p>
                   </div>
                 </div>
@@ -169,10 +169,11 @@ export default async function ChapterPage({
 
               <div className="relative mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:pl-12">
                 <Link
-                  href={`/phase/${phase.phaseId}`}
+                  href={phase.isUnlocked ? `/phase/${phase.phaseId}` : `/chapter/${progress.chapterId}`}
                   className="state-action"
                   data-tone={phase.isUnlocked ? "primary" : "secondary"}
                   data-state={phase.isUnlocked ? "active" : "locked"}
+                  aria-disabled={!phase.isUnlocked}
                 >
                   {stateCopy.actionLabel}
                 </Link>
