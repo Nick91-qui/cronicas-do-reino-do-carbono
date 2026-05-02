@@ -92,7 +92,7 @@ O valor padrão continua sendo `player`.
 - [x] role persistida no banco
 - [x] guard server-side para `operator`
 - [x] primeira página interna de leitura com resumo e jogadores recentes
-- [ ] visão detalhada de jogador
+- [x] visão detalhada de jogador
 - [ ] filtros e paginação
 - [ ] ações mutáveis deliberadas
 

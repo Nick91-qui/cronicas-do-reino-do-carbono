@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { requireOperator } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
@@ -153,6 +155,14 @@ export default async function OperatorPage() {
                       <p className="pt-1 text-sm text-slate-300">
                         @{player.username} · turma {player.classroom.code}
                       </p>
+                      <div className="mt-3">
+                        <Link
+                          href={`/operator/player/${player.id}`}
+                          className="ritual-link px-4 py-2 text-sm"
+                        >
+                          Abrir leitura detalhada
+                        </Link>
+                      </div>
                     </div>
 
                     <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-3 lg:min-w-[360px]">
