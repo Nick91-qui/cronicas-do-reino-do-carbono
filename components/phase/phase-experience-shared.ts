@@ -80,23 +80,23 @@ export const stepCopy: Record<
     eyebrow: "Prova",
     title: "Prova do rito",
     description:
-      "Prepare-se para passar pela prova! Ue seus conhecimentos para  completar os desafios!",
+      "Entenda o desafio antes de comecar. Esta etapa apresenta o objetivo e prepara o que voce vai fazer a seguir.",
   },
   synthesis: {
     eyebrow: "Rito da sintese",
     title: "Moldar a estrutura",
-    description: "Use a mesa de síntese para criar a molécula mais adequada",
+    description: "Monte a estrutura na mesa de sintese e valide a molecula antes de avancar.",
   },
   select: {
     eyebrow: "Escolha da carta",
     title: "Definir a carta",
-    description: "Escolha da carta mais adequada.",
+    description: "Escolha a carta que melhor representa a molecula correta para esta prova.",
   },
   read: {
     eyebrow: "Rito da leitura",
     title: "Classificar e sustentar",
     description:
-      "Marque as propriedades que justificam a escolha desta molécula.",
+      "Marque as propriedades que justificam sua resposta antes de entregar a prova.",
   },
 };
 

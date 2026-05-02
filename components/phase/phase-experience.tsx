@@ -116,6 +116,50 @@ function getAvailablePhaseSteps(
   return steps;
 }
 
+function getCurrentInstruction(input: {
+  currentStep: PhaseStep;
+  canAdvanceFromForge: boolean;
+  canAdvanceFromRead: boolean;
+  canAdvanceFromSelect: boolean;
+  isSubmitting: boolean;
+  selectedPropertiesCount: number;
+  supportsMoleculeSelection: boolean;
+}) {
+  if (input.currentStep === "intro") {
+    return "Leia o objetivo e avance quando estiver pronto.";
+  }
+
+  if (input.currentStep === "synthesis") {
+    return input.canAdvanceFromForge
+      ? "Estrutura validada. Voce ja pode seguir para a proxima etapa."
+      : "Monte e valide a estrutura antes de avancar.";
+  }
+
+  if (input.currentStep === "select") {
+    return input.canAdvanceFromSelect
+      ? "Carta escolhida. Avance para justificar sua resposta."
+      : "Escolha uma carta para continuar.";
+  }
+
+  if (input.currentStep === "read") {
+    if (input.isSubmitting) {
+      return "Sua resposta esta sendo enviada ao reino.";
+    }
+
+    if (!input.canAdvanceFromRead) {
+      return "Selecione ao menos uma propriedade para entregar a prova.";
+    }
+
+    if (input.supportsMoleculeSelection && !input.canAdvanceFromSelect) {
+      return "Escolha uma carta valida antes de entregar.";
+    }
+
+    return `${input.selectedPropertiesCount} propriedade(s) marcada(s). Voce ja pode entregar a prova.`;
+  }
+
+  return "Revise o resultado e decida seu proximo movimento.";
+}
+
 export function PhaseExperience({
   phase,
   molecules,
@@ -251,6 +295,15 @@ export function PhaseExperience({
             .filter((step) => step !== "result")
             .indexOf(displayedStep) + 1,
         );
+  const currentInstruction = getCurrentInstruction({
+    currentStep: displayedStep,
+    canAdvanceFromForge,
+    canAdvanceFromRead,
+    canAdvanceFromSelect,
+    isSubmitting,
+    selectedPropertiesCount: selectedProperties.length,
+    supportsMoleculeSelection,
+  });
 
   function navigateToStep(
     nextStep: PhaseStep,
@@ -545,9 +598,12 @@ export function PhaseExperience({
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
       <PhaseStepHeader
+        currentInstruction={currentInstruction}
+        displayedStepIndex={visibleProgressStep}
         phaseNumber={phase.number}
         phaseTitle={phase.title}
         displayedStep={displayedStep}
+        totalSteps={totalSteps}
         availableSteps={availableSteps}
         scene={scene}
         canAdvanceFromForge={canAdvanceFromForge}
@@ -642,6 +698,7 @@ export function PhaseExperience({
           canAdvanceFromIntro={canAdvanceFromIntro}
           canAdvanceFromRead={canAdvanceFromRead}
           canAdvanceFromSelect={canAdvanceFromSelect}
+          currentInstruction={currentInstruction}
           currentStep={currentStep}
           displayedStep={displayedStep}
           effectiveSelectedMoleculeId={effectiveSelectedMoleculeId}

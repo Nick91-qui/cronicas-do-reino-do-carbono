@@ -6,6 +6,7 @@ type PhaseRitualConsoleProps = {
   canAdvanceFromIntro: boolean;
   canAdvanceFromRead: boolean;
   canAdvanceFromSelect: boolean;
+  currentInstruction: string;
   currentStep: PhaseStep;
   displayedStep: PhaseStep;
   effectiveSelectedMoleculeId: string | undefined;
@@ -22,6 +23,7 @@ export function PhaseRitualConsole({
   canAdvanceFromIntro,
   canAdvanceFromRead,
   canAdvanceFromSelect,
+  currentInstruction,
   currentStep,
   displayedStep,
   effectiveSelectedMoleculeId,
@@ -34,7 +36,10 @@ export function PhaseRitualConsole({
   return (
     <section className="sticky bottom-3 z-10 mt-6 supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:supports-[padding:max(0px)]:pb-0">
       <div className="ritual-console px-3 py-3 sm:px-5 sm:py-4">
-        <div className="relative flex items-center justify-between gap-3">
+        <div className="relative flex flex-col gap-3">
+          <p className="text-xs text-slate-300 sm:text-sm">{currentInstruction}</p>
+
+          <div className="flex items-center justify-between gap-3">
           <div className="hidden items-center gap-2 lg:flex">
             {availableSteps
               .filter((step) => step !== "result")
@@ -54,11 +59,11 @@ export function PhaseRitualConsole({
             <button
               type="button"
               onClick={onBack}
-              className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
+              className="ritual-console-action h-10 min-w-[6.5rem] px-4 text-sm font-black sm:h-11 sm:min-w-[7rem]"
               data-tone="back"
               aria-label={currentStep === "intro" ? "Voltar para o capítulo" : "Voltar"}
             >
-              &lt;
+              Voltar
             </button>
 
             {currentStep !== "read" ? (
@@ -70,11 +75,11 @@ export function PhaseRitualConsole({
                   (currentStep === "synthesis" && !canAdvanceFromForge) ||
                   (currentStep === "select" && !canAdvanceFromSelect)
                 }
-                className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
+                className="ritual-console-action h-10 min-w-[6.5rem] px-4 text-sm font-black sm:h-11 sm:min-w-[7rem]"
                 data-tone="forward"
                 aria-label="Avançar"
               >
-                &gt;
+                Avancar
               </button>
             ) : (
               <button
@@ -85,14 +90,15 @@ export function PhaseRitualConsole({
                   !canAdvanceFromRead ||
                   (supportsMoleculeSelection && !effectiveSelectedMoleculeId)
                 }
-                className="ritual-console-action h-10 min-w-[4.5rem] px-4 text-base font-black sm:h-11 sm:min-w-[5rem]"
+                className="ritual-console-action h-10 min-w-[6.5rem] px-4 text-sm font-black sm:h-11 sm:min-w-[7rem]"
                 data-tone="forward"
                 aria-label="Entregar resposta"
               >
-                {isSubmitting ? "..." : ">"}
+                {isSubmitting ? "Enviando" : "Entregar"}
               </button>
             )}
           </div>
+        </div>
         </div>
       </div>
     </section>

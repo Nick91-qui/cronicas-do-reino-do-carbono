@@ -4,9 +4,12 @@ import type { PhaseStep } from "@/components/phase/phase-experience-shared";
 import { stepCopy } from "@/components/phase/phase-experience-shared";
 
 type PhaseStepHeaderProps = {
+  currentInstruction: string;
+  displayedStepIndex: number;
   phaseNumber: number;
   phaseTitle: string;
   displayedStep: PhaseStep;
+  totalSteps: number;
   availableSteps: PhaseStep[];
   scene: { src: string; alt: string; ambient: string };
   canAdvanceFromForge: boolean;
@@ -15,9 +18,12 @@ type PhaseStepHeaderProps = {
 };
 
 export function PhaseStepHeader({
+  currentInstruction,
+  displayedStepIndex,
   phaseNumber,
   phaseTitle,
   displayedStep,
+  totalSteps,
   availableSteps,
   scene,
   canAdvanceFromForge,
@@ -55,6 +61,14 @@ export function PhaseStepHeader({
                   ? "Você completou a tarefa! Prepare-se para os próximos desafios!"
                   : stepCopy[displayedStep].description}
               </p>
+              <div className="mt-4 flex flex-col gap-2 text-sm text-slate-200 sm:flex-row sm:flex-wrap sm:items-center">
+                <span className="hud-chip">
+                  Etapa {displayedStepIndex} de {totalSteps}
+                </span>
+                <span className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-slate-300">
+                  {currentInstruction}
+                </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
