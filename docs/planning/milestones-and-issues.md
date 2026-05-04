@@ -168,6 +168,7 @@ Stack atual preparada:
 - [ ] revisar pontos de expansão já modelados para não contaminarem o MVP
 - [x] remover `LegacyBuilderState` e `BlueprintBuilderState` após corte explícito de compatibilidade
 - [x] executar plano de remoção documentado em `docs/tech/builder-legacy-removal.md`
+- [ ] implementar tutorial contextual da bancada sem criar fase oficial nova
 
 ### Autenticação e autorização
 

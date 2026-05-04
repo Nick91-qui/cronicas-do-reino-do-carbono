@@ -66,6 +66,7 @@ Esses arquivos não substituem os centrais, mas formalizam regras operacionais r
 - `planning/milestones-and-issues.md`
 - `planning/qa-checklist.md`
 - `planning/operator-observability-plan.md`
+- `planning/synthesis-tutorial-plan.md`
 - `tech/builder-legacy-removal.md`
 
 ### 3. Documentos auxiliares de uso pedagógico e narrativo
