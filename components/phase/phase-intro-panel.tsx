@@ -8,18 +8,18 @@ export function PhaseIntroPanel({ phase }: PhaseIntroPanelProps) {
   return (
     <div className="mx-auto grid max-w-6xl gap-4 lg:gap-5 xl:grid-cols-[1.25fr,0.75fr]">
       <article className="game-panel border-cyan-300/15 p-6 sm:p-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Prova do reino</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Prova do reino</p>
         <p className="mt-5 text-base leading-8 text-slate-100">{phase.narrative}</p>
       </article>
 
       <div className="grid gap-4">
         <article className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Conceito central</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Conceito central</p>
           <p className="mt-3 text-sm leading-6 text-slate-200">{phase.coreConcept}</p>
         </article>
         {phase.objective ? (
           <article className="game-panel">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Desafio</p>
             <p className="mt-3 text-sm leading-6 text-slate-200">{phase.objective}</p>
           </article>
         ) : null}

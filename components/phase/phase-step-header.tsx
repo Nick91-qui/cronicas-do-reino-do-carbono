@@ -47,7 +47,7 @@ export function PhaseStepHeader({
 
       <div className="relative px-5 py-6 sm:px-8 sm:py-8">
         <div className="flex flex-col gap-4">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-300">
             <span>Capitulo I · Prova {phaseNumber}</span>
           </div>
 
@@ -93,7 +93,7 @@ export function PhaseStepHeader({
                           ? "border-cyan-300/35 bg-cyan-400/12 text-cyan-100"
                           : isDone
                             ? "border-emerald-300/25 bg-emerald-500/10 text-emerald-100"
-                            : "border-white/10 bg-white/5 text-slate-400"
+                            : "border-white/10 bg-white/5 text-slate-300"
                       }`}
                     >
                       {step === "intro"

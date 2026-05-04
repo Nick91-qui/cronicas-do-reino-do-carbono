@@ -33,7 +33,7 @@ export function PhaseReadPanel({
     <section className="grid gap-5 xl:grid-cols-[0.86fr,1.14fr] xl:gap-6">
       <aside className="grid gap-4 self-start">
         <div className="game-panel sm:p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Carta em foco</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Carta em foco</p>
           {focusedMolecule ? (
             <div className="mt-4">
               <MoleculeCard
@@ -46,7 +46,7 @@ export function PhaseReadPanel({
               />
             </div>
           ) : (
-            <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-400">
+            <div className="mt-4 rounded-[24px] border border-dashed border-white/15 bg-slate-950/25 px-5 py-8 text-sm leading-6 text-slate-300">
               {supportsMoleculeSelection
                 ? "Selecione uma carta para comparar com as propriedades exigidas pela prova."
                 : "O laboratorio de sintese ainda nao gerou uma carta reconhecida para esta etapa."}
@@ -55,7 +55,7 @@ export function PhaseReadPanel({
         </div>
 
         <div className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Antes de entregar</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Antes de entregar</p>
           <div className="mt-3 grid gap-3 text-sm text-slate-200">
             <div className="rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-3">
               Molecula: <span className="font-semibold text-white">{focusedMolecule?.nomeQuimico ?? "nenhuma"}</span>
@@ -76,7 +76,7 @@ export function PhaseReadPanel({
                   ))}
                 </div>
               ) : (
-                <span className="text-slate-400">
+                <span className="text-slate-300">
                   Marque ao menos uma propriedade para liberar a entrega.
                 </span>
               )}
@@ -89,14 +89,14 @@ export function PhaseReadPanel({
         <section className="game-panel sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Classificacao</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Classificacao</p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-white">Propriedades em foco</h3>
               <p className="mt-2 text-sm text-slate-300">
                 Escolha apenas as propriedades que realmente sustentam sua resposta.
               </p>
             </div>
             <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
-              Escolha ate 3
+              Marque ate 3
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export function PhaseReadPanel({
         </section>
 
         <section className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{phase.objective}</p>
 
           <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/25 px-4 py-3 text-sm text-slate-300">

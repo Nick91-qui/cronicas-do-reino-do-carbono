@@ -255,13 +255,13 @@ export function SynthesisLabVisual({
 
         <div className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex flex-wrap gap-2 sm:inset-x-3 sm:bottom-3">
           <div className="rounded-full border border-white/10 bg-slate-950/78 px-2.5 py-1.5 text-[10px] text-slate-200 backdrop-blur">
-            <span className="mr-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <span className="mr-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-300">
               Estrutural
             </span>
             <span className="font-semibold text-white">{previewFormulaEstrutural}</span>
           </div>
           <div className="rounded-full border border-white/10 bg-slate-950/78 px-2.5 py-1.5 text-[10px] text-slate-200 backdrop-blur">
-            <span className="mr-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <span className="mr-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-300">
               Molecular
             </span>
             <span className="font-semibold text-white">{previewFormulaMolecular}</span>

@@ -108,20 +108,20 @@ export function SynthesisLab({
     <section className="game-panel overflow-hidden border-cyan-300/15 bg-[linear-gradient(180deg,rgba(7,12,24,0.98),rgba(3,7,18,0.98))] p-3 sm:p-4">
       <div className="mb-4 grid gap-3 lg:grid-cols-[0.95fr,1.05fr]">
         <article className="game-panel-muted">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Estado da bancada</p>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300">Estado da bancada</p>
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Geometria</p>
+              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-300">Geometria</p>
               <p className="mt-2 text-sm font-semibold text-white">
                 {layout === "closed_ring" ? "Cadeia fechada" : "Cadeia aberta"}
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Carbonos ativos</p>
+              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-300">Carbonos ativos</p>
               <p className="mt-2 text-sm font-semibold text-white">{activeCarbonCount}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Ligacoes elevadas</p>
+              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-300">Ligacoes elevadas</p>
               <p className="mt-2 text-sm font-semibold text-white">
                 {normalizedBondOrders.filter((order) => order === 2).length}
               </p>
@@ -130,7 +130,7 @@ export function SynthesisLab({
         </article>
 
         <article className="game-panel-muted">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Desafio</p>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
         </article>
       </div>
@@ -178,7 +178,7 @@ export function SynthesisLab({
         <article className="mt-4 rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.88),rgba(15,23,42,0.82))] p-4 text-sm text-slate-300 sm:rounded-[24px] sm:p-5">
           <div className={`${synthesizedMolecule ? "grid gap-3 xl:grid-cols-[0.32fr,0.68fr]" : "grid gap-3 sm:grid-cols-2"}`}>
             <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-300">
                 Estrutural
               </p>
               <p className="mt-2 text-sm font-semibold text-white">
@@ -186,7 +186,7 @@ export function SynthesisLab({
               </p>
             </div>
             <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-300">
                 Molecular
               </p>
               <p className="mt-2 text-sm font-semibold text-white">

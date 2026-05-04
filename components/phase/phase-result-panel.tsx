@@ -101,7 +101,7 @@ export function PhaseResultPanel({
         </div>
 
         <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
             Recompensas desta tentativa
           </p>
           {hasRewards ? (

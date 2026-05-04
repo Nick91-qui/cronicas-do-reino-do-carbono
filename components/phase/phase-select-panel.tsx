@@ -39,7 +39,7 @@ export function PhaseSelectPanel({
     <section className="relative">
       <section className="grid gap-4">
         <article className="game-panel">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Desafio</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
           <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/25 px-4 py-3 text-sm text-slate-300">
             {hasSelectedMolecule
@@ -51,14 +51,14 @@ export function PhaseSelectPanel({
         <section className="game-panel sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Escolha</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Escolha</p>
               <h3 className="mt-2 text-2xl font-black tracking-tight text-white">Cartas disponiveis</h3>
               <p className="mt-2 text-sm text-slate-300">
                 Toque em uma carta para ativar sua escolha antes da justificativa.
               </p>
             </div>
             <div className="rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">
-              Selecione 1 carta
+              Escolha 1 carta
             </div>
           </div>
 
@@ -89,7 +89,7 @@ export function PhaseSelectPanel({
                       <p className="line-clamp-2 text-sm font-black tracking-tight text-white">
                         {molecule.nomeQuimico}
                       </p>
-                      <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                      <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-slate-300">
                         {isSelected
                           ? "Carta ativa"
                           : isCreated
