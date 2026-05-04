@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PlayerRole, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { requireOperator } from "@/lib/auth/session";
@@ -8,6 +8,9 @@ import { blobAssets } from "@/lib/assets/blob";
 
 const recentActivityWindowDays = 7;
 const playersPerPage = 12;
+const playerRoles = ["player", "operator"] as const;
+
+type PlayerRole = (typeof playerRoles)[number];
 
 function formatRelativeWindow(days: number) {
   return `${days} dia${days === 1 ? "" : "s"}`;
@@ -29,7 +32,7 @@ function normalizeSingleValue(value: string | string[] | undefined) {
 }
 
 function isPlayerRole(value: string): value is PlayerRole {
-  return value === PlayerRole.player || value === PlayerRole.operator;
+  return playerRoles.includes(value as PlayerRole);
 }
 
 function normalizePage(value: string | string[] | undefined) {
@@ -306,8 +309,8 @@ export default async function OperatorPage(props: {
                 className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400"
               >
                 <option value="">Todos os papeis</option>
-                <option value={PlayerRole.player}>player</option>
-                <option value={PlayerRole.operator}>operator</option>
+                <option value="player">player</option>
+                <option value="operator">operator</option>
               </select>
             </label>
 
