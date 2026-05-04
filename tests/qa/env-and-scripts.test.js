@@ -22,7 +22,7 @@ test("package.json expõe scripts mínimos de QA", () => {
   const packageJson = JSON.parse(readProjectFile("package.json"));
 
   assert.equal(packageJson.scripts.typecheck, "tsc --noEmit");
-  assert.equal(packageJson.scripts.build, "next build");
+  assert.equal(packageJson.scripts.build, "prisma generate && next build");
   assert.equal(packageJson.scripts.test, "npm run test:qa && npm run test:unit");
   assert.equal(packageJson.scripts["test:qa"], "node --test tests/qa/*.test.js");
   assert.equal(packageJson.scripts["test:unit"], "vitest run");

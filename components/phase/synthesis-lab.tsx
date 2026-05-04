@@ -12,6 +12,7 @@ import type {
 import type { BondType, Molecule } from "@/lib/content/types";
 
 type SynthesisLabProps = {
+  onOpenTutorial: () => void;
   objective: string;
   layout: BuilderLayout;
   carbonCount: string;
@@ -36,6 +37,7 @@ type SynthesisLabProps = {
 };
 
 export function SynthesisLab({
+  onOpenTutorial,
   objective,
   layout,
   carbonCount,
@@ -130,7 +132,16 @@ export function SynthesisLab({
         </article>
 
         <article className="game-panel-muted">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300">Desafio</p>
+          <div className="flex items-start justify-between gap-3">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300">Desafio</p>
+            <button
+              type="button"
+              onClick={onOpenTutorial}
+              className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-100 transition hover:border-cyan-200/35"
+            >
+              Como usar a bancada
+            </button>
+          </div>
           <p className="mt-3 text-sm leading-6 text-slate-300">{objective}</p>
         </article>
       </div>

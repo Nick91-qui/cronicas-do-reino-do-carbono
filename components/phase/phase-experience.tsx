@@ -16,6 +16,7 @@ import { PhaseRitualConsole } from "@/components/phase/phase-ritual-console";
 import { PhaseSelectPanel } from "@/components/phase/phase-select-panel";
 import { PhaseStepHeader } from "@/components/phase/phase-step-header";
 import { SynthesisLab } from "@/components/phase/synthesis-lab";
+import { SynthesisTutorial } from "@/components/phase/synthesis-tutorial";
 
 import type {
   BuilderLayout,
@@ -47,6 +48,8 @@ type PhaseExperienceProps = {
 };
 
 const minimumSynthesisFeedbackMs = 900;
+const synthesisTutorialStorageKey = "crc_seen_synthesis_tutorial_v1";
+const synthesisTutorialOnboardingPhaseId = "chapter-1-phase-1";
 
 async function waitForMinimumFeedbackDuration(startedAt: number) {
   const elapsed = Date.now() - startedAt;
@@ -195,6 +198,7 @@ export function PhaseExperience({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isValidatingBuilder, setIsValidatingBuilder] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
 
   const nextPhaseHref = getNextPhaseHref(chapterProgress, phase.number);
   const supportsBuilder = phase.technicalType !== "choice";
@@ -304,6 +308,8 @@ export function PhaseExperience({
     selectedPropertiesCount: selectedProperties.length,
     supportsMoleculeSelection,
   });
+  const shouldOfferSynthesisTutorial =
+    supportsBuilder && phase.id === synthesisTutorialOnboardingPhaseId;
 
   function navigateToStep(
     nextStep: PhaseStep,
@@ -326,6 +332,24 @@ export function PhaseExperience({
       navigateToStep("result", "forward");
     }
   }, [submitResult]);
+
+  useEffect(() => {
+    if (!shouldOfferSynthesisTutorial || displayedStep !== "synthesis") {
+      return;
+    }
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const hasSeenTutorial = window.localStorage.getItem(
+      synthesisTutorialStorageKey,
+    );
+
+    if (!hasSeenTutorial) {
+      setIsTutorialOpen(true);
+    }
+  }, [displayedStep, shouldOfferSynthesisTutorial]);
 
   useEffect(() => {
     setBondOrders((current) => {
@@ -578,6 +602,22 @@ export function PhaseExperience({
     }
   }
 
+  function markTutorialAsSeen() {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(synthesisTutorialStorageKey, "1");
+    }
+  }
+
+  function handleCloseTutorial() {
+    markTutorialAsSeen();
+    setIsTutorialOpen(false);
+  }
+
+  function handleCompleteTutorial() {
+    markTutorialAsSeen();
+    setIsTutorialOpen(false);
+  }
+
   function updateBondOrder(index: number) {
     setBondOrders((current) => {
       const normalized = normalizeBondOrders(
@@ -626,6 +666,7 @@ export function PhaseExperience({
 
         {displayedStep === "synthesis" ? (
           <SynthesisLab
+            onOpenTutorial={() => setIsTutorialOpen(true)}
             objective={phase.objective}
             layout={layout}
             carbonCount={carbonCount}
@@ -707,6 +748,13 @@ export function PhaseExperience({
           onForward={goForward}
           onSubmit={handleSubmit}
           supportsMoleculeSelection={supportsMoleculeSelection}
+        />
+      ) : null}
+
+      {isTutorialOpen ? (
+        <SynthesisTutorial
+          onClose={handleCloseTutorial}
+          onComplete={handleCompleteTutorial}
         />
       ) : null}
     </main>
