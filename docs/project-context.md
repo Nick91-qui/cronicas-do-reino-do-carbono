@@ -141,12 +141,13 @@ inadequate -> incorrect -> 0
 
 ## Status da Missão
 
-- **Estado atual:** MVP validado no fluxo central do jogador, com foco atual no **Milestone 10 — Reposicionamento visual de site para jogo**
+- **Estado atual:** MVP funcional validado no fluxo central do jogador, com foco atual em acabamento visual, QA fino e fechamento do **Milestone 10 — Reposicionamento visual de site para jogo**
 - **Fonte oficial de regra de negócio:** `README.md` e documentos normativos em `docs/`
 - **Implementação tipada derivada do conteúdo:** `content/`
 - **Legado removido:** `archive/` excluído para evitar ambiguidade
-- **Milestone 9:** concluído no fluxo central, com follow-ups abertos de QA fino, autenticação/autorização e persistência
-- **Próximo passo imediato:** concluir responsividade e clareza pedagógica do **Milestone 10**
+- **Milestone 9:** concluído no fluxo central, com follow-ups abertos de QA fino, autorização em rotas de escrita e smoke tests manuais complementares
+- **Superfícies adicionais já implementadas:** `profile`, observatório interno `operator` somente leitura e persistência oficial do tutorial contextual de síntese por jogador
+- **Próximo passo imediato:** concluir responsividade e clareza pedagógica do **Milestone 10** sem reabrir o núcleo funcional já aceito
 
 ## Estrutura documental visual
 
@@ -173,7 +174,8 @@ Executar a fase atual do projeto com foco em:
 
 - alinhar responsividade desktop/mobile sem perder leitura de jogo;
 - validar que o enquadramento visual novo não degrada clareza pedagógica;
-- ampliar QA dos fluxos críticos ainda em aberto de builder, autenticação e persistência;
+- ampliar QA manual dos fluxos críticos ainda em aberto de builder, autenticação, perfil e observabilidade interna;
+- revisar autorização das rotas de escrita e cobertura negativa de autenticação;
 - revisar continuamente coerência entre `content/` e documentos normativos;
 - atualizar continuamente a documentação de status quando a implementação avançar.
 

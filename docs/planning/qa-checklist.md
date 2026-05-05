@@ -75,6 +75,8 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 - [x] fases bloqueadas não ficam acessíveis diretamente por URL.
 - [x] `/collection` exibe cartas desbloqueadas sem erro.
 - [ ] `/profile` carrega sem erro.
+- [ ] `/operator` carrega sem erro para usuário com papel `operator`.
+- [ ] `/operator/player/[playerId]` carrega sem erro para usuário com papel `operator`.
 
 ## Checklist funcional do Capítulo I
 
@@ -156,6 +158,24 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 Preencher ao final de cada rodada relevante de QA:
 
 Itens não marcados neste checklist representam débito real de validação ou correção, e não apenas ausência de atualização documental.
+
+### Rodada registrada — 2026-05-05
+
+- Data: 2026-05-05
+- Ambiente: local do repositório + produção em Neon/Vercel para alinhamento de schema
+- Responsável: usuário com suporte do Codex
+- `typecheck`: aprovado
+- `build`: aprovado
+- Testes automatizados: `npm test` aprovado
+- Infra de produção: migrations Prisma alinhadas após saneamento de duplicidade histórica em `Player.displayName`
+- Escopo confirmado nesta rodada:
+  - persistência oficial do tutorial contextual de síntese por jogador;
+  - presença das superfícies protegidas `profile` e `operator` no build atual;
+  - manutenção da suíte automatizada mínima do MVP.
+- Pendências preservadas:
+  - smoke test manual recente de `/profile`, `/operator` e `/operator/player/[playerId]`;
+  - validação manual de responsividade e clareza pedagógica do Milestone 10;
+  - confirmação manual dos fluxos negativos de autenticação marcados acima.
 
 ### Rodada registrada — 2026-04-21
 

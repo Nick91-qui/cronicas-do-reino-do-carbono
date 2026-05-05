@@ -138,7 +138,7 @@ Status: concluído.
 
 ### Milestone 9 — QA, segurança e deploy
 
-Status: concluído no fluxo central, com follow-ups abertos.
+Status: concluído no fluxo central, com follow-ups abertos e nova validação automatizada em 2026-05-05.
 
 - [x] definir stack oficial de testes automatizados
 - [x] criar testes unitários mínimos para builder e avaliação de fase
@@ -158,6 +158,13 @@ Stack atual preparada:
 - ambiente `node` como padrão inicial;
 - sem browser/E2E nesta etapa.
 
+Verificação recente:
+
+- `npm run typecheck` aprovado em 2026-05-05;
+- `npm test` aprovado em 2026-05-05;
+- `npm run build` aprovado em 2026-05-05;
+- migrations de produção reaplicadas e esquema alinhado em 2026-05-05 após saneamento de duplicidade histórica em `Player.displayName`.
+
 ## Issues abertas
 
 ### Builder e validação
@@ -176,6 +183,7 @@ Stack atual preparada:
 - [ ] revisar autorização nas rotas de escrita
 - [x] revisar fluxos de erro de cadastro, login e logout
 - [x] aplicar rate limiting básico em login e cadastro
+- [x] persistir visualização do tutorial contextual de síntese por jogador autenticado
 
 ### Persistência e idempotência
 
@@ -195,6 +203,7 @@ Stack atual preparada:
 - [x] definir primeira página interna somente leitura para feedback dos dados dos usuários
 - [x] decidir consultas mínimas, filtros e regras de acesso para a superfície interna
 - [x] consolidar decisão de manter a superfície `operator` somente leitura no MVP
+- [x] materializar listagem filtrável de jogadores e leitura detalhada por jogador
 
 ### Direção visual e percepção de produto
 
@@ -205,9 +214,9 @@ Stack atual preparada:
 
 ## Próxima sequência recomendada
 
-1. concluir o Milestone 10 a partir do redesign do `layout` autenticado e da tela `/game`
-2. transformar a navegação global em HUD e definir tokens compartilhados de jogo
-3. reenquadrar `/chapter/[chapterId]` e `/collection` dentro da nova linguagem
+1. concluir a validação manual do Milestone 10 em desktop e mobile
+2. verificar que `profile` e a superfície `operator` carregam sem regressões no ambiente conectado ao Neon/Vercel
+3. revisar autorização nas rotas de escrita e registrar o resultado no checklist
 4. revisar estados visuais de fase, feedback e progressão contra `docs/visual/ui-system.md`
 5. manter documentação e checklist sincronizados com as decisões consolidadas
 6. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
@@ -233,3 +242,12 @@ O tracker pode ser considerado encerrado quando:
 - Observações residuais:
   - ajustar `APP_BASE_URL` para remover barra final;
   - aviso não bloqueante do Vitest/Vite sobre CJS permanece em aberto.
+
+## Atualização operacional recente
+
+- Data: 2026-05-05
+- Escopo: validação automatizada da base atual, persistência oficial do tutorial contextual de síntese e saneamento de migrations pendentes em produção
+- Resultado: `typecheck`, suíte de testes e `build` aprovados; produção com schema Prisma alinhado
+- Débitos preservados:
+  - responsividade e clareza pedagógica do Milestone 10 ainda dependem de rodada manual;
+  - checklist manual de `profile` e `operator` ainda precisa de confirmação explícita em ambiente conectado.
