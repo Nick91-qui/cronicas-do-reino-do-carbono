@@ -45,10 +45,10 @@ type PhaseExperienceProps = {
   phase: Phase;
   molecules: Molecule[];
   chapterProgress: ChapterProgressView;
+  hasSeenSynthesisTutorial: boolean;
 };
 
 const minimumSynthesisFeedbackMs = 900;
-const synthesisTutorialStorageKey = "crc_seen_synthesis_tutorial_v1";
 const synthesisTutorialOnboardingPhaseId = "chapter-1-phase-1";
 
 async function waitForMinimumFeedbackDuration(startedAt: number) {
@@ -167,6 +167,7 @@ export function PhaseExperience({
   phase,
   molecules,
   chapterProgress,
+  hasSeenSynthesisTutorial: initialHasSeenSynthesisTutorial,
 }: PhaseExperienceProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -199,6 +200,9 @@ export function PhaseExperience({
   const [isValidatingBuilder, setIsValidatingBuilder] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const [hasSeenSynthesisTutorial, setHasSeenSynthesisTutorial] = useState(
+    initialHasSeenSynthesisTutorial,
+  );
 
   const nextPhaseHref = getNextPhaseHref(chapterProgress, phase.number);
   const supportsBuilder = phase.technicalType !== "choice";
@@ -338,18 +342,10 @@ export function PhaseExperience({
       return;
     }
 
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const hasSeenTutorial = window.localStorage.getItem(
-      synthesisTutorialStorageKey,
-    );
-
-    if (!hasSeenTutorial) {
+    if (!hasSeenSynthesisTutorial) {
       setIsTutorialOpen(true);
     }
-  }, [displayedStep, shouldOfferSynthesisTutorial]);
+  }, [displayedStep, hasSeenSynthesisTutorial, shouldOfferSynthesisTutorial]);
 
   useEffect(() => {
     setBondOrders((current) => {
@@ -602,19 +598,29 @@ export function PhaseExperience({
     }
   }
 
-  function markTutorialAsSeen() {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(synthesisTutorialStorageKey, "1");
+  async function markTutorialAsSeen() {
+    if (hasSeenSynthesisTutorial) {
+      return;
+    }
+
+    setHasSeenSynthesisTutorial(true);
+
+    try {
+      await fetch("/api/tutorials/synthesis", {
+        method: "POST",
+      });
+    } catch {
+      // Preserve the dismissal for the current session even if the network write fails.
     }
   }
 
   function handleCloseTutorial() {
-    markTutorialAsSeen();
+    void markTutorialAsSeen();
     setIsTutorialOpen(false);
   }
 
   function handleCompleteTutorial() {
-    markTutorialAsSeen();
+    void markTutorialAsSeen();
     setIsTutorialOpen(false);
   }
 

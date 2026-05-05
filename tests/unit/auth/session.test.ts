@@ -36,6 +36,7 @@ describe("auth/session", () => {
             classroom: { code: "ABC123" },
             displayName: "Jogador",
             username: "jogador",
+            hasSeenSynthesisTutorial: false,
           },
         }),
         deleteMany,
@@ -67,6 +68,7 @@ describe("auth/session", () => {
             classroom: { code: "ABC123" },
             displayName: "Jogador",
             username: "jogador",
+            hasSeenSynthesisTutorial: true,
           },
         }),
       },
@@ -81,6 +83,7 @@ describe("auth/session", () => {
       role: "operator",
       displayName: "Jogador",
       username: "jogador",
+      hasSeenSynthesisTutorial: true,
     });
   });
 });

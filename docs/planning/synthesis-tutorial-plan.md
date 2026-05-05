@@ -69,16 +69,16 @@ Escopo recomendado:
 - disponível em todas as fases com bancada;
 - reusa o mesmo conteúdo do tutorial inicial, com pequenas adaptações se necessário.
 
-### 4.3 Persistência inicial simples
+### 4.3 Persistência oficial por jogador
 
-Na primeira versão, o projeto deve registrar a visualização do tutorial por cliente/navegador, e não ainda por banco.
+Como o tutorial passou a fazer parte estável do onboarding oficial, o projeto deve registrar a visualização por jogador autenticado.
 
 Escopo recomendado:
 
-- `localStorage`;
-- chave explícita de tutorial visto;
+- persistência no banco;
+- flag explícita de tutorial visto no jogador;
 - reabertura manual sempre permitida;
-- sem alterar schema ou migrations nesta etapa.
+- sem depender de navegador/dispositivo para decidir a abertura automática.
 
 ---
 
@@ -176,26 +176,22 @@ Responsabilidades:
 
 ## 8. Persistência recomendada
 
-### Primeira versão
+Persistência oficial:
 
-Persistência local:
-
-- `localStorage`
-- chave sugerida:
-  - `crc_seen_synthesis_tutorial_v1`
+- banco de dados;
+- campo booleano dedicado no jogador para a primeira versão oficial.
 
 Comportamento:
 
-- se a chave não existir, abrir tutorial automaticamente;
+- se o jogador ainda não tiver visto o tutorial, abrir automaticamente;
 - ao concluir ou fechar explicitamente, registrar como visto;
 - botão manual ignora esse bloqueio e sempre pode reabrir.
 
 ### Evolução futura opcional
 
-Se a UX for aprovada e passar a ser requisito operacional:
+Se surgirem outros tutoriais oficiais:
 
-- migrar para persistência por jogador;
-- adicionar campo dedicado no banco ou JSON de preferências;
+- migrar de flag única para estrutura extensível por tutorial;
 - revisar impacto em seed, testes e autenticação.
 
 ---
@@ -270,7 +266,7 @@ Mitigações:
 - manter um passo por vez;
 - usar texto curto;
 - integrar no nível de `phase-experience`;
-- limitar a primeira versão a `localStorage`.
+- limitar a primeira versão oficial a uma flag simples por jogador.
 
 ---
 

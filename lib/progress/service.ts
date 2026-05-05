@@ -236,6 +236,16 @@ export async function getPlayerChapterProgress(
   };
 }
 
+export async function markPlayerSynthesisTutorialSeen(
+  db: DbClient,
+  playerId: string,
+) {
+  await db.player.update({
+    where: { id: playerId },
+    data: { hasSeenSynthesisTutorial: true },
+  });
+}
+
 export async function persistPhaseEvaluation(
   db: PrismaClient,
   input: PersistPhaseEvaluationInput,

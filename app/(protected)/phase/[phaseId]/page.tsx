@@ -30,5 +30,12 @@ export default async function PhasePage({
 
   const molecules = getMoleculesByIds(phase.availableMolecules);
 
-  return <PhaseExperience phase={phase} molecules={molecules} chapterProgress={chapterProgress} />;
+  return (
+    <PhaseExperience
+      phase={phase}
+      molecules={molecules}
+      chapterProgress={chapterProgress}
+      hasSeenSynthesisTutorial={player.hasSeenSynthesisTutorial}
+    />
+  );
 }

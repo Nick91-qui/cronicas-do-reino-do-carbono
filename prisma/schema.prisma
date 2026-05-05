@@ -45,6 +45,7 @@ model Player {
   displayName    String               @unique
   username       String               @unique
   passwordHash   String
+  hasSeenSynthesisTutorial Boolean    @default(false)
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
   classroom      Classroom            @relation(fields: [classroomId], references: [id], onDelete: Restrict)

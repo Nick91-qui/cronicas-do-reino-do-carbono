@@ -59,6 +59,7 @@ export type AuthenticatedPlayer = {
   role: "player" | "operator";
   displayName: string;
   username: string;
+  hasSeenSynthesisTutorial: boolean;
   sessionExpiresAt: Date;
 };
 
@@ -135,6 +136,7 @@ export async function getAuthenticatedPlayer(db: DbClient): Promise<Authenticate
     role: session.player.role,
     displayName: session.player.displayName,
     username: session.player.username,
+    hasSeenSynthesisTutorial: session.player.hasSeenSynthesisTutorial,
     sessionExpiresAt: session.expiresAt,
   };
 }
