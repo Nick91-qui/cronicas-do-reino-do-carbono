@@ -294,11 +294,11 @@ Hidrocarbonetos como combustíveis e comparação entre alcanos pequenos.
 
 ### Tipo técnico
 
-`construction_choice`
+`choice`
 
 ### Tipo legível
 
-Construção + escolha
+Escolha
 
 ### Narrativa curta
 
@@ -864,7 +864,7 @@ Essa molécula não representa a estabilidade especial exigida pela Coroa Aromá
 | 1    | O Primeiro Sopro         | Construção           | metano    | —               | tetravalência do carbono                       |
 | 2    | A Ponte das Cadeias      | Construção           | etano     | —               | ligação entre carbonos e crescimento da cadeia |
 | 3    | A Tocha do Portão Norte  | Construção + escolha | propano   | metano, etano   | hidrocarbonetos como combustíveis              |
-| 4    | O Véu dos Vapores        | Construção + escolha | metano    | etano           | volatilidade e tamanho da cadeia               |
+| 4    | O Véu dos Vapores        | Escolha              | metano    | etano           | volatilidade e tamanho da cadeia               |
 | 5    | A Ruptura da Saturação   | Construção           | eteno     | —               | introdução à ligação dupla                     |
 | 6    | A Porta da Transformação | Construção + escolha | eteno     | propeno         | reatividade dos alcenos                        |
 | 7    | O Laboratório de Síntese de Polímeros  | Escolha              | eteno     | propeno, buteno | polimerização por adição                       |
