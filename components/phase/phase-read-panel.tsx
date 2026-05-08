@@ -35,7 +35,7 @@ export function PhaseReadPanel({
         <div className="game-panel sm:p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Carta em foco</p>
           {focusedMolecule ? (
-            <div className="mt-4">
+            <div className="mt-4 mx-auto max-w-[18rem] sm:max-w-[19rem]">
               <MoleculeCard
                 molecule={focusedMolecule}
                 isSelected
@@ -122,14 +122,8 @@ export function PhaseReadPanel({
         </section>
 
         <section className="game-panel">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Desafio</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">Desafio</p>
           <p className="mt-3 text-sm leading-6 text-slate-300">{phase.objective}</p>
-
-          <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/25 px-4 py-3 text-sm text-slate-300">
-            {hasSelectedProperties
-              ? "Quando terminar, use Entregar para registrar sua leitura."
-              : "Selecione ao menos uma propriedade para concluir esta etapa."}
-          </div>
 
           {submitError ? (
             <p className="mt-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
