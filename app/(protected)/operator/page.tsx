@@ -276,7 +276,7 @@ export default async function OperatorPage(props: {
                 type="search"
                 name="q"
                 defaultValue={searchTerm}
-                placeholder="Nome no grimorio ou login"
+                placeholder="Nome no livro dos aprendizes ou login"
                 className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400"
               />
             </label>

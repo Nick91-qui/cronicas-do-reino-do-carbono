@@ -52,7 +52,7 @@ O valor padrão continua sendo `player`.
 
 ### 5.2 Lista de jogadores
 
-- nome no grimório;
+- nome no livro dos aprendizes;
 - username;
 - turma;
 - fase mais avançada;

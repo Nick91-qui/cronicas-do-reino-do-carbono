@@ -9,7 +9,7 @@ import { prisma } from "@/lib/db/prisma";
 const REGISTER_CLIENT_ERRORS = new Set([
   "Turma inválida. Cadastre uma turma antes de registrar jogadores.",
   "Username já está em uso.",
-  "Nome no grimório já está em uso.",
+  "Nome no livro dos aprendizes já está em uso.",
 ]);
 const registerRateLimiter = createFixedWindowRateLimiter({
   limit: 3,

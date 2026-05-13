@@ -116,7 +116,7 @@ export default async function OperatorPlayerDetailPage({
           </h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Nome no grimorio</dt>
+              <dt className="text-slate-500">Nome no livro dos aprendizes</dt>
               <dd className="mt-1 text-slate-100">{player.displayName}</dd>
             </div>
             <div className="game-panel-muted">

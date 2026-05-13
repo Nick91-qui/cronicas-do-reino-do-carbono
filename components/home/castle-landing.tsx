@@ -23,7 +23,7 @@ const menuOptions: Array<{
   {
     href: "/register",
     label: "Registrar",
-    description: "Atravesse o portao e reclame um nome no grimorio.",
+    description: "Atravesse o portao e registre seu nome no livro dos aprendizes.",
     tone: "secondary",
   },
 ];

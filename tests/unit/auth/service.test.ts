@@ -29,7 +29,7 @@ describe("auth/service", () => {
     });
   });
 
-  it("rejeita nome no grimório já existente com comparação case-insensitive", async () => {
+  it("rejeita nome no livro dos aprendizes já existente com comparação case-insensitive", async () => {
     const db = {
       classroom: {
         findUnique: vi.fn().mockResolvedValue({ id: "class-1", code: "ABC123" }),
@@ -47,7 +47,7 @@ describe("auth/service", () => {
         username: "nick-login",
         password: "12345678",
       }),
-    ).rejects.toThrow("Nome no grimório já está em uso.");
+    ).rejects.toThrow("Nome no livro dos aprendizes já está em uso.");
   });
 
   it("rejeita username já existente antes de criar o jogador", async () => {

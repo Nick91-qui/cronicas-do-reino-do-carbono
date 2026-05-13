@@ -53,7 +53,7 @@ export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
   });
 
   if (existingDisplayName) {
-    throw new Error("Nome no grimório já está em uso.");
+    throw new Error("Nome no livro dos aprendizes já está em uso.");
   }
 
   const passwordHash = hashPassword(input.password);
@@ -92,7 +92,7 @@ export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
     }
 
     if (isUniqueConstraintError(error, "displayName")) {
-      throw new Error("Nome no grimório já está em uso.");
+      throw new Error("Nome no livro dos aprendizes já está em uso.");
     }
 
     throw error;

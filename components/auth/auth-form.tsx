@@ -40,7 +40,7 @@ const copyByMode: Record<
     eyebrow: "Rito de Ingresso",
     sideTitle: "Toda grande sintese comeca quando um nome e aceito pelo reino.",
     sideDescription:
-      "Apresente os sinais exigidos pelo laboratorio, assuma seu nome no grimorio e receba a primeira marca de aprendiz.",
+      "Apresente os sinais exigidos pelo laboratorio, assuma seu nome no livro dos aprendizes e receba a primeira marca de aprendiz.",
     sideHighlights: [
       {
         title: "Codigo do laboratorio",
@@ -48,14 +48,14 @@ const copyByMode: Record<
           "Use o codigo da turma para ingressar no mesmo circulo de estudos conduzido pelo mestre.",
       },
       {
-        title: "Nome no grimorio",
+        title: "Nome no livro dos aprendizes",
         description:
           "Escolha como o reino registrara sua passagem pelas provas e descobertas do carbono.",
       },
     ],
     title: "Iniciar a provacao",
     description:
-      "Apresente seu codigo de turma, escolha seu nome no grimorio e receba sua marca de aprendiz.",
+      "Apresente seu codigo de turma, escolha seu nome no livro dos aprendizes e receba sua marca de aprendiz.",
     submitLabel: "Receber marca de aprendiz",
     endpoint: "/api/auth/register",
   },
@@ -180,7 +180,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 </label>
                 <label className="block text-sm">
                   <span className="mb-2 block text-slate-200">
-                    Nome no grimorio (unico)
+                    Nome no livro dos aprendizes (unico)
                   </span>
                   <input name="displayName" required className="state-field" />
                 </label>
