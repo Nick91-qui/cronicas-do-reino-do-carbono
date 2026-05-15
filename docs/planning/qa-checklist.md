@@ -69,11 +69,13 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 ### Navegação principal
 
 - [x] página inicial carrega sem erro.
-- [x] `/game` carrega com progresso e inventário do jogador.
-- [x] `/chapter/chapter-1` exibe as 8 fases do capítulo.
-- [x] `/chapter/[chapterId]` resolve capítulo válido a partir do conteúdo oficial, sem string fixa no handler.
+- [x] `/hall` carrega com progresso e inventário do jogador.
+- [x] `/hall?chapterId=chapter-1` abre o capítulo correto no salão.
+- [x] `/chapter/[chapterId]` redireciona corretamente para `/hall?chapterId=...`.
 - [x] fases bloqueadas não ficam acessíveis diretamente por URL.
 - [x] `/collection` exibe cartas desbloqueadas sem erro.
+- [x] `/library` exibe o catálogo dos livros sem erro.
+- [x] `/library/[bookId]` abre um livro válido sem erro.
 - [ ] `/profile` carrega sem erro.
 - [ ] `/operator` carrega sem erro para usuário com papel `operator`.
 - [ ] `/operator/player/[playerId]` carrega sem erro para usuário com papel `operator`.

@@ -28,7 +28,7 @@ Referências:
 - [x] Milestone 8 — Integração completa do Capítulo I
 - [x] Milestone 9 — QA, segurança e deploy no fluxo central
 - [ ] Milestone 10 — Reposicionamento visual de site para jogo
-- [ ] Milestone 11 — Biblioteca pedagógica do jogador
+- [x] Milestone 11 — Biblioteca pedagógica do jogador
 
 ## Estratégia de mudança
 
@@ -65,7 +65,7 @@ Objetivos:
 - transformar navegação em HUD;
 - expor identidade do jogador, capítulo, progresso e recursos como status do mundo;
 - reduzir aparência de navbar tradicional;
-- criar continuidade visual entre `/game`, capítulo, fase, coleção e perfil.
+- criar continuidade visual entre `/hall`, capítulo, fase, coleção e perfil.
 
 #### 2. Progressão e mapa de jogo
 
@@ -116,8 +116,8 @@ Objetivos:
 Status: em andamento.
 
 - [x] revisar `app/(protected)/layout.tsx` como HUD persistente do jogo
-- [x] redesenhar `/game` como hub de progressão e sala do reino
-- [x] redesenhar `/chapter/[chapterId]` como mapa/trilha de provas
+- [x] redesenhar `/hall` como hub de progressão e sala do reino
+- [x] mover a visualização principal de capítulo para dentro de `/hall`
 - [x] reenquadrar `/collection` como grimório e biblioteca de cartas
 - [x] consolidar tokens visuais em `app/globals.css` e `tailwind.config.ts`
 - [x] formalizar superfícies reutilizáveis para cena, painel, feedback e status
@@ -128,15 +128,15 @@ Status: em andamento.
 
 ### Milestone 11 — Biblioteca pedagógica do jogador
 
-Status: planejado.
+Status: concluído no escopo inicial do MVP.
 
-- [ ] definir documento normativo da Biblioteca em `docs/design/library.md`
-- [ ] definir shape tipado oficial dos livros em `docs/design/content-model.md`
-- [ ] adicionar `/library` ao mapa de telas e à navegação protegida
-- [ ] implementar catálogo dos 3 livros iniciais
-- [ ] implementar leitura mobile-first para livro individual
-- [ ] validar separação clara entre Biblioteca e Coleção
-- [ ] revisar copy e apoio pedagógico dos livros contra `docs/pedagogy/teacher-guide.md`
+- [x] definir documento normativo da Biblioteca em `docs/design/library.md`
+- [x] definir shape tipado oficial dos livros em `docs/design/content-model.md`
+- [x] adicionar `/library` ao mapa de telas e à navegação protegida
+- [x] implementar catálogo dos 3 livros iniciais
+- [x] implementar leitura mobile-first para livro individual
+- [x] validar separação clara entre Biblioteca e Coleção
+- [x] revisar copy e apoio pedagógico dos livros contra `docs/pedagogy/teacher-guide.md`
 
 ### Milestone 8 — Integração completa do Capítulo I
 
@@ -209,7 +209,7 @@ Verificação recente:
 - [ ] revisar aderência fina entre `content/` e `docs/design/`
 - [x] evitar drift entre implementação e documentação oficial
 - [ ] atualizar documentação explicitamente quando houver divergência real
-- [ ] materializar o conteúdo oficial inicial da Biblioteca em arquivos tipados
+- [x] materializar o conteúdo oficial inicial da Biblioteca em arquivos tipados
 
 ### Observabilidade interna
 
@@ -235,7 +235,7 @@ Verificação recente:
 5. manter documentação e checklist sincronizados com as decisões consolidadas
 6. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
 7. opcionalmente ampliar cobertura de integração com Prisma real de teste
-8. iniciar a Biblioteca pedagógica após consolidar o fechamento visual principal do MVP
+8. consolidar o fechamento visual principal do MVP após a entrada da Biblioteca e da navegação em `/hall`
 
 ## Critério de fechamento do tracker
 
@@ -252,7 +252,7 @@ O tracker pode ser considerado encerrado quando:
 
 - Data: 2026-04-21
 - Ambiente validado: Vercel + Neon
-- Escopo validado: cadastro, login, `/game`, todas as fases, persistência de progresso, `/collection`, logout e retomada de sessão
+- Escopo validado: cadastro, login, `/hall` como hub principal, todas as fases, persistência de progresso, `/collection`, `/library`, logout e retomada de sessão
 - Resultado: aceite funcional do MVP no fluxo central do jogador
 - Observações residuais:
   - ajustar `APP_BASE_URL` para remover barra final;
