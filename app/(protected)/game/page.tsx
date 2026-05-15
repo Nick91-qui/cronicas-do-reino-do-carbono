@@ -1,23 +1,29 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { HallPhaseViewer } from "@/components/game/hall-phase-viewer";
+import { HallChapterBrowser } from "@/components/game/hall-chapter-browser";
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
-import { getPrimaryChapter } from "@/lib/content/loaders";
+import { getAllChapters, getPrimaryChapter } from "@/lib/content/loaders";
 import { getAllChaptersProgressView } from "@/lib/progress/queries";
 import { getPlayerInventorySnapshot } from "@/lib/inventory/service";
 import { blobAssets } from "@/lib/assets/blob";
 
-export default async function GamePage() {
+export default async function GamePage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ chapter?: string }>;
+}) {
   const player = await requireAuthenticatedPlayer(prisma);
   const [progress, inventory] = await Promise.all([
     getAllChaptersProgressView(prisma, player.playerId),
     getPlayerInventorySnapshot(prisma, player.playerId),
   ]);
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
 
   const primaryChapter = getPrimaryChapter();
+  const availableChapters = getAllChapters();
   const chapterProgress = progress.find(
     (chapter) => chapter.chapterId === primaryChapter.id,
   );
@@ -41,6 +47,12 @@ export default async function GamePage() {
   const progressPercent = Math.round(
     (completedCount / chapterProgress.totalPhases) * 100,
   );
+  const requestedChapterId = resolvedSearchParams?.chapter;
+  const initialChapterId = availableChapters.some(
+    (chapter) => chapter.id === requestedChapterId,
+  )
+    ? (requestedChapterId as typeof primaryChapter.id)
+    : primaryChapter.id;
 
   return (
     <>
@@ -125,10 +137,9 @@ export default async function GamePage() {
               </div>
             </div>
 
-            <HallPhaseViewer
-              chapterId={chapterProgress.chapterId}
-              initialPhaseId={nextPhaseId}
-              phases={chapterProgress.phases}
+            <HallChapterBrowser
+              chapters={progress}
+              initialChapterId={initialChapterId}
             />
           </article>
 

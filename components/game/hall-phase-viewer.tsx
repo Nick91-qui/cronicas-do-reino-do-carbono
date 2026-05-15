@@ -9,6 +9,7 @@ type HallPhaseViewerProps = {
   chapterId: ChapterProgressView["chapterId"];
   initialPhaseId: ChapterProgressView["phases"][number]["phaseId"];
   phases: ChapterProgressView["phases"];
+  onBack?: () => void;
 };
 
 function Chevron({ direction }: { direction: "left" | "right" }) {
@@ -61,8 +62,8 @@ function getPhaseStateMeta(
   }
 
   return {
-    actionHref: `/chapter/${chapterId}`,
-    actionLabel: "Voltar ao mapa",
+    actionHref: `/game?chapter=${chapterId}`,
+    actionLabel: "Prova fechada",
     description: "Conclua a prova anterior para abrir esta prova.",
     stateClass: "border-white/10 bg-white/5",
     stateLabel: "Selada",
@@ -74,6 +75,7 @@ export function HallPhaseViewer({
   chapterId,
   initialPhaseId,
   phases,
+  onBack,
 }: HallPhaseViewerProps) {
   const initialIndex = useMemo(() => {
     const foundIndex = phases.findIndex((phase) => phase.phaseId === initialPhaseId);
@@ -96,18 +98,33 @@ export function HallPhaseViewer({
   return (
     <div className="mt-6 grid gap-4">
       <div className="flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={goToPrevious}
-          disabled={isFirstPhase}
-          className={`ritual-link px-4 py-2 text-sm ${isFirstPhase ? "pointer-events-none opacity-40" : ""}`}
-          aria-label="Prova anterior"
-        >
-          <span className="inline-flex items-center gap-2">
-            <Chevron direction="left" />
-            Voltar
-          </span>
-        </button>
+        <div className="flex items-center gap-2">
+          {onBack ? (
+            <button
+              type="button"
+              onClick={onBack}
+              className="ritual-link px-4 py-2 text-sm"
+              aria-label="Voltar aos capitulos"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Chevron direction="left" />
+                Capitulos
+              </span>
+            </button>
+          ) : null}
+          <button
+            type="button"
+            onClick={goToPrevious}
+            disabled={isFirstPhase}
+            className={`ritual-link px-4 py-2 text-sm ${isFirstPhase ? "pointer-events-none opacity-40" : ""}`}
+            aria-label="Prova anterior"
+          >
+            <span className="inline-flex items-center gap-2">
+              <Chevron direction="left" />
+              Voltar
+            </span>
+          </button>
+        </div>
 
         <div className="rounded-full border border-white/10 bg-slate-950/50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-200">
           Prova {activePhase.phaseNumber} de {phases.length}
