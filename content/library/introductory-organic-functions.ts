@@ -5,7 +5,7 @@ export const introductoryOrganicFunctionsBook: LibraryBook = {
   title: "Funções orgânicas introdutórias",
   subtitle: "Uma ponte para além dos hidrocarbonetos",
   shortDescription:
-    "Visão preparatória sobre o que são funções orgânicas e como elas ampliam o estudo além do repertório atual do Capítulo I.",
+    "Visao preparatoria sobre o que sao funcoes organicas e como elas ampliam o estudo alem dos hidrocarbonetos estudados agora.",
   coreTopics: [
     "ideia de função orgânica",
     "hidrocarbonetos",
@@ -37,16 +37,16 @@ export const introductoryOrganicFunctionsBook: LibraryBook = {
     {
       id: "onde-os-hidrocarbonetos-entram",
       title: "Onde os hidrocarbonetos entram nessa história",
-      summary: "Os hidrocarbonetos são o foco atual do jogo e servem como porta de entrada para o estudo de orgânica.",
+      summary: "Os hidrocarbonetos sao o primeiro grupo estudado aqui e servem como porta de entrada para o estudo de organica.",
       blocks: [
         {
           type: "comparison",
-          title: "Leitura do escopo atual",
+          title: "O que estamos estudando agora",
           items: [
             {
               label: "Hidrocarbonetos",
               description:
-                "São compostos formados apenas por carbono e hidrogênio no repertório introdutório do Capítulo I.",
+                "Sao compostos formados apenas por carbono e hidrogenio nas primeiras leituras deste percurso.",
             },
             {
               label: "Outras funções orgânicas",
@@ -60,26 +60,26 @@ export const introductoryOrganicFunctionsBook: LibraryBook = {
           tone: "info",
           title: "Importante",
           content:
-            "Este livro prepara a leitura futura, mas não altera a regra oficial do Capítulo I, que continua centrado em hidrocarbonetos.",
+            "Este livro amplia sua visao e mostra que a quimica organica vai alem dos hidrocarbonetos.",
         },
       ],
     },
     {
       id: "por-que-aprender-isso-ja",
       title: "Por que antecipar essa ideia agora",
-      summary: "Mesmo antes de jogar novos capítulos, é útil entender que o repertório da orgânica é maior do que o conjunto atual de cartas.",
+      summary: "Mesmo antes de estudar novos conteudos, e util entender que a quimica organica e maior do que as moleculas vistas ate aqui.",
       blocks: [
         {
           type: "paragraph",
           content:
-            "Ao perceber que os hidrocarbonetos são apenas uma parte do universo da química orgânica, o estudante entende melhor que as classificações do jogo fazem parte de uma estrutura maior de estudo.",
+            "Ao perceber que os hidrocarbonetos sao apenas uma parte do universo da quimica organica, o estudante entende melhor como as classificacoes se conectam a um estudo mais amplo.",
         },
         {
           type: "bullets",
           title: "Ganhos pedagógicos",
           items: [
-            "Evita tratar o repertório atual como se fosse toda a orgânica.",
-            "Prepara a transição para capítulos futuros.",
+            "Ajuda a perceber que ainda existem muitas outras familias de compostos para estudar.",
+            "Prepara voce para estudos mais avancados.",
             "Ajuda a organizar mentalmente o conteúdo por famílias.",
           ],
         },
@@ -87,22 +87,22 @@ export const introductoryOrganicFunctionsBook: LibraryBook = {
     },
     {
       id: "ponte-para-expansao",
-      title: "Ponte para expansões futuras",
-      summary: "Novos capítulos podem introduzir famílias além dos hidrocarbonetos sem quebrar a base já construída.",
+      title: "Um passo alem",
+      summary: "Outras familias podem ser estudadas depois sem perder a base que voce ja construiu.",
       blocks: [
         {
           type: "example",
           title: "Leitura de continuidade",
-          prompt: "O que muda quando o jogo sair dos hidrocarbonetos?",
+          prompt: "O que muda quando comecamos a estudar outras familias de compostos?",
           explanation:
-            "A base sobre cadeias, ligações e identificação estrutural continua útil, mas novas famílias exigem observar outros padrões e novas relações entre estrutura e propriedade.",
+            "A base sobre cadeias, ligacoes e identificacao estrutural continua util, mas novas familias exigem observar outros padroes e novas relacoes entre estrutura e propriedade.",
         },
         {
           type: "callout",
           tone: "success",
-          title: "Como usar este livro no MVP",
+          title: "Como aproveitar este livro",
           content:
-            "Trate este conteúdo como preparação conceitual curta. Ele serve para ampliar horizonte, não para substituir o foco jogável atual.",
+            "Trate este conteudo como uma preparacao conceitual curta para ampliar sua compreensao do conteudo.",
         },
       ],
     },

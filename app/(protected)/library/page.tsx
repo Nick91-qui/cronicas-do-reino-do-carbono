@@ -16,8 +16,8 @@ export default async function LibraryPage() {
       ambientLabel="Arquivo de estudo"
       imageSrc={blobAssets.authLibrary}
       imageAlt="Biblioteca ritual do castelo."
-      title={`Livros abertos para ${player.displayName}`}
-      description="Esta ala reúne leituras curtas para apoiar a jornada do Capítulo I. Os livros ficam disponíveis desde o início e podem ser consultados a qualquer momento, sem alterar a progressão do jogo."
+      title={`Biblioteca de ${player.displayName}`}
+      description="Aqui voce encontra livros curtos para revisar ideias importantes de quimica organica sempre que quiser."
       stats={
         <>
           <div className="game-panel-muted">
@@ -28,10 +28,10 @@ export default async function LibraryPage() {
           </div>
           <div className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Regra de acesso
+              Leitura livre
             </p>
             <p className="pt-2 text-sm text-slate-100">
-              Consulta livre desde o primeiro login.
+              Voce pode abrir estes livros a qualquer momento.
             </p>
           </div>
         </>
@@ -45,27 +45,27 @@ export default async function LibraryPage() {
           <div className="mt-5 grid gap-3 text-sm text-slate-300">
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Papel da biblioteca
+                Para que serve
               </p>
               <p className="pt-2 text-slate-100">
-                Os livros reforçam conceitos básicos de orgânica sem substituir cartas,
-                fases ou feedbacks da campanha.
+                Os livros ajudam a revisar conceitos importantes e a entender melhor
+                as estruturas estudadas no reino.
               </p>
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Leitura pensada para mobile
+                Modo de leitura
               </p>
               <p className="pt-2 text-slate-100">
-                O formato prioriza rolagem vertical, seções curtas e blocos simples de consulta.
+                Cada livro e dividido em paginas curtas para facilitar a leitura e a revisao.
               </p>
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Quando consultar
+                Quando abrir
               </p>
               <p className="pt-2 text-slate-100">
-                Antes de uma prova, depois de um erro ou como revisão independente do capítulo.
+                Abra um livro quando quiser revisar um conceito, esclarecer uma duvida ou se preparar para a proxima prova.
               </p>
             </div>
           </div>

@@ -3,9 +3,9 @@ import type { LibraryBook } from "@/lib/content/types";
 export const introductoryNomenclatureBook: LibraryBook = {
   id: "nomenclatura-introdutoria",
   title: "Nomenclatura introdutória",
-  subtitle: "Como reconhecer nomes básicos no repertório do MVP",
+  subtitle: "Como reconhecer nomes basicos das primeiras moleculas estudadas",
   shortDescription:
-    "Guia enxuto para relacionar quantidade de carbonos, tipo de ligação e nomes simples usados no Capítulo I.",
+    "Guia enxuto para relacionar quantidade de carbonos, tipo de ligacao e nomes simples usados nas primeiras provas do reino.",
   coreTopics: [
     "prefixos básicos",
     "alcano e alceno",
@@ -20,7 +20,7 @@ export const introductoryNomenclatureBook: LibraryBook = {
       blocks: [
         {
           type: "bullets",
-          title: "Prefixos do repertório atual",
+          title: "Prefixos mais usados",
           items: [
             "met-: 1 carbono",
             "et-: 2 carbonos",
@@ -40,7 +40,7 @@ export const introductoryNomenclatureBook: LibraryBook = {
     {
       id: "terminacoes-principais",
       title: "Como a terminação ajuda a leitura",
-      summary: "No MVP, a terminação já orienta parte importante da classificação.",
+      summary: "Neste inicio de estudo, a terminacao ja orienta parte importante da classificacao.",
       blocks: [
         {
           type: "comparison",
@@ -115,13 +115,6 @@ export const introductoryNomenclatureBook: LibraryBook = {
             "Depois verifique se há só ligações simples ou se aparece ligação dupla.",
             "Use o nome da carta para confirmar sua leitura, e não como único critério.",
           ],
-        },
-        {
-          type: "callout",
-          tone: "success",
-          title: "Conexão com o jogo",
-          content:
-            "Essa combinação ajuda quando você precisa comparar cartas rapidamente e decidir qual molécula é mais adequada ao desafio da fase.",
         },
       ],
     },

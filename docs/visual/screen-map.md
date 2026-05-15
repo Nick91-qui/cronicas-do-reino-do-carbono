@@ -62,7 +62,7 @@ Deve comunicar:
 - catálogo dos livros disponíveis;
 - separação clara entre livros e cartas;
 - leitura guiada de apoio ao jogador;
-- navegação simples entre capa, sumário e seções;
+- navegação lateral simples entre páginas ou seções;
 - conforto de leitura em mobile como prioridade.
 
 ## Ordem de prioridade visual

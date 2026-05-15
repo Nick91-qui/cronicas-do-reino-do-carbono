@@ -136,10 +136,10 @@ Eles **não** devem ser:
 
 O livro deve ser montado como:
 
-- uma página vertical de leitura;
-- com seções curtas e empilhadas;
+- um leitor imersivo de tela ampla;
+- com uma seção ou página por vez;
 - com blocos visuais reutilizáveis;
-- com navegação simples e legível em telas estreitas.
+- com navegação lateral clara entre esquerda e direita.
 
 ### Estrutura recomendada da página de livro
 
@@ -158,7 +158,7 @@ Como prioridade oficial, os livros devem ser pensados primeiro para **mobile**.
 Isso significa:
 
 - largura estreita como caso principal;
-- leitura por rolagem vertical;
+- leitura por páginas ou seções individualizadas;
 - parágrafos curtos;
 - blocos com respiro claro entre si;
 - títulos e subtítulos bem separados;
@@ -174,6 +174,7 @@ Evitar, no MVP:
 - tabelas largas como forma principal de comparação;
 - blocos muito longos sem quebra;
 - ornamentação que reduza contraste ou compressa a área útil de leitura;
+- dependência de rolagem vertical contínua para consumir o núcleo do conteúdo;
 - excesso de interações ocultas para revelar conteúdo essencial.
 
 ## Estrutura de conteúdo recomendada
@@ -194,6 +195,10 @@ Cada seção pode usar blocos como:
 Cada bloco deve responder a uma ideia principal.
 
 Se uma explicação ficar longa demais para leitura confortável em celular, ela deve ser quebrada em novos blocos ou novas seções.
+
+### Regra de paginação
+
+Se uma seção ficar densa demais para caber com conforto em uma única tela de leitura, ela deve ser dividida em novas páginas internas ou em novas seções curtas.
 
 ## Modelo de dados recomendado
 
@@ -256,7 +261,7 @@ type LibraryBook = {
 - o conteúdo deve continuar versionado em arquivos locais;
 - o conteúdo deve ser tipado;
 - o conteúdo deve ser renderizável sem depender de HTML arbitrário vindo de fora;
-- o shape deve favorecer composição simples em React e leitura estável em mobile.
+- o shape deve favorecer composição simples em React e leitura paginada estável em mobile.
 
 ## Critérios de sucesso da Biblioteca no MVP
 

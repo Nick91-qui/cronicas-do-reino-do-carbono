@@ -3,7 +3,7 @@ import type { LibraryBook } from "@/lib/content/types";
 export const carbonAndChainsBook: LibraryBook = {
   id: "caracteristicas-do-carbono-e-das-cadeias",
   title: "Características do carbono e das cadeias",
-  subtitle: "A base estrutural da jornada orgânica",
+  subtitle: "A base estrutural da quimica organica",
   shortDescription:
     "Revisão curta sobre tetravalência, formação de cadeias e diferenças introdutórias entre tipos de estrutura.",
   coreTopics: [
@@ -15,7 +15,7 @@ export const carbonAndChainsBook: LibraryBook = {
   sections: [
     {
       id: "papel-do-carbono",
-      title: "Por que o carbono ocupa o centro do jogo",
+      title: "Por que o carbono e tao importante",
       summary: "O carbono forma muitas estruturas porque consegue fazer quatro ligações.",
       blocks: [
         {
@@ -31,13 +31,6 @@ export const carbonAndChainsBook: LibraryBook = {
             "Essas ligações podem ser com hidrogênio ou com outros átomos de carbono.",
             "A forma como os carbonos se conectam muda o comportamento da molécula.",
           ],
-        },
-        {
-          type: "callout",
-          tone: "info",
-          title: "Conexão com o jogo",
-          content:
-            "No laboratório de síntese, estruturas inválidas costumam falhar justamente porque o arranjo não respeita essa lógica básica de ligações do carbono.",
         },
       ],
     },
@@ -69,7 +62,7 @@ export const carbonAndChainsBook: LibraryBook = {
         },
         {
           type: "example",
-          title: "Exemplo do capítulo",
+          title: "Exemplo",
           prompt: "Metano, etano e propano pertencem à mesma família?",
           explanation:
             "Sim. Os três são hidrocarbonetos saturados da família dos alcanos. O que muda entre eles é o número de carbonos na cadeia.",
@@ -93,7 +86,7 @@ export const carbonAndChainsBook: LibraryBook = {
             {
               label: "Fechada",
               description:
-                "A sequência principal forma um ciclo. No Capítulo I, isso aparece na leitura introdutória do benzeno.",
+                "A sequencia principal forma um ciclo. Isso aparece, por exemplo, na leitura introdutoria do benzeno.",
             },
             {
               label: "Saturada",
@@ -119,7 +112,7 @@ export const carbonAndChainsBook: LibraryBook = {
     {
       id: "homogeneidade-e-leitura",
       title: "Homogeneidade e leitura estrutural",
-      summary: "No repertório atual do jogo, as cadeias trabalhadas são homogêneas.",
+      summary: "Neste momento, vamos observar cadeias homogeneas.",
       blocks: [
         {
           type: "paragraph",
@@ -130,8 +123,8 @@ export const carbonAndChainsBook: LibraryBook = {
           type: "bullets",
           title: "Para guardar",
           items: [
-            "No Capítulo I, o foco está em hidrocarbonetos.",
-            "Isso ajuda a manter a leitura estrutural mais controlada no início da campanha.",
+            "Aqui, o foco esta nos hidrocarbonetos.",
+            "Isso ajuda a manter a leitura estrutural mais controlada neste comeco de estudo.",
             "Mais adiante, outras funções orgânicas podem ampliar essa leitura.",
           ],
         },

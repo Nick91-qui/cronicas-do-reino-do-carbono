@@ -168,7 +168,7 @@ const tutorialSteps: SynthesisTutorialStep[] = [
   },
   {
     title: "Seguir a prova",
-    body: "Se a estrutura for aceita, voce segue para escolher a carta ou justificar a resposta, dependendo da fase. Se travar em conceitos basicos de organica, a Biblioteca Pedagogica fica aberta desde o inicio para consulta livre.",
+    body: "Se a estrutura for aceita, voce segue para escolher a carta ou justificar a resposta, dependendo da fase. Se travar em conceitos basicos de organica, voce pode consultar os livros da Biblioteca sempre que quiser revisar esses conceitos.",
   },
 ];
 

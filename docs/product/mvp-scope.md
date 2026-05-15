@@ -77,7 +77,7 @@ O MVP deve demonstrar que o projeto consegue:
 - apresentar conceitos químicos de forma gradual;
 - manter fidelidade conceitual com simplificação controlada;
 - permitir ao aluno aprender por interação e decisão;
-- permitir ao aluno revisar conceitos básicos em uma superfície de consulta simples e mobile-first;
+- permitir ao aluno revisar conceitos básicos em uma superfície de consulta imersiva, paginada e mobile-first;
 - oferecer feedback suficiente para orientar a progressão;
 - sustentar a base de futuras expansões de conteúdo.
 
@@ -197,13 +197,13 @@ O MVP inclui uma Biblioteca Pedagógica protegida.
 
 ### Regra de formato
 
-Os livros devem ser implementados como conteúdo vivo e tipado, com leitura vertical e otimização para mobile.
+Os livros devem ser implementados como conteúdo vivo e tipado, com leitura paginada por seções e otimização para mobile.
 
 O MVP não deve tratar os livros como:
 
 - PDF;
 - imagem longa com texto;
-- livro paginado de leitura rígida;
+- página longa que dependa de rolagem contínua para leitura principal;
 - material dependente de download externo para cumprir sua função principal.
 
 ## Inventário no MVP
