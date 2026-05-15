@@ -55,3 +55,22 @@ test("Moléculas oficiais do capítulo estão materializadas no conteúdo", () =
 
   assert.deepEqual(ids, ["metano", "etano", "propano", "eteno", "propeno", "buteno", "benzeno"]);
 });
+
+test("Biblioteca declara os 3 livros introdutórios oficiais do MVP", () => {
+  const librarySources = [
+    readProjectFile("content/library/carbon-and-chains.ts"),
+    readProjectFile("content/library/introductory-nomenclature.ts"),
+    readProjectFile("content/library/introductory-organic-functions.ts"),
+  ].join("\n");
+
+  const bookIds = extractIds(
+    librarySources,
+    /id:\s*"(caracteristicas-do-carbono-e-das-cadeias|nomenclatura-introdutoria|funcoes-organicas-introdutorias)"/g,
+  );
+
+  assert.deepEqual(bookIds, [
+    "caracteristicas-do-carbono-e-das-cadeias",
+    "nomenclatura-introdutoria",
+    "funcoes-organicas-introdutorias",
+  ]);
+});

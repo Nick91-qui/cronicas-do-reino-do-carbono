@@ -2,6 +2,7 @@ import type {
   BondType,
   ChemicalClass,
   FragmentId,
+  LibraryBookId,
   MoleculeId,
   PhaseId,
   PhaseType,
@@ -11,6 +12,11 @@ import type {
 } from "@/lib/content/types";
 
 export const CHAPTER_IDS = ["chapter-1"] as const;
+export const LIBRARY_BOOK_IDS = [
+  "caracteristicas-do-carbono-e-das-cadeias",
+  "nomenclatura-introdutoria",
+  "funcoes-organicas-introdutorias",
+] as const satisfies readonly LibraryBookId[];
 export const MOLECULE_IDS = ["metano", "etano", "propano", "eteno", "propeno", "buteno", "benzeno"] as const satisfies readonly MoleculeId[];
 export const FRAGMENT_IDS = ["ligacao_simples", "ligacao_dupla", "estrutura_aromatica"] as const satisfies readonly FragmentId[];
 export const PHASE_IDS = [

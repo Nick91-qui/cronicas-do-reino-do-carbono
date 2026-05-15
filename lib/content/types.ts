@@ -1,5 +1,10 @@
 export type ChapterId = "chapter-1";
 
+export type LibraryBookId =
+  | "caracteristicas-do-carbono-e-das-cadeias"
+  | "nomenclatura-introdutoria"
+  | "funcoes-organicas-introdutorias";
+
 export type MoleculeId =
   | "metano"
   | "etano"
@@ -164,6 +169,53 @@ export type Chapter = {
   totalPhases: number;
   moleculeIds: MoleculeId[];
   phaseIds: PhaseId[];
+};
+
+export type LibraryContentBlock =
+  | {
+      type: "paragraph";
+      content: string;
+    }
+  | {
+      type: "bullets";
+      title?: string;
+      items: string[];
+    }
+  | {
+      type: "callout";
+      tone: "info" | "warning" | "success";
+      title: string;
+      content: string;
+    }
+  | {
+      type: "example";
+      title: string;
+      prompt?: string;
+      explanation: string;
+    }
+  | {
+      type: "comparison";
+      title: string;
+      items: Array<{
+        label: string;
+        description: string;
+      }>;
+    };
+
+export type LibrarySection = {
+  id: string;
+  title: string;
+  summary?: string;
+  blocks: LibraryContentBlock[];
+};
+
+export type LibraryBook = {
+  id: LibraryBookId;
+  title: string;
+  subtitle?: string;
+  shortDescription: string;
+  coreTopics: string[];
+  sections: LibrarySection[];
 };
 
 export type PhaseSubmission = {

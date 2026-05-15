@@ -9,6 +9,7 @@ import { LogoutButton } from "@/components/auth/logout-button";
 const items = [
   { href: "/game", label: "Salao" },
   { href: "/collection", label: "Grimorio" },
+  { href: "/library", label: "Biblioteca" },
   { href: "/profile", label: "Aposentos" },
 ];
 

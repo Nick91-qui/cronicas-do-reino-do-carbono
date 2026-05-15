@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 const chapterIds = ["chapter-1"] as const;
+const libraryBookIds = [
+  "caracteristicas-do-carbono-e-das-cadeias",
+  "nomenclatura-introdutoria",
+  "funcoes-organicas-introdutorias",
+] as const;
 const moleculeIds = ["metano", "etano", "propano", "eteno", "propeno", "buteno", "benzeno"] as const;
 const fragmentIds = ["ligacao_simples", "ligacao_dupla", "estrutura_aromatica"] as const;
 const phaseIds = [
@@ -41,6 +46,7 @@ const selectableProperties = [
 ] as const;
 
 export const chapterIdSchema = z.enum(chapterIds);
+export const libraryBookIdSchema = z.enum(libraryBookIds);
 export const moleculeIdSchema = z.enum(moleculeIds);
 export const fragmentIdSchema = z.enum(fragmentIds);
 export const phaseIdSchema = z.enum(phaseIds);
@@ -154,6 +160,56 @@ export const chapterSchema = z.object({
   totalPhases: z.number().int().positive(),
   moleculeIds: z.array(moleculeIdSchema).min(1),
   phaseIds: z.array(phaseIdSchema).min(1),
+});
+
+const libraryComparisonItemSchema = z.object({
+  label: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const libraryContentBlockSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("paragraph"),
+    content: z.string().min(1),
+  }),
+  z.object({
+    type: z.literal("bullets"),
+    title: z.string().min(1).optional(),
+    items: z.array(z.string().min(1)).min(1),
+  }),
+  z.object({
+    type: z.literal("callout"),
+    tone: z.enum(["info", "warning", "success"]),
+    title: z.string().min(1),
+    content: z.string().min(1),
+  }),
+  z.object({
+    type: z.literal("example"),
+    title: z.string().min(1),
+    prompt: z.string().min(1).optional(),
+    explanation: z.string().min(1),
+  }),
+  z.object({
+    type: z.literal("comparison"),
+    title: z.string().min(1),
+    items: z.array(libraryComparisonItemSchema).min(1),
+  }),
+]);
+
+export const librarySectionSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  summary: z.string().min(1).optional(),
+  blocks: z.array(libraryContentBlockSchema).min(1),
+});
+
+export const libraryBookSchema = z.object({
+  id: libraryBookIdSchema,
+  title: z.string().min(1),
+  subtitle: z.string().min(1).optional(),
+  shortDescription: z.string().min(1),
+  coreTopics: z.array(z.string().min(1)).min(1),
+  sections: z.array(librarySectionSchema).min(1),
 });
 
 export const phaseSubmissionSchema = z.object({

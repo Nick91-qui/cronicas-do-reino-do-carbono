@@ -1,14 +1,17 @@
 import { chapter1 } from "@/content/chapters/chapter-1";
+import { libraryBooks } from "@/content/library";
 import { chapter1Molecules } from "@/content/molecules/chapter-1";
 import { chapter1Phases } from "@/content/phases/chapter-1";
-import { chapterSchema, moleculeSchema, phaseSchema } from "@/lib/content/schema";
-import type { Chapter, ChapterId, Molecule, MoleculeId, Phase, PhaseId } from "@/lib/content/types";
+import { chapterSchema, libraryBookSchema, moleculeSchema, phaseSchema } from "@/lib/content/schema";
+import type { Chapter, ChapterId, LibraryBook, LibraryBookId, Molecule, MoleculeId, Phase, PhaseId } from "@/lib/content/types";
 
 const chapters = [chapterSchema.parse(chapter1)];
+const parsedLibraryBooks = libraryBooks.map((book) => libraryBookSchema.parse(book));
 const molecules = chapter1Molecules.map((molecule) => moleculeSchema.parse(molecule));
 const phases = chapter1Phases.map((phase) => phaseSchema.parse(phase));
 
 const chapterMap = new Map<ChapterId, Chapter>(chapters.map((chapter) => [chapter.id, chapter]));
+const libraryBookMap = new Map<LibraryBookId, LibraryBook>(parsedLibraryBooks.map((book) => [book.id, book]));
 const moleculeMap = new Map<MoleculeId, Molecule>(molecules.map((molecule) => [molecule.id, molecule]));
 const phaseMap = new Map<PhaseId, Phase>(phases.map((phase) => [phase.id, phase]));
 
@@ -30,6 +33,16 @@ function assertPhaseExists(phaseId: PhaseId): Phase {
   }
 
   return phase;
+}
+
+function assertLibraryBookExists(bookId: LibraryBookId): LibraryBook {
+  const book = libraryBookMap.get(bookId);
+
+  if (!book) {
+    throw new Error(`Livro da biblioteca não encontrado: ${bookId}`);
+  }
+
+  return book;
 }
 
 function assertMoleculeExists(moleculeId: MoleculeId): Molecule {
@@ -64,6 +77,14 @@ export function getAllMolecules(): Molecule[] {
   return molecules;
 }
 
+export function getAllLibraryBooks(): LibraryBook[] {
+  return parsedLibraryBooks;
+}
+
+export function getLibraryBookById(bookId: LibraryBookId): LibraryBook {
+  return assertLibraryBookExists(bookId);
+}
+
 export function getMoleculeById(moleculeId: MoleculeId): Molecule {
   return assertMoleculeExists(moleculeId);
 }
@@ -89,6 +110,24 @@ export function getMoleculesByIds(ids: MoleculeId[]): Molecule[] {
 }
 
 export function validateContentIntegrity(): void {
+  const sectionIds = new Set<string>();
+
+  for (const book of parsedLibraryBooks) {
+    if (book.sections.length === 0) {
+      throw new Error(`Livro ${book.id} não possui seções.`);
+    }
+
+    for (const section of book.sections) {
+      const scopedId = `${book.id}:${section.id}`;
+
+      if (sectionIds.has(scopedId)) {
+        throw new Error(`Seção duplicada na biblioteca: ${scopedId}`);
+      }
+
+      sectionIds.add(scopedId);
+    }
+  }
+
   for (const chapter of chapters) {
     for (const phaseId of chapter.phaseIds) {
       const phase = assertPhaseExists(phaseId);

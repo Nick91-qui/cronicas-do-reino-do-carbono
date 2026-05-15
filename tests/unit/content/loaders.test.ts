@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   getAllChapters,
+  getAllLibraryBooks,
   getAllMolecules,
   getAllPhases,
   getChapterById,
+  getLibraryBookById,
   getMoleculeById,
   getPhaseById,
   getPhasesByChapterId,
@@ -37,9 +39,11 @@ describe("content/loaders", () => {
 
   it("expõe os registros oficiais de capítulo, fase e molécula", () => {
     expect(getAllChapters()).toHaveLength(1);
+    expect(getAllLibraryBooks()).toHaveLength(3);
     expect(getAllPhases()).toHaveLength(8);
     expect(getAllMolecules()).toHaveLength(7);
     expect(getPrimaryChapter().id).toBe("chapter-1");
+    expect(getLibraryBookById("nomenclatura-introdutoria").sections.length).toBeGreaterThan(0);
     expect(getPhaseById("chapter-1-phase-8").excellentAnswer).toBe("benzeno");
     expect(getMoleculeById("eteno").classe).toBe("alceno");
   });
