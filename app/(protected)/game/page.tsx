@@ -63,7 +63,7 @@ export default async function GamePage() {
         imageSrc={blobAssets.protectedGrandHall}
         imageAlt="Salao central do castelo."
         title={`Seu proximo passo no reino, ${player.displayName}.`}
-        description="Retome a prova aberta do capitulo, acompanhe seu avanço e consulte seus recursos sem perder a trilha de aprendizado."
+        description="Retome seus estudos, veja qual prova vem a seguir e acompanhe o que voce ja conquistou no reino."
         actions={
           <>
             <Link
@@ -91,12 +91,12 @@ export default async function GamePage() {
                 {chapterProgress.chapterTitle}
               </p>
               <p className="pt-2 text-sm text-slate-300">
-                Prova seguinte: {nextPhase?.phaseNumber} · {nextPhase?.title}
+                Proxima prova: {nextPhase?.phaseNumber} · {nextPhase?.title}
               </p>
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Passagem consolidada
+                Avanco no capitulo
               </p>
               <p className="pt-2 font-display text-3xl text-white">
                 {progressPercent}%
@@ -113,14 +113,14 @@ export default async function GamePage() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
-                  Trilha de progressao
+                  Seu caminho
                 </p>
                 <h2 className="pt-2 text-3xl tracking-[0.05em] text-white">
                   Mapa ritual das provas
                 </h2>
               </div>
               <div className="hud-chip">
-                {unlockedCount} portoes respondendo
+                {unlockedCount} provas abertas
               </div>
             </div>
 
@@ -170,7 +170,7 @@ export default async function GamePage() {
                         ? `Melhor pontuacao: ${phase.bestScore}`
                         : phase.isUnlocked
                           ? "Esta prova ja pode ser iniciada."
-                          : "Conclua a prova anterior para abrir este portal."}
+                          : "Conclua a prova anterior para abrir esta prova."}
                     </p>
                   </Link>
                 );
@@ -181,7 +181,7 @@ export default async function GamePage() {
           <div className="grid gap-4">
             <article className="game-panel">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
-                Estado do laboratorio
+                Seus recursos
               </p>
               <dl className="mt-5 grid gap-3 text-sm text-slate-300">
                 <div className="game-panel-muted">
@@ -198,7 +198,7 @@ export default async function GamePage() {
                   </dt>
                   <dd className="pt-2 text-slate-100">
                     {inventory.unlockedFragments.join(", ") ||
-                      "Nenhum vestigio inscrito"}
+                      "Nenhum fragmento registrado"}
                   </dd>
                 </div>
                 <div className="game-panel-muted">
@@ -218,7 +218,7 @@ export default async function GamePage() {
               </p>
               <div className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
                 <p>
-                  Proxima etapa sugerida:{" "}
+                  Sua proxima prova e{" "}
                   <span className="font-semibold text-white">
                     prova {nextPhase?.phaseNumber}
                     {nextPhase ? ` · ${nextPhase.title}` : ""}
@@ -226,11 +226,11 @@ export default async function GamePage() {
                   .
                 </p>
                 <p>
-                  Se travar em uma prova, volte ao mapa do capitulo para revisar
-                  o que ja foi concluido e o que ainda esta aberto.
+                  Se tiver dificuldade, volte ao mapa do capitulo para rever o que
+                  ja foi concluido e escolher com calma o proximo passo.
                 </p>
                 <p>
-                  Pontuacao acumulada:{" "}
+                  Sua pontuacao neste capitulo:{" "}
                   <span className="font-semibold text-white">
                     {chapterProgress.chapterScore}
                   </span>

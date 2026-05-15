@@ -17,8 +17,8 @@ function getPhaseStateCopy(phase: {
     return {
       seal: "Dominada",
       toneClass: "border-emerald-400/25 bg-emerald-500/10 text-emerald-100",
-      summary: "A prova foi concluida. Voce pode revisitá-la para revisar a ideia central e melhorar sua leitura do capitulo.",
-      meritLabel: "Forca obtida",
+      summary: "Voce concluiu esta prova. Pode voltar quando quiser para revisar a ideia central e fortalecer sua leitura do capitulo.",
+      meritLabel: "Melhor resultado",
       actionLabel: "Revisitar prova",
     };
   }
@@ -27,8 +27,8 @@ function getPhaseStateCopy(phase: {
     return {
       seal: "Disponivel",
       toneClass: "border-cyan-300/25 bg-cyan-400/10 text-cyan-100",
-      summary: "Esta e a proxima prova ativa. Entre nela para responder o desafio atual e manter a progressao do capitulo.",
-      meritLabel: phase.bestScore > 0 ? "Forca obtida" : "Prova a conquistar",
+      summary: "Esta prova ja esta aberta. Entre nela para enfrentar o desafio e seguir avancando no capitulo.",
+      meritLabel: phase.bestScore > 0 ? "Melhor resultado" : "Pronta para voce",
       actionLabel: "Enfrentar prova",
     };
   }
@@ -36,8 +36,8 @@ function getPhaseStateCopy(phase: {
   return {
     seal: "Selada",
     toneClass: "border-white/10 bg-white/5 text-slate-300",
-    summary: "Esta prova ainda nao esta aberta. Conclua a fase anterior para liberar o acesso.",
-    meritLabel: "Portao velado",
+    summary: "Esta prova ainda nao foi aberta. Conclua a prova anterior para seguir adiante.",
+    meritLabel: "Ainda fechada",
     actionLabel: "Voltar ao mapa",
   };
 }
@@ -69,19 +69,19 @@ export default async function ChapterPage({
       imageSrc={blobAssets.protectedCrystalChamber}
       imageAlt="Camara de cristalizacao do castelo."
       title={progress.chapterTitle}
-      description={`O mapa do dominio mostra os portoes ja respondidos, os selos conquistados e a proxima prova que reconhece o nome de ${player.displayName}.`}
+      description={`Veja quais provas voce ja concluiu, quais ainda estao abertas e qual sera o proximo desafio de ${player.displayName}.`}
       stats={
         <>
           <div className="game-panel-muted">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Selos conquistados</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Provas concluidas</p>
             <p className="pt-2 font-display text-3xl text-white">{completedCount}</p>
           </div>
           <div className="game-panel-muted">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Portoes abertos</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Provas abertas</p>
             <p className="pt-2 font-display text-3xl text-white">{unlockedCount}</p>
           </div>
           <div className="game-panel-muted">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Aprendiz em campo</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Seu nome no reino</p>
             <p className="pt-2 text-sm text-slate-100">{player.displayName}</p>
           </div>
         </>
@@ -95,7 +95,7 @@ export default async function ChapterPage({
           />
         </div>
         <p className="pt-3 text-sm text-slate-300">
-          {completedCount} de {progress.totalPhases} provas concluidas. Proxima prova disponivel:{" "}
+          {completedCount} de {progress.totalPhases} provas concluidas. A proxima prova aberta e a{" "}
           {progress.highestUnlockedPhaseNumber}.
         </p>
       </section>
@@ -146,22 +146,22 @@ export default async function ChapterPage({
                     </p>
                   </div>
                   <div className="game-panel-muted">
-                    <p className="text-slate-500">Passagem pelo dominio</p>
+                    <p className="text-slate-500">Estado da prova</p>
                     <p className="mt-1 font-semibold text-white">
-                      {phase.isCompleted ? "Selo conquistado" : phase.isUnlocked ? "Portao respondendo" : "Silencio dos sigilos"}
+                      {phase.isCompleted ? "Concluida" : phase.isUnlocked ? "Aberta" : "Fechada"}
                     </p>
                   </div>
                   <div className="game-panel-muted sm:col-span-2">
-                    <p className="text-slate-500">Ritmo da prova</p>
+                    <p className="text-slate-500">Suas tentativas</p>
                     <p className="mt-1 font-semibold text-white">
                       {phase.attemptCount > 0
-                        ? `${phase.attemptCount} tentativa(s) registradas`
-                        : "Nenhuma tentativa inscrita ainda"}
+                        ? `${phase.attemptCount} tentativa(s)`
+                        : "Nenhuma tentativa ainda"}
                     </p>
                     <p className="mt-2 text-xs text-slate-400">
                       {phase.bestQualitativeResult
                         ? `Resultado mais alto: ${phase.bestQualitativeResult}`
-                        : "A avaliacao qualitativa aparecera apos a primeira tentativa."}
+                        : "Seu resultado aparecera depois da primeira tentativa."}
                     </p>
                   </div>
                 </div>
