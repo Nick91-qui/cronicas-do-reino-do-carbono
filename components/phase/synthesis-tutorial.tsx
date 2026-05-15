@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
 type SynthesisTutorialControl = {
@@ -167,7 +168,7 @@ const tutorialSteps: SynthesisTutorialStep[] = [
   },
   {
     title: "Seguir a prova",
-    body: "Se a estrutura for aceita, voce segue para escolher a carta ou justificar a resposta, dependendo da fase.",
+    body: "Se a estrutura for aceita, voce segue para escolher a carta ou justificar a resposta, dependendo da fase. Se travar em conceitos basicos de organica, a Biblioteca Pedagogica fica aberta desde o inicio para consulta livre.",
   },
 ];
 
@@ -218,6 +219,26 @@ export function SynthesisTutorial({
             {step.title}
           </h2>
           <p className="mt-3 text-sm leading-7 text-slate-200">{step.body}</p>
+          {isLastStep ? (
+            <div className="mt-5 rounded-[20px] border border-cyan-300/20 bg-cyan-400/10 px-4 py-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                Apoio extra
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-100">
+                Se voce ficar com duvida sobre cadeias, nomenclatura ou funcoes organicas,
+                pode consultar os livros da Biblioteca antes de continuar.
+              </p>
+              <div className="mt-4">
+                <Link
+                  href="/library"
+                  onClick={onClose}
+                  className="ritual-link inline-flex px-4 py-2 text-sm"
+                >
+                  Abrir biblioteca
+                </Link>
+              </div>
+            </div>
+          ) : null}
           {step.controls?.length ? (
             <div className="mt-5 grid gap-3">
               {step.controls.map((control) => (
