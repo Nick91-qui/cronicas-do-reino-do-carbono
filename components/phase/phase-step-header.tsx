@@ -34,6 +34,49 @@ export function PhaseStepHeader({
 }: PhaseStepHeaderProps) {
   const isIntroStep = displayedStep === "intro";
   const isResultStep = displayedStep === "result";
+  const compactStepLabel =
+    displayedStep === "result"
+      ? "Resultado"
+      : displayedStep === "synthesis"
+        ? stepCopy.synthesis.title
+        : displayedStep === "select"
+          ? stepCopy.select.title
+          : displayedStep === "read"
+            ? stepCopy.read.title
+            : stepCopy.intro.title;
+
+  if (!isIntroStep) {
+    return (
+      <section className="rounded-[20px] border border-white/10 bg-[rgba(10,14,26,0.82)] shadow-[0_14px_50px_rgba(2,6,23,0.24)] backdrop-blur-xl">
+        <div className="px-4 py-4 sm:px-6">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                {chapterTitle} · Prova {phaseNumber}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <h1 className="text-xl tracking-[0.04em] text-white sm:text-2xl">
+                  {phaseTitle}
+                </h1>
+                <span className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] text-slate-300">
+                  {compactStepLabel}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="hud-chip">
+                Etapa {displayedStepIndex} de {totalSteps}
+              </span>
+              <span className="hidden rounded-full border border-white/10 px-3 py-1.5 text-[11px] text-slate-300 lg:inline-flex">
+                {currentInstruction}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -84,9 +127,7 @@ export function PhaseStepHeader({
               {isIntroStep ? (
                 <>
                   <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-                    {isResultStep
-                      ? "Você completou a tarefa! Prepare-se para os próximos desafios!"
-                      : stepCopy[displayedStep].description}
+                    {stepCopy.intro.description}
                   </p>
                   <div className="mt-4 flex flex-col gap-2 text-sm text-slate-200 sm:flex-row sm:flex-wrap sm:items-center">
                     <span className="hud-chip">
@@ -103,9 +144,7 @@ export function PhaseStepHeader({
                     Etapa {displayedStepIndex} de {totalSteps}
                   </span>
                   <span className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] text-slate-300">
-                    {displayedStep === "result"
-                      ? "Resultado"
-                      : stepCopy[displayedStep].title}
+                    {compactStepLabel}
                   </span>
                 </div>
               )}
