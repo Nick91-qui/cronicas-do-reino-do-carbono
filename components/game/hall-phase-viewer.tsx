@@ -9,7 +9,7 @@ type HallPhaseViewerProps = {
   chapterId: ChapterProgressView["chapterId"];
   initialPhaseId: ChapterProgressView["phases"][number]["phaseId"];
   phases: ChapterProgressView["phases"];
-  onBack?: () => void;
+  onBackAction?: () => void;
 };
 
 function Chevron({ direction }: { direction: "left" | "right" }) {
@@ -75,7 +75,7 @@ export function HallPhaseViewer({
   chapterId,
   initialPhaseId,
   phases,
-  onBack,
+  onBackAction,
 }: HallPhaseViewerProps) {
   const initialIndex = useMemo(() => {
     const foundIndex = phases.findIndex((phase) => phase.phaseId === initialPhaseId);
@@ -99,30 +99,24 @@ export function HallPhaseViewer({
     <div className="mt-6 grid gap-4">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          {onBack ? (
+          {onBackAction ? (
             <button
               type="button"
-              onClick={onBack}
-              className="ritual-link px-4 py-2 text-sm"
+              onClick={onBackAction}
+              className="ritual-link px-3 py-2 text-sm"
               aria-label="Voltar aos capitulos"
             >
-              <span className="inline-flex items-center gap-2">
-                <Chevron direction="left" />
-                Capitulos
-              </span>
+              <Chevron direction="left" />
             </button>
           ) : null}
           <button
             type="button"
             onClick={goToPrevious}
             disabled={isFirstPhase}
-            className={`ritual-link px-4 py-2 text-sm ${isFirstPhase ? "pointer-events-none opacity-40" : ""}`}
+            className={`ritual-link px-3 py-2 text-sm ${isFirstPhase ? "pointer-events-none opacity-40" : ""}`}
             aria-label="Prova anterior"
           >
-            <span className="inline-flex items-center gap-2">
-              <Chevron direction="left" />
-              Voltar
-            </span>
+            <Chevron direction="left" />
           </button>
         </div>
 
@@ -134,13 +128,10 @@ export function HallPhaseViewer({
           type="button"
           onClick={goToNext}
           disabled={isLastPhase}
-          className={`ritual-link px-4 py-2 text-sm ${isLastPhase ? "pointer-events-none opacity-40" : ""}`}
+          className={`ritual-link px-3 py-2 text-sm ${isLastPhase ? "pointer-events-none opacity-40" : ""}`}
           aria-label="Proxima prova"
         >
-          <span className="inline-flex items-center gap-2">
-            Avancar
-            <Chevron direction="right" />
-          </span>
+          <Chevron direction="right" />
         </button>
       </div>
 

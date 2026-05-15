@@ -745,7 +745,6 @@ export function PhaseExperience({
           canAdvanceFromIntro={canAdvanceFromIntro}
           canAdvanceFromRead={canAdvanceFromRead}
           canAdvanceFromSelect={canAdvanceFromSelect}
-          currentInstruction={currentInstruction}
           currentStep={currentStep}
           displayedStep={displayedStep}
           effectiveSelectedMoleculeId={effectiveSelectedMoleculeId}

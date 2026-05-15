@@ -89,7 +89,7 @@ export function HallChapterBrowser({
           chapterId={selectedChapter.chapterId}
           initialPhaseId={selectedNextPhase.phaseId}
           phases={selectedChapter.phases}
-          onBack={() => setSelectedChapterId(null)}
+          onBackAction={() => setSelectedChapterId(null)}
         />
       </div>
     );
@@ -102,13 +102,10 @@ export function HallChapterBrowser({
           type="button"
           onClick={goToPreviousChapter}
           disabled={isFirstChapter}
-          className={`ritual-link px-4 py-2 text-sm ${isFirstChapter ? "pointer-events-none opacity-40" : ""}`}
+          className={`ritual-link px-3 py-2 text-sm ${isFirstChapter ? "pointer-events-none opacity-40" : ""}`}
           aria-label="Capitulo anterior"
         >
-          <span className="inline-flex items-center gap-2">
-            <Chevron direction="left" />
-            Voltar
-          </span>
+          <Chevron direction="left" />
         </button>
 
         <div className="rounded-full border border-white/10 bg-slate-950/50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-200">
@@ -119,13 +116,10 @@ export function HallChapterBrowser({
           type="button"
           onClick={goToNextChapter}
           disabled={isLastChapter}
-          className={`ritual-link px-4 py-2 text-sm ${isLastChapter ? "pointer-events-none opacity-40" : ""}`}
+          className={`ritual-link px-3 py-2 text-sm ${isLastChapter ? "pointer-events-none opacity-40" : ""}`}
           aria-label="Proximo capitulo"
         >
-          <span className="inline-flex items-center gap-2">
-            Avancar
-            <Chevron direction="right" />
-          </span>
+          <Chevron direction="right" />
         </button>
       </div>
 
