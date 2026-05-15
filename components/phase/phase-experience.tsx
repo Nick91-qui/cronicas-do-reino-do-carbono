@@ -667,9 +667,7 @@ export function PhaseExperience({
               : "-translate-x-6 opacity-0"
         }`}
       >
-        {displayedStep === "intro" ? (
-          <PhaseIntroPanel phase={phase} />
-        ) : null}
+        {displayedStep === "intro" ? <PhaseIntroPanel phase={phase} /> : null}
 
         {displayedStep === "synthesis" ? (
           <SynthesisLab
