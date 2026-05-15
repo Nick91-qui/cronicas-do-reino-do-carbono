@@ -22,7 +22,7 @@ export default async function ProfilePage() {
       imageSrc={blobAssets.protectedApprenticeRoom}
       imageAlt="Aposentos do aprendiz no castelo."
       title={player.displayName}
-      description="Visao geral da identidade, do progresso acumulado e do inventario persistente do jogador."
+      description="Veja aqui sua identidade no reino, o que voce ja concluiu e os recursos reunidos ao longo da jornada."
       stats={
         <>
           <div className="game-panel-muted">
@@ -45,7 +45,7 @@ export default async function ProfilePage() {
               <dd className="mt-1 text-slate-100">{player.displayName}</dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Username</dt>
+              <dt className="text-slate-500">Nome de oficio</dt>
               <dd className="mt-1 text-slate-100">{player.username}</dd>
             </div>
             <div className="game-panel-muted">
@@ -53,21 +53,21 @@ export default async function ProfilePage() {
               <dd className="mt-1 text-slate-100">{player.classroomCode}</dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Sessao expira em</dt>
+              <dt className="text-slate-500">Sessao ativa ate</dt>
               <dd className="mt-1 text-slate-100">{player.sessionExpiresAt.toLocaleString("pt-BR")}</dd>
             </div>
           </dl>
         </section>
 
         <section className="game-panel">
-          <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">Snapshot de inventario</h2>
+          <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">Recursos reunidos</h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
             <div className="game-panel-muted">
               <dt className="text-slate-500">Carbonos disponiveis</dt>
               <dd className="mt-1 text-slate-100">{inventory.carbonAvailable}</dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Modo de hidrogenio</dt>
+              <dt className="text-slate-500">Modo do hidrogenio</dt>
               <dd className="mt-1 text-slate-100">{inventory.hydrogenMode}</dd>
             </div>
             <div className="game-panel-muted">
@@ -75,7 +75,7 @@ export default async function ProfilePage() {
               <dd className="mt-1 text-slate-100">{inventory.unlockedFragments.join(", ") || "Nenhum"}</dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Titulos</dt>
+              <dt className="text-slate-500">Titulos conquistados</dt>
               <dd className="mt-1 text-slate-100">{inventory.unlockedTitles.join(", ") || "Nenhum"}</dd>
             </div>
           </dl>

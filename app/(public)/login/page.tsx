@@ -23,7 +23,7 @@ export default function LoginPage() {
             href="/register"
             className="font-semibold text-amber-200 transition hover:text-amber-100"
           >
-            Inicie sua provacao
+            Criar meu nome no reino
           </Link>
         </div>
       </div>

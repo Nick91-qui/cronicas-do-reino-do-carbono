@@ -45,12 +45,12 @@ const copyByMode: Record<
       {
         title: "Codigo do laboratorio",
         description:
-          "Use o codigo da turma para ingressar no mesmo circulo de estudos conduzido pelo mestre.",
+          "Use o codigo da turma para entrar no mesmo circulo de estudos da sua classe.",
       },
       {
         title: "Nome no livro dos aprendizes",
         description:
-          "Escolha como o reino registrara sua passagem pelas provas e descobertas do carbono.",
+          "Escolha como seu nome aparecera nas provas e descobertas feitas no reino.",
       },
     ],
     title: "Iniciar a provacao",
@@ -190,8 +190,8 @@ export function AuthForm({ mode }: AuthFormProps) {
             <label className="block text-sm">
               <span className="mb-2 block text-slate-200">
                 {mode === "register"
-                  ? "Nome de oficio (login)"
-                  : "Nome de oficio (login)"}
+                  ? "Nome de oficio"
+                  : "Nome de oficio"}
               </span>
               <input name="username" required className="state-field" />
             </label>

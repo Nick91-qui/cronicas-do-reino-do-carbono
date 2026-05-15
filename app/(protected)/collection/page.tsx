@@ -18,7 +18,7 @@ export default async function CollectionPage() {
       imageSrc={blobAssets.authLibrary}
       imageAlt="Biblioteca ritual do castelo."
       title={`Cartas inscritas por ${player.displayName}`}
-      description="Esta sala reune as moleculas que voce ja desbloqueou e funciona como consulta rapida para revisar descobertas do capitulo."
+      description="Esta sala reune as moleculas que voce ja descobriu e ajuda a revisar o que foi aprendido no capitulo."
       stats={
         <>
           <div className="game-panel-muted">
@@ -68,7 +68,7 @@ export default async function CollectionPage() {
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Regra de leitura
+                Como ler
               </p>
               <p className="pt-2 text-slate-100">
                 Toque nas cartas para ver atributos, pontos fortes e limitacoes no verso.
@@ -76,7 +76,7 @@ export default async function CollectionPage() {
             </div>
             <div className="game-panel-muted">
               <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                Proximo desbloqueio
+                Proxima descoberta
               </p>
               <p className="pt-2 text-slate-100">
                 {hasUnlockedMolecules
@@ -108,8 +108,8 @@ export default async function CollectionPage() {
             ))
           ) : (
             <article className="game-panel border-dashed text-sm text-slate-300">
-              Nenhuma molecula desbloqueada ainda. Conclua fases para liberar
-              cartas oficiais e preencher o grimorio.
+              Nenhuma molecula foi descoberta ainda. Conclua provas para revelar
+              novas cartas e preencher o grimorio.
             </article>
           )}
         </section>

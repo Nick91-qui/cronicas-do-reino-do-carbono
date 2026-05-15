@@ -9,7 +9,7 @@ export default function RegisterPage() {
     <AuthScene
       mode="register"
       title="O laboratorio de iniciacao prepara um novo nome."
-      description="Quem escolhe registrar atravessa o portao para a ala de sintese, onde o castelo apresenta os instrumentos, regras e marcas do primeiro rito."
+      description="Quem entra no reino pela primeira vez atravessa este portao para comecar os estudos e receber sua marca de aprendiz."
       backLabel="Voltar ao portao"
       ambientLabel="Laboratorio de iniciacao"
       imageSrc={blobAssets.authSynthesisLab}
@@ -20,7 +20,7 @@ export default function RegisterPage() {
         <div className="pb-2 text-center text-sm text-slate-300">
           Ja possui marca de aprendiz?{" "}
           <Link href="/login" className="font-semibold text-amber-200 transition hover:text-amber-100">
-            Retorne ao laboratorio
+            Entrar no reino
           </Link>
         </div>
       </div>
