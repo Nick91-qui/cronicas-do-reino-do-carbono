@@ -25,7 +25,7 @@ export default async function PhasePage({
   const phaseProgress = chapterProgress.phases.find((item) => item.phaseId === phase.id);
 
   if (!phaseProgress?.isUnlocked) {
-    redirect(`/chapter/${phase.chapterId}`);
+    redirect(`/hall?chapterId=${phase.chapterId}`);
   }
 
   const molecules = getMoleculesByIds(phase.availableMolecules);

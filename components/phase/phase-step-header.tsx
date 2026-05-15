@@ -4,6 +4,7 @@ import type { PhaseStep } from "@/components/phase/phase-experience-shared";
 import { stepCopy } from "@/components/phase/phase-experience-shared";
 
 type PhaseStepHeaderProps = {
+  chapterTitle: string;
   currentInstruction: string;
   displayedStepIndex: number;
   phaseNumber: number;
@@ -18,6 +19,7 @@ type PhaseStepHeaderProps = {
 };
 
 export function PhaseStepHeader({
+  chapterTitle,
   currentInstruction,
   displayedStepIndex,
   phaseNumber,
@@ -67,7 +69,7 @@ export function PhaseStepHeader({
       >
         <div className="flex flex-col gap-4">
           <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-300">
-            <span>Capitulo I · Prova {phaseNumber}</span>
+            <span>{chapterTitle} · Prova {phaseNumber}</span>
           </div>
 
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">

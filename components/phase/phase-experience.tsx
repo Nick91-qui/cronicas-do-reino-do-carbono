@@ -644,6 +644,7 @@ export function PhaseExperience({
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-5 pb-28 sm:px-6 sm:py-8 sm:pb-8">
       <PhaseStepHeader
+        chapterTitle={chapterProgress.chapterTitle}
         currentInstruction={currentInstruction}
         displayedStepIndex={visibleProgressStep}
         phaseNumber={phase.number}
