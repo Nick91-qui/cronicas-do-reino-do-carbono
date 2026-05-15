@@ -5,12 +5,14 @@ export const carbonAndChainsBook: LibraryBook = {
   title: "Características do carbono e das cadeias",
   subtitle: "A base estrutural da quimica organica",
   shortDescription:
-    "Revisão curta sobre tetravalência, formação de cadeias e diferenças introdutórias entre tipos de estrutura.",
+    "Revisao curta sobre tetravalencia, formacao de cadeias, tipos de ligacao e diferencas introdutorias entre estruturas.",
   coreTopics: [
     "tetravalência",
     "cadeias abertas e fechadas",
     "saturação e insaturação",
     "homogeneidade",
+    "ligacoes sigma e pi",
+    "angulos de ligacao",
   ],
   sections: [
     {
@@ -106,6 +108,104 @@ export const carbonAndChainsBook: LibraryBook = {
           title: "Confusão comum",
           content:
             "Uma molécula maior não é automaticamente insaturada. Tamanho da cadeia e tipo de ligação são critérios diferentes.",
+        },
+      ],
+    },
+    {
+      id: "sigma-e-pi",
+      title: "Ligacoes sigma e pi",
+      summary: "Nem toda ligacao entre atomos tem o mesmo papel estrutural. As ligacoes sigma formam a base da conexao, e as ligacoes pi aparecem nas ligacoes multiplas.",
+      blocks: [
+        {
+          type: "paragraph",
+          content:
+            "Em nivel introdutorio, voce pode pensar que toda ligacao simples entre atomos envolve uma ligacao sigma. Quando aparece uma ligacao dupla, ela combina uma ligacao sigma com uma ligacao pi. Numa ligacao tripla, ha uma sigma e duas pi.",
+        },
+        {
+          type: "comparison",
+          title: "Diferenca inicial",
+          items: [
+            {
+              label: "Ligacao sigma",
+              description:
+                "E a ligacao principal entre dois atomos. Ela aparece em toda ligacao simples e tambem faz parte das ligacoes duplas e triplas.",
+            },
+            {
+              label: "Ligacao pi",
+              description:
+                "Aparece apenas quando existe ligacao multipla. Ela reforca a conexao entre os atomos e altera propriedades da estrutura.",
+            },
+          ],
+        },
+        {
+          type: "example",
+          title: "Leitura rapida",
+          prompt: "No eteno, quantas ligacoes sigma e pi existem entre os dois carbonos?",
+          explanation:
+            "Entre os dois carbonos do eteno existe uma ligacao dupla. Isso significa uma ligacao sigma e uma ligacao pi entre eles.",
+        },
+      ],
+    },
+    {
+      id: "angulos-das-ligacoes",
+      title: "Angulos das ligacoes",
+      summary: "A posicao das ligacoes ao redor do carbono ajuda a definir a forma da molecula.",
+      blocks: [
+        {
+          type: "paragraph",
+          content:
+            "O carbono nao liga seus atomos ao acaso. A distribuicao das ligacoes no espaco cria angulos caracteristicos, que ajudam a entender a geometria da estrutura.",
+        },
+        {
+          type: "bullets",
+          title: "Angulos mais comuns neste estudo",
+          items: [
+            "Carbono com quatro ligacoes simples: geometria tetraedrica, com angulos proximos de 109,5°.",
+            "Carbono em ligacao dupla: geometria trigonal plana, com angulos proximos de 120°.",
+            "Carbono em ligacao tripla: geometria linear, com angulo de 180°.",
+          ],
+        },
+        {
+          type: "callout",
+          tone: "info",
+          title: "Por que isso importa",
+          content:
+            "Esses angulos ajudam a explicar por que uma molecula pode ser mais aberta, mais plana ou mais alinhada, mesmo quando o numero de carbonos parece parecido.",
+        },
+      ],
+    },
+    {
+      id: "formulas-estruturais",
+      title: "Exemplos com formulas estruturais",
+      summary: "Observar a formula estrutural ajuda a perceber o tipo de ligacao e a forma geral da cadeia.",
+      blocks: [
+        {
+          type: "comparison",
+          title: "Exemplos iniciais",
+          items: [
+            {
+              label: "Etano",
+              description:
+                "Formula estrutural resumida: CH3-CH3. Entre os carbonos ha uma ligacao simples, portanto apenas uma ligacao sigma.",
+            },
+            {
+              label: "Eteno",
+              description:
+                "Formula estrutural resumida: CH2=CH2. Entre os carbonos ha uma ligacao dupla, formada por uma sigma e uma pi.",
+            },
+            {
+              label: "Etino",
+              description:
+                "Formula estrutural resumida: CH≡CH. Entre os carbonos ha uma ligacao tripla, formada por uma sigma e duas pi.",
+            },
+          ],
+        },
+        {
+          type: "example",
+          title: "Comparando pela estrutura",
+          prompt: "Qual dessas formulas mostra carbonos com geometria mais alinhada: CH3-CH3, CH2=CH2 ou CH≡CH?",
+          explanation:
+            "CH≡CH, porque a ligacao tripla esta associada a geometria linear no carbono, com angulo de 180°.",
         },
       ],
     },

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { HallPhaseViewer } from "@/components/game/hall-phase-viewer";
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
@@ -124,58 +125,11 @@ export default async function GamePage() {
               </div>
             </div>
 
-            <div className="mt-6 grid gap-3 md:grid-cols-2 2xl:grid-cols-4">
-              {chapterProgress.phases.map((phase) => {
-                const stateLabel = phase.isCompleted
-                  ? "Dominada"
-                  : phase.isUnlocked
-                    ? "Ativa"
-                    : "Selada";
-                const stateClass = phase.isCompleted
-                  ? "border-emerald-400/24 bg-emerald-500/10"
-                  : phase.isUnlocked
-                    ? "border-sky-300/24 bg-sky-400/10"
-                    : "border-white/10 bg-white/5";
-
-                return (
-                  <Link
-                    key={phase.phaseId}
-                    href={
-                      phase.isUnlocked
-                        ? `/phase/${phase.phaseId}`
-                        : `/chapter/${chapterProgress.chapterId}`
-                    }
-                    className={`state-panel group ${stateClass}`}
-                    data-state={
-                      phase.isCompleted
-                        ? "success"
-                        : phase.isUnlocked
-                          ? "active"
-                          : "locked"
-                    }
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="font-display text-3xl text-white">
-                        {String(phase.phaseNumber).padStart(2, "0")}
-                      </span>
-                      <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-200">
-                        {stateLabel}
-                      </span>
-                    </div>
-                    <h3 className="pt-4 text-lg font-semibold text-white">
-                      {phase.title}
-                    </h3>
-                    <p className="pt-2 text-sm text-slate-300">
-                      {phase.isCompleted
-                        ? `Melhor pontuacao: ${phase.bestScore}`
-                        : phase.isUnlocked
-                          ? "Esta prova ja pode ser iniciada."
-                          : "Conclua a prova anterior para abrir esta prova."}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
+            <HallPhaseViewer
+              chapterId={chapterProgress.chapterId}
+              initialPhaseId={nextPhaseId}
+              phases={chapterProgress.phases}
+            />
           </article>
 
           <div className="grid gap-4">

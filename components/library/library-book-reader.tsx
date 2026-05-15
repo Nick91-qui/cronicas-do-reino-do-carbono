@@ -25,8 +25,8 @@ type ReaderPage =
       sectionTitle: string;
       sectionIndex: number;
       sectionCount: number;
-      blockIndex: number;
-      blockCount: number;
+      pageNumber: number;
+      totalPages: number;
       summary?: string;
       block: LibraryContentBlock;
     };
@@ -63,24 +63,34 @@ function Chevron({
 export function LibraryBookReader({ book }: LibraryBookReaderProps) {
   const router = useRouter();
   const pages = useMemo<ReaderPage[]>(() => {
+    const totalContentPages = book.sections.reduce(
+      (total, section) => total + section.blocks.length,
+      0,
+    );
+    let pageNumber = 1;
     const contentPages = book.sections.flatMap((section, sectionIndex) =>
-      section.blocks.map((block, blockIndex) => ({
-        kind: "block" as const,
-        id: `${section.id}-${blockIndex}`,
-        title:
-          block.type === "callout" ||
-          block.type === "example" ||
-          block.type === "comparison"
-            ? block.title
-            : section.title,
-        sectionTitle: section.title,
-        sectionIndex,
-        sectionCount: book.sections.length,
-        blockIndex,
-        blockCount: section.blocks.length,
-        summary: blockIndex === 0 ? section.summary : undefined,
-        block,
-      })),
+      section.blocks.map((block, blockIndex) => {
+        const page = {
+          kind: "block" as const,
+          id: `${section.id}-${blockIndex}`,
+          title:
+            block.type === "callout" ||
+            block.type === "example" ||
+            block.type === "comparison"
+              ? block.title
+              : section.title,
+          sectionTitle: section.title,
+          sectionIndex,
+          sectionCount: book.sections.length,
+          pageNumber,
+          totalPages: totalContentPages,
+          summary: blockIndex === 0 ? section.summary : undefined,
+          block,
+        };
+
+        pageNumber += 1;
+        return page;
+      }),
     );
 
     return [
@@ -298,9 +308,6 @@ export function LibraryBookReader({ book }: LibraryBookReaderProps) {
                             <h2 className="mt-2 text-2xl tracking-[0.03em] text-slate-950 sm:text-3xl">
                               {activePage.sectionTitle}
                             </h2>
-                            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-amber-900/70">
-                              Pagina interna {activePage.blockIndex + 1} de {activePage.blockCount}
-                            </p>
                           </div>
                           <div className="rounded-full border border-slate-950/8 bg-slate-950/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600">
                             {activePage.title}
@@ -317,6 +324,12 @@ export function LibraryBookReader({ book }: LibraryBookReaderProps) {
                           <div className="w-full">
                             <LibraryBookBlocks blocks={[activePage.block]} tone="reader" />
                           </div>
+                        </div>
+
+                        <div className="mt-auto flex justify-end pt-4">
+                          <span className="text-xs font-semibold tracking-[0.16em] text-amber-900/70">
+                            {activePage.pageNumber}
+                          </span>
                         </div>
                       </div>
                     )}
