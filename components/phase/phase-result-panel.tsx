@@ -131,7 +131,7 @@ export function PhaseResultPanel({
             Tentar novamente
           </button>
           <Link
-            href={nextPhaseActionHref ?? "/game"}
+            href={nextPhaseActionHref ?? "/hall"}
             className="rounded-full bg-[linear-gradient(180deg,rgba(250,204,21,0.96),rgba(245,158,11,0.92))] px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-950"
           >
             {nextPhaseActionHref

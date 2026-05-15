@@ -16,5 +16,5 @@ export default async function ChapterPage({
     notFound();
   }
 
-  redirect(`/game?chapter=${chapter.id}`);
+  redirect(`/hall?chapterId=${chapter.id}`);
 }

@@ -62,7 +62,7 @@ function getPhaseStateMeta(
   }
 
   return {
-    actionHref: `/game?chapter=${chapterId}`,
+    actionHref: `/hall?chapterId=${chapterId}`,
     actionLabel: "Prova fechada",
     description: "Conclua a prova anterior para abrir esta prova.",
     stateClass: "border-white/10 bg-white/5",

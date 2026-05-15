@@ -103,7 +103,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      router.push("/game");
+      router.push("/hall");
       router.refresh();
     } catch {
       setError(

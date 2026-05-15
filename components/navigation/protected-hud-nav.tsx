@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { LogoutButton } from "@/components/auth/logout-button";
 
 const items = [
-  { href: "/game", label: "Salao" },
+  { href: "/hall", label: "Salao" },
   { href: "/collection", label: "Grimorio" },
   { href: "/library", label: "Biblioteca" },
   { href: "/profile", label: "Aposentos" },
@@ -77,7 +77,7 @@ export function ProtectedHudNav({ showOperator = false }: ProtectedHudNavProps) 
           <div className="grid gap-2">
             {navigationItems.map((item) => {
               const isActive =
-                pathname === item.href || (item.href !== "/game" && pathname.startsWith(`${item.href}/`));
+                pathname === item.href || (item.href !== "/hall" && pathname.startsWith(`${item.href}/`));
 
               return (
                 <Link

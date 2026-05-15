@@ -10,7 +10,7 @@ export default async function PublicLayout({
   const player = await getAuthenticatedPlayer(prisma);
 
   if (player) {
-    redirect("/game");
+    redirect("/hall");
   }
 
   return children;

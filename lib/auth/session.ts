@@ -165,7 +165,7 @@ export async function requireOperator(db: DbClient): Promise<AuthenticatedPlayer
   const player = await requireAuthenticatedPlayer(db);
 
   if (player.role !== "operator") {
-    redirect("/game");
+    redirect("/hall");
   }
 
   return player;
