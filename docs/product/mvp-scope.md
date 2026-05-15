@@ -25,6 +25,7 @@ O MVP inclui:
 - seleção de propriedades como justificativa;
 - correção automática;
 - feedback curto ao jogador;
+- biblioteca pedagógica protegida com **3 livros introdutórios**;
 - registro de tentativas e progresso.
 
 ## Conteúdo incluído no MVP
@@ -40,6 +41,8 @@ O Capítulo I do MVP cobre:
 - potencial energético;
 - reatividade;
 - aromaticidade introdutória.
+
+Além da campanha jogável, o MVP inclui apoio conceitual introdutório em biblioteca interna para revisão do jogador.
 
 ### Moléculas oficiais do MVP
 
@@ -74,6 +77,7 @@ O MVP deve demonstrar que o projeto consegue:
 - apresentar conceitos químicos de forma gradual;
 - manter fidelidade conceitual com simplificação controlada;
 - permitir ao aluno aprender por interação e decisão;
+- permitir ao aluno revisar conceitos básicos em uma superfície de consulta simples e mobile-first;
 - oferecer feedback suficiente para orientar a progressão;
 - sustentar a base de futuras expansões de conteúdo.
 
@@ -173,6 +177,34 @@ O MVP **não** incluirá:
 - editor químico completamente livre;
 - representação estrutural avançada;
 - sistema aberto de desenho químico.
+
+## Biblioteca pedagógica do MVP
+
+O MVP inclui uma Biblioteca Pedagógica protegida.
+
+### Regra oficial de acesso
+
+- os livros ficam disponíveis desde o primeiro login;
+- não há desbloqueio por progresso;
+- a biblioteca não concede pontuação nem altera progresso;
+- a biblioteca serve como apoio de estudo e revisão.
+
+### Livros iniciais oficiais
+
+- **Características do carbono e das cadeias**
+- **Nomenclatura introdutória**
+- **Funções orgânicas introdutórias**
+
+### Regra de formato
+
+Os livros devem ser implementados como conteúdo vivo e tipado, com leitura vertical e otimização para mobile.
+
+O MVP não deve tratar os livros como:
+
+- PDF;
+- imagem longa com texto;
+- livro paginado de leitura rígida;
+- material dependente de download externo para cumprir sua função principal.
 
 ## Inventário no MVP
 

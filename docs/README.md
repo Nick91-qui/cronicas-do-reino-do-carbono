@@ -50,6 +50,7 @@ Esses arquivos definem oficialmente o MVP e devem ser usados para decisão de pr
 - `product/mvp-scope.md`
 - `design/game-design.md`
 - `design/content-model.md`
+- `design/library.md`
 - `design/phases.md`
 - `tech/technical-spec.md`
 
@@ -91,7 +92,7 @@ Define visão, problema, proposta de valor e escopo funcional do MVP.
 
 ### `design/`
 
-Define gameplay, estrutura do conteúdo, fases, avaliações, propriedades e progressão oficial do capítulo.
+Define gameplay, estrutura do conteúdo, fases, biblioteca pedagógica, avaliações, propriedades e progressão oficial do capítulo.
 
 ### `tech/`
 
@@ -121,8 +122,9 @@ Consulte primeiro:
 
 1. `tech/technical-spec.md`
 2. `design/content-model.md`
-3. `design/phases.md`
-4. `product/mvp-scope.md`
+3. `design/library.md`
+4. `design/phases.md`
+5. `product/mvp-scope.md`
 
 ### Para validar conteúdo
 
@@ -157,8 +159,9 @@ Use `narrative/lore.md` apenas como referência de expansão, salvo promoção e
 Consulte primeiro:
 
 1. `pedagogy/teacher-guide.md`
-2. `design/phases.md`
-3. `product/mvp-scope.md`
+2. `design/library.md`
+3. `design/phases.md`
+4. `product/mvp-scope.md`
 
 Use `pedagogy/data.md` apenas como base ampliada de expansão, e não como fonte oficial de validação do MVP.
 
@@ -168,6 +171,7 @@ Sempre que houver mudança real em:
 
 - autenticação;
 - conteúdo do capítulo;
+- biblioteca pedagógica;
 - builder molecular;
 - avaliação de fase;
 - inventário e recompensas;

@@ -28,6 +28,7 @@ Referências:
 - [x] Milestone 8 — Integração completa do Capítulo I
 - [x] Milestone 9 — QA, segurança e deploy no fluxo central
 - [ ] Milestone 10 — Reposicionamento visual de site para jogo
+- [ ] Milestone 11 — Biblioteca pedagógica do jogador
 
 ## Estratégia de mudança
 
@@ -125,6 +126,18 @@ Status: em andamento.
 - [ ] validar que o novo enquadramento não degrada clareza pedagógica
 - [x] atualizar documentação visual se a implementação introduzir convenções novas estáveis
 
+### Milestone 11 — Biblioteca pedagógica do jogador
+
+Status: planejado.
+
+- [ ] definir documento normativo da Biblioteca em `docs/design/library.md`
+- [ ] definir shape tipado oficial dos livros em `docs/design/content-model.md`
+- [ ] adicionar `/library` ao mapa de telas e à navegação protegida
+- [ ] implementar catálogo dos 3 livros iniciais
+- [ ] implementar leitura mobile-first para livro individual
+- [ ] validar separação clara entre Biblioteca e Coleção
+- [ ] revisar copy e apoio pedagógico dos livros contra `docs/pedagogy/teacher-guide.md`
+
 ### Milestone 8 — Integração completa do Capítulo I
 
 Status: concluído.
@@ -196,6 +209,7 @@ Verificação recente:
 - [ ] revisar aderência fina entre `content/` e `docs/design/`
 - [x] evitar drift entre implementação e documentação oficial
 - [ ] atualizar documentação explicitamente quando houver divergência real
+- [ ] materializar o conteúdo oficial inicial da Biblioteca em arquivos tipados
 
 ### Observabilidade interna
 
@@ -221,6 +235,7 @@ Verificação recente:
 5. manter documentação e checklist sincronizados com as decisões consolidadas
 6. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
 7. opcionalmente ampliar cobertura de integração com Prisma real de teste
+8. iniciar a Biblioteca pedagógica após consolidar o fechamento visual principal do MVP
 
 ## Critério de fechamento do tracker
 

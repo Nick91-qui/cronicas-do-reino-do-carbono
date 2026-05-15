@@ -38,6 +38,7 @@ O diferencial do projeto está na combinação de:
 - **jogabilidade baseada em decisão**, e não apenas memorização;
 - **progressão pedagógica estruturada**, com aumento gradual de complexidade;
 - **narrativa temática**, que sustenta a motivação sem substituir o conteúdo;
+- **material de apoio consultável dentro do próprio jogo**, sem quebrar a experiência principal;
 - **base reutilizável**, capaz de sustentar capítulos futuros e novos conteúdos.
 
 ## Público-alvo
@@ -64,6 +65,8 @@ Por isso, a experiência deve ser:
 - fácil de entender;
 - objetiva na interação;
 - adequada para sessões curtas de uso.
+
+Além do loop principal, o produto pode oferecer superfícies curtas de consulta para revisão conceitual em contexto escolar e estudo individual.
 
 ## Objetivo pedagógico
 
@@ -122,6 +125,8 @@ O projeto deve privilegiar uma experiência:
 - recompensadora;
 - quimicamente coerente.
 
+Essa experiência pode ser reforçada por uma biblioteca interna de consulta, desde que ela complemente o jogo sem substituir clareza, ritmo ou foco pedagógico.
+
 ## Papel da narrativa
 
 A narrativa é uma camada **importante**, mas **subordinada ao objetivo pedagógico**.
@@ -176,6 +181,8 @@ Embora o foco atual seja o MVP do primeiro capítulo, o projeto foi concebido pa
 - novos sistemas de progressão;
 - novos recursos pedagógicos;
 - materiais de apoio mais robustos para docentes.
+
+No escopo atual do MVP, a primeira expansão pedagógica interna planejada é uma Biblioteca com livros introdutórios voltados ao estudante.
 
 Expansões futuras podem incluir, por exemplo:
 

@@ -6,6 +6,7 @@
 - **Público-alvo principal:** alunos da 3ª série do Ensino Médio
 - **Público secundário:** professores que usam o jogo como apoio didático
 - **Core loop pedagógico:** narrativa curta → desafio → construção molecular simplificada → análise de cartas → escolha da molécula → justificativa por propriedades → feedback imediato → progressão
+- **Superfície pedagógica complementar do MVP:** biblioteca protegida com livros introdutórios de consulta livre para o jogador
 
 ## Diretrizes de Ouro
 
@@ -43,6 +44,7 @@ Os documentos normativos oficiais do MVP são:
 
 - `docs/tech/technical-spec.md`;
 - `docs/design/content-model.md`;
+- `docs/design/library.md`;
 - `docs/design/phases.md`;
 - `docs/product/mvp-scope.md`;
 - `README.md`.
@@ -51,6 +53,7 @@ Eles definem a fonte oficial para:
 
 - capítulos;
 - fases;
+- biblioteca pedagógica;
 - moléculas;
 - enums;
 - propriedades selecionáveis;
@@ -142,11 +145,13 @@ inadequate -> incorrect -> 0
 ## Status da Missão
 
 - **Estado atual:** MVP funcional validado no fluxo central do jogador, com foco atual em acabamento visual, QA fino e fechamento do **Milestone 10 — Reposicionamento visual de site para jogo**
+- **Próxima expansão planejada após o fechamento visual principal:** Biblioteca Pedagógica com 3 livros introdutórios de acesso livre ao jogador autenticado
 - **Fonte oficial de regra de negócio:** `README.md` e documentos normativos em `docs/`
 - **Implementação tipada derivada do conteúdo:** `content/`
 - **Legado removido:** `archive/` excluído para evitar ambiguidade
 - **Milestone 9:** concluído no fluxo central, com follow-ups abertos de QA fino, autorização em rotas de escrita e smoke tests manuais complementares
 - **Superfícies adicionais já implementadas:** `profile`, observatório interno `operator` somente leitura e persistência oficial do tutorial contextual de síntese por jogador
+- **Superfície adicional planejada:** `library`, separada da coleção, como área de estudo conceitual com conteúdo estático tipado e leitura mobile-first
 - **Próximo passo imediato:** concluir responsividade e clareza pedagógica do **Milestone 10** sem reabrir o núcleo funcional já aceito
 
 ## Estrutura documental visual
@@ -174,6 +179,7 @@ Executar a fase atual do projeto com foco em:
 
 - alinhar responsividade desktop/mobile sem perder leitura de jogo;
 - validar que o enquadramento visual novo não degrada clareza pedagógica;
+- definir e depois implementar a Biblioteca Pedagógica como apoio de estudo sem bloquear progressão;
 - ampliar QA manual dos fluxos críticos ainda em aberto de builder, autenticação, perfil e observabilidade interna;
 - revisar autorização das rotas de escrita e cobertura negativa de autenticação;
 - revisar continuamente coerência entre `content/` e documentos normativos;

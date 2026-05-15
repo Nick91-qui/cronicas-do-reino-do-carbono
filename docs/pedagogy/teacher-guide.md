@@ -17,9 +17,12 @@ Este guia reúne:
 - critérios de observação;
 - interpretação dos resultados qualitativos;
 - apoio à mediação em sala;
+- uso da biblioteca pedagógica pelo estudante;
 - leitura formativa do desempenho dos estudantes.
 
 Como o MVP não inclui painel docente, este documento também funciona como principal referência para uso em contexto escolar.
+
+No estágio atual do projeto, ele também deve ser lido em conjunto com a Biblioteca Pedagógica do jogador, que oferece material de revisão conceitual dentro da área protegida.
 
 ---
 
@@ -31,6 +34,8 @@ O MVP foi concebido principalmente como uma ferramenta de:
 - reforço guiado;
 - observação formativa;
 - aprendizagem por tentativa e feedback.
+
+Ele também passa a incluir uma superfície complementar de revisão para o estudante por meio de livros introdutórios consultáveis na Biblioteca.
 
 Ele **não** deve ser tratado, no MVP, como instrumento principal de avaliação somativa de alta consequência.
 
@@ -134,6 +139,12 @@ O MVP deve ser usado principalmente como:
 **Atividade introdutória**
 
 - também pode ser usada antes da explicação formal, desde que seja seguida de mediação e consolidação conceitual.
+
+**Consulta orientada na biblioteca**
+
+- útil para revisão curta antes da fase;
+- útil para retomada após erro recorrente;
+- útil para consolidar conceitos básicos em uso individual no celular.
 
 ### 4.3 Papel do professor no MVP
 

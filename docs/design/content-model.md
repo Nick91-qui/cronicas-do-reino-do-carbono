@@ -10,6 +10,7 @@ Ele deve funcionar como referência para:
 - enums e classificações
 - propriedades clicáveis
 - atributos das cartas
+- estrutura dos livros da biblioteca
 - estrutura de moléculas
 - estrutura de fases
 - estrutura de recompensas
@@ -69,6 +70,15 @@ O padrão oficial para ids de fase é:
 
 ```ts
 type ChapterId = "chapter-1";
+```
+
+### IDs de livros da biblioteca
+
+```ts
+type LibraryBookId =
+  | "caracteristicas-do-carbono-e-das-cadeias"
+  | "nomenclatura-introdutoria"
+  | "funcoes-organicas-introdutorias";
 ```
 
 ## Enums oficiais
@@ -266,6 +276,65 @@ type Molecule = {
   visual: MoleculeCardVisual;
 };
 ```
+
+## Modelo oficial de livro da biblioteca
+
+```ts
+type LibraryContentBlock =
+  | {
+      type: "paragraph";
+      content: string;
+    }
+  | {
+      type: "bullets";
+      title?: string;
+      items: string[];
+    }
+  | {
+      type: "callout";
+      tone: "info" | "warning" | "success";
+      title: string;
+      content: string;
+    }
+  | {
+      type: "example";
+      title: string;
+      prompt?: string;
+      explanation: string;
+    }
+  | {
+      type: "comparison";
+      title: string;
+      items: Array<{
+        label: string;
+        description: string;
+      }>;
+    };
+
+type LibrarySection = {
+  id: string;
+  title: string;
+  summary?: string;
+  blocks: LibraryContentBlock[];
+};
+
+type LibraryBook = {
+  id: LibraryBookId;
+  title: string;
+  subtitle?: string;
+  shortDescription: string;
+  coreTopics: string[];
+  sections: LibrarySection[];
+};
+```
+
+### Regras para livros da biblioteca
+
+- o conteúdo dos livros permanece em arquivos locais do projeto;
+- os livros são voltados ao jogador, e não ao painel docente;
+- os livros não dependem de desbloqueio por progresso no MVP;
+- o conteúdo deve favorecer renderização simples em mobile;
+- conteúdo essencial não deve depender de HTML arbitrário ou asset achatado.
 
 ### Regras para moléculas
 

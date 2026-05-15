@@ -18,6 +18,7 @@ Este plano é estruturado para execução, e não apenas para documentação. El
 - `docs/product/mvp-scope.md`;
 - `docs/design/game-design.md`;
 - `docs/design/content-model.md`;
+- `docs/design/library.md`;
 - `docs/design/phases.md`;
 - `docs/tech/technical-spec.md`.
 
@@ -34,7 +35,8 @@ Estado consolidado:
 - Bloco 5 — Progresso, inventário e recompensas: concluído em versão funcional;
 - Bloco 6 — Integração do Capítulo I: concluído no escopo do MVP;
 - Bloco 7 — Estabilização, QA e implantação: concluído no fluxo central aceito;
-- Bloco 8 — Reposicionamento visual de site para jogo: próximo ciclo recomendado.
+- Bloco 8 — Reposicionamento visual de site para jogo: próximo ciclo recomendado;
+- Bloco 9 — Biblioteca pedagógica de apoio ao jogador: planejado.
 
 Este documento continua válido como plano, mas não deve mais ser lido como se o projeto estivesse prestes a iniciar o Bloco 1.
 
@@ -86,6 +88,7 @@ A ordem geral é:
 6. integração progressiva do Capítulo I;
 7. estabilização, QA e deploy;
 8. reposicionamento visual da experiência para leitura prioritária de jogo.
+9. biblioteca pedagógica de apoio ao jogador.
 
 ### 3.2 Interpretação prática
 
@@ -110,6 +113,7 @@ A implementação está organizada nos seguintes blocos:
 - **Bloco 6 — Integração do Capítulo I**
 - **Bloco 7 — Estabilização, QA e implantação**
 - **Bloco 8 — Reposicionamento visual de site para jogo**
+- **Bloco 9 — Biblioteca pedagógica**
 
 ---
 
@@ -262,6 +266,37 @@ Persistir o estado oficial do jogador e garantir progressão segura entre tentat
 
 - conclusão do Bloco 3;
 - conclusão do Bloco 4.
+
+---
+
+## 13. Bloco 9 — Biblioteca pedagógica
+
+### Objetivo
+
+Adicionar uma área protegida de estudo com livros introdutórios de química orgânica, sem alterar a regra de progresso do jogo.
+
+### Entregas principais
+
+- catálogo da Biblioteca na área protegida;
+- tela de livro com leitura vertical mobile-first;
+- conteúdo oficial estático e tipado para 3 livros iniciais;
+- navegação clara entre lista de livros e leitura interna;
+- integração visual coerente com o restante do jogo.
+
+### Critérios de sucesso
+
+- os livros ficam disponíveis desde o primeiro login;
+- a leitura é confortável em celular;
+- a Biblioteca não depende de banco como fonte de verdade;
+- os livros reforçam o estudo sem competir com o loop principal de fase;
+- a superfície visual diferencia claramente Biblioteca de Coleção.
+
+### Dependências
+
+- manutenção da base visual consolidada no Bloco 8;
+- alinhamento com `docs/design/library.md`;
+- alinhamento com `docs/design/content-model.md`;
+- alinhamento com `docs/tech/technical-spec.md`.
 
 ---
 

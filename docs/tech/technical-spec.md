@@ -61,6 +61,7 @@ A implementação técnica do MVP deve suportar:
 - avaliação automática da submissão;
 - persistência de tentativas, progresso, inventário e recompensas;
 - coleção de cartas desbloqueadas;
+- biblioteca pedagógica protegida com livros estáticos de consulta;
 - analytics leves de gameplay.
 
 O MVP não precisa suportar:
@@ -150,7 +151,7 @@ Responsável por:
 
 Responsável por:
 
-- carregar capítulos, fases, moléculas, enums e definições oficiais;
+- carregar capítulos, fases, moléculas, livros da biblioteca, enums e definições oficiais;
 - manter ids estáveis e tipados;
 - expor conteúdo ao restante do sistema.
 
@@ -202,7 +203,17 @@ Responsável por:
 - mapear conteúdo estático a assets visuais oficiais;
 - manter a fronteira entre bitmap decorativo e conteúdo vivo;
 - padronizar cartas, painéis, builder e telas principais;
+- padronizar também a leitura da biblioteca em formato mobile-first;
 - permitir evolução visual sem alterar a lógica autoritativa do jogo.
+
+### 6.9 Biblioteca pedagógica
+
+Responsável por:
+
+- expor livros introdutórios de consulta ao jogador autenticado;
+- manter o conteúdo da biblioteca em arquivos locais tipados;
+- sustentar leitura confortável em mobile;
+- separar claramente apoio conceitual de cartas, fases e progresso.
 
 ---
 
@@ -215,6 +226,7 @@ Isso inclui:
 - capítulos;
 - fases;
 - moléculas;
+- livros da biblioteca;
 - enums;
 - propriedades selecionáveis;
 - recompensas definidas por conteúdo;
@@ -300,6 +312,16 @@ O sistema deve:
 - atualizar o progresso do capítulo;
 - persistir inventário e recompensas;
 - permitir retomada posterior do progresso.
+
+### 8.7 Biblioteca pedagógica
+
+O sistema deve:
+
+- oferecer uma área protegida de biblioteca;
+- permitir leitura dos livros desde o primeiro login;
+- carregar livros oficiais a partir de conteúdo local versionado;
+- manter a leitura independente de desbloqueio por fase;
+- evitar dependência de banco de dados para o conteúdo dos livros.
 
 ---
 

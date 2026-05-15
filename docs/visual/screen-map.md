@@ -55,6 +55,16 @@ Deve resumir:
 - cartas obtidas;
 - estado geral do capítulo.
 
+### 6. Biblioteca pedagógica
+
+Deve comunicar:
+
+- catálogo dos livros disponíveis;
+- separação clara entre livros e cartas;
+- leitura guiada de apoio ao jogador;
+- navegação simples entre capa, sumário e seções;
+- conforto de leitura em mobile como prioridade.
+
 ## Ordem de prioridade visual
 
 Para o MVP, a prioridade de refinamento visual deve ser:
@@ -63,8 +73,9 @@ Para o MVP, a prioridade de refinamento visual deve ser:
 2. carta de molécula;
 3. tela principal do jogo;
 4. tela de capítulo;
-5. coleção;
-6. perfil.
+5. biblioteca pedagógica;
+6. coleção;
+7. perfil.
 
 ## Regra de consistência
 
@@ -74,3 +85,5 @@ As telas devem compartilhar:
 - mesma semântica de cores;
 - mesma linguagem de botões e destaque;
 - mesma lógica de feedback visual.
+
+Na Biblioteca, essa consistência não deve sacrificar densidade confortável de leitura em telas pequenas.
