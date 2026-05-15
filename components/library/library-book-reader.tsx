@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { LibraryBookBlocks } from "@/components/library/library-book-blocks";
@@ -60,6 +61,7 @@ function Chevron({
 }
 
 export function LibraryBookReader({ book }: LibraryBookReaderProps) {
+  const router = useRouter();
   const pages = useMemo<ReaderPage[]>(() => {
     const contentPages = book.sections.flatMap((section, sectionIndex) =>
       section.blocks.map((block, blockIndex) => ({
@@ -102,6 +104,11 @@ export function LibraryBookReader({ book }: LibraryBookReaderProps) {
   }
 
   function goToNextPage() {
+    if (isLastPage) {
+      router.push("/library");
+      return;
+    }
+
     setCurrentPage((value) => Math.min(pages.length - 1, value + 1));
   }
 
@@ -333,11 +340,10 @@ export function LibraryBookReader({ book }: LibraryBookReaderProps) {
                 <button
                   type="button"
                   onClick={goToNextPage}
-                  disabled={isLastPage}
-                  className={`ritual-link px-4 py-2 text-sm ${isLastPage ? "pointer-events-none opacity-40" : ""}`}
+                  className="ritual-link px-4 py-2 text-sm"
                 >
                   <span className="inline-flex items-center gap-2">
-                    Proximo
+                    {isLastPage ? "Fechar livro" : "Proximo"}
                     <Chevron direction="right" />
                   </span>
                 </button>
@@ -347,18 +353,17 @@ export function LibraryBookReader({ book }: LibraryBookReaderProps) {
             <button
               type="button"
               onClick={goToNextPage}
-              disabled={isLastPage}
               className={`hidden w-20 shrink-0 items-center justify-center border-l border-white/6 transition lg:flex ${
                 isLastPage
-                  ? "cursor-not-allowed text-slate-700"
+                  ? "text-amber-200 hover:bg-amber-200/10 hover:text-amber-50"
                   : "text-slate-300 hover:bg-white/5 hover:text-white"
               }`}
-              aria-label="Proxima pagina"
+              aria-label={isLastPage ? "Fechar livro" : "Proxima pagina"}
             >
               <div className="flex flex-col items-center gap-3">
                 <Chevron direction="right" className="h-7 w-7" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em]">
-                  Avancar
+                  {isLastPage ? "Fechar" : "Avancar"}
                 </span>
               </div>
             </button>
