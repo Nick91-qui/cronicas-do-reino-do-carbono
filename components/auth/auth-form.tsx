@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FormEvent } from "react";
@@ -221,6 +222,23 @@ export function AuthForm({ mode }: AuthFormProps) {
           >
             {isPending ? "Selando acesso..." : copyByMode[mode].submitLabel}
           </button>
+
+          <div className="game-panel-muted space-y-2 text-xs leading-6 text-slate-300">
+            <p>
+              {mode === "register"
+                ? "Ao criar sua conta, o reino usa codigo da turma, nome de exibicao, username, cookie de sessao e progresso de jogo para autenticar voce, salvar sua jornada e operar o laboratorio."
+                : "Ao entrar, o reino usa seu cookie de sessao, dados de conta e progresso persistido para autenticar voce e retomar sua jornada no laboratorio."}
+            </p>
+            <p>
+              Eventos operacionais minimos podem ser registrados para seguranca, autenticacao e continuidade pedagogica.{" "}
+              <Link
+                href="/privacy"
+                className="font-semibold text-amber-200 transition hover:text-amber-100"
+              >
+                Ler a Politica de Privacidade
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
     </section>

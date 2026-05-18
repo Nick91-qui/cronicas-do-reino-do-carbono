@@ -17,14 +17,25 @@ export default function LoginPage() {
     >
       <div className="space-y-6">
         <AuthForm mode="login" />
-        <div className="pb-2 text-center text-sm text-slate-300">
-          Ainda nao recebeu sua marca?{" "}
-          <Link
-            href="/register"
-            className="font-semibold text-amber-200 transition hover:text-amber-100"
-          >
-            Criar meu nome no reino
-          </Link>
+        <div className="space-y-3 pb-2 text-center text-sm text-slate-300">
+          <div>
+            Ainda nao recebeu sua marca?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-amber-200 transition hover:text-amber-100"
+            >
+              Criar meu nome no reino
+            </Link>
+          </div>
+          <div className="text-xs text-slate-400">
+            Consulta publica:{" "}
+            <Link
+              href="/privacy"
+              className="font-semibold text-cyan-200 transition hover:text-cyan-100"
+            >
+              Politica de Privacidade
+            </Link>
+          </div>
         </div>
       </div>
     </AuthScene>

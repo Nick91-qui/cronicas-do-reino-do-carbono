@@ -17,11 +17,22 @@ export default function RegisterPage() {
     >
       <div className="space-y-6">
         <AuthForm mode="register" />
-        <div className="pb-2 text-center text-sm text-slate-300">
-          Ja possui marca de aprendiz?{" "}
-          <Link href="/login" className="font-semibold text-amber-200 transition hover:text-amber-100">
-            Entrar no reino
-          </Link>
+        <div className="space-y-3 pb-2 text-center text-sm text-slate-300">
+          <div>
+            Ja possui marca de aprendiz?{" "}
+            <Link href="/login" className="font-semibold text-amber-200 transition hover:text-amber-100">
+              Entrar no reino
+            </Link>
+          </div>
+          <div className="text-xs text-slate-400">
+            Antes do cadastro, consulte a{" "}
+            <Link
+              href="/privacy"
+              className="font-semibold text-cyan-200 transition hover:text-cyan-100"
+            >
+              Politica de Privacidade
+            </Link>
+          </div>
         </div>
       </div>
     </AuthScene>
