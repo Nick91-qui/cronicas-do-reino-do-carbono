@@ -53,18 +53,28 @@ O valor padrão continua sendo `player`.
 ### 5.2 Lista de jogadores
 
 - nome no livro dos aprendizes;
-- username;
 - turma;
 - fase mais avançada;
 - pontuação total;
 - última atividade.
 
+Observação:
+
+- a lista não precisa exibir username completo se a busca já permitir localizar o jogador operacionalmente.
+
 ### 5.3 Visão individual
 
+- identidade minimizada;
 - progresso por capítulo;
 - tentativas por fase;
-- inventário atual;
-- recompensas registradas.
+- sinais operacionais recentes.
+
+Fica recomendado evitar, por padrão:
+
+- inventário detalhado;
+- recompensas históricas completas;
+- username completo;
+- detalhes de sessão além do mínimo necessário.
 
 ---
 

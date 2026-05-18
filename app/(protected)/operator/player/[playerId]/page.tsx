@@ -10,6 +10,14 @@ function formatDate(value: Date | null) {
   return value ? value.toLocaleString("pt-BR") : "Sem registro";
 }
 
+function maskUsername(username: string) {
+  if (username.length <= 3) {
+    return `${username[0] ?? ""}***`;
+  }
+
+  return `${username.slice(0, 3)}***`;
+}
+
 export default async function OperatorPlayerDetailPage({
   params,
 }: {
@@ -25,22 +33,13 @@ export default async function OperatorPlayerDetailPage({
       chapterProgress: {
         orderBy: { chapterId: "asc" },
       },
-      inventory: true,
       phaseSummaries: {
         orderBy: [{ phaseId: "asc" }],
         take: 12,
       },
-      rewardEvents: {
-        orderBy: { grantedAt: "desc" },
-        take: 8,
-      },
       analyticsEvents: {
         orderBy: { createdAt: "desc" },
         take: 8,
-      },
-      sessions: {
-        orderBy: { expiresAt: "desc" },
-        take: 1,
       },
     },
   });
@@ -57,7 +56,6 @@ export default async function OperatorPlayerDetailPage({
     (sum, chapter) => sum + chapter.completedPhaseCount,
     0,
   );
-  const latestSession = player.sessions[0] ?? null;
 
   return (
     <ProtectedScene
@@ -66,7 +64,7 @@ export default async function OperatorPlayerDetailPage({
       imageSrc={blobAssets.protectedApprenticeRoom}
       imageAlt="Sala de leitura detalhada do observatorio."
       title={player.displayName}
-      description={`Visao detalhada do jogador para ${operator.displayName}. Esta leitura exibe identidade, progresso, inventario, recompensas e atividade recente sem permitir mutacao direta.`}
+      description={`Visao detalhada do jogador para ${operator.displayName}. Esta leitura exibe identidade minimizada, progresso resumido e sinais recentes suficientes para suporte operacional sem abrir uma superficie administrativa ampla.`}
       actions={
         <Link href="/operator" className="ritual-link px-5 py-3 text-sm">
           Voltar ao observatorio
@@ -100,10 +98,10 @@ export default async function OperatorPlayerDetailPage({
           </div>
           <div className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Sessao mais recente
+              Turmas com progresso
             </p>
             <p className="pt-2 text-sm text-slate-100">
-              {formatDate(latestSession?.expiresAt ?? null)}
+              {player.chapterProgress.length}
             </p>
           </div>
         </>
@@ -121,16 +119,16 @@ export default async function OperatorPlayerDetailPage({
             </div>
             <div className="game-panel-muted">
               <dt className="text-slate-500">Username</dt>
-              <dd className="mt-1 text-slate-100">@{player.username}</dd>
+              <dd className="mt-1 text-slate-100">@{maskUsername(player.username)}</dd>
             </div>
             <div className="game-panel-muted">
               <dt className="text-slate-500">Turma</dt>
               <dd className="mt-1 text-slate-100">
-                {player.classroom.name} · {player.classroom.code}
+                {player.classroom.code}
               </dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Criado em</dt>
+              <dt className="text-slate-500">Conta criada em</dt>
               <dd className="mt-1 text-slate-100">
                 {formatDate(player.createdAt)}
               </dd>
@@ -140,37 +138,28 @@ export default async function OperatorPlayerDetailPage({
 
         <section className="game-panel">
           <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">
-            Snapshot de inventario
+            Limite desta leitura
           </h2>
           <dl className="mt-5 grid gap-3 text-sm text-slate-300">
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Carbonos disponiveis</dt>
+              <dt className="text-slate-500">Identidade minimizada</dt>
               <dd className="mt-1 text-slate-100">
-                {player.inventory?.carbonAvailable ?? 0}
+                O observatorio evita exibir username completo e detalhes
+                granulares de inventario por padrao.
               </dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Modo de hidrogenio</dt>
+              <dt className="text-slate-500">Uso recomendado</dt>
               <dd className="mt-1 text-slate-100">
-                {player.inventory?.hydrogenMode ?? "Sem snapshot"}
+                Esta visao deve servir para suporte operacional e validacao de
+                progresso, nao para inspecao ampla de dados pessoais.
               </dd>
             </div>
             <div className="game-panel-muted">
-              <dt className="text-slate-500">Fragmentos</dt>
+              <dt className="text-slate-500">Dados omitidos</dt>
               <dd className="mt-1 text-slate-100">
-                {(Array.isArray(player.inventory?.unlockedFragmentsJson)
-                  ? player.inventory?.unlockedFragmentsJson
-                  : []
-                ).join(", ") || "Nenhum"}
-              </dd>
-            </div>
-            <div className="game-panel-muted">
-              <dt className="text-slate-500">Titulos</dt>
-              <dd className="mt-1 text-slate-100">
-                {(Array.isArray(player.inventory?.unlockedTitlesJson)
-                  ? player.inventory?.unlockedTitlesJson
-                  : []
-                ).join(", ") || "Nenhum"}
+                Inventario detalhado, recompensas historicas e sessoes completas
+                nao aparecem nesta primeira leitura minimizada.
               </dd>
             </div>
           </dl>
@@ -239,32 +228,7 @@ export default async function OperatorPlayerDetailPage({
         </section>
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1fr,1fr]">
-        <section className="game-panel">
-          <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">
-            Recompensas recentes
-          </h2>
-          <div className="mt-5 grid gap-3 text-sm text-slate-300">
-            {player.rewardEvents.length > 0 ? (
-              player.rewardEvents.map((reward) => (
-                <article key={reward.id} className="game-panel-muted">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                    {reward.rewardType}
-                  </p>
-                  <p className="mt-2 text-slate-100">{reward.rewardValue}</p>
-                  <p className="mt-1 text-slate-400">
-                    {formatDate(reward.grantedAt)}
-                  </p>
-                </article>
-              ))
-            ) : (
-              <article className="game-panel-muted text-slate-100">
-                Nenhuma recompensa registrada ainda.
-              </article>
-            )}
-          </div>
-        </section>
-
+      <section className="grid gap-4">
         <section className="game-panel">
           <h2 className="text-2xl tracking-[0.04em] text-white sm:text-3xl">
             Atividade recente

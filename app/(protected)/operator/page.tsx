@@ -383,7 +383,7 @@ export default async function OperatorPage(props: {
                         {player.displayName}
                       </p>
                       <p className="pt-1 text-sm text-slate-300">
-                        @{player.username} · turma {player.classroom.code}
+                        turma {player.classroom.code}
                       </p>
                       <div className="mt-3">
                         <Link
