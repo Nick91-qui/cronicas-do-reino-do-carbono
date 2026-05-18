@@ -998,6 +998,8 @@ Grupos recomendados:
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `POST /api/auth/logout`
+- `GET /api/account/export`
+- `DELETE /api/account`
 
 **Acesso a conteúdo**
 

@@ -91,6 +91,10 @@ Formato recomendado no MVP:
 
 - JSON estruturado por entidade operacional do jogador.
 
+Implementacao atual no repositiorio:
+
+- `GET /api/account/export`
+
 ### 5. Exclusao ou anonimizaicao
 
 Objetivo:
@@ -102,6 +106,13 @@ Decisao a fechar pela operacao:
 - exclusao total dos registros pessoais;
 - anonimizacao com preservacao de estatisticas agregadas;
 - bloqueio temporario enquanto a solicitacao e validada.
+
+Implementacao atual no repositiorio:
+
+- `DELETE /api/account`
+- exige sessao autenticada;
+- exige senha atual;
+- exige frase explicita de confirmacao.
 
 ## Fluxo operacional padrao
 
@@ -240,9 +251,9 @@ Registrar internamente:
 
 Este runbook pode ser executado manualmente, mas depende de implementacoes futuras para ficar completo:
 
-- fluxo de exportacao automatizado;
 - fluxo de correcao autenticado para o proprio jogador;
-- fluxo seguro de exclusao ou anonimizacao;
+- fluxo de exportacao autenticado ja existe, mas ainda sem superficie de UI;
+- fluxo de exclusao autenticado ja existe, mas ainda sem superficie de UI;
 - rotina automatica de limpeza de sessoes expiradas;
 - governanca de auditoria para acessos internos sensiveis.
 

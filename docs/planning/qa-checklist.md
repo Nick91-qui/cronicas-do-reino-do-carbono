@@ -165,6 +165,8 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 
 - [ ] existe regra documentada de retenção para sessão, conta, analytics e histórico de tentativas.
 - [ ] existe fluxo documentado para correção, exportação e exclusão ou anonimização de conta.
+- [ ] `GET /api/account/export` retorna os dados da conta autenticada sem expor `passwordHash`.
+- [ ] `DELETE /api/account` exige sessão, senha atual e confirmação explícita antes de excluir a conta.
 - [ ] sessões expiradas possuem rotina prevista de limpeza operacional.
 
 ## Checklist de conteúdo
