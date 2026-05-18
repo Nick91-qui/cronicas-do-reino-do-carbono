@@ -7,15 +7,72 @@ import { DELETE_ACCOUNT_CONFIRMATION } from "@/lib/privacy/schema";
 
 type DeleteState = "idle" | "confirming";
 
-export function AccountPrivacyControls() {
+type AccountPrivacyControlsProps = {
+  displayName: string;
+  username: string;
+};
+
+export function AccountPrivacyControls({
+  displayName: initialDisplayName,
+  username: initialUsername,
+}: AccountPrivacyControlsProps) {
   const router = useRouter();
+  const [displayName, setDisplayName] = useState(initialDisplayName);
+  const [username, setUsername] = useState(initialUsername);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deleteState, setDeleteState] = useState<DeleteState>("idle");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  async function handleProfileSave() {
+    setIsSavingProfile(true);
+    setProfileError(null);
+    setProfileSuccess(null);
+
+    try {
+      const response = await fetch("/api/account/profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          displayName,
+          username,
+        }),
+      });
+
+      const json = (await response.json().catch(() => null)) as {
+        error?: string;
+        player?: {
+          displayName: string;
+          username: string;
+        };
+      } | null;
+
+      if (!response.ok) {
+        setProfileError(json?.error ?? "Falha ao atualizar seus dados.");
+        return;
+      }
+
+      if (json?.player) {
+        setDisplayName(json.player.displayName);
+        setUsername(json.player.username);
+      }
+
+      setProfileSuccess("Seus dados de conta foram atualizados.");
+      router.refresh();
+    } catch {
+      setProfileError("Nao foi possivel atualizar seus dados agora.");
+    } finally {
+      setIsSavingProfile(false);
+    }
+  }
 
   async function handleExport() {
     setIsExporting(true);
@@ -96,6 +153,58 @@ export function AccountPrivacyControls() {
           Dados da conta
         </h2>
         <div className="mt-5 grid gap-3 text-sm text-slate-300">
+          <label className="block text-sm">
+            <span className="mb-2 block text-slate-200">
+              Nome no livro dos aprendizes
+            </span>
+            <input
+              value={displayName}
+              onChange={(event) => setDisplayName(event.target.value)}
+              className="state-field"
+            />
+          </label>
+          <label className="block text-sm">
+            <span className="mb-2 block text-slate-200">Nome de oficio</span>
+            <input
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              className="state-field"
+            />
+          </label>
+          <div className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+              Correcao autenticada
+            </p>
+            <p className="mt-2 leading-6 text-slate-100">
+              Atualize seu nome no livro dos aprendizes e seu nome de oficio sem
+              sair do reino. As regras de unicidade do cadastro continuam
+              valendo aqui.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={handleProfileSave}
+              disabled={isSavingProfile}
+              className="state-action px-5"
+              data-tone="primary"
+            >
+              {isSavingProfile ? "Salvando..." : "Salvar meus dados"}
+            </button>
+          </div>
+
+          {profileError ? (
+            <p className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              {profileError}
+            </p>
+          ) : null}
+
+          {profileSuccess ? (
+            <p className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+              {profileSuccess}
+            </p>
+          ) : null}
+
           <div className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
               Exportacao

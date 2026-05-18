@@ -83,7 +83,10 @@ export default async function ProfilePage() {
         </section>
       </section>
 
-      <AccountPrivacyControls />
+      <AccountPrivacyControls
+        displayName={player.displayName}
+        username={player.username}
+      />
     </ProtectedScene>
   );
 }

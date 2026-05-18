@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { passwordSchema } from "@/lib/auth/schema";
+import {
+  displayNameSchema,
+  passwordSchema,
+  usernameSchema,
+} from "@/lib/auth/schema";
 
 export const DELETE_ACCOUNT_CONFIRMATION = "EXCLUIR MINHA CONTA";
 
@@ -9,4 +13,10 @@ export const deleteAccountInputSchema = z.object({
   confirmation: z.literal(DELETE_ACCOUNT_CONFIRMATION),
 });
 
+export const updateAccountProfileInputSchema = z.object({
+  displayName: displayNameSchema,
+  username: usernameSchema,
+});
+
 export type DeleteAccountInput = z.infer<typeof deleteAccountInputSchema>;
+export type UpdateAccountProfileInput = z.infer<typeof updateAccountProfileInputSchema>;
