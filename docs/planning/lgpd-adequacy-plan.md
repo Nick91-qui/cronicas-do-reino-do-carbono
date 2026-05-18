@@ -16,7 +16,9 @@ Este plano complementa:
 - `docs/project-context.md`;
 - `docs/tech/technical-spec.md`;
 - `docs/planning/implementation-plan.md`;
-- `docs/planning/qa-checklist.md`.
+- `docs/planning/qa-checklist.md`;
+- `docs/legal/privacy-policy.md`;
+- `docs/planning/data-subject-rights-runbook.md`.
 
 ## Escopo
 
@@ -57,8 +59,8 @@ Ao final desta trilha, o projeto deve:
 
 Entregas:
 
-- criar política de privacidade do MVP em linguagem clara;
-- criar documento operacional interno com base legal assumida, finalidade e papéis;
+- criar politica de privacidade do MVP em linguagem clara;
+- criar documento operacional interno com base legal assumida, finalidade e papeis;
 - documentar controlador, operador e canal de contato para direitos do titular;
 - alinhar `technical-spec`, `qa-checklist` e docs de planejamento com a política.
 
@@ -139,7 +141,8 @@ Entregas:
 
 ## Artefatos mínimos esperados no repositório
 
-- política de privacidade pública;
+- `docs/legal/privacy-policy.md`;
+- `docs/planning/data-subject-rights-runbook.md`;
 - runbook interno de atendimento ao titular;
 - especificação técnica atualizada com regras de minimização, retenção e acesso;
 - checklist de QA com critérios de privacidade;

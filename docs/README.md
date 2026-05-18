@@ -67,6 +67,7 @@ Esses arquivos não substituem os centrais, mas formalizam regras operacionais r
 - `planning/milestones-and-issues.md`
 - `planning/qa-checklist.md`
 - `planning/lgpd-adequacy-plan.md`
+- `planning/data-subject-rights-runbook.md`
 - `planning/operator-observability-plan.md`
 - `planning/synthesis-tutorial-plan.md`
 - `tech/builder-legacy-removal.md`
@@ -77,6 +78,7 @@ Esses arquivos apoiam escrita, mediação pedagógica e expansão conceitual, ma
 
 - `narrative/narrative.md`
 - `pedagogy/teacher-guide.md`
+- `legal/privacy-policy.md`
 
 ### 4. Documentos de expansão pós-MVP
 
@@ -102,6 +104,10 @@ Define arquitetura, persistência, segurança, contratos do sistema e decisões 
 ### `planning/`
 
 Define estratégia de execução, status operacional, pendências e checklist de QA.
+
+### `legal/`
+
+Define a camada publica de compromissos de privacidade e transparencia do MVP.
 
 ### `visual/`
 
@@ -174,8 +180,10 @@ Consulte primeiro:
 
 1. `tech/technical-spec.md`
 2. `planning/lgpd-adequacy-plan.md`
-3. `planning/qa-checklist.md`
-4. `project-context.md`
+3. `legal/privacy-policy.md`
+4. `planning/data-subject-rights-runbook.md`
+5. `planning/qa-checklist.md`
+6. `project-context.md`
 
 ## Regra de manutenção
 
