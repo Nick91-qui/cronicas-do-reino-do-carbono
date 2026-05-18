@@ -39,6 +39,7 @@ A solução técnica do MVP deve:
 - suportar o loop completo do Capítulo I;
 - permitir autenticação vinculada à turma;
 - persistir progresso, tentativas, inventário e recompensas;
+- suportar adequação mínima de privacidade e LGPD para os dados pessoais operacionais do MVP;
 - manter a avaliação de gameplay determinística e autoritativa no servidor;
 - separar conteúdo estático de lógica de aplicação;
 - permanecer simples o suficiente para implementação rápida e sustentável;
@@ -62,7 +63,7 @@ A implementação técnica do MVP deve suportar:
 - persistência de tentativas, progresso, inventário e recompensas;
 - coleção de cartas desbloqueadas;
 - biblioteca pedagógica protegida com livros estáticos de consulta;
-- analytics leves de gameplay.
+- analytics leves de gameplay, sob minimização e governança de privacidade.
 
 O MVP não precisa suportar:
 
@@ -470,6 +471,14 @@ O fluxo de cadastro deve incluir pelo menos:
 - cookies de sessão seguros e `HttpOnly`, quando aplicável;
 - nenhuma credencial em texto puro persistida no banco.
 
+### 12.5 Requisitos de privacidade e transparência
+
+- o fluxo de cadastro deve expor link visível para política de privacidade;
+- telas públicas de autenticação devem informar, em linguagem clara, os dados coletados e sua finalidade principal;
+- o uso de cookie de sessão essencial deve ser informado ao usuário;
+- o sistema deve distinguir dados necessários para autenticação, progressão pedagógica e observabilidade operacional;
+- nenhuma expansão de coleta pode ocorrer sem atualização documental explícita em `docs/`.
+
 ---
 
 ## 13. Builder molecular
@@ -738,6 +747,14 @@ Os analytics devem:
 - não expor dados sensíveis desnecessariamente;
 - permanecer leves no MVP.
 
+### 19.4 Regras de minimização e retenção para analytics
+
+- eventos de analytics devem carregar apenas os campos necessários para operação e melhoria do MVP;
+- identificadores diretos no payload devem ser evitados quando o `playerId` relacional já for suficiente;
+- analytics não devem registrar credenciais, texto livre ou dados externos à experiência jogável;
+- deve existir política explícita de retenção para eventos identificados ou pseudonimizados;
+- qualquer uso futuro de analytics para produto ou docência deve passar por revisão documental de finalidade e acesso.
+
 ---
 
 ## 20. Modelo de banco de dados
@@ -795,6 +812,13 @@ Valores iniciais:
 - `operator`
 
 No escopo atual, `operator` existe para proteger futuras páginas internas de leitura operacional. Isso não implica painel administrativo completo no MVP.
+
+O papel `operator` deve obedecer às regras abaixo:
+
+- concessão restrita a necessidade operacional explícita;
+- leitura limitada ao mínimo necessário para suporte e validação;
+- revisão documental antes de qualquer ampliação de escopo;
+- rastreabilidade mínima de quem recebeu o papel e por qual motivo.
 
 #### `Session`
 
@@ -912,6 +936,12 @@ Carregado a partir de arquivos locais em tempo de execução ou build.
 
 Armazenados em PostgreSQL.
 
+Esses dados devem ser classificados em três grupos:
+
+- identidade e autenticação;
+- progressão e histórico pedagógico;
+- observabilidade operacional.
+
 ### 21.3 Atualizações por submissão avaliada
 
 Após cada submissão de fase avaliada, o sistema deve atualizar:
@@ -928,6 +958,14 @@ Após cada submissão de fase avaliada, o sistema deve atualizar:
 **Recomendação:** realizar atualizações críticas de progressão em transação de banco de dados, quando aplicável.
 
 Isso é especialmente importante quando uma única submissão dispara múltiplas escritas.
+
+### 21.5 Retenção, exclusão e anonimização
+
+- sessões expiradas devem ser removidas por rotina operacional;
+- o projeto deve definir prazo de retenção para conta, analytics e histórico de tentativa;
+- exclusão de conta deve remover ou anonimizar dados pessoais conforme a regra operacional adotada;
+- exportação e correção de dados do jogador devem ter fluxo implementável e documentado;
+- nenhuma tabela operacional com dado pessoal deve permanecer sem regra de descarte.
 
 ---
 
@@ -1036,6 +1074,9 @@ O MVP deve implementar:
 - autorização no servidor para todas as escritas do jogador;
 - gerenciamento de segredos por variáveis de ambiente;
 - validação de entrada em todas as rotas de mutação.
+- política de privacidade publicada e referenciada nas telas públicas;
+- governança mínima para concessão e uso do papel `operator`;
+- regra explícita de retenção e exclusão para dados pessoais operacionais.
 
 ### 24.2 Controles recomendados
 
@@ -1054,6 +1095,12 @@ Coletar apenas os dados necessários para:
 - persistência do progresso.
 
 Nenhum dado pessoal desnecessário deve ser coletado no MVP.
+
+Em termos práticos:
+
+- payloads de analytics devem ser revistos sempre que repetirem identificadores ou atributos já inferíveis pela relação com `playerId`;
+- superfícies internas não devem exibir inventário, progresso fino ou identidade completa sem necessidade operacional definida;
+- novos campos em `Player` ou tabelas relacionadas exigem justificativa de finalidade e retenção.
 
 ---
 

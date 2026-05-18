@@ -19,6 +19,7 @@
 - O conteúdo do jogo é estático e versionado em arquivos locais.
 - O banco de dados não é fonte de verdade para fases, moléculas ou regras de conteúdo.
 - Toda escrita deve ser validada com schemas tipados no servidor.
+- Dados operacionais do jogador são dados pessoais do produto e devem seguir finalidade explícita, minimização, retenção e controle de acesso.
 
 ## Stack e Infra
 
@@ -70,6 +71,8 @@ O banco existe apenas para dados operacionais do jogador:
 - inventário;
 - eventos de recompensa;
 - analytics leves.
+
+Esses dados operacionais devem ser tratados como base pessoal identificável ou pseudonimizável, nunca como telemetria livre sem governança.
 
 ## Modelagem de Dados
 
@@ -145,6 +148,7 @@ inadequate -> incorrect -> 0
 ## Status da Missão
 
 - **Estado atual:** MVP funcional validado no fluxo central do jogador, com foco atual em acabamento visual, QA fino e fechamento do **Milestone 10 — Reposicionamento visual de site para jogo**
+- **Adequação transversal obrigatória:** consolidar documentação e implementação mínima de privacidade/LGPD antes de ampliar uso real com alunos
 - **Próxima expansão planejada após o fechamento visual principal:** Biblioteca Pedagógica com 3 livros introdutórios de acesso livre ao jogador autenticado
 - **Fonte oficial de regra de negócio:** `README.md` e documentos normativos em `docs/`
 - **Implementação tipada derivada do conteúdo:** `content/`
@@ -181,6 +185,7 @@ Executar a fase atual do projeto com foco em:
 - validar que o enquadramento visual novo não degrada clareza pedagógica;
 - definir e depois implementar a Biblioteca Pedagógica como apoio de estudo sem bloquear progressão;
 - ampliar QA manual dos fluxos críticos ainda em aberto de builder, autenticação, perfil e observabilidade interna;
+- implementar transparência, minimização, retenção e fluxos mínimos de direitos do titular;
 - revisar autorização das rotas de escrita e cobertura negativa de autenticação;
 - revisar continuamente coerência entre `content/` e documentos normativos;
 - atualizar continuamente a documentação de status quando a implementação avançar.

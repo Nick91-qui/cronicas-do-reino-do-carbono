@@ -41,6 +41,7 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 - `npm run typecheck` passando;
 - `npm run build` passando;
 - smoke test manual dos fluxos críticos concluído;
+- checklist mínimo de privacidade/LGPD aplicável concluído;
 - nenhuma divergência conhecida entre `content/` e `docs/design/phases.md` para o Capítulo I;
 - nenhum erro bloqueador em autenticação, submissão de fase, progresso ou inventário.
 
@@ -145,6 +146,26 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 - [x] submissão de fase cria eventos mínimos de avaliação.
 - [x] conclusão de fase cria evento de conclusão.
 - [x] concessão de recompensa cria evento quando aplicável.
+
+## Checklist mínimo de privacidade e LGPD
+
+### Transparência
+
+- [ ] telas públicas de login e cadastro exibem link visível para política de privacidade.
+- [ ] cadastro informa dados coletados, finalidade principal e uso de cookie de sessão essencial.
+- [ ] documentação do repositório identifica controlador, operador e canal de contato para direitos do titular.
+
+### Minimização e acesso
+
+- [ ] payloads de analytics não repetem identificadores ou atributos pessoais sem necessidade.
+- [ ] área `operator` expõe apenas campos necessários para suporte operacional explícito.
+- [ ] concessão do papel `operator` segue regra documentada de necessidade e rastreabilidade.
+
+### Retenção e direitos do titular
+
+- [ ] existe regra documentada de retenção para sessão, conta, analytics e histórico de tentativas.
+- [ ] existe fluxo documentado para correção, exportação e exclusão ou anonimização de conta.
+- [ ] sessões expiradas possuem rotina prevista de limpeza operacional.
 
 ## Checklist de conteúdo
 

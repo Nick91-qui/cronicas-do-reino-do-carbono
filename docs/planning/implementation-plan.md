@@ -70,6 +70,16 @@ Se a implementação alterar qualquer regra oficial, a documentação deve ser a
 
 Testes e validação devem acompanhar as entregas críticas, e não ficar restritos ao final.
 
+### 2.7 Privacidade acompanha a operação
+
+Sempre que autenticação, analytics, sessão, observabilidade interna ou modelagem de dados pessoais forem alterados, a implementação deve evoluir junto com:
+
+- transparência nas telas públicas;
+- regras de minimização;
+- retenção e descarte;
+- fluxos mínimos de direitos do titular;
+- atualização de `docs/planning/lgpd-adequacy-plan.md`.
+
 ---
 
 ## 3. Estratégia de entrega
@@ -114,6 +124,23 @@ A implementação está organizada nos seguintes blocos:
 - **Bloco 7 — Estabilização, QA e implantação**
 - **Bloco 8 — Reposicionamento visual de site para jogo**
 - **Bloco 9 — Biblioteca pedagógica**
+- **Trilha transversal — Adequação LGPD e governança de dados**
+
+### Interpretação prática da trilha transversal
+
+Essa trilha não substitui os blocos funcionais. Ela atravessa principalmente:
+
+- Bloco 3, para cadastro, login e sessão;
+- Bloco 5, para persistência e histórico;
+- Bloco 7, para QA, operação e deploy;
+- quaisquer expansões de `operator`, analytics ou superfícies públicas.
+
+Entregas mínimas dessa trilha:
+
+- política de privacidade e avisos nas telas públicas;
+- revisão de minimização em analytics e `operator`;
+- definição de retenção, exclusão, exportação e correção;
+- checklist de QA de privacidade validável no repositório.
 
 ---
 

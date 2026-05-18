@@ -66,6 +66,7 @@ Esses arquivos não substituem os centrais, mas formalizam regras operacionais r
 - `planning/implementation-plan.md`
 - `planning/milestones-and-issues.md`
 - `planning/qa-checklist.md`
+- `planning/lgpd-adequacy-plan.md`
 - `planning/operator-observability-plan.md`
 - `planning/synthesis-tutorial-plan.md`
 - `tech/builder-legacy-removal.md`
@@ -126,6 +127,8 @@ Consulte primeiro:
 4. `design/phases.md`
 5. `product/mvp-scope.md`
 
+Se a mudança tocar dados pessoais, sessão, analytics, `operator` ou telas públicas de auth, consulte também `planning/lgpd-adequacy-plan.md`.
+
 ### Para validar conteúdo
 
 Consulte primeiro:
@@ -165,6 +168,15 @@ Consulte primeiro:
 
 Use `pedagogy/data.md` apenas como base ampliada de expansão, e não como fonte oficial de validação do MVP.
 
+### Para privacidade e LGPD
+
+Consulte primeiro:
+
+1. `tech/technical-spec.md`
+2. `planning/lgpd-adequacy-plan.md`
+3. `planning/qa-checklist.md`
+4. `project-context.md`
+
 ## Regra de manutenção
 
 Sempre que houver mudança real em:
@@ -175,6 +187,7 @@ Sempre que houver mudança real em:
 - builder molecular;
 - avaliação de fase;
 - inventário e recompensas;
+- tratamento de dados pessoais, analytics, sessão ou observabilidade interna;
 - direção visual consolidada;
 - regras de progresso;
 - contratos técnicos do backend;
