@@ -20,13 +20,12 @@ Esta politica cobre o tratamento de dados pessoais realizado pelo MVP web hosped
 
 ### 3.1 Operacao atual do MVP
 
-Enquanto este MVP estiver sendo operado diretamente pelo mantenedor do projeto, o responsavel pela operacao deve ser identificado publicamente antes da disponibilizacao externa.
+Enquanto este MVP estiver sendo operado diretamente pelo mantenedor do projeto, o controlador atualmente identificado para esta operacao e:
 
-Campos obrigatorios para publicacao:
-
-- responsavel/controlador: `[preencher antes da publicacao]`
-- contato de privacidade: `[preencher antes da publicacao]`
-- canal para direitos do titular: `[preencher antes da publicacao]`
+- responsavel/controlador: `Nicholas Contijo Moreira`
+- localizacao informada: `Vila Velha - ES - Brasil`
+- contato de privacidade: `nicholascm@gmail.com`
+- canal para direitos do titular: `nicholascm@gmail.com`
 
 ### 3.2 Uso por escola ou instituicao
 
@@ -92,6 +91,12 @@ Para o MVP, o tratamento deve permanecer limitado ao necessario para:
 
 Antes de uso ampliado com instituicoes de ensino ou alunos reais, a base legal e a distribuicao de responsabilidades devem ser formalizadas pela operacao responsavel.
 
+No estado atual do piloto interno, a operacao assume a seguinte base operacional minima:
+
+- execucao da conta e do jogo para autenticar o jogador e manter sua sessao;
+- registro de progresso pedagogico para continuidade da experiencia;
+- interesse operacional legitimo do piloto interno para seguranca, estabilidade e melhoria controlada do MVP.
+
 ## 7. Cookies e sessao
 
 O MVP usa cookie de sessao essencial para manter o login do jogador e proteger areas autenticadas.
@@ -124,6 +129,11 @@ Esses eventos devem obedecer aos seguintes limites:
 
 No estado atual do MVP, os dados podem ser processados por fornecedores de infraestrutura usados para hospedar a aplicacao e o banco, como plataforma de deploy e banco de dados gerenciado.
 
+No estado atual do piloto, os provedores publicamente identificados sao:
+
+- `Vercel`, para hospedagem da aplicacao;
+- `Neon`, para banco de dados gerenciado.
+
 O projeto nao deve compartilhar dados pessoais com terceiros para fins comerciais ou publicitarios.
 
 Qualquer compartilhamento adicional exige atualizacao desta politica e revisao documental da finalidade.
@@ -134,11 +144,11 @@ Os dados pessoais operacionais do MVP devem seguir regra explicita de retencao.
 
 No estado atual da documentacao:
 
-- sessoes expiradas devem ser removidas por rotina operacional;
-- contas, historico de tentativas e analytics devem receber prazo definido de retencao antes de uso ampliado;
-- quando aplicavel, a exclusao deve remover ou anonimizar os dados pessoais segundo a regra operacional adotada.
-
-Enquanto o prazo final de retencao nao estiver definido em ambiente real, esse ponto permanece como requisito obrigatorio de implementacao antes da ampliacao de uso.
+- sessoes devem ser retidas por ate `7 dias` ou ate logout;
+- contas inativas devem ser revisadas para exclusao apos `12 meses sem acesso`;
+- analytics operacionais devem ser retidos por ate `6 meses`;
+- progresso, tentativas, inventario e recompensas devem ser retidos por ate `12 meses` ou ate pedido de exclusao;
+- no piloto interno atual, a exclusao oficial adotada e a exclusao total da conta e dos dados vinculados a ela.
 
 ## 11. Direitos do titular
 
@@ -177,4 +187,4 @@ Esta politica deve ser revisada sempre que houver mudanca relevante em:
 
 ## 14. Status deste documento
 
-Status atual: documento base implementado no repositorio e pendente de preenchimento dos campos operacionais de contato antes da publicacao externa.
+Status atual: politica publica oficial do piloto interno nas turmas do controlador, ainda nao aberta para outras escolas ou operacoes externas.

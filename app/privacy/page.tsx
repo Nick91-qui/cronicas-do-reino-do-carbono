@@ -21,15 +21,17 @@ export default function PrivacyPage() {
         <article className="game-panel">
           <div className="flex flex-wrap items-center gap-2">
             <span className="hud-chip">Politica de Privacidade</span>
-            <span className="hud-chip border-gold/20 text-gold/90">MVP</span>
+            <span className="hud-chip border-gold/20 text-gold/90">
+              Piloto interno
+            </span>
           </div>
           <h1 className="mt-5 font-display text-4xl tracking-[0.05em] text-white sm:text-5xl">
             Como o reino trata seus dados
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
-            Esta pagina resume o tratamento minimo de dados pessoais no MVP de
-            Cronicas do Reino do Carbono. Ela deve ser lida junto da
-            documentacao completa em <code>docs/legal/privacy-policy.md</code>.
+            Esta pagina apresenta a versao publica oficial da politica de
+            privacidade do piloto interno de Cronicas do Reino do Carbono, hoje
+            aplicado nas turmas do proprio controlador.
           </p>
         </article>
 
@@ -50,7 +52,7 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>Autenticar o jogador, vincular a turma correta e manter a jornada pedagogica.</p>
-              <p>Salvar progresso, retomar sessao e registrar eventos operacionais minimos de funcionamento.</p>
+              <p>Salvar progresso, retomar sessao e registrar eventos operacionais minimos de funcionamento e melhoria controlada do piloto.</p>
             </div>
           </article>
 
@@ -70,7 +72,27 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>O titular deve poder solicitar acesso, correcao, exportacao e exclusao ou anonimizacao conforme a operacao aplicavel.</p>
-              <p>Os contatos operacionais ainda precisam ser preenchidos antes da publicacao externa do MVP.</p>
+              <p>Contato de privacidade e canal para direitos do titular: nicholascm@gmail.com.</p>
+            </div>
+          </article>
+
+          <article className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+              Retencao oficial
+            </p>
+            <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
+              <p>Sessao: ate 7 dias ou ate logout. Analytics operacionais: ate 6 meses.</p>
+              <p>Conta inativa e historico pedagogico: ate 12 meses sem acesso ou ate pedido de exclusao.</p>
+            </div>
+          </article>
+
+          <article className="game-panel-muted">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+              Controlador e provedores
+            </p>
+            <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
+              <p>Controlador identificado: Nicholas Contijo Moreira, Vila Velha - ES - Brasil.</p>
+              <p>Infraestrutura atualmente usada: Vercel para hospedagem da aplicacao e Neon para banco de dados gerenciado.</p>
             </div>
           </article>
         </section>
@@ -81,14 +103,14 @@ export default function PrivacyPage() {
           </p>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-300">
             <p>
-              Esta pagina e um resumo publico inicial. A politica operacional
-              completa do repositorio ainda depende do preenchimento do
-              responsavel/controlador, do canal de privacidade e da regra final
-              de retencao antes do uso ampliado com jogadores reais.
+              Esta politica vale para o piloto interno conduzido pelo
+              controlador em suas proprias turmas. O MVP ainda nao esta aberto
+              a outras escolas ou a operacao externa ampliada.
             </p>
             <p>
-              Referencias internas: <code>docs/legal/privacy-policy.md</code> e{" "}
-              <code>docs/planning/data-subject-rights-runbook.md</code>.
+              O repositiorio tambem possui implementacoes autenticadas para
+              correcao de dados, exportacao de conta e exclusao da conta do
+              proprio jogador.
             </p>
           </div>
         </article>

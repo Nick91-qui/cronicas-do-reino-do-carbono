@@ -21,9 +21,9 @@ Este runbook cobre solicitacoes de:
 
 Antes de usar este runbook em ambiente real, a operacao deve preencher:
 
-- responsavel primario pelo atendimento: `[preencher]`
-- canal oficial de recebimento: `[preencher]`
-- prazo interno alvo para primeira resposta: `[preencher]`
+- responsavel primario pelo atendimento: `Nicholas Contijo Moreira`
+- canal oficial de recebimento: `nicholascm@gmail.com`
+- prazo interno alvo para primeira resposta: `ate 7 dias corridos`
 - criterio de validacao de identidade do solicitante: `[preencher]`
 
 ## Fontes internas de verdade
@@ -91,7 +91,7 @@ Formato recomendado no MVP:
 
 - JSON estruturado por entidade operacional do jogador.
 
-Implementacao atual no repositiorio:
+Implementacao atual no repositorio:
 
 - `GET /api/account/export`
 
@@ -107,7 +107,7 @@ Decisao a fechar pela operacao:
 - anonimizacao com preservacao de estatisticas agregadas;
 - bloqueio temporario enquanto a solicitacao e validada.
 
-Implementacao atual no repositiorio:
+Implementacao atual no repositorio:
 
 - `DELETE /api/account`
 - exige sessao autenticada;
@@ -251,9 +251,10 @@ Registrar internamente:
 
 Este runbook pode ser executado manualmente, mas depende de implementacoes futuras para ficar completo:
 
-- fluxo de correcao autenticado para o proprio jogador;
-- fluxo de exportacao autenticado ja existe, mas ainda sem superficie de UI;
-- fluxo de exclusao autenticado ja existe, mas ainda sem superficie de UI;
+- criterio formal de validacao de identidade fora da sessao autenticada;
+- fluxo de correcao autenticado ja existe e possui superficie no perfil;
+- fluxo de exportacao autenticado ja existe e possui superficie no perfil;
+- fluxo de exclusao autenticado ja existe e possui superficie no perfil;
 - rotina automatica de limpeza de sessoes expiradas;
 - governanca de auditoria para acessos internos sensiveis.
 
