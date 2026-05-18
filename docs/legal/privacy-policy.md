@@ -33,7 +33,7 @@ Campos obrigatorios para publicacao:
 Se o MVP for operado em parceria com escola, curso ou instituicao:
 
 - o papel de controlador e operador deve ser definido formalmente antes do uso;
-- o canal de atendimento ao titular e a responsavel legal devem ser informados de forma explicita;
+- o canal de atendimento ao titular e o responsavel legal devem ser informados de forma explicita;
 - esta politica deve ser revisada para refletir essa operacao concreta.
 
 ## 4. Quais dados o MVP trata
@@ -147,10 +147,10 @@ O titular dos dados, ou seu representante legitimo quando cabivel, deve poder so
 - confirmacao de tratamento;
 - acesso aos dados;
 - correcao de dados cadastrais;
-- exclusao ou anonimizaicao conforme a operacao aplicavel;
+- exclusao ou anonimizacao conforme a operacao aplicavel;
 - exportacao basica dos dados do jogador em formato legivel.
 
-As solicitacoes devem seguir o runbook interno do repositiorio:
+As solicitacoes devem seguir o runbook interno do repositorio:
 
 - `docs/planning/data-subject-rights-runbook.md`
 
@@ -177,4 +177,4 @@ Esta politica deve ser revisada sempre que houver mudanca relevante em:
 
 ## 14. Status deste documento
 
-Status atual: documento base implementado no repositiorio e pendente de preenchimento dos campos operacionais de contato antes da publicacao externa.
+Status atual: documento base implementado no repositorio e pendente de preenchimento dos campos operacionais de contato antes da publicacao externa.

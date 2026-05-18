@@ -143,7 +143,6 @@ Entregas:
 
 - `docs/legal/privacy-policy.md`;
 - `docs/planning/data-subject-rights-runbook.md`;
-- runbook interno de atendimento ao titular;
 - especificação técnica atualizada com regras de minimização, retenção e acesso;
 - checklist de QA com critérios de privacidade;
 - implementação das superfícies e rotas mínimas decididas para direitos do titular.

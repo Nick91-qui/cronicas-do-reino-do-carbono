@@ -68,6 +68,7 @@ Esses arquivos não substituem os centrais, mas formalizam regras operacionais r
 - `planning/qa-checklist.md`
 - `planning/lgpd-adequacy-plan.md`
 - `planning/data-subject-rights-runbook.md`
+- `legal/privacy-policy.md`
 - `planning/operator-observability-plan.md`
 - `planning/synthesis-tutorial-plan.md`
 - `tech/builder-legacy-removal.md`
@@ -78,7 +79,6 @@ Esses arquivos apoiam escrita, mediação pedagógica e expansão conceitual, ma
 
 - `narrative/narrative.md`
 - `pedagogy/teacher-guide.md`
-- `legal/privacy-policy.md`
 
 ### 4. Documentos de expansão pós-MVP
 

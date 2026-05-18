@@ -14,7 +14,7 @@ Este runbook cobre solicitacoes de:
 - acesso aos dados;
 - correcao de dados cadastrais;
 - exportacao basica;
-- exclusao ou anonimizaicao de conta;
+- exclusao ou anonimizacao de conta;
 - esclarecimento sobre retencao e uso operacional.
 
 ## Pre-condicoes operacionais
@@ -100,7 +100,7 @@ Objetivo:
 Decisao a fechar pela operacao:
 
 - exclusao total dos registros pessoais;
-- anonimizaicao com preservacao de estatisticas agregadas;
+- anonimizacao com preservacao de estatisticas agregadas;
 - bloqueio temporario enquanto a solicitacao e validada.
 
 ## Fluxo operacional padrao
@@ -147,7 +147,7 @@ Escolher uma das trilhas:
 - acesso;
 - correcao;
 - exportacao;
-- exclusao/anonimizaicao;
+- exclusao/anonimizacao;
 - esclarecimento documental.
 
 ### Etapa 5. Executar a resposta tecnica
@@ -171,7 +171,7 @@ Escolher uma das trilhas:
 
 #### Exclusao ou anonimizaicao
 
-- verificar se a regra operacional aprovada para o ambiente e exclusao ou anonimizaicao;
+- verificar se a regra operacional aprovada para o ambiente e exclusao ou anonimizacao;
 - remover ou descaracterizar dados pessoais conforme a regra;
 - invalidar sessoes remanescentes;
 - registrar quais entidades foram afetadas.
@@ -191,7 +191,7 @@ Registrar internamente:
 ### `Player`
 
 - contem identidade basica e autenticacao;
-- sujeito a acesso, correcao, exportacao e exclusao/anonimizaicao.
+- sujeito a acesso, correcao, exportacao e exclusao/anonimizacao.
 
 ### `Session`
 
@@ -201,32 +201,32 @@ Registrar internamente:
 ### `PlayerPhaseAttempt`
 
 - contem historico de tentativas;
-- sujeito a exportacao e a exclusao/anonimizaicao conforme regra do ambiente.
+- sujeito a exportacao e a exclusao/anonimizacao conforme regra do ambiente.
 
 ### `PlayerPhaseSummary`
 
 - contem estado resumido de progresso;
-- sujeito a exportacao e a exclusao/anonimizaicao.
+- sujeito a exportacao e a exclusao/anonimizacao.
 
 ### `PlayerChapterProgress`
 
 - contem progresso consolidado por capitulo;
-- sujeito a exportacao e a exclusao/anonimizaicao.
+- sujeito a exportacao e a exclusao/anonimizacao.
 
 ### `PlayerInventory`
 
 - contem snapshot de recursos do jogador;
-- sujeito a exportacao e a exclusao/anonimizaicao.
+- sujeito a exportacao e a exclusao/anonimizacao.
 
 ### `PlayerRewardEvent`
 
 - contem historico operacional de recompensas;
-- sujeito a exportacao e a exclusao/anonimizaicao.
+- sujeito a exportacao e a exclusao/anonimizacao.
 
 ### `PlayerAnalyticsEvent`
 
 - contem analytics operacionais;
-- sujeito a exportacao e a exclusao/anonimizaicao ou retencao reduzida, conforme regra do ambiente.
+- sujeito a exportacao e a exclusao/anonimizacao ou retencao reduzida, conforme regra do ambiente.
 
 ## Riscos e cuidados
 
@@ -242,7 +242,7 @@ Este runbook pode ser executado manualmente, mas depende de implementacoes futur
 
 - fluxo de exportacao automatizado;
 - fluxo de correcao autenticado para o proprio jogador;
-- fluxo seguro de exclusao ou anonimizaicao;
+- fluxo seguro de exclusao ou anonimizacao;
 - rotina automatica de limpeza de sessoes expiradas;
 - governanca de auditoria para acessos internos sensiveis.
 
@@ -253,4 +253,4 @@ Este artefato so deve ser considerado plenamente operacional quando:
 - os campos de responsavel e contato estiverem preenchidos;
 - houver comandos, rotas ou operacoes documentadas para cada tipo de solicitacao;
 - a politica publica e este runbook estiverem consistentes entre si;
-- o checklist LGPD do repositiorio puder ser validado contra implementacao real.
+- o checklist LGPD do repositorio puder ser validado contra implementacao real.
