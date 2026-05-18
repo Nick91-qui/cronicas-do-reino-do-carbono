@@ -1,3 +1,4 @@
+import { AccountPrivacyControls } from "@/components/profile/account-privacy-controls";
 import { ProtectedScene } from "@/components/scene/protected-scene";
 import { prisma } from "@/lib/db/prisma";
 import { requireAuthenticatedPlayer } from "@/lib/auth/session";
@@ -81,6 +82,8 @@ export default async function ProfilePage() {
           </dl>
         </section>
       </section>
+
+      <AccountPrivacyControls />
     </ProtectedScene>
   );
 }
