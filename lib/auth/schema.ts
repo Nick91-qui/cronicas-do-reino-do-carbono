@@ -9,12 +9,17 @@ export const usernameSchema = z
   .max(32)
   .regex(/^[a-zA-Z0-9_.-]+$/, "Use apenas letras, números, ponto, traço e underscore.");
 export const passwordSchema = z.string().min(8).max(128);
+export const requiredTrueSchema = z.boolean().refine((value) => value, {
+  message: "Campo obrigatório.",
+});
 
 export const registerInputSchema = z.object({
   classroomCode: classroomCodeSchema,
   displayName: displayNameSchema,
   username: usernameSchema,
   password: passwordSchema,
+  privacyPolicyAcknowledged: requiredTrueSchema,
+  termsOfUseAccepted: requiredTrueSchema,
 });
 
 export const loginInputSchema = z.object({

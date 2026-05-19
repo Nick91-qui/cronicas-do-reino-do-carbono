@@ -81,6 +81,9 @@ export function AuthForm({ mode }: AuthFormProps) {
               displayName: String(formData.get("displayName") ?? ""),
               username: String(formData.get("username") ?? ""),
               password: String(formData.get("password") ?? ""),
+              privacyPolicyAcknowledged:
+                formData.get("privacyPolicyAcknowledged") === "on",
+              termsOfUseAccepted: formData.get("termsOfUseAccepted") === "on",
             }
           : {
               username: String(formData.get("username") ?? ""),
@@ -208,6 +211,47 @@ export function AuthForm({ mode }: AuthFormProps) {
             </label>
           </div>
 
+          {mode === "register" ? (
+            <div className="space-y-3 rounded-3xl border border-white/10 bg-slate-950/40 px-4 py-4 text-sm text-slate-200">
+              <label className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  name="privacyPolicyAcknowledged"
+                  required
+                  className="mt-1 h-4 w-4 rounded border-white/20 bg-slate-900 text-cyan-300"
+                />
+                <span className="leading-6">
+                  Li e estou ciente da{" "}
+                  <Link
+                    href="/privacy"
+                    className="font-semibold text-cyan-200 transition hover:text-cyan-100"
+                  >
+                    Politica de Privacidade
+                  </Link>
+                  .
+                </span>
+              </label>
+              <label className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  name="termsOfUseAccepted"
+                  required
+                  className="mt-1 h-4 w-4 rounded border-white/20 bg-slate-900 text-cyan-300"
+                />
+                <span className="leading-6">
+                  Aceito os{" "}
+                  <Link
+                    href="/terms"
+                    className="font-semibold text-cyan-200 transition hover:text-cyan-100"
+                  >
+                    Termos de Uso
+                  </Link>{" "}
+                  do piloto interno.
+                </span>
+              </label>
+            </div>
+          ) : null}
+
           {error ? (
             <p className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
               {error}
@@ -237,6 +281,17 @@ export function AuthForm({ mode }: AuthFormProps) {
               >
                 Ler a Politica de Privacidade
               </Link>
+              {mode === "register" ? (
+                <>
+                  {" "}e os{" "}
+                  <Link
+                    href="/terms"
+                    className="font-semibold text-amber-200 transition hover:text-amber-100"
+                  >
+                    Termos de Uso
+                  </Link>
+                </>
+              ) : null}
             </p>
           </div>
         </form>

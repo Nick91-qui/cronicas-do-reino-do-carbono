@@ -1024,6 +1024,16 @@ Grupos recomendados:
 
 - `GET /api/collection`
 
+### 22.2.1 Requisitos mínimos do cadastro público
+
+O fluxo de `POST /api/auth/register` deve:
+
+- validar `classroomCode`, `displayName`, `username` e `password`;
+- exigir `privacyPolicyAcknowledged = true`;
+- exigir `termsOfUseAccepted = true`;
+- rejeitar o payload com `400` quando qualquer aceite obrigatório estiver ausente;
+- manter links públicos e visíveis para `/privacy` e `/terms` na UI de cadastro.
+
 ### 22.3 Princípios das rotas
 
 As rotas devem:

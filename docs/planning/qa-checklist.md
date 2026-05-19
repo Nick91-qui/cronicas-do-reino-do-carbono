@@ -152,7 +152,9 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 ### Transparência
 
 - [ ] telas públicas de login e cadastro exibem link visível para política de privacidade.
+- [ ] telas públicas de login e cadastro exibem link visível para termos de uso.
 - [ ] cadastro informa dados coletados, finalidade principal e uso de cookie de sessão essencial.
+- [ ] cadastro exige ciência da política de privacidade e aceite explícito dos termos de uso.
 - [ ] documentação do repositório identifica controlador, operador e canal de contato para direitos do titular.
 
 ### Minimização e acesso

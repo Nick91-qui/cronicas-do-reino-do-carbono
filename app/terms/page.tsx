@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function PrivacyPage() {
+export default function TermsPage() {
   return (
     <main className="min-h-screen bg-[#060913] px-4 py-8 text-white sm:px-6 sm:py-10">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -15,87 +15,86 @@ export default function PrivacyPage() {
             <Link href="/register" className="ritual-link px-4 py-2 text-sm">
               Cadastro
             </Link>
-            <Link href="/terms" className="ritual-link px-4 py-2 text-sm">
-              Termos de Uso
+            <Link href="/privacy" className="ritual-link px-4 py-2 text-sm">
+              Politica de Privacidade
             </Link>
           </div>
         </div>
 
         <article className="game-panel">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="hud-chip">Politica de Privacidade</span>
+            <span className="hud-chip">Termos de Uso</span>
             <span className="hud-chip border-gold/20 text-gold/90">
               Piloto interno
             </span>
           </div>
           <h1 className="mt-5 font-display text-4xl tracking-[0.05em] text-white sm:text-5xl">
-            Como o reino trata seus dados
+            Regras oficiais de uso do reino
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
-            Esta pagina apresenta a versao publica oficial da politica de
-            privacidade do piloto interno de Cronicas do Reino do Carbono, hoje
-            aplicado nas turmas do proprio controlador.
+            Esta pagina apresenta a versao publica oficial dos Termos de Uso do
+            piloto interno de Cronicas do Reino do Carbono.
           </p>
         </article>
 
         <section className="grid gap-4 lg:grid-cols-2">
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Dados coletados
+              Operacao atual
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>Codigo da turma, nome de exibicao, username e senha protegida por hash.</p>
-              <p>Sessao autenticada, progresso por fase, inventario, recompensas e eventos operacionais minimos.</p>
+              <p>Responsavel identificado: Nicholas Contijo Moreira, Vila Velha - ES - Brasil.</p>
+              <p>Contato operacional e de privacidade: nicholascm@gmail.com.</p>
             </div>
           </article>
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Finalidade principal
+              Escopo autorizado
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>Autenticar o jogador, vincular a turma correta e manter a jornada pedagogica.</p>
-              <p>Salvar progresso, retomar sessao e registrar eventos operacionais minimos de funcionamento e melhoria controlada do piloto.</p>
+              <p>O MVP esta autorizado apenas para piloto interno nas turmas do proprio controlador.</p>
+              <p>O sistema ainda nao esta aberto a outras escolas nem a adesao publica ampla.</p>
             </div>
           </article>
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Cookie essencial
+              Cadastro e acesso
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>O MVP usa cookie de sessao para manter login e proteger as areas autenticadas.</p>
-              <p>Esse cookie nao tem finalidade publicitaria e e necessario para o funcionamento da area protegida.</p>
+              <p>O cadastro exige codigo de turma valido, credenciais proprias e aceite destes termos.</p>
+              <p>O jogador tambem deve declarar ciencia da Politica de Privacidade antes da criacao da conta.</p>
             </div>
           </article>
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Direitos e contato
+              Uso aceitavel
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>O titular deve poder solicitar acesso, correcao, exportacao e exclusao ou anonimizacao conforme a operacao aplicavel.</p>
-              <p>Contato de privacidade e canal para direitos do titular: nicholascm@gmail.com.</p>
+              <p>Nao e permitido compartilhar conta, tentar acessar conta alheia ou manipular mecanismos do jogo.</p>
+              <p>O ambiente deve permanecer compativel com uso pedagogico interno e supervisionado.</p>
             </div>
           </article>
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Retencao oficial
+              Conta e encerramento
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>Sessao: ate 7 dias ou ate logout. Analytics operacionais: ate 6 meses.</p>
-              <p>Conta inativa e historico pedagogico: ate 12 meses sem acesso ou ate pedido de exclusao.</p>
+              <p>Contas podem ser restringidas ou encerradas por abuso, fraude, uso fora do escopo ou necessidade operacional.</p>
+              <p>O proprio jogador autenticado pode corrigir dados, exportar a conta e solicitar exclusao pelo fluxo disponivel.</p>
             </div>
           </article>
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Controlador e provedores
+              Relacao com privacidade
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>Controlador identificado: Nicholas Contijo Moreira, Vila Velha - ES - Brasil.</p>
-              <p>Infraestrutura atualmente usada: Vercel para hospedagem da aplicacao e Neon para banco de dados gerenciado.</p>
+              <p>O uso do MVP depende do tratamento minimo de dados para autenticacao, sessao e progresso pedagogico.</p>
+              <p>A politica oficial aplicavel esta publicada na pagina de privacidade e no documento legal do repositorio.</p>
             </div>
           </article>
         </section>
@@ -106,18 +105,14 @@ export default function PrivacyPage() {
           </p>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-300">
             <p>
-              Esta politica vale para o piloto interno conduzido pelo
-              controlador em suas proprias turmas. O MVP ainda nao esta aberto
-              a outras escolas ou a operacao externa ampliada.
+              Estes termos valem para o piloto interno conduzido pelo
+              controlador em suas proprias turmas e acompanham a politica de
+              privacidade oficial do repositorio.
             </p>
             <p>
-              O cadastro de novas contas exige ciencia desta politica e aceite
-              explicito dos Termos de Uso oficiais do piloto interno.
-            </p>
-            <p>
-              O repositiorio tambem possui implementacoes autenticadas para
-              correcao de dados, exportacao de conta e exclusao da conta do
-              proprio jogador.
+              O texto completo tambem esta mantido em
+              `docs/legal/terms-of-use.md` para governanca normativa e futura
+              revisao institucional.
             </p>
           </div>
         </article>

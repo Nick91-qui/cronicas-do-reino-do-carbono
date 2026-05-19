@@ -34,6 +34,13 @@ export default function LoginPage() {
               className="font-semibold text-cyan-200 transition hover:text-cyan-100"
             >
               Politica de Privacidade
+            </Link>{" "}
+            e{" "}
+            <Link
+              href="/terms"
+              className="font-semibold text-cyan-200 transition hover:text-cyan-100"
+            >
+              Termos de Uso
             </Link>
           </div>
         </div>

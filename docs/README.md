@@ -69,6 +69,7 @@ Esses arquivos não substituem os centrais, mas formalizam regras operacionais r
 - `planning/lgpd-adequacy-plan.md`
 - `planning/data-subject-rights-runbook.md`
 - `legal/privacy-policy.md`
+- `legal/terms-of-use.md`
 - `planning/operator-observability-plan.md`
 - `planning/synthesis-tutorial-plan.md`
 - `tech/builder-legacy-removal.md`
@@ -181,9 +182,10 @@ Consulte primeiro:
 1. `tech/technical-spec.md`
 2. `planning/lgpd-adequacy-plan.md`
 3. `legal/privacy-policy.md`
-4. `planning/data-subject-rights-runbook.md`
-5. `planning/qa-checklist.md`
-6. `project-context.md`
+4. `legal/terms-of-use.md`
+5. `planning/data-subject-rights-runbook.md`
+6. `planning/qa-checklist.md`
+7. `project-context.md`
 
 ## Regra de manutenção
 

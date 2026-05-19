@@ -92,6 +92,8 @@ describe("api/auth rate limiting", () => {
           displayName: "Nick",
           username: "nick",
           password: "12345678",
+          privacyPolicyAcknowledged: true,
+          termsOfUseAccepted: true,
         }),
         headers: { "Content-Type": "application/json" },
       }),
@@ -102,6 +104,39 @@ describe("api/auth rate limiting", () => {
     await expect(response.json()).resolves.toEqual({
       error: "Muitas tentativas de cadastro. Aguarde um pouco antes de tentar novamente.",
     });
+    expect(registerPlayerMock).not.toHaveBeenCalled();
+  });
+
+  it("rejeita cadastro sem os aceites obrigatorios", async () => {
+    consumeRegisterMock.mockReturnValue({
+      allowed: true,
+      retryAfterSeconds: 0,
+      remaining: 2,
+    });
+
+    const response = await registerPost(
+      new Request("http://localhost/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          classroomCode: "ABC123",
+          displayName: "Nick",
+          username: "nick",
+          password: "12345678",
+          privacyPolicyAcknowledged: true,
+          termsOfUseAccepted: false,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    const json = (await response.json()) as {
+      error: string;
+      details?: { fieldErrors?: Record<string, string[]> };
+    };
+
+    expect(json.error).toBe("Payload de cadastro inválido.");
+    expect(json.details?.fieldErrors?.termsOfUseAccepted).toBeDefined();
     expect(registerPlayerMock).not.toHaveBeenCalled();
   });
 });

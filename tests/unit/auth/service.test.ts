@@ -46,6 +46,8 @@ describe("auth/service", () => {
         displayName: "  Nicholas  ",
         username: "nick-login",
         password: "12345678",
+        privacyPolicyAcknowledged: true,
+        termsOfUseAccepted: true,
       }),
     ).rejects.toThrow("Nome no livro dos aprendizes já está em uso.");
   });
@@ -66,6 +68,8 @@ describe("auth/service", () => {
         displayName: "Nicholas",
         username: "nick-login",
         password: "12345678",
+        privacyPolicyAcknowledged: true,
+        termsOfUseAccepted: true,
       }),
     ).rejects.toThrow("Username já está em uso.");
   });

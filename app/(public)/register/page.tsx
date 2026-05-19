@@ -31,6 +31,13 @@ export default function RegisterPage() {
               className="font-semibold text-cyan-200 transition hover:text-cyan-100"
             >
               Politica de Privacidade
+            </Link>{" "}
+            e os{" "}
+            <Link
+              href="/terms"
+              className="font-semibold text-cyan-200 transition hover:text-cyan-100"
+            >
+              Termos de Uso
             </Link>
           </div>
         </div>
