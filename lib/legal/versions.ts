@@ -1,0 +1,3 @@
+export const LEGAL_POLICY_EFFECTIVE_DATE = "2026-05-20";
+export const PRIVACY_POLICY_VERSION = "2026-05-20.1";
+export const TERMS_OF_USE_VERSION = "2026-05-20.1";

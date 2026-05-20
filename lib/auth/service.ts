@@ -4,6 +4,10 @@ import { ensurePlayerInventorySnapshot } from "@/lib/inventory/service";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import type { LoginInput, RegisterInput } from "@/lib/auth/schema";
 import { createSessionForPlayer } from "@/lib/auth/session";
+import {
+  PRIVACY_POLICY_VERSION,
+  TERMS_OF_USE_VERSION,
+} from "@/lib/legal/versions";
 
 function normalizeUsername(username: string): string {
   return username.trim().toLowerCase();
@@ -30,6 +34,7 @@ export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
   const classroomCode = normalizeClassroomCode(input.classroomCode);
   const displayName = normalizeDisplayName(input.displayName);
   const username = normalizeUsername(input.username);
+  const legalAcceptanceTimestamp = new Date();
 
   const classroom = await db.classroom.findUnique({ where: { code: classroomCode } });
 
@@ -68,6 +73,10 @@ export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
           displayName,
           username,
           passwordHash,
+          privacyPolicyAcknowledgedAt: legalAcceptanceTimestamp,
+          privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+          termsOfUseAcceptedAt: legalAcceptanceTimestamp,
+          termsOfUseVersion: TERMS_OF_USE_VERSION,
         },
       });
 
@@ -80,6 +89,8 @@ export async function registerPlayer(db: PrismaClient, input: RegisterInput) {
           payloadJson: {
             classroomCode,
             username,
+            privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+            termsOfUseVersion: TERMS_OF_USE_VERSION,
           },
         },
       });

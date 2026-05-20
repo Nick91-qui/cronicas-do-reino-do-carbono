@@ -1031,6 +1031,7 @@ O fluxo de `POST /api/auth/register` deve:
 - validar `classroomCode`, `displayName`, `username` e `password`;
 - exigir `privacyPolicyAcknowledged = true`;
 - exigir `termsOfUseAccepted = true`;
+- persistir `privacyPolicyAcknowledgedAt`, `privacyPolicyVersion`, `termsOfUseAcceptedAt` e `termsOfUseVersion` no jogador criado;
 - rejeitar o payload com `400` quando qualquer aceite obrigatório estiver ausente;
 - manter links públicos e visíveis para `/privacy` e `/terms` na UI de cadastro.
 

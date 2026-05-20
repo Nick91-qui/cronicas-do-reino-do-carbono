@@ -59,6 +59,7 @@ Objetivo:
 Escopo minimo do acesso:
 
 - dados cadastrais do jogador;
+- evidencia persistida de ciencia da politica e aceite dos termos, quando existente;
 - dados de turma associados;
 - sessoes ativas ou recentes, quando aplicavel;
 - progresso por capitulo e fase;
@@ -94,6 +95,7 @@ Formato recomendado no MVP:
 Implementacao atual no repositorio:
 
 - `GET /api/account/export`
+- inclui, quando existente, timestamp e versao de politica de privacidade e termos de uso aceitos no cadastro.
 
 ### 5. Exclusao ou anonimizaicao
 

@@ -2,6 +2,10 @@ import { describe, expect, it, vi } from "vitest";
 
 import { hashPassword } from "@/lib/auth/password";
 import {
+  PRIVACY_POLICY_VERSION,
+  TERMS_OF_USE_VERSION,
+} from "@/lib/legal/versions";
+import {
   deletePlayerAccount,
   exportPlayerAccountData,
 } from "@/lib/privacy/service";
@@ -17,6 +21,10 @@ describe("privacy/service", () => {
           displayName: "Jogador",
           username: "jogador",
           passwordHash: "secret",
+          privacyPolicyAcknowledgedAt: new Date("2026-05-20T10:00:00.000Z"),
+          privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+          termsOfUseAcceptedAt: new Date("2026-05-20T10:00:00.000Z"),
+          termsOfUseVersion: TERMS_OF_USE_VERSION,
           hasSeenSynthesisTutorial: false,
           createdAt: new Date("2026-01-01T00:00:00.000Z"),
           updatedAt: new Date("2026-01-02T00:00:00.000Z"),
@@ -44,6 +52,8 @@ describe("privacy/service", () => {
       classroom: {
         code: "ABC123",
       },
+      privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+      termsOfUseVersion: TERMS_OF_USE_VERSION,
     });
     expect(exported.player).not.toHaveProperty("passwordHash");
     expect(typeof exported.exportedAt).toBe("string");

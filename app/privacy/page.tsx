@@ -1,5 +1,10 @@
 import Link from "next/link";
 
+import {
+  LEGAL_POLICY_EFFECTIVE_DATE,
+  PRIVACY_POLICY_VERSION,
+} from "@/lib/legal/versions";
+
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-[#060913] px-4 py-8 text-white sm:px-6 sm:py-10">
@@ -27,6 +32,9 @@ export default function PrivacyPage() {
             <span className="hud-chip border-gold/20 text-gold/90">
               Piloto interno
             </span>
+            <span className="hud-chip border-white/10 text-slate-200">
+              v{PRIVACY_POLICY_VERSION}
+            </span>
           </div>
           <h1 className="mt-5 font-display text-4xl tracking-[0.05em] text-white sm:text-5xl">
             Como o reino trata seus dados
@@ -35,6 +43,9 @@ export default function PrivacyPage() {
             Esta pagina apresenta a versao publica oficial da politica de
             privacidade do piloto interno de Cronicas do Reino do Carbono, hoje
             aplicado nas turmas do proprio controlador.
+          </p>
+          <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
+            Vigencia: {LEGAL_POLICY_EFFECTIVE_DATE}
           </p>
         </article>
 
@@ -113,6 +124,10 @@ export default function PrivacyPage() {
             <p>
               O cadastro de novas contas exige ciencia desta politica e aceite
               explicito dos Termos de Uso oficiais do piloto interno.
+            </p>
+            <p>
+              Para novas contas, o sistema registra a versao e o momento dessa
+              ciencia para fins de rastreabilidade operacional minima.
             </p>
             <p>
               O repositiorio tambem possui implementacoes autenticadas para

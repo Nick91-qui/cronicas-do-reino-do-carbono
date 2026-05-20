@@ -1,5 +1,8 @@
 # Politica de Privacidade do MVP
 
+- versao oficial: `2026-05-20.1`
+- vigencia: `2026-05-20`
+
 ## 1. Proposito
 
 Esta politica descreve, em linguagem clara, como o MVP de **Cronicas do Reino do Carbono** trata dados pessoais durante cadastro, autenticacao, uso do jogo e operacao interna minima.
@@ -163,6 +166,8 @@ O titular dos dados, ou seu representante legitimo quando cabivel, deve poder so
 As solicitacoes devem seguir o runbook interno do repositorio:
 
 - `docs/planning/data-subject-rights-runbook.md`
+
+O cadastro de novas contas no piloto interno passa a registrar, no perfil do jogador, a versao e o timestamp de ciencia desta politica.
 
 ## 12. Seguranca minima
 

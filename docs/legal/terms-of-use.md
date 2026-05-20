@@ -1,5 +1,8 @@
 # Termos de Uso do Piloto Interno
 
+- versao oficial: `2026-05-20.1`
+- vigencia: `2026-05-20`
+
 ## 1. Proposito
 
 Estes termos regulam o uso do MVP web de **Cronicas do Reino do Carbono** durante sua operacao como piloto interno.
@@ -37,6 +40,8 @@ Para criar conta e usar a area autenticada, o jogador deve:
 - manter sua senha sob guarda pessoal;
 - declarar ciencia da politica de privacidade;
 - aceitar estes termos de uso.
+
+Para novas contas do piloto interno, o sistema registra a versao e o timestamp do aceite destes termos.
 
 O acesso pode ser negado, limitado ou encerrado se o cadastro estiver fora do escopo do piloto interno.
 

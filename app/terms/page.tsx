@@ -1,5 +1,10 @@
 import Link from "next/link";
 
+import {
+  LEGAL_POLICY_EFFECTIVE_DATE,
+  TERMS_OF_USE_VERSION,
+} from "@/lib/legal/versions";
+
 export default function TermsPage() {
   return (
     <main className="min-h-screen bg-[#060913] px-4 py-8 text-white sm:px-6 sm:py-10">
@@ -27,6 +32,9 @@ export default function TermsPage() {
             <span className="hud-chip border-gold/20 text-gold/90">
               Piloto interno
             </span>
+            <span className="hud-chip border-white/10 text-slate-200">
+              v{TERMS_OF_USE_VERSION}
+            </span>
           </div>
           <h1 className="mt-5 font-display text-4xl tracking-[0.05em] text-white sm:text-5xl">
             Regras oficiais de uso do reino
@@ -34,6 +42,9 @@ export default function TermsPage() {
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
             Esta pagina apresenta a versao publica oficial dos Termos de Uso do
             piloto interno de Cronicas do Reino do Carbono.
+          </p>
+          <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
+            Vigencia: {LEGAL_POLICY_EFFECTIVE_DATE}
           </p>
         </article>
 
@@ -65,6 +76,7 @@ export default function TermsPage() {
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>O cadastro exige codigo de turma valido, credenciais proprias e aceite destes termos.</p>
               <p>O jogador tambem deve declarar ciencia da Politica de Privacidade antes da criacao da conta.</p>
+              <p>Para novas contas, a operacao registra a versao e o momento desse aceite.</p>
             </div>
           </article>
 
