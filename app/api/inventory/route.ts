@@ -1,15 +1,32 @@
-import { getAuthenticatedPlayer } from "@/lib/auth/session";
+import {
+  ApiAuthenticationRequiredError,
+  ApiLegalAcceptanceRequiredError,
+  requireApiAuthenticatedPlayer,
+} from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { jsonNoStore } from "@/lib/http/response";
 import { getPlayerInventorySnapshot } from "@/lib/inventory/service";
+import { logServerError } from "@/lib/observability/logger";
 
 export async function GET() {
-  const player = await getAuthenticatedPlayer(prisma);
+  try {
+    const player = await requireApiAuthenticatedPlayer(prisma);
 
-  if (!player) {
-    return jsonNoStore({ error: "Autenticação obrigatória." }, { status: 401 });
+    const inventory = await getPlayerInventorySnapshot(prisma, player.playerId);
+    return jsonNoStore(inventory, { status: 200 });
+  } catch (error) {
+    if (error instanceof ApiAuthenticationRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 401 });
+    }
+
+    if (error instanceof ApiLegalAcceptanceRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 428 });
+    }
+
+    logServerError("inventory.get", error);
+    return jsonNoStore(
+      { error: "Falha interna ao carregar o inventário." },
+      { status: 500 },
+    );
   }
-
-  const inventory = await getPlayerInventorySnapshot(prisma, player.playerId);
-  return jsonNoStore(inventory, { status: 200 });
 }

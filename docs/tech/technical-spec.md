@@ -1000,6 +1000,7 @@ Grupos recomendados:
 - `POST /api/auth/logout`
 - `GET /api/account/export`
 - `DELETE /api/account`
+- `PATCH /api/account/legal-acceptance`
 
 **Acesso a conteúdo**
 
@@ -1032,8 +1033,15 @@ O fluxo de `POST /api/auth/register` deve:
 - exigir `privacyPolicyAcknowledged = true`;
 - exigir `termsOfUseAccepted = true`;
 - persistir `privacyPolicyAcknowledgedAt`, `privacyPolicyVersion`, `termsOfUseAcceptedAt` e `termsOfUseVersion` no jogador criado;
+- exigir novo aceite quando a versao persistida de politica ou termos estiver desatualizada em relacao a versao oficial vigente;
 - rejeitar o payload com `400` quando qualquer aceite obrigatório estiver ausente;
 - manter links públicos e visíveis para `/privacy` e `/terms` na UI de cadastro.
+
+Quando houver mudanca material em politica de privacidade ou termos de uso:
+
+- o acesso autenticado deve ser interrompido ate revisao e novo aceite;
+- a superficie protegida deve redirecionar o jogador para `/legal/update`;
+- as rotas autenticadas devem bloquear o acesso com resposta compativel ate que `PATCH /api/account/legal-acceptance` registre a nova versao.
 
 ### 22.3 Princípios das rotas
 

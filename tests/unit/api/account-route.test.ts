@@ -18,6 +18,11 @@ vi.mock("@/lib/auth/session", () => ({
       super("Autenticação obrigatória.");
     }
   },
+  ApiLegalAcceptanceRequiredError: class ApiLegalAcceptanceRequiredError extends Error {
+    constructor() {
+      super("Aceite atualizado dos documentos legais é obrigatório.");
+    }
+  },
   requireApiAuthenticatedPlayer: requireApiAuthenticatedPlayerMock,
   clearSessionCookie: clearSessionCookieMock,
 }));
@@ -35,7 +40,10 @@ vi.mock("@/lib/db/prisma", () => ({
 }));
 
 import { DELETE } from "@/app/api/account/route";
-import { ApiAuthenticationRequiredError } from "@/lib/auth/session";
+import {
+  ApiAuthenticationRequiredError,
+  ApiLegalAcceptanceRequiredError,
+} from "@/lib/auth/session";
 
 describe("api/account", () => {
   beforeEach(() => {
@@ -79,6 +87,23 @@ describe("api/account", () => {
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toMatchObject({
       error: "Payload de exclusão de conta inválido.",
+    });
+  });
+
+  it("retorna 428 quando o aceite legal atualizado e obrigatorio", async () => {
+    requireApiAuthenticatedPlayerMock.mockRejectedValue(
+      new ApiLegalAcceptanceRequiredError(),
+    );
+
+    const response = await DELETE(
+      new Request("http://localhost/api/account", {
+        method: "DELETE",
+      }),
+    );
+
+    expect(response.status).toBe(428);
+    await expect(response.json()).resolves.toEqual({
+      error: "Aceite atualizado dos documentos legais é obrigatório.",
     });
   });
 

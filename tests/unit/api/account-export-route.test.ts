@@ -16,6 +16,11 @@ vi.mock("@/lib/auth/session", () => ({
       super("Autenticação obrigatória.");
     }
   },
+  ApiLegalAcceptanceRequiredError: class ApiLegalAcceptanceRequiredError extends Error {
+    constructor() {
+      super("Aceite atualizado dos documentos legais é obrigatório.");
+    }
+  },
   requireApiAuthenticatedPlayer: requireApiAuthenticatedPlayerMock,
 }));
 
@@ -32,7 +37,10 @@ vi.mock("@/lib/db/prisma", () => ({
 }));
 
 import { GET } from "@/app/api/account/export/route";
-import { ApiAuthenticationRequiredError } from "@/lib/auth/session";
+import {
+  ApiAuthenticationRequiredError,
+  ApiLegalAcceptanceRequiredError,
+} from "@/lib/auth/session";
 
 describe("api/account/export", () => {
   beforeEach(() => {
@@ -75,6 +83,19 @@ describe("api/account/export", () => {
       },
     });
     expect(exportPlayerAccountDataMock).toHaveBeenCalledWith({}, "player-1");
+  });
+
+  it("retorna 428 quando o aceite legal atualizado e obrigatorio", async () => {
+    requireApiAuthenticatedPlayerMock.mockRejectedValue(
+      new ApiLegalAcceptanceRequiredError(),
+    );
+
+    const response = await GET();
+
+    expect(response.status).toBe(428);
+    await expect(response.json()).resolves.toEqual({
+      error: "Aceite atualizado dos documentos legais é obrigatório.",
+    });
   });
 
   it("registra falha inesperada", async () => {

@@ -1,5 +1,6 @@
 import {
   ApiAuthenticationRequiredError,
+  ApiLegalAcceptanceRequiredError,
   requireApiAuthenticatedPlayer,
 } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
@@ -42,6 +43,10 @@ export async function PATCH(request: Request) {
   } catch (error) {
     if (error instanceof ApiAuthenticationRequiredError) {
       return jsonNoStore({ error: error.message }, { status: 401 });
+    }
+
+    if (error instanceof ApiLegalAcceptanceRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 428 });
     }
 
     if (

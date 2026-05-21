@@ -8,6 +8,7 @@ import {
 import {
   deletePlayerAccount,
   exportPlayerAccountData,
+  updatePlayerLegalAcceptance,
 } from "@/lib/privacy/service";
 
 describe("privacy/service", () => {
@@ -120,6 +121,49 @@ describe("privacy/service", () => {
     expect(deleted).toMatchObject({
       deletedPlayerId: "player-1",
       deletedUsername: "jogador",
+    });
+  });
+
+  it("atualiza a ciencia e o aceite legal para as versoes vigentes", async () => {
+    const update = vi.fn().mockResolvedValue({
+      id: "player-1",
+      privacyPolicyAcknowledgedAt: new Date("2026-05-21T10:00:00.000Z"),
+      privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+      termsOfUseAcceptedAt: new Date("2026-05-21T10:00:00.000Z"),
+      termsOfUseVersion: TERMS_OF_USE_VERSION,
+    });
+    const db = {
+      player: {
+        findUnique: vi.fn().mockResolvedValue({ id: "player-1" }),
+        update,
+      },
+    } as never;
+
+    const updated = await updatePlayerLegalAcceptance(db, "player-1", {
+      privacyPolicyAcknowledged: true,
+      termsOfUseAccepted: true,
+    });
+
+    expect(update).toHaveBeenCalledWith({
+      where: { id: "player-1" },
+      data: expect.objectContaining({
+        privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+        termsOfUseVersion: TERMS_OF_USE_VERSION,
+        privacyPolicyAcknowledgedAt: expect.any(Date),
+        termsOfUseAcceptedAt: expect.any(Date),
+      }),
+      select: {
+        id: true,
+        privacyPolicyAcknowledgedAt: true,
+        privacyPolicyVersion: true,
+        termsOfUseAcceptedAt: true,
+        termsOfUseVersion: true,
+      },
+    });
+    expect(updated).toMatchObject({
+      id: "player-1",
+      privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+      termsOfUseVersion: TERMS_OF_USE_VERSION,
     });
   });
 });

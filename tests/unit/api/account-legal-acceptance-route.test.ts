@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
   requireApiAuthenticatedPlayerMock,
-  updatePlayerAccountProfileMock,
+  updatePlayerLegalAcceptanceMock,
   logServerErrorMock,
 } = vi.hoisted(() => ({
   requireApiAuthenticatedPlayerMock: vi.fn(),
-  updatePlayerAccountProfileMock: vi.fn(),
+  updatePlayerLegalAcceptanceMock: vi.fn(),
   logServerErrorMock: vi.fn(),
 }));
 
@@ -25,7 +25,7 @@ vi.mock("@/lib/auth/session", () => ({
 }));
 
 vi.mock("@/lib/privacy/service", () => ({
-  updatePlayerAccountProfile: updatePlayerAccountProfileMock,
+  updatePlayerLegalAcceptance: updatePlayerLegalAcceptanceMock,
 }));
 
 vi.mock("@/lib/observability/logger", () => ({
@@ -36,16 +36,13 @@ vi.mock("@/lib/db/prisma", () => ({
   prisma: {},
 }));
 
-import { PATCH } from "@/app/api/account/profile/route";
-import {
-  ApiAuthenticationRequiredError,
-  ApiLegalAcceptanceRequiredError,
-} from "@/lib/auth/session";
+import { PATCH } from "@/app/api/account/legal-acceptance/route";
+import { ApiAuthenticationRequiredError } from "@/lib/auth/session";
 
-describe("api/account/profile", () => {
+describe("api/account/legal-acceptance", () => {
   beforeEach(() => {
     requireApiAuthenticatedPlayerMock.mockReset();
-    updatePlayerAccountProfileMock.mockReset();
+    updatePlayerLegalAcceptanceMock.mockReset();
     logServerErrorMock.mockReset();
   });
 
@@ -55,7 +52,9 @@ describe("api/account/profile", () => {
     );
 
     const response = await PATCH(
-      new Request("http://localhost/api/account/profile"),
+      new Request("http://localhost/api/account/legal-acceptance", {
+        method: "PATCH",
+      }),
     );
 
     expect(response.status).toBe(401);
@@ -70,106 +69,65 @@ describe("api/account/profile", () => {
     });
 
     const response = await PATCH(
-      new Request("http://localhost/api/account/profile", {
+      new Request("http://localhost/api/account/legal-acceptance", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          displayName: "A",
-          username: "ok",
+          privacyPolicyAcknowledged: true,
+          termsOfUseAccepted: false,
         }),
       }),
     );
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toMatchObject({
-      error: "Payload de atualização de perfil inválido.",
+      error: "Payload de aceite legal inválido.",
     });
   });
 
-  it("retorna 428 quando o aceite legal atualizado e obrigatorio", async () => {
-    requireApiAuthenticatedPlayerMock.mockRejectedValue(
-      new ApiLegalAcceptanceRequiredError(),
-    );
-
-    const response = await PATCH(
-      new Request("http://localhost/api/account/profile", {
-        method: "PATCH",
-      }),
-    );
-
-    expect(response.status).toBe(428);
-    await expect(response.json()).resolves.toEqual({
-      error: "Aceite atualizado dos documentos legais é obrigatório.",
-    });
-  });
-
-  it("atualiza os dados da conta autenticada", async () => {
+  it("atualiza o aceite legal do jogador autenticado", async () => {
     requireApiAuthenticatedPlayerMock.mockResolvedValue({
       playerId: "player-1",
     });
-    updatePlayerAccountProfileMock.mockResolvedValue({
+    updatePlayerLegalAcceptanceMock.mockResolvedValue({
       id: "player-1",
-      displayName: "Novo Nome",
-      username: "novo-username",
+      privacyPolicyVersion: "2026-05-21.1",
+      termsOfUseVersion: "2026-05-21.1",
     });
 
     const response = await PATCH(
-      new Request("http://localhost/api/account/profile", {
+      new Request("http://localhost/api/account/legal-acceptance", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          displayName: "Novo Nome",
-          username: "novo-username",
+          privacyPolicyAcknowledged: true,
+          termsOfUseAccepted: true,
         }),
       }),
     );
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({
-      player: {
+      legalAcceptance: {
         id: "player-1",
-        displayName: "Novo Nome",
-        username: "novo-username",
+        privacyPolicyVersion: "2026-05-21.1",
+        termsOfUseVersion: "2026-05-21.1",
       },
     });
-    expect(updatePlayerAccountProfileMock).toHaveBeenCalledWith(
+    expect(updatePlayerLegalAcceptanceMock).toHaveBeenCalledWith(
       {},
       "player-1",
       {
-        displayName: "Novo Nome",
-        username: "novo-username",
+        privacyPolicyAcknowledged: true,
+        termsOfUseAccepted: true,
       },
     );
-  });
-
-  it("retorna erro de cliente quando o username ja esta em uso", async () => {
-    requireApiAuthenticatedPlayerMock.mockResolvedValue({
-      playerId: "player-1",
-    });
-    updatePlayerAccountProfileMock.mockRejectedValue(
-      new Error("Username já está em uso."),
-    );
-
-    const response = await PATCH(
-      new Request("http://localhost/api/account/profile", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          displayName: "Novo Nome",
-          username: "novo-username",
-        }),
-      }),
-    );
-
-    expect(response.status).toBe(400);
-    await expect(response.json()).resolves.toEqual({
-      error: "Username já está em uso.",
+    expect(requireApiAuthenticatedPlayerMock).toHaveBeenCalledWith({}, {
+      allowOutdatedLegalAcceptance: true,
     });
   });
 
@@ -177,27 +135,27 @@ describe("api/account/profile", () => {
     requireApiAuthenticatedPlayerMock.mockResolvedValue({
       playerId: "player-1",
     });
-    updatePlayerAccountProfileMock.mockRejectedValue(new Error("db down"));
+    updatePlayerLegalAcceptanceMock.mockRejectedValue(new Error("db down"));
 
     const response = await PATCH(
-      new Request("http://localhost/api/account/profile", {
+      new Request("http://localhost/api/account/legal-acceptance", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          displayName: "Novo Nome",
-          username: "novo-username",
+          privacyPolicyAcknowledged: true,
+          termsOfUseAccepted: true,
         }),
       }),
     );
 
     expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual({
-      error: "Falha interna ao atualizar os dados da conta.",
+      error: "Falha interna ao atualizar o aceite legal.",
     });
     expect(logServerErrorMock).toHaveBeenCalledWith(
-      "account.profile.update",
+      "account.legal-acceptance.update",
       expect.any(Error),
     );
   });

@@ -156,6 +156,7 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 - [ ] cadastro informa dados coletados, finalidade principal e uso de cookie de sessão essencial.
 - [ ] cadastro exige ciência da política de privacidade e aceite explícito dos termos de uso.
 - [ ] cadastro persiste versão e timestamp de ciência/aceite para política e termos.
+- [ ] mudança material de política ou termos desvia o jogador autenticado para revisão em `/legal/update`.
 - [ ] documentação do repositório identifica controlador, operador e canal de contato para direitos do titular.
 
 ### Minimização e acesso
@@ -168,6 +169,7 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 
 - [ ] existe regra documentada de retenção para sessão, conta, analytics e histórico de tentativas.
 - [ ] existe fluxo documentado para correção, exportação e exclusão ou anonimização de conta.
+- [ ] existe fluxo implementado para registrar novo aceite material de política e termos em `PATCH /api/account/legal-acceptance`.
 - [ ] `GET /api/account/export` retorna os dados da conta autenticada sem expor `passwordHash`.
 - [ ] `DELETE /api/account` exige sessão, senha atual e confirmação explícita antes de excluir a conta.
 - [ ] sessões expiradas possuem rotina prevista de limpeza operacional.

@@ -5,6 +5,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { getEnv } from "@/lib/validation/env";
+import {
+  PRIVACY_POLICY_VERSION,
+  TERMS_OF_USE_VERSION,
+} from "@/lib/legal/versions";
 
 const SESSION_COOKIE_NAME = "crc_session";
 const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7;
@@ -60,7 +64,14 @@ export type AuthenticatedPlayer = {
   displayName: string;
   username: string;
   hasSeenSynthesisTutorial: boolean;
+  privacyPolicyVersion: string | null;
+  termsOfUseVersion: string | null;
+  needsLegalAcceptance: boolean;
   sessionExpiresAt: Date;
+};
+
+type AuthRequirementOptions = {
+  allowOutdatedLegalAcceptance?: boolean;
 };
 
 export class ApiAuthenticationRequiredError extends Error {
@@ -68,6 +79,23 @@ export class ApiAuthenticationRequiredError extends Error {
     super("Autenticação obrigatória.");
     this.name = "ApiAuthenticationRequiredError";
   }
+}
+
+export class ApiLegalAcceptanceRequiredError extends Error {
+  constructor() {
+    super("Aceite atualizado dos documentos legais é obrigatório.");
+    this.name = "ApiLegalAcceptanceRequiredError";
+  }
+}
+
+function needsCurrentLegalAcceptance(input: {
+  privacyPolicyVersion: string | null;
+  termsOfUseVersion: string | null;
+}) {
+  return (
+    input.privacyPolicyVersion !== PRIVACY_POLICY_VERSION ||
+    input.termsOfUseVersion !== TERMS_OF_USE_VERSION
+  );
 }
 
 export async function createSessionForPlayer(db: DbClient, playerId: string) {
@@ -137,25 +165,45 @@ export async function getAuthenticatedPlayer(db: DbClient): Promise<Authenticate
     displayName: session.player.displayName,
     username: session.player.username,
     hasSeenSynthesisTutorial: session.player.hasSeenSynthesisTutorial,
+    privacyPolicyVersion: session.player.privacyPolicyVersion,
+    termsOfUseVersion: session.player.termsOfUseVersion,
+    needsLegalAcceptance: needsCurrentLegalAcceptance({
+      privacyPolicyVersion: session.player.privacyPolicyVersion,
+      termsOfUseVersion: session.player.termsOfUseVersion,
+    }),
     sessionExpiresAt: session.expiresAt,
   };
 }
 
-export async function requireAuthenticatedPlayer(db: DbClient): Promise<AuthenticatedPlayer> {
+export async function requireAuthenticatedPlayer(
+  db: DbClient,
+  options: AuthRequirementOptions = {},
+): Promise<AuthenticatedPlayer> {
   const player = await getAuthenticatedPlayer(db);
 
   if (!player) {
     redirect("/login");
   }
 
+  if (!options.allowOutdatedLegalAcceptance && player.needsLegalAcceptance) {
+    redirect("/legal/update");
+  }
+
   return player;
 }
 
-export async function requireApiAuthenticatedPlayer(db: DbClient): Promise<AuthenticatedPlayer> {
+export async function requireApiAuthenticatedPlayer(
+  db: DbClient,
+  options: AuthRequirementOptions = {},
+): Promise<AuthenticatedPlayer> {
   const player = await getAuthenticatedPlayer(db);
 
   if (!player) {
     throw new ApiAuthenticationRequiredError();
+  }
+
+  if (!options.allowOutdatedLegalAcceptance && player.needsLegalAcceptance) {
+    throw new ApiLegalAcceptanceRequiredError();
   }
 
   return player;

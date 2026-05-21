@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import {
+  PRIVACY_POLICY_VERSION,
+  TERMS_OF_USE_VERSION,
+} from "@/lib/legal/versions";
+
 const { cookiesMock } = vi.hoisted(() => ({
   cookiesMock: vi.fn(),
 }));
@@ -37,6 +42,8 @@ describe("auth/session", () => {
             displayName: "Jogador",
             username: "jogador",
             hasSeenSynthesisTutorial: false,
+            privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+            termsOfUseVersion: TERMS_OF_USE_VERSION,
           },
         }),
         deleteMany,
@@ -69,6 +76,8 @@ describe("auth/session", () => {
             displayName: "Jogador",
             username: "jogador",
             hasSeenSynthesisTutorial: true,
+            privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+            termsOfUseVersion: TERMS_OF_USE_VERSION,
           },
         }),
       },
@@ -84,6 +93,41 @@ describe("auth/session", () => {
       displayName: "Jogador",
       username: "jogador",
       hasSeenSynthesisTutorial: true,
+      privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+      termsOfUseVersion: TERMS_OF_USE_VERSION,
+      needsLegalAcceptance: false,
+    });
+  });
+
+  it("marca necessidade de novo aceite quando a versao legal salva esta desatualizada", async () => {
+    cookiesMock.mockResolvedValue({
+      get: () => ({ value: "token-1" }),
+    });
+
+    const db = {
+      session: {
+        findUnique: vi.fn().mockResolvedValue({
+          id: "hashed-token",
+          expiresAt: new Date("2999-01-01T00:00:00.000Z"),
+          player: {
+            id: "player-1",
+            classroomId: "class-1",
+            role: "player",
+            classroom: { code: "ABC123" },
+            displayName: "Jogador",
+            username: "jogador",
+            hasSeenSynthesisTutorial: true,
+            privacyPolicyVersion: "2026-05-20.1",
+            termsOfUseVersion: TERMS_OF_USE_VERSION,
+          },
+        }),
+      },
+    } as never;
+
+    const result = await getAuthenticatedPlayer(db);
+
+    expect(result).toMatchObject({
+      needsLegalAcceptance: true,
     });
   });
 });

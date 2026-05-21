@@ -1,15 +1,32 @@
-import { getAuthenticatedPlayer } from "@/lib/auth/session";
+import {
+  ApiAuthenticationRequiredError,
+  ApiLegalAcceptanceRequiredError,
+  requireApiAuthenticatedPlayer,
+} from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { jsonNoStore } from "@/lib/http/response";
+import { logServerError } from "@/lib/observability/logger";
 import { getAllChaptersProgressView } from "@/lib/progress/queries";
 
 export async function GET() {
-  const player = await getAuthenticatedPlayer(prisma);
+  try {
+    const player = await requireApiAuthenticatedPlayer(prisma);
 
-  if (!player) {
-    return jsonNoStore({ error: "Autenticação obrigatória." }, { status: 401 });
+    const progress = await getAllChaptersProgressView(prisma, player.playerId);
+    return jsonNoStore({ progress }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ApiAuthenticationRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 401 });
+    }
+
+    if (error instanceof ApiLegalAcceptanceRequiredError) {
+      return jsonNoStore({ error: error.message }, { status: 428 });
+    }
+
+    logServerError("progress.get", error);
+    return jsonNoStore(
+      { error: "Falha interna ao carregar o progresso." },
+      { status: 500 },
+    );
   }
-
-  const progress = await getAllChaptersProgressView(prisma, player.playerId);
-  return jsonNoStore({ progress }, { status: 200 });
 }

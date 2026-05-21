@@ -1,49 +1,48 @@
 import {
   ApiAuthenticationRequiredError,
   ApiLegalAcceptanceRequiredError,
-  clearSessionCookie,
   requireApiAuthenticatedPlayer,
 } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { jsonNoStore } from "@/lib/http/response";
 import { logServerError } from "@/lib/observability/logger";
-import { deleteAccountInputSchema } from "@/lib/privacy/schema";
-import { deletePlayerAccount } from "@/lib/privacy/service";
+import { updateLegalAcceptanceInputSchema } from "@/lib/privacy/schema";
+import { updatePlayerLegalAcceptance } from "@/lib/privacy/service";
 
-const DELETE_ACCOUNT_CLIENT_ERRORS = new Set([
+const UPDATE_LEGAL_ACCEPTANCE_CLIENT_ERRORS = new Set([
   "Jogador não encontrado.",
-  "Senha atual inválida.",
 ]);
 
-export async function DELETE(request: Request) {
+export async function PATCH(request: Request) {
   try {
-    const authenticatedPlayer = await requireApiAuthenticatedPlayer(prisma);
+    const authenticatedPlayer = await requireApiAuthenticatedPlayer(prisma, {
+      allowOutdatedLegalAcceptance: true,
+    });
     const json = await request.json().catch(() => null);
-    const parsedPayload = deleteAccountInputSchema.safeParse(json);
+    const parsedPayload = updateLegalAcceptanceInputSchema.safeParse(json);
 
     if (!parsedPayload.success) {
       return jsonNoStore(
-        { error: "Payload de exclusão de conta inválido.", details: parsedPayload.error.flatten() },
+        {
+          error: "Payload de aceite legal inválido.",
+          details: parsedPayload.error.flatten(),
+        },
         { status: 400 },
       );
     }
 
-    const deleted = await deletePlayerAccount(
+    const updatedPlayer = await updatePlayerLegalAcceptance(
       prisma,
       authenticatedPlayer.playerId,
       parsedPayload.data,
     );
 
-    const response = jsonNoStore(
+    return jsonNoStore(
       {
-        ok: true,
-        deletedPlayerId: deleted.deletedPlayerId,
+        legalAcceptance: updatedPlayer,
       },
       { status: 200 },
     );
-    clearSessionCookie(response.cookies);
-
-    return response;
   } catch (error) {
     if (error instanceof ApiAuthenticationRequiredError) {
       return jsonNoStore({ error: error.message }, { status: 401 });
@@ -53,13 +52,16 @@ export async function DELETE(request: Request) {
       return jsonNoStore({ error: error.message }, { status: 428 });
     }
 
-    if (error instanceof Error && DELETE_ACCOUNT_CLIENT_ERRORS.has(error.message)) {
+    if (
+      error instanceof Error &&
+      UPDATE_LEGAL_ACCEPTANCE_CLIENT_ERRORS.has(error.message)
+    ) {
       return jsonNoStore({ error: error.message }, { status: 400 });
     }
 
-    logServerError("account.delete", error);
+    logServerError("account.legal-acceptance.update", error);
     return jsonNoStore(
-      { error: "Falha interna ao excluir a conta." },
+      { error: "Falha interna ao atualizar o aceite legal." },
       { status: 500 },
     );
   }

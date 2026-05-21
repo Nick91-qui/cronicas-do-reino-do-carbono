@@ -3,6 +3,11 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import { verifyPassword } from "@/lib/auth/password";
 import type { DeleteAccountInput } from "@/lib/privacy/schema";
 import type { UpdateAccountProfileInput } from "@/lib/privacy/schema";
+import type { UpdateLegalAcceptanceInput } from "@/lib/privacy/schema";
+import {
+  PRIVACY_POLICY_VERSION,
+  TERMS_OF_USE_VERSION,
+} from "@/lib/legal/versions";
 
 type DbClient = PrismaClient | Prisma.TransactionClient;
 
@@ -150,6 +155,44 @@ export async function updatePlayerAccountProfile(
       id: true,
       displayName: true,
       username: true,
+    },
+  });
+
+  return updatedPlayer;
+}
+
+export async function updatePlayerLegalAcceptance(
+  db: PrismaClient,
+  playerId: string,
+  _input: UpdateLegalAcceptanceInput,
+) {
+  const currentPlayer = await db.player.findUnique({
+    where: { id: playerId },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!currentPlayer) {
+    throw new Error("Jogador não encontrado.");
+  }
+
+  const acceptedAt = new Date();
+
+  const updatedPlayer = await db.player.update({
+    where: { id: playerId },
+    data: {
+      privacyPolicyAcknowledgedAt: acceptedAt,
+      privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+      termsOfUseAcceptedAt: acceptedAt,
+      termsOfUseVersion: TERMS_OF_USE_VERSION,
+    },
+    select: {
+      id: true,
+      privacyPolicyAcknowledgedAt: true,
+      privacyPolicyVersion: true,
+      termsOfUseAcceptedAt: true,
+      termsOfUseVersion: true,
     },
   });
 
