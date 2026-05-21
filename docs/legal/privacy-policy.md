@@ -1,48 +1,47 @@
-# Politica de Privacidade do MVP
+# Politica de Privacidade de Cronicas do Reino do Carbono
 
-- versao oficial: `2026-05-20.1`
-- vigencia: `2026-05-20`
+- versao oficial: `2026-05-21.1`
+- vigencia: `2026-05-21`
 
 ## 1. Proposito
 
-Esta politica descreve, em linguagem clara, como o MVP de **Cronicas do Reino do Carbono** trata dados pessoais durante cadastro, autenticacao, uso do jogo e operacao interna minima.
+Esta politica descreve, em linguagem clara, como **Cronicas do Reino do Carbono** trata dados pessoais no contexto de uso educacional atualmente operado pelo responsavel do projeto.
 
-Este documento deve ser publicado e referenciado nas telas publicas de autenticacao antes de uso ampliado com jogadores reais.
+Ela deve ser publicada e referenciada nas telas publicas de autenticacao e lida em conjunto com os termos de uso do servico.
 
 ## 2. Escopo desta politica
 
-Esta politica cobre o tratamento de dados pessoais realizado pelo MVP web hospedado para:
+Esta politica cobre o tratamento de dados pessoais relacionado a:
 
 - cadastro e login;
 - manutencao de sessao autenticada;
-- persistencia de progresso e historico de jogo;
+- persistencia de progresso, tentativas, inventario e recompensas;
 - analytics operacionais minimos;
-- suporte interno de leitura operacional restrita.
+- relatorios pedagogicos ligados ao uso da turma;
+- atendimento a direitos do titular e suporte operacional.
 
-## 3. Quem e o responsavel pelos dados
+## 3. Quem trata os dados
 
-### 3.1 Operacao atual do MVP
+### 3.1 Operacao atual
 
-Enquanto este MVP estiver sendo operado diretamente pelo mantenedor do projeto, o controlador atualmente identificado para esta operacao e:
+No estado atual da operacao:
 
-- responsavel/controlador: `Nicholas Contijo Moreira`
+- responsavel/controlador identificado: `Nicholas Contijo Moreira`
 - localizacao informada: `Vila Velha - ES - Brasil`
 - contato de privacidade: `nicholascm@gmail.com`
 - canal para direitos do titular: `nicholascm@gmail.com`
 
-### 3.2 Uso por escola ou instituicao
+### 3.2 Contexto escolar
 
-Se o MVP for operado em parceria com escola, curso ou instituicao:
+Quando o servico for utilizado em contexto escolar, a escola, instituicao ou organizacao educacional envolvida podera participar da operacao como parte contratante, ambiente institucional de aplicacao pedagogica ou arranjo equivalente, conforme a relacao concreta adotada.
 
-- o papel de controlador e operador deve ser definido formalmente antes do uso;
-- o canal de atendimento ao titular e o responsavel legal devem ser informados de forma explicita;
-- esta politica deve ser revisada para refletir essa operacao concreta.
+Se essa distribuicao de papeis mudar de forma relevante, esta politica deve ser atualizada para refletir a operacao real.
 
-## 4. Quais dados o MVP trata
+## 4. Quais dados o servico trata
 
 ### 4.1 Dados informados no cadastro
 
-O MVP pode tratar os seguintes dados fornecidos no cadastro:
+O servico pode tratar os seguintes dados fornecidos no cadastro:
 
 - codigo da turma;
 - nome de exibicao no jogo;
@@ -51,18 +50,20 @@ O MVP pode tratar os seguintes dados fornecidos no cadastro:
 
 ### 4.2 Dados gerados durante o uso
 
-O MVP tambem pode tratar:
+O servico tambem pode tratar:
 
 - identificador interno do jogador;
 - dados de sessao autenticada;
 - progresso por fase e capitulo;
 - historico de tentativas;
 - inventario e recompensas;
-- eventos operacionais de analytics relacionados ao uso do jogo.
+- eventos operacionais de analytics ligados ao uso do sistema;
+- versao e timestamp da ciencia da politica e do aceite dos termos de uso;
+- relatorios pedagogicos derivados do uso da plataforma na turma.
 
-### 4.3 Dados que o MVP nao deve coletar
+### 4.3 Dados que o servico nao deve coletar
 
-No estado atual do MVP, o sistema nao deve coletar:
+No estado atual, o sistema nao deve coletar:
 
 - texto livre do jogador como resposta de fase;
 - documentos civis;
@@ -73,36 +74,39 @@ No estado atual do MVP, o sistema nao deve coletar:
 
 ## 5. Para que os dados sao usados
 
-Os dados tratados pelo MVP sao usados para:
+Os dados tratados pelo servico sao usados para:
 
 - autenticar o jogador e manter sua sessao;
 - vincular o jogador a uma turma valida;
 - salvar progresso, tentativas, pontuacao, inventario e recompensas;
 - permitir continuidade pedagogica da experiencia;
-- detectar problemas operacionais minimos de autenticacao e uso;
-- viabilizar suporte interno restrito, quando necessario.
+- gerar relatorios pedagogicos visiveis ao professor, escola ou responsavel educacional competente;
+- detectar problemas operacionais de autenticacao, uso e seguranca;
+- viabilizar suporte operacional e melhoria controlada da plataforma;
+- atender solicitacoes de acesso, correcao, exportacao e exclusao quando aplicavel.
 
-O MVP nao deve usar os dados para publicidade comportamental, venda de base de dados ou compartilhamento comercial de informacoes pessoais.
+O servico nao deve usar os dados para publicidade comportamental, venda de base de dados ou compartilhamento comercial de informacoes pessoais.
 
-## 6. Base operacional minima do tratamento
+## 6. Base operacional do tratamento
 
-Para o MVP, o tratamento deve permanecer limitado ao necessario para:
-
-- execucao da experiencia autenticada do jogo;
-- registro de progresso pedagogico;
-- seguranca e operacao basica da aplicacao.
-
-Antes de uso ampliado com instituicoes de ensino ou alunos reais, a base legal e a distribuicao de responsabilidades devem ser formalizadas pela operacao responsavel.
-
-No estado atual do piloto interno, a operacao assume a seguinte base operacional minima:
+No estado atual, a operacao assume como base operacional minima:
 
 - execucao da conta e do jogo para autenticar o jogador e manter sua sessao;
 - registro de progresso pedagogico para continuidade da experiencia;
-- interesse operacional legitimo do piloto interno para seguranca, estabilidade e melhoria controlada do MVP.
+- interesse operacional legitimo para seguranca, estabilidade, suporte e melhoria controlada da plataforma;
+- uso educacional do servico no contexto da turma e do acompanhamento pedagogico aplicavel.
 
-## 7. Cookies e sessao
+Quando houver arranjo institucional especifico com escola ou organizacao contratante, a distribuicao de responsabilidades e a base operacional devem ser formalizadas conforme a operacao concreta.
 
-O MVP usa cookie de sessao essencial para manter o login do jogador e proteger areas autenticadas.
+## 7. Faixa etaria e mediação educacional
+
+O servico pode ser utilizado por publico misto em contexto educacional.
+
+Quando houver estudantes menores de idade, o uso deve ocorrer com mediacao da escola, do professor ou da organizacao responsavel pela atividade pedagogica, conforme aplicavel.
+
+## 8. Cookies e sessao
+
+O servico usa cookie de sessao essencial para manter o login do jogador e proteger as areas autenticadas.
 
 Esse cookie:
 
@@ -110,86 +114,93 @@ Esse cookie:
 - nao tem finalidade publicitaria;
 - deve ser configurado com protecoes tecnicas compativeis com o ambiente de execucao.
 
-## 8. Analytics operacionais minimos
+## 9. Analytics operacionais e relatorios pedagogicos
 
-O MVP pode registrar eventos operacionais minimos, como:
+O servico pode registrar eventos operacionais minimos, como:
 
 - registro de jogador;
 - autenticacao;
 - submissao e avaliacao de fase;
 - conclusao de fase;
-- concessao de recompensa.
+- concessao de recompensa;
+- eventos tecnicos relacionados a operacao da conta.
 
-Esses eventos devem obedecer aos seguintes limites:
+Esses registros devem obedecer aos seguintes limites:
 
 - coletar apenas o minimo necessario;
 - evitar dados redundantes no payload;
 - nao registrar credenciais;
 - nao registrar texto livre;
-- nao ser reutilizados fora da finalidade operacional e evolutiva documentada.
+- nao ser reutilizados fora da finalidade operacional, pedagogica e evolutiva documentada.
 
-## 9. Compartilhamento de dados
+Relatorios pedagogicos podem ser apresentados ao professor, escola ou responsavel educacional competente, na medida necessaria ao acompanhamento da turma.
 
-No estado atual do MVP, os dados podem ser processados por fornecedores de infraestrutura usados para hospedar a aplicacao e o banco, como plataforma de deploy e banco de dados gerenciado.
+## 10. Compartilhamento de dados
 
-No estado atual do piloto, os provedores publicamente identificados sao:
+No estado atual, os dados podem ser processados por fornecedores de infraestrutura usados para hospedar a aplicacao e o banco.
+
+Os provedores publicamente identificados sao:
 
 - `Vercel`, para hospedagem da aplicacao;
 - `Neon`, para banco de dados gerenciado.
 
 O projeto nao deve compartilhar dados pessoais com terceiros para fins comerciais ou publicitarios.
 
-Qualquer compartilhamento adicional exige atualizacao desta politica e revisao documental da finalidade.
+Qualquer compartilhamento adicional relevante exige atualizacao desta politica.
 
-## 10. Retencao e descarte
+## 11. Retencao e descarte
 
-Os dados pessoais operacionais do MVP devem seguir regra explicita de retencao.
+Os dados pessoais operacionais do servico devem seguir regra explicita de retencao.
 
-No estado atual da documentacao:
+No estado atual:
 
 - sessoes devem ser retidas por ate `7 dias` ou ate logout;
 - contas inativas devem ser revisadas para exclusao apos `12 meses sem acesso`;
 - analytics operacionais devem ser retidos por ate `6 meses`;
 - progresso, tentativas, inventario e recompensas devem ser retidos por ate `12 meses` ou ate pedido de exclusao;
-- no piloto interno atual, a exclusao oficial adotada e a exclusao total da conta e dos dados vinculados a ela.
+- a exclusao oficial atualmente adotada e a exclusao total da conta e dos dados vinculados a ela, conforme o fluxo implementado no produto.
 
-## 11. Direitos do titular
+## 12. Direitos do titular
 
 O titular dos dados, ou seu representante legitimo quando cabivel, deve poder solicitar:
 
 - confirmacao de tratamento;
 - acesso aos dados;
 - correcao de dados cadastrais;
-- exclusao ou anonimizacao conforme a operacao aplicavel;
-- exportacao basica dos dados do jogador em formato legivel.
+- exportacao basica dos dados do jogador em formato legivel;
+- exclusao ou anonimizacao conforme a operacao aplicavel.
 
 As solicitacoes devem seguir o runbook interno do repositorio:
 
 - `docs/planning/data-subject-rights-runbook.md`
 
-O cadastro de novas contas no piloto interno passa a registrar, no perfil do jogador, a versao e o timestamp de ciencia desta politica.
+Para novas contas, o sistema registra versao e timestamp da ciencia desta politica e do aceite dos termos para fins de rastreabilidade operacional minima.
 
-## 12. Seguranca minima
+## 13. Seguranca minima
 
-O MVP deve adotar, no minimo:
+O servico deve adotar, no minimo:
 
 - armazenamento de senha apenas como hash seguro;
 - protecao de rotas autenticadas;
 - validacao server-side de escritas;
 - segregacao entre conteudo estatico e dados operacionais;
-- minimizacao de dados em analytics e observabilidade interna.
+- minimizacao de dados em analytics e observabilidade interna;
+- restricao de leitura na area administrativa e pedagogica ao estritamente necessario.
 
-## 13. Atualizacoes desta politica
+## 14. Atualizacoes desta politica
 
 Esta politica deve ser revisada sempre que houver mudanca relevante em:
 
 - cadastro, login ou sessao;
-- analytics;
+- analytics operacionais;
+- relatorios pedagogicos;
 - persistencia de progresso;
-- area `operator`;
+- papeis institucionais da operacao;
 - compartilhamento com terceiros;
-- retencao, exclusao ou exportacao de dados.
+- retencao, exclusao, exportacao ou atendimento ao titular.
 
-## 14. Status deste documento
+Nova versao deve ser publicada quando houver atualizacao relevante. Mudancas materiais podem exigir nova ciencia ou novo aceite, conforme a operacao considerar necessario.
 
-Status atual: politica publica oficial do piloto interno nas turmas do controlador, ainda nao aberta para outras escolas ou operacoes externas.
+## 15. Status deste documento
+
+Status atual: politica publica oficial de uso educacional do servico, com operacao gratuita no piloto e aplicacao voltada ao contexto autorizado pelo responsavel.

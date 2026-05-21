@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="hud-chip">Politica de Privacidade</span>
             <span className="hud-chip border-gold/20 text-gold/90">
-              Piloto interno
+              Uso educacional
             </span>
             <span className="hud-chip border-white/10 text-slate-200">
               v{PRIVACY_POLICY_VERSION}
@@ -41,8 +41,7 @@ export default function PrivacyPage() {
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
             Esta pagina apresenta a versao publica oficial da politica de
-            privacidade do piloto interno de Cronicas do Reino do Carbono, hoje
-            aplicado nas turmas do proprio controlador.
+            privacidade de Cronicas do Reino do Carbono para uso educacional.
           </p>
           <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
             Vigencia: {PRIVACY_POLICY_EFFECTIVE_DATE}
@@ -56,7 +55,7 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>Codigo da turma, nome de exibicao, username e senha protegida por hash.</p>
-              <p>Sessao autenticada, progresso por fase, inventario, recompensas e eventos operacionais minimos.</p>
+              <p>Sessao autenticada, progresso por fase, inventario, recompensas, eventos operacionais minimos e registro versionado do aceite legal.</p>
             </div>
           </article>
 
@@ -66,7 +65,7 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>Autenticar o jogador, vincular a turma correta e manter a jornada pedagogica.</p>
-              <p>Salvar progresso, retomar sessao e registrar eventos operacionais minimos de funcionamento e melhoria controlada do piloto.</p>
+              <p>Salvar progresso, retomar sessao, apoiar acompanhamento pedagogico e registrar eventos operacionais minimos de funcionamento.</p>
             </div>
           </article>
 
@@ -82,11 +81,11 @@ export default function PrivacyPage() {
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Direitos e contato
+              Direitos, contato e mediação
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>O titular deve poder solicitar acesso, correcao, exportacao e exclusao ou anonimizacao conforme a operacao aplicavel.</p>
-              <p>Contato de privacidade e canal para direitos do titular: nicholascm@gmail.com.</p>
+              <p>Contato de privacidade e canal para direitos do titular: nicholascm@gmail.com. Quando houver menores, o uso deve ocorrer com mediação educacional aplicavel.</p>
             </div>
           </article>
 
@@ -106,31 +105,31 @@ export default function PrivacyPage() {
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>Controlador identificado: Nicholas Contijo Moreira, Vila Velha - ES - Brasil.</p>
-              <p>Infraestrutura atualmente usada: Vercel para hospedagem da aplicacao e Neon para banco de dados gerenciado.</p>
+              <p>Infraestrutura atualmente usada: Vercel para hospedagem da aplicacao e Neon para banco de dados gerenciado. Em contexto escolar, a instituicao pode participar da operacao conforme o arranjo adotado.</p>
             </div>
           </article>
         </section>
 
         <article className="game-panel">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">
-            Estado atual
+            Condicoes gerais
           </p>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-300">
             <p>
-              Esta politica vale para o piloto interno conduzido pelo
-              controlador em suas proprias turmas. O MVP ainda nao esta aberto
-              a outras escolas ou a operacao externa ampliada.
+              Esta politica cobre o uso educacional atual do servico, ainda em
+              operacao gratuita de piloto e vinculada ao contexto autorizado
+              pelo responsavel.
             </p>
             <p>
               O cadastro de novas contas exige ciencia desta politica e aceite
-              explicito dos Termos de Uso oficiais do piloto interno.
+              explicito dos Termos de Uso oficiais do servico.
             </p>
             <p>
               Para novas contas, o sistema registra a versao e o momento dessa
               ciencia para fins de rastreabilidade operacional minima.
             </p>
             <p>
-              O repositiorio tambem possui implementacoes autenticadas para
+              O repositorio tambem possui implementacoes autenticadas para
               correcao de dados, exportacao de conta e exclusao da conta do
               proprio jogador.
             </p>
