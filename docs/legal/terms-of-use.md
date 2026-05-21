@@ -1,39 +1,43 @@
-# Termos de Uso do Piloto Interno
+# Termos de Uso de Cronicas do Reino do Carbono
 
-- versao oficial: `2026-05-20.1`
-- vigencia: `2026-05-20`
+- versao oficial: `2026-05-21.1`
+- vigencia: `2026-05-21`
 
 ## 1. Proposito
 
-Estes termos regulam o uso do MVP web de **Cronicas do Reino do Carbono** durante sua operacao como piloto interno.
+Estes termos regulam o uso da aplicacao web **Cronicas do Reino do Carbono** no contexto de uso educacional atualmente operado pelo responsavel do projeto.
 
 Eles devem ser apresentados publicamente nas telas de autenticacao e aceitos no fluxo de cadastro antes da criacao de novas contas de jogador.
 
-## 2. Quem opera o piloto
+## 2. Responsavel pela operacao
 
-No estado atual, o piloto interno e conduzido por:
+No estado atual, a operacao do servico e conduzida por:
 
-- responsavel/controlador: `Nicholas Contijo Moreira`
+- responsavel: `Nicholas Contijo Moreira`
 - localizacao informada: `Vila Velha - ES - Brasil`
 - contato operacional e de privacidade: `nicholascm@gmail.com`
 
-## 3. Escopo atual de uso
+## 3. Publico autorizado
 
-O MVP esta liberado apenas para:
+O uso do sistema e destinado, no estado atual, aos alunos vinculados ao contexto educacional conduzido pelo responsavel da operacao.
 
-- uso pedagogico interno nas turmas do proprio controlador;
-- testes de autenticacao, jornada do jogador, progresso pedagogico e observabilidade minima;
-- validacao controlada das mecanicas do jogo e da experiencia de aprendizagem.
+O cadastro nao constitui abertura publica irrestrita da plataforma. O uso autorizado depende de insercao em contexto pedagogico valido e de codigo de turma fornecido para esse fim.
 
-O MVP ainda nao esta aberto para:
+## 4. Papel da escola e contexto educacional
 
-- operacao publica ampla;
-- adesao livre por outras escolas;
-- comercializacao, sublicenciamento ou redistribuicao por terceiros.
+Quando o sistema for utilizado em contexto escolar, a escola ou instituicao de ensino podera atuar como parte contratante ou como ambiente institucional de aplicacao pedagogica, conforme o arranjo operacional adotado em cada turma.
 
-## 4. Condicoes de cadastro e acesso
+Enquanto nao houver instrumento institucional especifico disciplinando a relacao, estes termos regem o uso da plataforma no nivel do servico digital e do acesso do jogador.
 
-Para criar conta e usar a area autenticada, o jogador deve:
+## 5. Faixa etaria e mediação
+
+O sistema pode ser utilizado por publico misto em contexto educacional, inclusive quando houver estudantes menores de idade.
+
+Nesses casos, o uso deve ocorrer com mediacao da escola, do professor ou da organizacao responsavel pela atividade pedagogica, conforme aplicavel.
+
+## 6. Condicoes de cadastro e acesso
+
+Para criar conta e usar a area autenticada, o usuario deve:
 
 - informar codigo de turma valido;
 - escolher nome de exibicao e username conforme as regras tecnicas do cadastro;
@@ -41,77 +45,90 @@ Para criar conta e usar a area autenticada, o jogador deve:
 - declarar ciencia da politica de privacidade;
 - aceitar estes termos de uso.
 
-Para novas contas do piloto interno, o sistema registra a versao e o timestamp do aceite destes termos.
+O cadastro e destinado a aluno autorizado em contexto pedagogico valido. O simples conhecimento do codigo de turma nao autoriza uso fora desse contexto.
 
-O acesso pode ser negado, limitado ou encerrado se o cadastro estiver fora do escopo do piloto interno.
+Para novas contas, o sistema registra a versao e o timestamp da ciencia da politica de privacidade e do aceite destes termos.
 
-## 5. Finalidade do servico
+## 7. Finalidade do servico
 
-O MVP existe para:
+O servico existe para:
 
-- apoiar o uso pedagogico do capitulo atual;
-- permitir autenticacao e continuidade da jornada do jogador;
+- autenticar jogadores em contexto educacional;
+- viabilizar a jornada pedagogica no jogo;
 - registrar progresso, tentativas, inventario e recompensas;
-- sustentar avaliacao interna e melhoria controlada do piloto.
+- permitir acompanhamento pedagogico e relatorios associados ao uso da turma;
+- sustentar manutencao tecnica e melhoria operacional da plataforma.
 
-O servico nao oferece, neste estado, garantia de disponibilidade continua, integracao institucional ampla ou suporte operacional permanente.
+No estado atual, o servico permanece gratuito durante o piloto.
 
-## 6. Regras de uso aceitavel
+## 8. Regras de uso aceitavel
 
-Ao usar o MVP, o jogador concorda em nao:
+Ao usar o sistema, o usuario concorda em nao:
 
 - compartilhar credenciais com terceiros;
-- tentar acessar conta de outro jogador;
+- tentar acessar conta de outro usuario;
 - manipular, explorar ou contornar deliberadamente mecanismos de autenticacao, progressao ou pontuacao;
-- utilizar nomes ofensivos, enganosos ou inadequados ao ambiente pedagogico;
-- empregar o MVP para finalidade alheia ao piloto interno autorizado.
+- utilizar nome ofensivo, inadequado ou incompatível com o ambiente pedagogico;
+- usar a plataforma fora do contexto educacional autorizado;
+- utilizar a plataforma ou seu conteudo sem autorizacao para finalidades alheias ao uso permitido.
 
-## 7. Dados pessoais e privacidade
+## 9. Relatorios pedagogicos e dados operacionais
 
-O uso do MVP envolve tratamento minimo de dados pessoais para autenticacao, sessao, progresso e operacao do piloto.
+O uso da plataforma pode gerar relatorios pedagogicos, visiveis ao professor, escola ou responsavel educacional competente, na medida necessaria ao acompanhamento da atividade.
 
-A politica oficial aplicavel esta publicada em:
+O servico tambem pode registrar dados operacionais minimos para autenticacao, seguranca, continuidade da sessao, progresso e funcionamento da plataforma.
+
+O tratamento de dados pessoais aplicavel ao servico esta descrito na politica oficial publicada em:
 
 - `docs/legal/privacy-policy.md`
 - pagina publica `/privacy`
 
-Ao criar a conta, o jogador declara que leu a politica de privacidade e esta ciente do tratamento de dados descrito nela.
+## 10. Suporte e disponibilidade
 
-## 8. Conta, suspensao e encerramento
+No estado atual, o suporte operacional e realizado por e-mail, pelo contato informado nestes termos.
 
-O responsavel pelo piloto pode suspender, restringir ou encerrar contas quando houver:
+Durante o piloto, nao ha SLA formal de disponibilidade, tempo de resposta ou continuidade ininterrupta do servico. A operacao adota esforco razoavel para manter a plataforma funcional e corrigir falhas relevantes.
 
-- uso fora do escopo interno autorizado;
-- tentativa de fraude, abuso ou acesso indevido;
-- necessidade tecnica, pedagogica ou operacional justificada;
-- encerramento ou reconfiguracao do piloto.
+## 11. Suspensao, restricao e encerramento de conta
+
+O responsavel pela operacao pode suspender, restringir ou encerrar contas quando houver:
+
+- uso indevido da plataforma;
+- nome ofensivo ou inadequado ao ambiente pedagogico;
+- fraude, tentativa de burlar o sistema ou acesso indevido;
+- encerramento da turma ou do periodo pedagogico associado;
+- solicitacao da escola, do professor ou da organizacao responsavel pela atividade;
+- necessidade tecnica, pedagogica, disciplinar ou operacional justificavel.
 
 O proprio jogador autenticado tambem pode solicitar correcao, exportacao e exclusao da conta pelos fluxos previstos no produto e na documentacao operacional.
 
-## 9. Propriedade intelectual e material do MVP
+## 12. Propriedade intelectual e restricoes de uso
 
-O codigo, a identidade visual, o conteudo pedagogico e os materiais narrativos do MVP permanecem vinculados ao projeto e ao seu responsavel, salvo indicacao expressa em contrario.
+O codigo, a identidade visual, o conteudo pedagogico, os textos, a estrutura do jogo e os materiais narrativos permanecem vinculados ao projeto e ao seu responsavel, salvo indicacao expressa em contrario.
 
-Estes termos nao transferem ao jogador qualquer cessao de direitos sobre software, textos, ilustracoes, marcas ou estrutura do jogo.
+Sem autorizacao previa, nao e permitido:
 
-## 10. Limitacoes do piloto
+- copiar ou redistribuir a plataforma ou partes relevantes dela;
+- explorar comercialmente o servico, o conteudo ou seus materiais;
+- reutilizar o conteudo pedagogico fora do escopo autorizado;
+- realizar engenharia reversa, extracao sistematica ou uso tecnico indevido da plataforma.
 
-Por se tratar de piloto interno:
+Estes termos nao transferem ao usuario qualquer cessao de direitos sobre software, textos, marcas, ilustracoes ou estrutura do produto.
 
-- funcionalidades podem ser alteradas, interrompidas ou removidas sem aviso longo;
-- conteudos, regras ou fluxos podem ser refinados com base em validacao pedagogica e tecnica;
-- indisponibilidades, reinicios de ambiente e ajustes de base ainda podem ocorrer.
+## 13. Atualizacoes destes termos
 
-## 11. Atualizacoes destes termos
+Estes termos podem ser atualizados para refletir mudancas de operacao, escopo, suporte, publico autorizado, integracoes institucionais ou regras do servico.
 
-Estes termos devem ser revisados sempre que houver mudanca relevante em:
+Quando houver atualizacao, nova versao sera publicada e o aviso correspondente devera ficar disponivel na superficie publica do produto ou na documentacao oficial.
 
-- escopo de publico autorizado;
-- regras de cadastro e acesso;
-- superficie autenticada do jogador;
-- operacao institucional com escolas externas;
-- politica de privacidade ou compartilhamento de dados.
+Mudancas materiais podem exigir novo aceite no fluxo de uso ou em novo acesso autenticado, quando a operacao considerar isso necessario.
 
-## 12. Status deste documento
+## 14. Lei aplicavel e foro
 
-Status atual: termos oficiais do piloto interno, aplicaveis ao uso nas turmas do controlador, ainda sem abertura publica para outras escolas.
+Estes termos devem ser interpretados conforme a legislacao brasileira.
+
+Fica eleito o foro de Vila Velha/ES, ressalvadas hipoteses legais de competencia obrigatoria em sentido diverso.
+
+## 15. Status deste documento
+
+Status atual: termos oficiais de uso educacional do servico, com operacao gratuita no piloto e aplicacao voltada aos alunos vinculados ao contexto autorizado pelo responsavel.

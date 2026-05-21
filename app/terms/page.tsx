@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import {
-  LEGAL_POLICY_EFFECTIVE_DATE,
+  TERMS_OF_USE_EFFECTIVE_DATE,
   TERMS_OF_USE_VERSION,
 } from "@/lib/legal/versions";
 
@@ -30,7 +30,7 @@ export default function TermsPage() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="hud-chip">Termos de Uso</span>
             <span className="hud-chip border-gold/20 text-gold/90">
-              Piloto interno
+              Uso educacional
             </span>
             <span className="hud-chip border-white/10 text-slate-200">
               v{TERMS_OF_USE_VERSION}
@@ -41,10 +41,10 @@ export default function TermsPage() {
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
             Esta pagina apresenta a versao publica oficial dos Termos de Uso do
-            piloto interno de Cronicas do Reino do Carbono.
+            servico Cronicas do Reino do Carbono para uso educacional.
           </p>
           <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
-            Vigencia: {LEGAL_POLICY_EFFECTIVE_DATE}
+            Vigencia: {TERMS_OF_USE_EFFECTIVE_DATE}
           </p>
         </article>
 
@@ -64,8 +64,8 @@ export default function TermsPage() {
               Escopo autorizado
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>O MVP esta autorizado apenas para piloto interno nas turmas do proprio controlador.</p>
-              <p>O sistema ainda nao esta aberto a outras escolas nem a adesao publica ampla.</p>
+              <p>O sistema e destinado aos alunos vinculados ao contexto educacional autorizado pelo responsavel da operacao.</p>
+              <p>O uso depende de codigo de turma valido e de insercao em atividade pedagogica autorizada, nao de abertura publica irrestrita.</p>
             </div>
           </article>
 
@@ -75,8 +75,8 @@ export default function TermsPage() {
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
               <p>O cadastro exige codigo de turma valido, credenciais proprias e aceite destes termos.</p>
-              <p>O jogador tambem deve declarar ciencia da Politica de Privacidade antes da criacao da conta.</p>
-              <p>Para novas contas, a operacao registra a versao e o momento desse aceite.</p>
+              <p>O usuario tambem deve declarar ciencia da Politica de Privacidade antes da criacao da conta.</p>
+              <p>Para novas contas, a operacao registra a versao e o momento da ciencia e do aceite.</p>
             </div>
           </article>
 
@@ -85,8 +85,8 @@ export default function TermsPage() {
               Uso aceitavel
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>Nao e permitido compartilhar conta, tentar acessar conta alheia ou manipular mecanismos do jogo.</p>
-              <p>O ambiente deve permanecer compativel com uso pedagogico interno e supervisionado.</p>
+              <p>Nao e permitido compartilhar conta, tentar acessar conta alheia, usar nome ofensivo ou burlar mecanismos do sistema.</p>
+              <p>O ambiente deve permanecer compativel com uso pedagogico autorizado e mediado pela escola ou professor quando aplicavel.</p>
             </div>
           </article>
 
@@ -95,17 +95,17 @@ export default function TermsPage() {
               Conta e encerramento
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>Contas podem ser restringidas ou encerradas por abuso, fraude, uso fora do escopo ou necessidade operacional.</p>
+              <p>Contas podem ser restringidas ou encerradas por uso indevido, nome ofensivo, fraude, fim da turma ou solicitacao da escola/professor.</p>
               <p>O proprio jogador autenticado pode corrigir dados, exportar a conta e solicitar exclusao pelo fluxo disponivel.</p>
             </div>
           </article>
 
           <article className="game-panel-muted">
             <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              Relacao com privacidade
+              Dados e relatorios
             </p>
             <div className="mt-3 space-y-2 text-sm leading-6 text-slate-200">
-              <p>O uso do MVP depende do tratamento minimo de dados para autenticacao, sessao e progresso pedagogico.</p>
+              <p>O uso do sistema envolve dados operacionais minimos e pode gerar relatorios pedagogicos visiveis ao professor ou escola.</p>
               <p>A politica oficial aplicavel esta publicada na pagina de privacidade e no documento legal do repositorio.</p>
             </div>
           </article>
@@ -113,18 +113,17 @@ export default function TermsPage() {
 
         <article className="game-panel">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">
-            Estado atual
+            Condicoes gerais
           </p>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-300">
             <p>
-              Estes termos valem para o piloto interno conduzido pelo
-              controlador em suas proprias turmas e acompanham a politica de
-              privacidade oficial do repositorio.
+              O servico permanece gratuito durante o piloto, com suporte por
+              e-mail e sem SLA formal de disponibilidade.
             </p>
             <p>
               O texto completo tambem esta mantido em
-              `docs/legal/terms-of-use.md` para governanca normativa e futura
-              revisao institucional.
+              `docs/legal/terms-of-use.md` e aplica lei brasileira, com foro de
+              Vila Velha/ES, ressalvadas hipoteses legais obrigatorias.
             </p>
           </div>
         </article>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import {
-  LEGAL_POLICY_EFFECTIVE_DATE,
+  PRIVACY_POLICY_EFFECTIVE_DATE,
   PRIVACY_POLICY_VERSION,
 } from "@/lib/legal/versions";
 
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             aplicado nas turmas do proprio controlador.
           </p>
           <p className="mt-3 text-xs uppercase tracking-[0.18em] text-slate-400">
-            Vigencia: {LEGAL_POLICY_EFFECTIVE_DATE}
+            Vigencia: {PRIVACY_POLICY_EFFECTIVE_DATE}
           </p>
         </article>
 
