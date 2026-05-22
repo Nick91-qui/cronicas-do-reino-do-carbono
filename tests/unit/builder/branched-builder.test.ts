@@ -67,4 +67,26 @@ describe("branched builder foundation", () => {
     expect(renderModel.atoms.filter((atom) => atom.label === "H")).toHaveLength(6);
     expect(renderModel.bonds.filter((bond) => bond.kind === "hydrogen")).toHaveLength(6);
   });
+
+  it("mantém comprimento de ligação estável em cadeias maiores", () => {
+    const methane = createBranchedBuilderState();
+    const ethane = addCarbonToAtom(methane, "a1");
+    const propane = addCarbonToAtom(ethane, "a2");
+    const butane = addCarbonToAtom(propane, "a3");
+    const layout = layoutBranchedStateWithEngine(butane);
+    const coords = Object.fromEntries(
+      layout.atomCoords.map((coord) => [coord.atomId, coord]),
+    );
+
+    const lengths = [
+      Math.hypot(coords.a2.x - coords.a1.x, coords.a2.y - coords.a1.y),
+      Math.hypot(coords.a3.x - coords.a2.x, coords.a3.y - coords.a2.y),
+      Math.hypot(coords.a4.x - coords.a3.x, coords.a4.y - coords.a3.y),
+    ];
+
+    for (const length of lengths) {
+      expect(length).toBeGreaterThan(70);
+      expect(length).toBeLessThan(100);
+    }
+  });
 });

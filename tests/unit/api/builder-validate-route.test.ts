@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { BranchedBuilderState } from "@/lib/builder/state/branched-types";
 
 const {
   requireApiAuthenticatedPlayerMock,
@@ -33,6 +34,15 @@ vi.mock("@/lib/db/prisma", () => ({
 
 import { POST } from "@/app/api/phases/[phaseId]/builder/validate/route";
 import { ApiAuthenticationRequiredError } from "@/lib/auth/session";
+
+const branchedMethaneState: BranchedBuilderState = {
+  kind: "branched_v2" as const,
+  atoms: [{ id: "a1", element: "C" }],
+  bonds: [],
+  selectedAtomId: "a1",
+  nextAtomIndex: 2,
+  nextBondIndex: 1,
+};
 
 describe("api/phases/[phaseId]/builder/validate", () => {
   beforeEach(() => {
@@ -139,6 +149,39 @@ describe("api/phases/[phaseId]/builder/validate", () => {
         carbonCount: 1,
         bonds: [],
       },
+    );
+  });
+
+  it("encaminha payload branched_v2 para o validador", async () => {
+    requireApiAuthenticatedPlayerMock.mockResolvedValue({
+      playerId: "player-1",
+    });
+    validateBuilderStateForPhaseMock.mockReturnValue({
+      phaseId: "chapter-1-phase-1",
+      structuralValid: true,
+      canCreateMolecule: true,
+      resolvedMoleculeId: "metano",
+      errors: [],
+      derivedStructure: {
+        formulaMolecular: "C1H4",
+      },
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/phases/chapter-1-phase-1/builder/validate", {
+        method: "POST",
+        body: JSON.stringify(branchedMethaneState),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      { params: Promise.resolve({ phaseId: "chapter-1-phase-1" }) },
+    );
+
+    expect(response.status).toBe(200);
+    expect(validateBuilderStateForPhaseMock).toHaveBeenCalledWith(
+      "chapter-1-phase-1",
+      branchedMethaneState,
     );
   });
 

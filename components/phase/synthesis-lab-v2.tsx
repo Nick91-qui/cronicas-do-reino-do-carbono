@@ -238,8 +238,8 @@ export function SynthesisLabV2({
         </article>
       </div>
 
-      <div className="relative mt-4 rounded-[24px] border border-cyan-300/14 bg-[linear-gradient(180deg,rgba(9,15,30,0.98),rgba(15,23,42,1))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
-        <div className="rounded-[20px] border border-cyan-300/10 bg-[linear-gradient(180deg,rgba(14,23,42,0.9),rgba(8,13,26,0.96))] p-4 sm:rounded-[24px]">
+      <div className="relative mt-4 rounded-[24px] border border-cyan-300/14 bg-[linear-gradient(180deg,rgba(9,15,30,0.98),rgba(15,23,42,1))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4 lg:p-5">
+        <div className="rounded-[20px] border border-cyan-300/10 bg-[linear-gradient(180deg,rgba(14,23,42,0.9),rgba(8,13,26,0.96))] p-4 sm:rounded-[24px] sm:p-5 lg:p-6">
           <SynthesisBuilderToolbarV2
             selectedAtomLabel={selectedAtomLabel}
             canAddCarbon={canAddCarbon}

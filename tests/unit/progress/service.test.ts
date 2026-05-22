@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { BranchedBuilderState } from "@/lib/builder/state/branched-types";
 
 const {
   getPhaseByIdMock,
@@ -26,6 +27,15 @@ vi.mock("@/lib/inventory/service", () => ({
 }));
 
 import { persistPhaseEvaluation } from "@/lib/progress/service";
+
+const branchedMethaneState: BranchedBuilderState = {
+  kind: "branched_v2" as const,
+  atoms: [{ id: "a1", element: "C" }],
+  bonds: [],
+  selectedAtomId: "a1",
+  nextAtomIndex: 2,
+  nextBondIndex: 1,
+};
 
 type SummaryRecord = {
   playerId: string;
@@ -366,5 +376,36 @@ describe("progress/service", () => {
     expect(createdAnalyticsEvents).toEqual([]);
     expect(getSummary()).toBeNull();
     expect(getChapterProgress()).toBeNull();
+  });
+
+  it("persiste builderStateJson branched_v2 e molécula construída oficial", async () => {
+    const { db, createdAttempts } = createProgressDb();
+
+    await persistPhaseEvaluation(db, {
+      playerId: "player-1",
+      submission: {
+        phaseId: "chapter-1-phase-1",
+        builderState: branchedMethaneState,
+        selectedProperties: ["cadeia_curta"],
+      },
+      evaluation: {
+        phaseId: "chapter-1-phase-1",
+        selectedMoleculeId: "metano",
+        selectedProperties: ["cadeia_curta"],
+        builderState: branchedMethaneState,
+        qualitativeResult: "excellent",
+        validationResult: "correct",
+        scoreAwarded: 3,
+        expectedPropertiesMatched: ["cadeia_curta"],
+        feedback: "ok",
+      },
+    });
+
+    expect(createdAttempts).toHaveLength(1);
+    expect(createdAttempts[0]).toMatchObject({
+      builderStateJson: branchedMethaneState,
+      constructedMoleculeId: "metano",
+      selectedMoleculeId: "metano",
+    });
   });
 });

@@ -77,6 +77,27 @@ function getBounds(points: Point[]) {
   return { minX, maxX, minY, maxY };
 }
 
+function trimLine(from: Point, to: Point, startInset: number, endInset = startInset) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const unitX = dx / length;
+  const unitY = dy / length;
+  const safeStartInset = Math.min(startInset, length / 2 - 1);
+  const safeEndInset = Math.min(endInset, length / 2 - 1);
+
+  return {
+    from: {
+      x: from.x + unitX * Math.max(0, safeStartInset),
+      y: from.y + unitY * Math.max(0, safeStartInset),
+    },
+    to: {
+      x: to.x - unitX * Math.max(0, safeEndInset),
+      y: to.y - unitY * Math.max(0, safeEndInset),
+    },
+  };
+}
+
 function offsetLine(from: Point, to: Point, offset: number) {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
@@ -140,11 +161,11 @@ export function SynthesisLabSvg({
   const viewBox = `${bounds.minX - padding} ${bounds.minY - padding} ${width} ${height}`;
   const svgClassName =
     layoutMode === "closed_ring"
-      ? "h-[260px] w-full max-w-[380px] sm:h-[290px]"
-      : "h-[240px] w-auto min-w-full sm:h-[260px]";
+      ? "h-[300px] w-full max-w-[520px] sm:h-[340px]"
+      : "h-[300px] w-auto min-w-full sm:h-[340px] lg:h-[390px]";
 
   return (
-    <div className={layoutMode === "closed_ring" ? "mx-auto flex justify-center py-6" : "mt-4 overflow-x-auto pb-12 pt-6 sm:pb-14"}>
+    <div className={layoutMode === "closed_ring" ? "mx-auto flex justify-center py-6" : "mt-4 overflow-x-auto pb-12 pt-6 sm:pb-14 lg:pb-16"}>
       <div className={layoutMode === "closed_ring" ? "w-full" : "mx-auto min-w-max px-2"}>
         <svg viewBox={viewBox} className={svgClassName} aria-hidden="true">
           <defs>
@@ -188,6 +209,10 @@ export function SynthesisLabSvg({
             const isHovered = bondId !== null && hoveredBondId === bondId;
             const isRecentlyChanged =
               bondId !== null && recentlyChangedBondId === bondId;
+            const trimmedBond =
+              bond.kind === "carbon"
+                ? trimLine(from, to, 23)
+                : trimLine(from, to, 18, 10);
             const stroke = getBondColor({
               kind: bond.kind,
               order: bond.order,
@@ -203,12 +228,12 @@ export function SynthesisLabSvg({
               <g key={bond.id}>
                 {isInteractive ? (
                   <line
-                    x1={from.x}
-                    y1={from.y}
-                    x2={to.x}
-                    y2={to.y}
+                    x1={trimmedBond.from.x}
+                    y1={trimmedBond.from.y}
+                    x2={trimmedBond.to.x}
+                    y2={trimmedBond.to.y}
                     stroke="transparent"
-                    strokeWidth="18"
+                    strokeWidth="20"
                     strokeLinecap="round"
                     className={canUseDoubleBond ? "cursor-pointer" : "cursor-not-allowed"}
                     onMouseEnter={() => onBondHoverAction(bondId)}
@@ -223,10 +248,10 @@ export function SynthesisLabSvg({
 
                 {ghostDouble ? (
                   <line
-                    x1={offsetLine(from, to, 4.5).from.x}
-                    y1={offsetLine(from, to, 4.5).from.y}
-                    x2={offsetLine(from, to, 4.5).to.x}
-                    y2={offsetLine(from, to, 4.5).to.y}
+                    x1={offsetLine(trimmedBond.from, trimmedBond.to, 4.5).from.x}
+                    y1={offsetLine(trimmedBond.from, trimmedBond.to, 4.5).from.y}
+                    x2={offsetLine(trimmedBond.from, trimmedBond.to, 4.5).to.x}
+                    y2={offsetLine(trimmedBond.from, trimmedBond.to, 4.5).to.y}
                     stroke="rgba(103, 232, 249, 0.45)"
                     strokeWidth="1.4"
                     strokeLinecap="round"
@@ -236,7 +261,7 @@ export function SynthesisLabSvg({
                 ) : null}
 
                 {getParallelOffsets(bond.order).map((offset) => {
-                  const line = offsetLine(from, to, offset);
+                  const line = offsetLine(trimmedBond.from, trimmedBond.to, offset);
 
                   return (
                     <line
@@ -271,7 +296,7 @@ export function SynthesisLabSvg({
                     fill="rgb(226 232 240)"
                     fontSize="15"
                     fontWeight="700"
-                    style={{ userSelect: "none" }}
+                    style={{ userSelect: "none", pointerEvents: "none" }}
                   >
                     H
                   </text>
@@ -308,7 +333,7 @@ export function SynthesisLabSvg({
                   fontSize="14"
                   fontWeight="800"
                   letterSpacing="0.01em"
-                  style={{ userSelect: "none" }}
+                  style={{ userSelect: "none", pointerEvents: "none" }}
                 >
                   C
                 </text>

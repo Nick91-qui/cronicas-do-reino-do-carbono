@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 
+import type { BranchedBuilderState } from "@/lib/builder/state/branched-types";
 import { evaluatePhaseSubmission } from "@/lib/gameplay/evaluate-phase";
+
+const branchedMethaneState: BranchedBuilderState = {
+  kind: "branched_v2" as const,
+  atoms: [{ id: "a1", element: "C" }],
+  bonds: [],
+  selectedAtomId: "a1",
+  nextAtomIndex: 2,
+  nextBondIndex: 1,
+};
 
 describe("gameplay/evaluate-phase", () => {
   it("retorna excellent para resposta ideal com justificativa suficiente", () => {
@@ -60,5 +70,17 @@ describe("gameplay/evaluate-phase", () => {
         selectedProperties: ["cadeia_curta", "cadeia_curta"],
       }),
     ).toThrow("Propriedades duplicadas não são permitidas na submissão.");
+  });
+
+  it("avalia fase de construção com builder branched_v2", () => {
+    const result = evaluatePhaseSubmission({
+      phaseId: "chapter-1-phase-1",
+      builderState: branchedMethaneState,
+      selectedProperties: ["cadeia_curta"],
+    });
+
+    expect(result.selectedMoleculeId).toBe("metano");
+    expect(result.validationResult).toBe("correct");
+    expect(result.builderState).toEqual(branchedMethaneState);
   });
 });

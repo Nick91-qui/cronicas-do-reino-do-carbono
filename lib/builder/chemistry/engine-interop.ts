@@ -21,9 +21,21 @@ export type EngineLayoutResult = {
   atomCoords: EngineLayoutAtomCoord[];
 };
 
+const TARGET_BOND_LENGTH = 86;
+
 function normalizeCoords(coords: EngineLayoutAtomCoord[]): EngineLayoutAtomCoord[] {
   if (coords.length === 0) {
     return coords;
+  }
+
+  const lengths: number[] = [];
+  for (let index = 1; index < coords.length; index += 1) {
+    const previous = coords[index - 1];
+    const current = coords[index];
+    const distance = Math.hypot(current.x - previous.x, current.y - previous.y);
+    if (distance > 0) {
+      lengths.push(distance);
+    }
   }
 
   const minX = Math.min(...coords.map((coord) => coord.x));
@@ -32,7 +44,11 @@ function normalizeCoords(coords: EngineLayoutAtomCoord[]): EngineLayoutAtomCoord
   const maxY = Math.max(...coords.map((coord) => coord.y));
   const width = maxX - minX || 1;
   const height = maxY - minY || 1;
-  const scale = 100 / Math.max(width, height);
+  const averageBondLength =
+    lengths.length > 0
+      ? lengths.reduce((sum, value) => sum + value, 0) / lengths.length
+      : Math.max(width, height);
+  const scale = TARGET_BOND_LENGTH / Math.max(averageBondLength || 1, 1);
   const centerX = minX + width / 2;
   const centerY = minY + height / 2;
 
