@@ -161,11 +161,11 @@ export function SynthesisLab({
           canUseDoubleBond={canUseDoubleBond}
           canUseClosedRing={canUseClosedRing}
           isValidatingBuilder={isValidatingBuilder}
-          onBondHover={setHoveredBondIndex}
-          onBondToggle={handleBondToggle}
-          onSetLayout={onSetLayout}
-          onCarbonStep={handleCarbonStep}
-          onValidateBuilder={onValidateBuilder}
+          onBondHoverAction={setHoveredBondIndex}
+          onBondToggleAction={handleBondToggle}
+          onSetLayoutAction={onSetLayout}
+          onCarbonStepAction={handleCarbonStep}
+          onValidateBuilderAction={onValidateBuilder}
         />
 
         {synthesizedMolecule ? (
