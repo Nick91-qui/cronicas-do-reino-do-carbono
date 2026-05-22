@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { branchedBuilderStateSchema } from "@/lib/builder/state/branched-schema";
 import { phaseIdSchema } from "@/lib/content/schema";
 
 export const builderLayoutSchema = z.enum(["open_chain", "closed_ring"]);
@@ -20,6 +21,10 @@ export const graphBuilderStateSchema = z.object({
 export const canonicalBuilderStateSchema = graphBuilderStateSchema;
 
 export const builderStateSchema = canonicalBuilderStateSchema;
+export const futureBuilderStateSchema = z.union([
+  graphBuilderStateSchema,
+  branchedBuilderStateSchema,
+]);
 
 export const builderValidationRequestSchema = z.object({
   phaseId: phaseIdSchema,
@@ -28,4 +33,5 @@ export const builderValidationRequestSchema = z.object({
 
 export type CanonicalBuilderStateInput = z.infer<typeof canonicalBuilderStateSchema>;
 export type BuilderStateInput = z.infer<typeof builderStateSchema>;
+export type FutureBuilderStateInput = z.infer<typeof futureBuilderStateSchema>;
 export type BuilderValidationRequestInput = z.infer<typeof builderValidationRequestSchema>;

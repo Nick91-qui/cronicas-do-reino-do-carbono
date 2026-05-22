@@ -1,4 +1,5 @@
 import type { BondType, MoleculeId, PhaseId } from "@/lib/content/types";
+import type { BranchedBuilderState } from "@/lib/builder/state/branched-types";
 
 export type BuilderLayout = "open_chain" | "closed_ring";
 
@@ -20,6 +21,7 @@ export type GraphBuilderState = {
 export type CanonicalBuilderState = GraphBuilderState;
 
 export type BuilderState = GraphBuilderState;
+export type FutureBuilderState = GraphBuilderState | BranchedBuilderState;
 
 export type BuilderDerivedStructure = {
   layout?: BuilderLayout;
