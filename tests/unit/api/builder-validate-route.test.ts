@@ -59,11 +59,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
     const response = await POST(
       new Request("http://localhost/api/phases/chapter-1-phase-1/builder/validate", {
         method: "POST",
-        body: JSON.stringify({
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        }),
+        body: JSON.stringify(branchedMethaneState),
         headers: {
           "Content-Type": "application/json",
         },
@@ -123,11 +119,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
     const response = await POST(
       new Request("http://localhost/api/phases/chapter-1-phase-1/builder/validate", {
         method: "POST",
-        body: JSON.stringify({
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        }),
+        body: JSON.stringify(branchedMethaneState),
         headers: {
           "Content-Type": "application/json",
         },
@@ -144,11 +136,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
     });
     expect(validateBuilderStateForPhaseMock).toHaveBeenCalledWith(
       "chapter-1-phase-1",
-      {
-        layout: "open_chain",
-        carbonCount: 1,
-        bonds: [],
-      },
+      branchedMethaneState,
     );
   });
 
@@ -196,11 +184,7 @@ describe("api/phases/[phaseId]/builder/validate", () => {
     const response = await POST(
       new Request("http://localhost/api/phases/chapter-1-phase-1/builder/validate", {
         method: "POST",
-        body: JSON.stringify({
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        }),
+        body: JSON.stringify(branchedMethaneState),
         headers: {
           "Content-Type": "application/json",
         },

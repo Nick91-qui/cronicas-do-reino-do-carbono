@@ -1,14 +1,10 @@
 "use client";
 
 import { createBranchedRenderModel } from "@/lib/builder/layout/branched-render-model";
-import { convertGraphBuilderStateToBranched } from "@/lib/builder/compatibility/graph-to-branched";
-import { buildGraphBuilderState } from "@/lib/builder/graph-preview";
-import type { BuilderLayout, GraphBuilderBondOrder } from "@/lib/builder/types";
 import type { BranchedAtomId, BranchedBuilderState, BranchedBondId } from "@/lib/builder/state/branched-types";
 
 type SynthesisLabSvgProps = {
   builderState: BranchedBuilderState;
-  layoutMode?: BuilderLayout;
   hoveredBondId: BranchedBondId | null;
   recentlyChangedBondId: BranchedBondId | null;
   canUseDoubleBond: boolean;
@@ -143,7 +139,6 @@ function carbonHasUnsaturatedBond(
 
 export function SynthesisLabSvg({
   builderState,
-  layoutMode = "open_chain",
   hoveredBondId,
   recentlyChangedBondId,
   canUseDoubleBond,
@@ -153,6 +148,9 @@ export function SynthesisLabSvg({
   onBondToggleAction,
 }: SynthesisLabSvgProps) {
   const renderModel = createBranchedRenderModel(builderState);
+  const isClosedRingLayout =
+    builderState.atoms.length >= 3 &&
+    builderState.bonds.length >= builderState.atoms.length;
   const atomMap = Object.fromEntries(renderModel.atoms.map((atom) => [atom.id, atom]));
   const bounds = getBounds(renderModel.atoms.map((atom) => ({ x: atom.x, y: atom.y })));
   const padding = 56;
@@ -160,13 +158,13 @@ export function SynthesisLabSvg({
   const height = bounds.maxY - bounds.minY + padding * 2;
   const viewBox = `${bounds.minX - padding} ${bounds.minY - padding} ${width} ${height}`;
   const svgClassName =
-    layoutMode === "closed_ring"
+    isClosedRingLayout
       ? "h-[300px] w-full max-w-[520px] sm:h-[340px]"
       : "h-[300px] w-auto min-w-full sm:h-[340px] lg:h-[390px]";
 
   return (
-    <div className={layoutMode === "closed_ring" ? "mx-auto flex justify-center py-6" : "mt-4 overflow-x-auto pb-12 pt-6 sm:pb-14 lg:pb-16"}>
-      <div className={layoutMode === "closed_ring" ? "w-full" : "mx-auto min-w-max px-2"}>
+    <div className={isClosedRingLayout ? "mx-auto flex justify-center py-6" : "mt-4 overflow-x-auto pb-12 pt-6 sm:pb-14 lg:pb-16"}>
+      <div className={isClosedRingLayout ? "w-full" : "mx-auto min-w-max px-2"}>
         <svg viewBox={viewBox} className={svgClassName} aria-hidden="true">
           <defs>
             {renderModel.atoms
@@ -344,21 +342,4 @@ export function SynthesisLabSvg({
       </div>
     </div>
   );
-}
-
-export function createGraphBackedSynthesisLabSvgProps(options: {
-  layout: BuilderLayout;
-  activeCarbonCount: number;
-  normalizedBondOrders: GraphBuilderBondOrder[];
-}) {
-  const graphState = buildGraphBuilderState(
-    options.layout,
-    options.activeCarbonCount,
-    options.normalizedBondOrders,
-  );
-
-  return {
-    builderState: convertGraphBuilderStateToBranched(graphState),
-    layoutMode: options.layout,
-  };
 }

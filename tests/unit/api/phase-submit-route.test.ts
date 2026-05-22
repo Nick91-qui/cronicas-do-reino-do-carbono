@@ -61,11 +61,7 @@ describe("api/phases/[phaseId]/submit", () => {
         method: "POST",
         body: JSON.stringify({
           phaseId: "chapter-1-phase-1",
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           selectedProperties: ["cadeia_curta"],
         }),
         headers: {
@@ -96,11 +92,7 @@ describe("api/phases/[phaseId]/submit", () => {
         method: "POST",
         body: JSON.stringify({
           phaseId: "chapter-1-phase-1",
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           selectedProperties: ["cadeia_curta"],
         }),
         headers: {
@@ -173,11 +165,7 @@ describe("api/phases/[phaseId]/submit", () => {
         method: "POST",
         body: JSON.stringify({
           phaseId: "chapter-1-phase-1",
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           selectedProperties: ["cadeia_curta"],
         }),
         headers: {

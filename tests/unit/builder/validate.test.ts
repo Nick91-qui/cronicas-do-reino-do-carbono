@@ -1,27 +1,32 @@
 import { describe, expect, it } from "vitest";
 
-import { buildGraphBuilderState } from "@/lib/builder/graph-preview";
+import {
+  addCarbonToAtom,
+  connectAtomsWithBond,
+  createBranchedBuilderState,
+  cycleBondOrder,
+} from "@/lib/builder/state/branched-operations";
 import { validateBuilderStateForPhase } from "@/lib/builder/validate";
 
 describe("builder/validate", () => {
-  it("aceita metano em fase de construção inicial usando o formato canônico em grafo", () => {
-    const result = validateBuilderStateForPhase("chapter-1-phase-1", {
-      layout: "open_chain",
-      carbonCount: 1,
-      bonds: [],
-    });
+  it("aceita metano em fase de construção inicial", () => {
+    const result = validateBuilderStateForPhase(
+      "chapter-1-phase-1",
+      createBranchedBuilderState(),
+    );
 
     expect(result.structuralValid).toBe(true);
     expect(result.canCreateMolecule).toBe(true);
     expect(result.resolvedMoleculeId).toBe("metano");
     expect(result.errors).toEqual([]);
-    expect(result.derivedStructure?.formulaMolecular).toBe("C1H4");
+    expect(result.derivedStructure?.formulaMolecular).toBe("CH4");
   });
 
   it("rejeita construção em fase do tipo choice", () => {
+    const methane = createBranchedBuilderState();
     const result = validateBuilderStateForPhase(
       "chapter-1-phase-4",
-      buildGraphBuilderState("open_chain", 1, []),
+      methane,
     );
 
     expect(result.structuralValid).toBe(false);
@@ -31,9 +36,11 @@ describe("builder/validate", () => {
   });
 
   it("rejeita estrutura com mais carbonos do que a fase permite", () => {
+    const methane = createBranchedBuilderState();
+    const ethane = addCarbonToAtom(methane, "a1");
     const result = validateBuilderStateForPhase(
       "chapter-1-phase-1",
-      buildGraphBuilderState("open_chain", 2, [1]),
+      ethane,
     );
 
     expect(result.structuralValid).toBe(false);
@@ -43,9 +50,12 @@ describe("builder/validate", () => {
   });
 
   it("rejeita uso de ligação não desbloqueada na fase", () => {
+    const methane = createBranchedBuilderState();
+    const ethane = addCarbonToAtom(methane, "a1");
+    const ethene = cycleBondOrder(ethane, "b1", 2);
     const result = validateBuilderStateForPhase(
       "chapter-1-phase-3",
-      buildGraphBuilderState("open_chain", 2, [2]),
+      ethene,
     );
 
     expect(result.structuralValid).toBe(false);
@@ -54,24 +64,39 @@ describe("builder/validate", () => {
     expect(result.errors).toContain("A estrutura usa um tipo de ligação não desbloqueado nesta fase.");
   });
 
-  it("rejeita geometria inválida em builder de grafo", () => {
+  it("rejeita estrutura desconectada", () => {
     const result = validateBuilderStateForPhase("chapter-1-phase-6", {
-      layout: "open_chain",
-      carbonCount: 3,
-      bonds: [{ from: 0, to: 1, order: 1 }],
+      kind: "branched_v2",
+      atoms: [
+        { id: "a1", element: "C" },
+        { id: "a2", element: "C" },
+        { id: "a3", element: "C" },
+      ],
+      bonds: [{ id: "b1", from: "a1", to: "a2", order: 1 }],
+      selectedAtomId: "a1",
+      nextAtomIndex: 4,
+      nextBondIndex: 2,
     });
 
     expect(result.structuralValid).toBe(false);
     expect(result.canCreateMolecule).toBe(false);
     expect(result.resolvedMoleculeId).toBeNull();
-    expect(result.errors).toContain("A estrutura não informou todas as ligações obrigatórias entre carbonos.");
+    expect(result.errors).toContain("A estrutura precisa formar uma única molécula conectada.");
   });
 
   it("resolve benzeno a partir de anel aromático alternado em fase 8", () => {
-    const result = validateBuilderStateForPhase(
-      "chapter-1-phase-8",
-      buildGraphBuilderState("closed_ring", 6, [2, 1, 2, 1, 2, 1]),
-    );
+    const methane = createBranchedBuilderState();
+    const ethane = addCarbonToAtom(methane, "a1");
+    const propane = addCarbonToAtom(ethane, "a2");
+    const butane = addCarbonToAtom(propane, "a3");
+    const pentane = addCarbonToAtom(butane, "a4");
+    const hexane = addCarbonToAtom(pentane, "a5");
+    const cyclohexane = connectAtomsWithBond(hexane, "a1", "a6");
+    const bond2 = cycleBondOrder(cyclohexane, "b2", 2);
+    const bond4 = cycleBondOrder(bond2, "b4", 2);
+    const benzene = cycleBondOrder(bond4, "b6", 2);
+
+    const result = validateBuilderStateForPhase("chapter-1-phase-8", benzene);
 
     expect(result.structuralValid).toBe(true);
     expect(result.canCreateMolecule).toBe(true);
@@ -84,13 +109,13 @@ describe("builder/validate", () => {
     const result = validateBuilderStateForPhase("chapter-1-phase-2", {
       kind: "branched_v2",
       atoms: [
-        { id: "a0", element: "C" },
         { id: "a1", element: "C" },
+        { id: "a2", element: "C" },
       ],
-      bonds: [{ id: "b0", from: "a0", to: "a1", order: 1 }],
-      selectedAtomId: "a0",
-      nextAtomIndex: 2,
-      nextBondIndex: 1,
+      bonds: [{ id: "b1", from: "a1", to: "a2", order: 1 }],
+      selectedAtomId: "a1",
+      nextAtomIndex: 3,
+      nextBondIndex: 2,
     });
 
     expect(result.structuralValid).toBe(true);
@@ -104,19 +129,19 @@ describe("builder/validate", () => {
     const result = validateBuilderStateForPhase("chapter-1-phase-8", {
       kind: "branched_v2",
       atoms: [
-        { id: "a0", element: "C" },
         { id: "a1", element: "C" },
         { id: "a2", element: "C" },
         { id: "a3", element: "C" },
+        { id: "a4", element: "C" },
       ],
       bonds: [
-        { id: "b0", from: "a0", to: "a1", order: 1 },
-        { id: "b1", from: "a1", to: "a2", order: 2 },
-        { id: "b2", from: "a2", to: "a3", order: 1 },
+        { id: "b1", from: "a1", to: "a2", order: 1 },
+        { id: "b2", from: "a2", to: "a3", order: 2 },
+        { id: "b3", from: "a3", to: "a4", order: 1 },
       ],
-      selectedAtomId: "a1",
-      nextAtomIndex: 4,
-      nextBondIndex: 3,
+      selectedAtomId: "a2",
+      nextAtomIndex: 5,
+      nextBondIndex: 4,
     });
 
     expect(result.structuralValid).toBe(true);
@@ -130,13 +155,13 @@ describe("builder/validate", () => {
     const result = validateBuilderStateForPhase("chapter-1-phase-8", {
       kind: "branched_v2",
       atoms: [
-        { id: "a0", element: "C" },
         { id: "a1", element: "C" },
+        { id: "a2", element: "C" },
       ],
-      bonds: [{ id: "b0", from: "a0", to: "a1", order: 3 }],
-      selectedAtomId: "a0",
-      nextAtomIndex: 2,
-      nextBondIndex: 1,
+      bonds: [{ id: "b1", from: "a1", to: "a2", order: 3 }],
+      selectedAtomId: "a1",
+      nextAtomIndex: 3,
+      nextBondIndex: 2,
     });
 
     expect(result.structuralValid).toBe(false);

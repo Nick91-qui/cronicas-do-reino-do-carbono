@@ -196,22 +196,14 @@ describe("progress/service", () => {
       playerId: "player-1",
       submission: {
         phaseId: "chapter-1-phase-1",
-        builderState: {
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        },
+        builderState: branchedMethaneState,
         selectedProperties: ["cadeia_curta"],
       },
       evaluation: {
         phaseId: "chapter-1-phase-1",
         selectedMoleculeId: "metano",
         selectedProperties: ["cadeia_curta"],
-        builderState: {
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        },
+        builderState: branchedMethaneState,
         qualitativeResult: "excellent",
         validationResult: "correct",
         scoreAwarded: 3,
@@ -256,22 +248,14 @@ describe("progress/service", () => {
       playerId: "player-1",
       submission: {
         phaseId: "chapter-1-phase-1",
-        builderState: {
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        },
+        builderState: branchedMethaneState,
         selectedProperties: ["cadeia_curta"],
       },
       evaluation: {
         phaseId: "chapter-1-phase-1",
         selectedMoleculeId: "metano",
         selectedProperties: ["cadeia_curta"],
-        builderState: {
-          layout: "open_chain",
-          carbonCount: 1,
-          bonds: [],
-        },
+        builderState: branchedMethaneState,
         qualitativeResult: "adequate",
         validationResult: "correct",
         scoreAwarded: 2,
@@ -305,22 +289,14 @@ describe("progress/service", () => {
         playerId: "player-1",
         submission: {
           phaseId: "chapter-1-phase-1",
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           selectedProperties: ["cadeia_curta"],
         },
         evaluation: {
           phaseId: "chapter-1-phase-1",
           selectedMoleculeId: "metano",
           selectedProperties: ["cadeia_curta"],
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           qualitativeResult: "excellent",
           validationResult: "correct",
           scoreAwarded: 3,
@@ -347,22 +323,14 @@ describe("progress/service", () => {
         playerId: "player-1",
         submission: {
           phaseId: "chapter-1-phase-1",
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           selectedProperties: ["cadeia_curta"],
         },
         evaluation: {
           phaseId: "chapter-1-phase-1",
           selectedMoleculeId: "metano",
           selectedProperties: ["cadeia_curta"],
-          builderState: {
-            layout: "open_chain",
-            carbonCount: 1,
-            bonds: [],
-          },
+          builderState: branchedMethaneState,
           qualitativeResult: "excellent",
           validationResult: "correct",
           scoreAwarded: 3,
