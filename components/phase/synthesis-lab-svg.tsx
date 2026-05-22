@@ -4,16 +4,18 @@ import { createBranchedRenderModel } from "@/lib/builder/layout/branched-render-
 import { convertGraphBuilderStateToBranched } from "@/lib/builder/compatibility/graph-to-branched";
 import { buildGraphBuilderState } from "@/lib/builder/graph-preview";
 import type { BuilderLayout, GraphBuilderBondOrder } from "@/lib/builder/types";
+import type { BranchedAtomId, BranchedBuilderState, BranchedBondId } from "@/lib/builder/state/branched-types";
 
 type SynthesisLabSvgProps = {
-  layout: BuilderLayout;
-  activeCarbonCount: number;
-  normalizedBondOrders: GraphBuilderBondOrder[];
-  hoveredBondIndex: number | null;
-  recentlyChangedBondIndex: number | null;
+  builderState: BranchedBuilderState;
+  layoutMode?: BuilderLayout;
+  hoveredBondId: BranchedBondId | null;
+  recentlyChangedBondId: BranchedBondId | null;
   canUseDoubleBond: boolean;
-  onBondHoverAction: (index: number | null) => void;
-  onBondToggleAction: (index: number) => void;
+  selectedAtomId?: BranchedAtomId | null;
+  onAtomSelectAction?: (atomId: BranchedAtomId) => void;
+  onBondHoverAction: (bondId: BranchedBondId | null) => void;
+  onBondToggleAction: (bondId: BranchedBondId) => void;
 };
 
 type Point = {
@@ -106,15 +108,6 @@ function getParallelOffsets(order: 1 | 2 | 3) {
   return [0];
 }
 
-function bondIndexFromId(id: string): number | null {
-  if (!id.startsWith("b")) {
-    return null;
-  }
-
-  const value = Number(id.slice(1));
-  return Number.isInteger(value) ? value : null;
-}
-
 function carbonHasUnsaturatedBond(
   atomId: string,
   bonds: ReturnType<typeof createBranchedRenderModel>["bonds"],
@@ -128,22 +121,17 @@ function carbonHasUnsaturatedBond(
 }
 
 export function SynthesisLabSvg({
-  layout,
-  activeCarbonCount,
-  normalizedBondOrders,
-  hoveredBondIndex,
-  recentlyChangedBondIndex,
+  builderState,
+  layoutMode = "open_chain",
+  hoveredBondId,
+  recentlyChangedBondId,
   canUseDoubleBond,
+  selectedAtomId,
+  onAtomSelectAction,
   onBondHoverAction,
   onBondToggleAction,
 }: SynthesisLabSvgProps) {
-  const graphState = buildGraphBuilderState(
-    layout,
-    activeCarbonCount,
-    normalizedBondOrders,
-  );
-  const branchedState = convertGraphBuilderStateToBranched(graphState);
-  const renderModel = createBranchedRenderModel(branchedState);
+  const renderModel = createBranchedRenderModel(builderState);
   const atomMap = Object.fromEntries(renderModel.atoms.map((atom) => [atom.id, atom]));
   const bounds = getBounds(renderModel.atoms.map((atom) => ({ x: atom.x, y: atom.y })));
   const padding = 56;
@@ -151,13 +139,13 @@ export function SynthesisLabSvg({
   const height = bounds.maxY - bounds.minY + padding * 2;
   const viewBox = `${bounds.minX - padding} ${bounds.minY - padding} ${width} ${height}`;
   const svgClassName =
-    layout === "closed_ring"
+    layoutMode === "closed_ring"
       ? "h-[260px] w-full max-w-[380px] sm:h-[290px]"
       : "h-[240px] w-auto min-w-full sm:h-[260px]";
 
   return (
-    <div className={layout === "closed_ring" ? "mx-auto flex justify-center py-6" : "mt-4 overflow-x-auto pb-12 pt-6 sm:pb-14"}>
-      <div className={layout === "closed_ring" ? "w-full" : "mx-auto min-w-max px-2"}>
+    <div className={layoutMode === "closed_ring" ? "mx-auto flex justify-center py-6" : "mt-4 overflow-x-auto pb-12 pt-6 sm:pb-14"}>
+      <div className={layoutMode === "closed_ring" ? "w-full" : "mx-auto min-w-max px-2"}>
         <svg viewBox={viewBox} className={svgClassName} aria-hidden="true">
           <defs>
             {renderModel.atoms
@@ -195,11 +183,11 @@ export function SynthesisLabSvg({
               return null;
             }
 
-            const bondIndex = bondIndexFromId(bond.id);
-            const isInteractive = bond.kind === "carbon" && bondIndex !== null;
-            const isHovered = bondIndex !== null && hoveredBondIndex === bondIndex;
+            const bondId = bond.kind === "carbon" ? (bond.id as BranchedBondId) : null;
+            const isInteractive = bond.kind === "carbon" && bondId !== null;
+            const isHovered = bondId !== null && hoveredBondId === bondId;
             const isRecentlyChanged =
-              bondIndex !== null && recentlyChangedBondIndex === bondIndex;
+              bondId !== null && recentlyChangedBondId === bondId;
             const stroke = getBondColor({
               kind: bond.kind,
               order: bond.order,
@@ -223,11 +211,11 @@ export function SynthesisLabSvg({
                     strokeWidth="18"
                     strokeLinecap="round"
                     className={canUseDoubleBond ? "cursor-pointer" : "cursor-not-allowed"}
-                    onMouseEnter={() => onBondHoverAction(bondIndex)}
+                    onMouseEnter={() => onBondHoverAction(bondId)}
                     onMouseLeave={() => onBondHoverAction(null)}
                     onClick={() => {
-                      if (canUseDoubleBond && bondIndex !== null) {
-                        onBondToggleAction(bondIndex);
+                      if (canUseDoubleBond && bondId !== null) {
+                        onBondToggleAction(bondId);
                       }
                     }}
                   />
@@ -294,16 +282,21 @@ export function SynthesisLabSvg({
             const style = getCarbonStyle(
               carbonHasUnsaturatedBond(atom.id, renderModel.bonds),
             );
+            const isSelected = selectedAtomId === atom.id;
 
             return (
-              <g key={atom.id}>
+              <g
+                key={atom.id}
+                className={onAtomSelectAction ? "cursor-pointer" : undefined}
+                onClick={() => onAtomSelectAction?.(atom.id as BranchedAtomId)}
+              >
                 <circle
                   cx={atom.x}
                   cy={atom.y}
-                  r="18"
+                  r={isSelected ? "21" : "18"}
                   fill={style.fill}
-                  stroke={style.stroke}
-                  strokeWidth="1.35"
+                  stroke={isSelected ? "rgba(250, 204, 21, 0.92)" : style.stroke}
+                  strokeWidth={isSelected ? "2.2" : "1.35"}
                   filter={`url(#carbon-glow-${atom.id})`}
                 />
                 <text
@@ -326,4 +319,21 @@ export function SynthesisLabSvg({
       </div>
     </div>
   );
+}
+
+export function createGraphBackedSynthesisLabSvgProps(options: {
+  layout: BuilderLayout;
+  activeCarbonCount: number;
+  normalizedBondOrders: GraphBuilderBondOrder[];
+}) {
+  const graphState = buildGraphBuilderState(
+    options.layout,
+    options.activeCarbonCount,
+    options.normalizedBondOrders,
+  );
+
+  return {
+    builderState: convertGraphBuilderStateToBranched(graphState),
+    layoutMode: options.layout,
+  };
 }

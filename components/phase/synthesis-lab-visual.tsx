@@ -1,8 +1,12 @@
 "use client";
 
 import { blobAssets } from "@/lib/assets/blob";
-import { SynthesisLabSvg } from "@/components/phase/synthesis-lab-svg";
+import {
+  createGraphBackedSynthesisLabSvgProps,
+  SynthesisLabSvg,
+} from "@/components/phase/synthesis-lab-svg";
 import type { BuilderLayout, GraphBuilderBondOrder } from "@/lib/builder/types";
+import type { BranchedBondId } from "@/lib/builder/state/branched-types";
 
 type SynthesisLabVisualProps = {
   layout: BuilderLayout;
@@ -120,6 +124,11 @@ export function SynthesisLabVisual({
           activeCarbonCount,
         )
       : null;
+  const graphBackedSvg = createGraphBackedSynthesisLabSvgProps({
+    layout,
+    activeCarbonCount,
+    normalizedBondOrders,
+  });
 
   return (
     <div className="rounded-[24px] border border-cyan-300/14 bg-[linear-gradient(180deg,rgba(9,15,30,0.98),rgba(15,23,42,1))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:rounded-[28px] sm:p-4">
@@ -212,14 +221,28 @@ export function SynthesisLabVisual({
         </div>
 
         <SynthesisLabSvg
-          layout={layout}
-          activeCarbonCount={activeCarbonCount}
-          normalizedBondOrders={normalizedBondOrders}
-          hoveredBondIndex={hoveredBondIndex}
-          recentlyChangedBondIndex={recentlyChangedBondIndex}
+          builderState={graphBackedSvg.builderState}
+          layoutMode={graphBackedSvg.layoutMode}
+          hoveredBondId={
+            hoveredBondIndex === null ? null : (`b${hoveredBondIndex}` as BranchedBondId)
+          }
+          recentlyChangedBondId={
+            recentlyChangedBondIndex === null
+              ? null
+              : (`b${recentlyChangedBondIndex}` as BranchedBondId)
+          }
           canUseDoubleBond={canUseDoubleBond}
-          onBondHoverAction={onBondHoverAction}
-          onBondToggleAction={onBondToggleAction}
+          onBondHoverAction={(bondId) => {
+            if (!bondId) {
+              onBondHoverAction(null);
+              return;
+            }
+
+            onBondHoverAction(Number(bondId.slice(1)));
+          }}
+          onBondToggleAction={(bondId) => {
+            onBondToggleAction(Number(bondId.slice(1)));
+          }}
         />
 
       </div>

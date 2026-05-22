@@ -83,6 +83,39 @@ export function addCarbonToAtom(
   };
 }
 
+export function connectAtomsWithBond(
+  state: BranchedBuilderState,
+  firstAtomId: BranchedAtomId,
+  secondAtomId: BranchedAtomId,
+  order: BranchedBuilderBondOrder = 1,
+): BranchedBuilderState {
+  if (firstAtomId === secondAtomId) {
+    return state;
+  }
+
+  if (findBondBetweenAtoms(state, firstAtomId, secondAtomId)) {
+    return state;
+  }
+
+  if (
+    !canAtomAcceptAdditionalBondOrder(state, firstAtomId, order) ||
+    !canAtomAcceptAdditionalBondOrder(state, secondAtomId, order)
+  ) {
+    return state;
+  }
+
+  const bondId = createBondId(state.nextBondIndex);
+
+  return {
+    ...state,
+    bonds: [
+      ...state.bonds,
+      { id: bondId, from: firstAtomId, to: secondAtomId, order },
+    ],
+    nextBondIndex: state.nextBondIndex + 1,
+  };
+}
+
 export function removeTerminalAtom(
   state: BranchedBuilderState,
   atomId: BranchedAtomId,
