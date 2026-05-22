@@ -18,9 +18,21 @@ Ele existe para:
 - registrar o modelo de dados alvo;
 - orientar a nova organização de código;
 - dividir a refatoração em entregas de baixo risco;
-- listar decisões ainda em aberto antes da implementação.
+- consolidar as decisões de escopo aprovadas antes da implementação.
 
 Enquanto este plano não for promovido explicitamente aos documentos normativos centrais, a especificação oficial em vigor continua sendo a descrita em `docs/tech/technical-spec.md` e `docs/design/game-design.md`.
+
+### 1.1 Escopo aprovado para a refatoração
+
+As decisões abaixo já foram aprovadas para esta trilha:
+
+- os hidrogênios devem aparecer como átomos visíveis separados;
+- o primeiro rollout já deve cobrir cadeia aberta e anéis;
+- o modelo deve nascer com ligação simples, dupla e tripla;
+- a UX deve oferecer `undo` e remoção direta de carbono terminal;
+- o jogador pode expandir a estrutura a partir de qualquer carbono com valência livre;
+- o reconhecimento oficial deve preparar caminho para isômeros constitucionais;
+- a arquitetura deve integrar uma engine química externa desde o início.
 
 ---
 
@@ -108,24 +120,35 @@ A direção recomendada é:
 - bibliotecas maduras do domínio químico também usam ou exportam `SVG`;
 - o problema histórico do projeto não foi “usar SVG”, mas sim depender de geometria manual simplificada demais.
 
-### 4.3 Papel de uma engine química auxiliar
+### 4.3 Papel de uma engine química externa
 
 Este plano assume que a mesa deve continuar sendo uma UI autoral do projeto.
 
-Mesmo assim, a refatoração pode usar uma engine auxiliar para:
+Mesmo assim, a refatoração deve usar uma engine externa para:
 
 - normalização estrutural;
-- auto-layout inicial;
+- auto-layout 2D;
 - exportações futuras;
 - conferência química adicional.
 
-As opções candidatas mais prováveis para uso auxiliar são:
+As opções candidatas mais prováveis são:
 
 - `OpenChemLib JS`;
 - `RDKit.js`, se o custo de integração e o estado de manutenção forem aceitos;
-- nenhuma engine externa na primeira entrega, desde que o layout 2D interno seja mantido intencionalmente pequeno e bem testado.
 
-Este plano não depende de decisão imediata por uma biblioteca externa.
+### 4.4 Recomendação atual de engine
+
+A recomendação atual deste plano é:
+
+- `OpenChemLib JS` como engine primária de apoio químico e de depiction/layout;
+- `SVG` próprio do projeto como camada de render e interação;
+- `RDKit.js` como candidato secundário para comparação, validação futura ou utilidades específicas, não como primeira escolha da integração inicial.
+
+Motivos:
+
+- `OpenChemLib JS` oferece edição, coordenadas, `toSVG`, hidrogênios implícitos/explicitação e operações químicas relevantes sem o alerta atual de transição de manutenção observado em `RDKit.js`;
+- a UI do jogo continua sob controle do projeto;
+- a engine externa resolve o problema estrutural de layout e assinatura química sem obrigar a mesa a virar um editor químico genérico.
 
 ---
 
@@ -135,7 +158,13 @@ Este plano não depende de decisão imediata por uma biblioteca externa.
 
 O novo builder deve deixar de representar a molécula como “uma cadeia com contagem global” e passar a representá-la como um grafo molecular simplificado.
 
-No escopo imediato da refatoração, esse grafo pode continuar centrado em carbonos e ligações C-C, com hidrogênios derivados automaticamente.
+No escopo imediato da refatoração, esse grafo deve representar:
+
+- carbonos explícitos;
+- hidrogênios explícitos na camada visual derivada;
+- ligações simples, duplas e triplas;
+- cadeias abertas e cíclicas;
+- ramificação arbitrária dentro das regras de valência da fase.
 
 ### 5.2 Estado canônico recomendado
 
@@ -145,11 +174,12 @@ Formato conceitual recomendado:
 type BranchedAtomId = string;
 type BranchedBondId = string;
 
-type BranchedBondOrder = 1 | 2;
+type BranchedBondOrder = 1 | 2 | 3;
 
 type BranchedAtom = {
   id: BranchedAtomId;
-  element: "C";
+  element: "C" | "H";
+  isDerivedHydrogen?: boolean;
 };
 
 type BranchedBond = {
@@ -166,16 +196,17 @@ type BranchedBuilderState = {
   rootAtomId: BranchedAtomId;
   selectedAtomId: BranchedAtomId | null;
   selectedBondId: BranchedBondId | null;
+  ringAnchors?: BranchedAtomId[];
 };
 ```
 
 ### 5.3 Regras do estado canônico
 
-- todo átomo do escopo inicial é carbono;
+- os átomos editáveis iniciais do jogador são carbonos;
+- hidrogênios visíveis são derivados automaticamente e não devem ser editados manualmente;
 - toda ligação conecta dois átomos distintos;
 - o grafo deve ser conexo;
-- não há hidrogênios persistidos no estado canônico da edição;
-- hidrogênios são sempre derivados;
+- hidrogênios derivados podem ser materializados em projeções de render sem alterar a fonte de verdade do grafo editável;
 - `rootAtomId` existe para orientar layout e estabilidade visual;
 - seleções atuais da UI podem viver no estado da interface ou no estado canônico, desde que a fronteira seja clara.
 
@@ -186,7 +217,7 @@ A partir de `BranchedBuilderState`, a aplicação deve derivar:
 - vizinhança de cada átomo;
 - valência ocupada por átomo;
 - hidrogênios por átomo;
-- forma textual local (`CH3`, `CH2`, `CH`, `C`);
+- projeção visual explícita dos hidrogênios;
 - conectividade;
 - presença de ciclo;
 - tipo geral da estrutura;
@@ -225,7 +256,6 @@ Exemplos:
 
 ### 6.2 Regras operacionais
 
-- hidrogênios não devem ser inseridos manualmente na primeira versão da refatoração;
 - hidrogênios devem ser recalculados a cada mutação estrutural;
 - se `valenciaOcupada > 4`, a estrutura é inválida;
 - a UI deve exibir invalidez antes mesmo da submissão final sempre que isso for determinístico.
@@ -234,25 +264,19 @@ Exemplos:
 
 Para cada carbono:
 
-- label principal: `CH3`, `CH2`, `CH` ou `C`;
-- opcionalmente, hidrogênios podem aparecer como parte do label condensado na primeira entrega;
-- uma segunda entrega pode separar visualmente alguns H em posições próprias se isso trouxer ganho pedagógico real.
+- o carbono continua sendo o átomo central editável;
+- os hidrogênios derivados devem ser desenhados como átomos explícitos separados;
+- o posicionamento dos H deve respeitar os ângulos livres restantes do carbono;
+- a renderização pode exibir também um label condensado auxiliar em modo de debug ou acessibilidade, mas não como visual principal da experiência.
 
 ### 6.4 Recomendação de escopo
 
-Para controlar risco, a primeira versão da refatoração deve usar:
+Para controlar risco mesmo com H explícito, a primeira versão deve:
 
-- carbono como nó explícito;
-- hidrogênio como derivação visual condensada no label.
-
-Ou seja:
-
-- `CH3`
-- `CH2`
-- `CH`
-- `C`
-
-Isso já satisfaz “hidrogênios aparecem” sem introduzir de imediato uma explosão de nós e colisões visuais.
+- manter apenas carbono como nó editável;
+- gerar e destruir nós de hidrogênio derivados a cada mutação;
+- impedir qualquer fluxo em que o jogador precise selecionar ou editar diretamente um hidrogênio;
+- tratar o conjunto de H como projeção visual derivada e não como estado autoritativo primário.
 
 ---
 
@@ -266,31 +290,30 @@ O novo layout deve ser calculado a partir do grafo.
 
 ### 7.2 Estratégia recomendada para a primeira entrega
 
-Usar um algoritmo interno pequeno e controlado, com as seguintes ideias:
+Usar layout apoiado por engine química externa desde a primeira etapa, com as seguintes ideias:
 
-- tratar a molécula como árvore na primeira etapa;
-- usar o `rootAtomId` como origem do layout;
-- distribuir vizinhos por ângulos preferenciais;
-- preservar ângulos aproximados de ligações orgânicas em 2D;
-- evitar sobreposição por regras simples de relaxamento;
-- manter estabilidade visual entre mutações pequenas.
+- o grafo editável do projeto continua sendo a fonte de verdade;
+- a engine gera ou normaliza coordenadas 2D dos carbonos;
+- a aplicação projeta os hidrogênios explícitos a partir dessas coordenadas e da valência livre;
+- o projeto preserva um pós-processamento leve para estabilidade visual e affordances do jogo;
+- ciclos e cadeias abertas já entram no mesmo contrato de layout inicial.
 
 ### 7.3 Ângulos preferenciais
 
-Na primeira entrega, não é necessário perseguir geometria física exata.
-
-É suficiente perseguir convenções visuais coerentes:
+Na primeira entrega, a meta é perseguir convenções químicas visuais coerentes e estáveis:
 
 - cadeia principal com direção predominante em zigue-zague;
-- vizinho único pode seguir direção principal;
-- dois vizinhos podem abrir em torno de 120 graus;
+- distribuição angular coerente para carbonos sp3, sp2 e sp;
+- dois vizinhos podem abrir em torno de 120 graus quando a topologia pedir;
+- uma tripla deve induzir alinhamento mais linear dos eixos relevantes;
 - três vizinhos devem evitar empilhamento visual;
 - ramificação deve sair para cima/baixo alternadamente quando possível;
-- ciclo aromático pode continuar sendo um caso especial.
+- anéis devem seguir coordenadas regulares ou normalizadas pela engine;
+- aromáticos continuam sendo um caso especial de render e reconhecimento.
 
 ### 7.4 Casos especiais de layout
 
-#### Cadeias abertas pequenas
+#### Cadeias abertas e ramificadas
 
 - usar zigue-zague padrão como base;
 - manter comprimento de ligação constante;
@@ -304,9 +327,10 @@ Na primeira entrega, não é necessário perseguir geometria física exata.
 
 #### Estruturas cíclicas
 
-- continuar com layout especializado;
-- para anel de 6, manter geometria hexagonal explícita;
-- aromaticidade pode continuar sendo um caso de render especial.
+- entrar já na primeira etapa;
+- usar geometria regular ou coordenadas normalizadas pela engine;
+- para anel de 6, manter geometria hexagonal explícita quando apropriado;
+- aromaticidade continua sendo um caso de render especial.
 
 ### 7.5 Estrutura de layout recomendada
 
@@ -325,7 +349,18 @@ type BuilderLayoutSnapshot = {
 
 O layout deve ser derivado do estado canônico e nunca ser a fonte de verdade química.
 
-### 7.6 Fronteira entre química e visual
+### 7.6 Hidrogênios explícitos no layout
+
+Os hidrogênios não devem participar da edição principal do grafo do jogador, mas devem participar da renderização final.
+
+Estratégia:
+
+- calcular as direções livres de cada carbono a partir dos seus vizinhos e ordens de ligação;
+- posicionar H derivados nesses ângulos livres;
+- reduzir sobreposição com deslocamentos leves;
+- nunca usar a posição do H como critério de reconhecimento químico oficial.
+
+### 7.7 Fronteira entre química e visual
 
 - `BranchedBuilderState` define a química editável;
 - `BuilderLayoutSnapshot` define a geometria visual transitória;
@@ -359,16 +394,20 @@ Separar três camadas:
 
 ### 8.3 Resolução inicial
 
-Na primeira versão do builder ramificado, o conjunto oficial do Capítulo I continua pequeno.
+Na primeira versão do builder ramificado, o conjunto oficial do Capítulo I continua pequeno, mas a arquitetura deve nascer apta a diferenciar isômeros constitucionais.
 
-O reconhecimento pode continuar por assinatura controlada, por exemplo:
+O reconhecimento não deve mais depender apenas de contagem simples.
+
+Ele deve considerar uma assinatura controlada com pelo menos:
 
 - número de carbonos;
-- multiconjunto de graus;
-- contagem de ligações duplas;
+- número total de hidrogênios;
+- multiconjunto de graus do grafo carbônico;
+- multiconjunto das ordens de ligação;
 - presença de ciclo;
+- posição relativa das insaturações;
 - padrão alternado aromático;
-- fórmula molecular derivada.
+- canonização da conectividade.
 
 Isso permite reconhecer:
 
@@ -378,20 +417,18 @@ Isso permite reconhecer:
 - propeno;
 - buteno;
 - benzeno;
-- e futuramente diferenciar isômeros quando o conteúdo exigir.
+- e diferenciar isômeros quando o conteúdo exigir.
 
 ### 8.4 Atenção para ramificação
 
-Quando a ramificação entrar, a assinatura atual baseada apenas em contagem de carbonos e “tipo geral de ligação” deixa de ser suficiente.
-
-O reconhecimento precisará distinguir:
+O reconhecimento precisa distinguir desde já:
 
 - cadeia normal;
 - cadeia ramificada;
 - posição de insaturação quando aplicável;
 - ciclo versus não ciclo.
 
-Esse ponto impacta diretamente a evolução futura do conteúdo e precisa ser fechado antes de expandir o capítulo para isomeria constitucional.
+Esse ponto impacta diretamente a expansão do conteúdo para isomeria constitucional e não deve ficar para uma etapa posterior improvisada.
 
 ---
 
@@ -421,10 +458,12 @@ lib/builder/
     valence.ts
     graph-analysis.ts
     molecule-signature.ts
+    engine-interop.ts
   layout/
     branched-layout.ts
     ring-layout.ts
     geometry.ts
+    hydrogen-layout.ts
   validation/
     branched-validate.ts
     resolve-official-molecule.ts
@@ -454,12 +493,14 @@ components/phase/
 - hidrogênios;
 - análise do grafo;
 - assinatura química simplificada.
+- interoperabilidade com a engine externa.
 
 `layout/`
 
 - coordenadas 2D;
 - posicionamento incremental;
 - casos especiais de ciclos.
+- projeção explícita dos hidrogênios.
 
 `validation/`
 
@@ -503,14 +544,17 @@ Não trocar simultaneamente:
 
 A refatoração deve acontecer em camadas.
 
-### 10.2 Fase 1 — Nova base interna sem trocar a UI principal
+### 10.2 Fase 1 — Nova base interna com engine desde o início
 
 Entregas:
 
 - introduzir `BranchedBuilderState`;
 - criar operações puras de edição;
+- introduzir tipos para simples, dupla e tripla;
 - criar cálculo de hidrogênios;
-- criar layout 2D simples;
+- integrar a engine externa escolhida;
+- criar layout 2D de carbonos e anéis com apoio da engine;
+- criar projeção explícita de hidrogênios;
 - criar suíte de testes da nova base;
 - manter a UI atual intacta.
 
@@ -523,8 +567,8 @@ Objetivo:
 Entregas:
 
 - criar `synthesis-lab-v2.tsx`;
-- renderizar carbonos com labels `CHx`;
-- renderizar ligações simples e duplas;
+- renderizar carbonos e hidrogênios explícitos;
+- renderizar ligações simples, duplas e triplas;
 - permitir seleção visual de átomo e ligação;
 - exibir preview da nova mesa em ambiente controlado.
 
@@ -538,6 +582,7 @@ Entregas:
 
 - operação “adicionar carbono no átomo selecionado”;
 - operação “remover carbono terminal”;
+- ação de `undo`;
 - operação “alternar ligação”;
 - bloqueios de invalidez por valência;
 - manutenção de layout estável após mutações.
@@ -552,6 +597,7 @@ Entregas:
 
 - nova rota ou adaptação da rota de validação para `BranchedBuilderState`;
 - resolução oficial de moléculas do Capítulo I;
+- suporte a diferenciação estrutural para isômeros;
 - compatibilidade com `construction` e `construction_choice`;
 - persistência da tentativa com o novo payload.
 
@@ -635,12 +681,14 @@ O builder novo pode ser considerado pronto para assumir fases reais quando:
 
 Risco:
 
-- tentar desenhar hidrogênios individuais demais cedo;
+- tentar desenhar hidrogênios individuais cedo demais sem uma boa disciplina de layout;
 - criar poluição visual e colisões.
 
 Mitigação:
 
-- começar por labels condensados `CHx`.
+- usar a engine desde o início;
+- separar layout dos carbonos e projeção dos H;
+- testar mobile cedo.
 
 ### 13.2 Layout instável
 
@@ -677,96 +725,30 @@ Mitigação:
 
 ---
 
-## 14. Perguntas em aberto para fechar antes da implementação
+## 14. Questões restantes que não bloqueiam o início
 
-### 14.1 Escopo visual dos hidrogênios
+As decisões estruturais principais desta trilha já foram fechadas.
 
-Pergunta:
+As questões abaixo podem ser refinadas durante a implementação sem travar o arranque da arquitetura:
 
-- na primeira entrega, os hidrogênios podem aparecer como label condensado `CH3`, `CH2`, `CH`, `C`, ou você quer desde o começo cada `H` desenhado como átomo separado em volta do carbono?
-
-Impacto:
-
-- muda bastante a complexidade do layout e da renderização.
-
-### 14.2 Escopo das ligações na primeira fase da refatoração
-
-Pergunta:
-
-- a primeira entrega da mesa nova deve cobrir apenas ligação simples e dupla, ou já deve prever tripla no modelo e na UI, mesmo sem uso imediato?
-
-Impacto:
-
-- muda tipos, layout e toolbar.
-
-### 14.3 Papel de anéis na primeira entrega
-
-Pergunta:
-
-- você quer que a primeira versão nova já preserve anéis e aromáticos, ou prefere entregar primeiro cadeia aberta com ramificação e só depois migrar a lógica de ciclos?
-
-Impacto:
-
-- é um divisor importante de escopo.
-
-### 14.4 Escopo de remoção
-
-Pergunta:
-
-- quando o usuário “desfaz” um crescimento, você quer apenas um botão de undo geral, ou também ações diretas como remover um carbono terminal clicando nele?
-
-Impacto:
-
-- muda operações do builder e UX principal.
-
-### 14.5 Modelo pedagógico da expansão
-
-Pergunta:
-
-- o aluno poderá adicionar carbono em qualquer carbono com valência livre, ou haverá fases em que certos carbonos ficarão propositalmente bloqueados para guiar aprendizagem?
-
-Impacto:
-
-- muda se o builder é livre controlado ou guiado por affordances contextuais.
-
-### 14.6 Escopo do conteúdo oficial após a ramificação
-
-Pergunta:
-
-- no curto prazo, o conteúdo oficial continuará reconhecendo só as moléculas já existentes do Capítulo I, ou você já quer abrir caminho para isômeros ramificados como `isobutano` logo após a refatoração da mesa?
-
-Impacto:
-
-- muda a assinatura química oficial e a estratégia de validação.
-
-### 14.7 Biblioteca externa
-
-Pergunta:
-
-- você quer que a primeira versão da refatoração já dependa de uma engine externa, ou prefere começar com layout interno pequeno e deixar a integração externa como etapa posterior se necessário?
-
-Impacto:
-
-- muda dependências, risco e ritmo da implementação.
+- qual engine externa será confirmada como oficial da primeira integração, `OpenChemLib JS` ou alternativa equivalente;
+- se a UI vai expor toggles auxiliares de debug para labels condensados além dos H explícitos;
+- em que fase do conteúdo oficial a diferenciação de isômeros ramificados passa a valer como regra pedagógica concreta;
+- se a primeira versão do anel aromático será representada com rótulo visual especializado ou apenas pela geometria e alternância de ligações;
+- qual será a política final de undo: pilha local apenas da sessão da fase ou integração futura com histórico mais amplo do builder.
 
 ---
 
 ## 15. Recomendação de decisão para início
 
-Se a meta for reduzir risco e começar logo, a recomendação inicial é:
+Com o escopo aprovado, a recomendação de início passa a ser:
 
-- hidrogênios como labels condensados `CHx`;
-- foco inicial em cadeia aberta;
-- suporte a ligação simples e dupla;
-- layout interno pequeno em `SVG`;
-- ramificação por clique em carbono com valência livre;
-- ciclos preservados no builder atual até a segunda etapa;
-- nenhum uso obrigatório de biblioteca externa na primeira entrega;
-- rollout paralelo da mesa nova.
+- engine externa integrada desde a Fase 1;
+- `OpenChemLib JS` como primeira candidata de implementação;
+- hidrogênios explícitos como projeção visual derivada;
+- cadeias e anéis no mesmo contrato de layout inicial;
+- simples, dupla e tripla já no modelo;
+- `undo` e remoção terminal já previstos nas operações do builder;
+- assinatura estrutural preparada para isomeria.
 
-Essa combinação é a que melhor preserva:
-
-- velocidade;
-- clareza arquitetural;
-- baixo risco de regressão;
-- caminho de evolução posterior.
+Essa combinação aumenta o escopo inicial, mas evita duas refatorações consecutivas do mesmo núcleo químico.
