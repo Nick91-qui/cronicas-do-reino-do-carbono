@@ -29,6 +29,7 @@ Referências:
 - [x] Milestone 9 — QA, segurança e deploy no fluxo central
 - [ ] Milestone 10 — Reposicionamento visual de site para jogo
 - [x] Milestone 11 — Biblioteca pedagógica do jogador
+- [x] Trilha transversal — Adequação LGPD mínima operacional
 
 ## Estratégia de mudança
 
@@ -110,6 +111,23 @@ Objetivos:
 - reforçar a coleção como espaço de consulta e recompensa.
 
 ## Todo List por milestone
+
+### Trilha transversal — Adequação LGPD mínima operacional
+
+Status: concluída no mínimo operacional, com follow-ups abertos.
+
+- [x] publicar política de privacidade oficial
+- [x] publicar termos de uso oficiais
+- [x] adicionar links públicos e aviso de privacidade nas telas de auth
+- [x] exigir ciência/aceite no cadastro
+- [x] persistir versão e timestamp de ciência/aceite legal
+- [x] implementar exportação, correção e exclusão autenticadas da conta
+- [x] reduzir exposição de dados na área `operator`
+- [x] implementar bloqueio de mudança material com reaceite em `/legal/update`
+- [ ] expor status legal atual no perfil do jogador
+- [ ] automatizar retenção contínua fora do fluxo de autenticação
+- [ ] definir trilha mínima de auditoria de acesso interno
+- [ ] preencher critério de validação de identidade no runbook do titular
 
 ### Milestone 10 — Reposicionamento visual de site para jogo
 
@@ -193,10 +211,11 @@ Verificação recente:
 ### Autenticação e autorização
 
 - [x] revisar endurecimento de sessão
-- [ ] revisar autorização nas rotas de escrita
+- [x] revisar autorização nas rotas de escrita
 - [x] revisar fluxos de erro de cadastro, login e logout
 - [x] aplicar rate limiting básico em login e cadastro
 - [x] persistir visualização do tutorial contextual de síntese por jogador autenticado
+- [x] exigir novo aceite quando política ou termos mudarem materialmente
 
 ### Persistência e idempotência
 
@@ -230,12 +249,13 @@ Verificação recente:
 
 1. concluir a validação manual do Milestone 10 em desktop e mobile
 2. verificar que `profile` e a superfície `operator` carregam sem regressões no ambiente conectado ao Neon/Vercel
-3. revisar autorização nas rotas de escrita e registrar o resultado no checklist
+3. expor no perfil do jogador a versão e a data do último aceite legal
 4. revisar estados visuais de fase, feedback e progressão contra `docs/visual/ui-system.md`
-5. manter documentação e checklist sincronizados com as decisões consolidadas
-6. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
-7. opcionalmente ampliar cobertura de integração com Prisma real de teste
-8. consolidar o fechamento visual principal do MVP após a entrada da Biblioteca e da navegação em `/hall`
+5. automatizar retenção contínua de sessões/analytics fora do fluxo de autenticação
+6. manter documentação e checklist sincronizados com as decisões consolidadas
+7. tratar o aviso não bloqueante do Vitest/Vite quando houver janela técnica
+8. opcionalmente ampliar cobertura de integração com Prisma real de teste
+9. consolidar o fechamento visual principal do MVP após a entrada da Biblioteca e da navegação em `/hall`
 
 ## Critério de fechamento do tracker
 

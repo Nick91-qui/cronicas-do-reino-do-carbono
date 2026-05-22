@@ -53,6 +53,64 @@ Ao final desta trilha, o projeto deve:
 - separar eventos operacionais indispensáveis de telemetria opcional;
 - permitir QA objetivo de privacidade antes de uso ampliado.
 
+## Status atual consolidado
+
+Na revisão atual, a trilha já possui implementação operacional relevante no repositório.
+
+### Frente 1. Base documental e governança
+
+- [x] política de privacidade oficial publicada
+- [x] termos de uso oficiais publicados
+- [x] runbook interno de atendimento ao titular publicado
+- [x] controlador, contato e canal do titular documentados
+- [ ] critério operacional de validação de identidade do solicitante ainda precisa ser preenchido no runbook
+
+### Frente 2. Transparência nas interfaces públicas
+
+- [x] links visíveis para política e termos nas telas públicas
+- [x] aviso de privacidade no cadastro
+- [x] aceite explícito no cadastro
+- [x] página pública de política
+- [x] página pública de termos
+- [x] fluxo de revisão obrigatória em `/legal/update` quando houver mudança material
+
+### Frente 3. Minimização de dados e modelagem
+
+- [x] minimização relevante da área `operator`
+- [x] persistência versionada de ciência/aceite legal no `Player`
+- [ ] revisão fina de payloads de analytics continua aberta
+- [ ] estratégia formal de pseudonimização continua aberta
+
+### Frente 4. Direitos do titular
+
+- [x] exportação autenticada de conta
+- [x] exclusão autenticada de conta
+- [x] correção autenticada de dados cadastrais
+- [x] atualização material de aceite legal via `PATCH /api/account/legal-acceptance`
+- [ ] regra operacional para solicitações vindas via escola ou responsável ainda precisa de fechamento mais explícito
+
+### Frente 5. Retenção e descarte
+
+- [x] retenção documentada para sessão, analytics, conta inativa e histórico
+- [x] regra oficial de exclusão documentada
+- [x] rotina implementada para invalidar sessão expirada ao autenticar
+- [ ] job administrativo para retenção histórica ainda não implementado
+- [ ] rotina automatizada de limpeza contínua fora do fluxo de autenticação ainda não implementada
+
+### Frente 6. Observabilidade interna e papel `operator`
+
+- [x] área `operator` protegida por role persistida
+- [x] superfície somente leitura mantida no MVP
+- [x] exposição reduzida de identidade e histórico fino
+- [x] governança mínima documentada em `operator-observability-plan.md`
+- [ ] trilha mínima de auditoria de acesso interno continua aberta
+
+### Frente 7. QA e validação contínua
+
+- [x] checklist LGPD incorporado ao repositório
+- [x] testes automatizados cobrindo aceite legal versionado e bloqueio por mudança material
+- [ ] validação manual contínua de textos legais e superfícies protegidas continua necessária
+
 ## Frentes de trabalho
 
 ### Frente 1. Base documental e governança

@@ -151,28 +151,28 @@ Para considerar o MVP apto para nova entrega interna ou validação ampliada, o 
 
 ### Transparência
 
-- [ ] telas públicas de login e cadastro exibem link visível para política de privacidade.
-- [ ] telas públicas de login e cadastro exibem link visível para termos de uso.
-- [ ] cadastro informa dados coletados, finalidade principal e uso de cookie de sessão essencial.
-- [ ] cadastro exige ciência da política de privacidade e aceite explícito dos termos de uso.
-- [ ] cadastro persiste versão e timestamp de ciência/aceite para política e termos.
-- [ ] mudança material de política ou termos desvia o jogador autenticado para revisão em `/legal/update`.
-- [ ] documentação do repositório identifica controlador, operador e canal de contato para direitos do titular.
+- [x] telas públicas de login e cadastro exibem link visível para política de privacidade.
+- [x] telas públicas de login e cadastro exibem link visível para termos de uso.
+- [x] cadastro informa dados coletados, finalidade principal e uso de cookie de sessão essencial.
+- [x] cadastro exige ciência da política de privacidade e aceite explícito dos termos de uso.
+- [x] cadastro persiste versão e timestamp de ciência/aceite para política e termos.
+- [x] mudança material de política ou termos desvia o jogador autenticado para revisão em `/legal/update`.
+- [x] documentação do repositório identifica controlador, operador e canal de contato para direitos do titular.
 
 ### Minimização e acesso
 
 - [ ] payloads de analytics não repetem identificadores ou atributos pessoais sem necessidade.
-- [ ] área `operator` expõe apenas campos necessários para suporte operacional explícito.
+- [x] área `operator` expõe apenas campos necessários para suporte operacional explícito.
 - [ ] concessão do papel `operator` segue regra documentada de necessidade e rastreabilidade.
 
 ### Retenção e direitos do titular
 
-- [ ] existe regra documentada de retenção para sessão, conta, analytics e histórico de tentativas.
-- [ ] existe fluxo documentado para correção, exportação e exclusão ou anonimização de conta.
-- [ ] existe fluxo implementado para registrar novo aceite material de política e termos em `PATCH /api/account/legal-acceptance`.
-- [ ] `GET /api/account/export` retorna os dados da conta autenticada sem expor `passwordHash`.
-- [ ] `DELETE /api/account` exige sessão, senha atual e confirmação explícita antes de excluir a conta.
-- [ ] sessões expiradas possuem rotina prevista de limpeza operacional.
+- [x] existe regra documentada de retenção para sessão, conta, analytics e histórico de tentativas.
+- [x] existe fluxo documentado para correção, exportação e exclusão ou anonimização de conta.
+- [x] existe fluxo implementado para registrar novo aceite material de política e termos em `PATCH /api/account/legal-acceptance`.
+- [x] `GET /api/account/export` retorna os dados da conta autenticada sem expor `passwordHash`.
+- [x] `DELETE /api/account` exige sessão, senha atual e confirmação explícita antes de excluir a conta.
+- [x] sessões expiradas possuem rotina prevista de limpeza operacional.
 
 ## Checklist de conteúdo
 
@@ -206,6 +206,25 @@ Itens não marcados neste checklist representam débito real de validação ou c
   - smoke test manual recente de `/profile`, `/operator` e `/operator/player/[playerId]`;
   - validação manual de responsividade e clareza pedagógica do Milestone 10;
   - confirmação manual dos fluxos negativos de autenticação marcados acima.
+
+### Rodada registrada — 2026-05-22
+
+- Data: 2026-05-22
+- Ambiente: repositório local com schema Prisma já alinhado ao Neon
+- Responsável: usuário com suporte do Codex
+- `typecheck`: aprovado
+- Testes automatizados: `npm test` aprovado
+- Escopo confirmado nesta rodada:
+  - persistência versionada de ciência/aceite para política e termos;
+  - política de privacidade e termos reescritos para uso educacional real;
+  - implementação do gate de mudança material em `/legal/update`;
+  - rota autenticada `PATCH /api/account/legal-acceptance`;
+  - bloqueio das rotas autenticadas quando o aceite legal estiver desatualizado.
+- Pendências preservadas:
+  - smoke test manual recente de `/profile`, `/operator` e `/operator/player/[playerId]`;
+  - validação manual da experiência de reaceite legal no navegador;
+  - revisão fina de minimização dos payloads de analytics;
+  - preenchimento do critério operacional de validação de identidade no runbook do titular.
 
 ### Rodada registrada — 2026-04-21
 

@@ -37,6 +37,7 @@ Estado consolidado:
 - Bloco 7 — Estabilização, QA e implantação: concluído no fluxo central aceito;
 - Bloco 8 — Reposicionamento visual de site para jogo: próximo ciclo recomendado;
 - Bloco 9 — Biblioteca pedagógica de apoio ao jogador: planejado.
+- Trilha transversal — Adequação LGPD e governança de dados: concluída no mínimo operacional implementado, com follow-ups abertos para visibilidade no perfil, retenção automatizada e validação manual contínua.
 
 Este documento continua válido como plano, mas não deve mais ser lido como se o projeto estivesse prestes a iniciar o Bloco 1.
 
