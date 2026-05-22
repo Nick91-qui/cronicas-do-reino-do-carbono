@@ -148,13 +148,15 @@ export function removeTerminalAtom(
 export function cycleBondOrder(
   state: BranchedBuilderState,
   bondId: BranchedBuilderBond["id"],
+  maxBondOrder: BranchedBuilderBondOrder = 3,
 ): BranchedBuilderState {
   const bond = state.bonds.find((candidate) => candidate.id === bondId);
   if (!bond) {
     return state;
   }
 
-  const nextOrder = bond.order === 3 ? 1 : ((bond.order + 1) as BranchedBuilderBondOrder);
+  const nextOrder =
+    bond.order >= maxBondOrder ? 1 : ((bond.order + 1) as BranchedBuilderBondOrder);
   const currentContribution = bond.order;
 
   const fromWithoutCurrentBond =

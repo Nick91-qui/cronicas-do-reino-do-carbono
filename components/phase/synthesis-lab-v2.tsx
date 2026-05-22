@@ -155,17 +155,15 @@ export function SynthesisLabV2({
   }
 
   function handleUndoAction() {
-    setHistory((current) => {
-      const previous = current.at(-1);
+    const previous = history.at(-1);
 
-      if (!previous) {
-        return current;
-      }
+    if (!previous) {
+      return;
+    }
 
-      onBuilderStateChangeAction(previous);
-      setRingSourceAtomId(null);
-      return current.slice(0, -1);
-    });
+    setHistory((current) => current.slice(0, -1));
+    onBuilderStateChangeAction(previous);
+    setRingSourceAtomId(null);
   }
 
   function handleResetAction() {
@@ -181,7 +179,7 @@ export function SynthesisLabV2({
       return;
     }
 
-    applyMutation(cycleBondOrder(builderState, bondId));
+    applyMutation(cycleBondOrder(builderState, bondId, 2));
     setRecentlyChangedBondId(bondId);
     window.setTimeout(() => {
       setRecentlyChangedBondId((current) => (current === bondId ? null : current));

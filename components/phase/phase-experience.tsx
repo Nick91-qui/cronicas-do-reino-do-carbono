@@ -19,22 +19,11 @@ import { SynthesisLabV2 } from "@/components/phase/synthesis-lab-v2";
 import { SynthesisTutorial } from "@/components/phase/synthesis-tutorial";
 
 import type {
-  BuilderLayout,
   BuilderState,
   BuilderValidationResult,
-  GraphBuilderBondOrder,
 } from "@/lib/builder/types";
 import { createBranchedBuilderState } from "@/lib/builder/state/branched-operations";
 import type { BranchedBuilderState } from "@/lib/builder/state/branched-types";
-import {
-  buildGraphBuilderState,
-  getBuilderBondType,
-  getClosedRingCarbonLimit,
-  getHydrogensByCarbon,
-  getPreviewFormulaEstrutural,
-  getPreviewFormulaMolecular,
-  normalizeBondOrders,
-} from "@/lib/builder/graph-preview";
 import type {
   Molecule,
   MoleculeId,
@@ -181,11 +170,6 @@ export function PhaseExperience({
   const [stepDirection, setStepDirection] = useState<"forward" | "backward">(
     "forward",
   );
-  const [layout, setLayout] = useState<BuilderLayout>("open_chain");
-  const [carbonCount, setCarbonCount] = useState(
-    String(Math.max(1, Math.min(phase.resources.carbonAvailable, 1))),
-  );
-  const [bondOrders, setBondOrders] = useState<GraphBuilderBondOrder[]>([]);
   const [branchedBuilderState, setBranchedBuilderState] =
     useState<BranchedBuilderState>(createBranchedBuilderState);
   const [builderResult, setBuilderResult] =
@@ -211,8 +195,6 @@ export function PhaseExperience({
   const nextPhaseHref = getNextPhaseHref(chapterProgress, phase.number);
   const supportsBuilder = phase.technicalType !== "choice";
   const supportsMoleculeSelection = phase.technicalType !== "construction";
-  const currentPhaseStatus =
-    chapterProgress.phases.find((item) => item.phaseId === phase.id) ?? null;
   const effectiveSelectedMoleculeId = supportsMoleculeSelection
     ? selectedMoleculeId || builderResult?.resolvedMoleculeId || ""
     : "";
@@ -221,44 +203,7 @@ export function PhaseExperience({
   );
   const canUseDoubleBond = availableBondTypes.includes("double");
   const canUseClosedRing = phase.resources.carbonAvailable >= 3;
-  const closedRingCarbonLimit = getClosedRingCarbonLimit(phase);
-  const minimumCarbonCount = layout === "closed_ring" ? 3 : 1;
-  const maximumCarbonCount =
-    layout === "closed_ring"
-      ? closedRingCarbonLimit
-      : phase.resources.carbonAvailable;
-  const clampedCarbonValue = Math.max(
-    minimumCarbonCount,
-    Number(carbonCount) || minimumCarbonCount,
-  );
-  const activeCarbonCount = Math.min(clampedCarbonValue, maximumCarbonCount);
-  const normalizedBondOrders = normalizeBondOrders(
-    bondOrders,
-    layout,
-    activeCarbonCount,
-  );
-  const previewBondType = getBuilderBondType(
-    layout,
-    activeCarbonCount,
-    normalizedBondOrders,
-  );
   const previewBuilderState: BuilderState = branchedBuilderState;
-  const previewHydrogensByCarbon = getHydrogensByCarbon(
-    layout,
-    activeCarbonCount,
-    normalizedBondOrders,
-  );
-  const previewFormulaEstrutural = getPreviewFormulaEstrutural(
-    layout,
-    previewHydrogensByCarbon,
-    normalizedBondOrders,
-    previewBondType,
-  );
-  const previewFormulaMolecular = getPreviewFormulaMolecular(
-    activeCarbonCount,
-    previewHydrogensByCarbon,
-  );
-  const bondOrdersKey = normalizedBondOrders.join("-");
   const selectedMolecule =
     molecules.find((molecule) => molecule.id === effectiveSelectedMoleculeId) ??
     null;
@@ -348,26 +293,9 @@ export function PhaseExperience({
   }, [displayedStep, hasSeenSynthesisTutorial, shouldOfferSynthesisTutorial]);
 
   useEffect(() => {
-    setBondOrders((current) => {
-      const next = normalizeBondOrders(current, layout, activeCarbonCount);
-
-      return current.length === next.length &&
-        current.every((value, index) => value === next[index])
-        ? current
-        : next;
-    });
-  }, [layout, activeCarbonCount]);
-
-  useEffect(() => {
-    if (layout === "closed_ring" && Number(carbonCount) < 3) {
-      setCarbonCount("3");
-    }
-  }, [carbonCount, layout]);
-
-  useEffect(() => {
     setBuilderResult(null);
     setBuilderError(null);
-  }, [layout, activeCarbonCount, bondOrdersKey, branchedBuilderState]);
+  }, [branchedBuilderState]);
 
   useEffect(() => {
     const requestedStep = new URLSearchParams(searchParamsKey).get("step");
@@ -622,21 +550,6 @@ export function PhaseExperience({
   function handleCompleteTutorial() {
     void markTutorialAsSeen();
     setIsTutorialOpen(false);
-  }
-
-  function updateBondOrder(index: number) {
-    setBondOrders((current) => {
-      const normalized = normalizeBondOrders(
-        current,
-        layout,
-        activeCarbonCount,
-      );
-      const nextOrder = normalized[index] === 2 || !canUseDoubleBond ? 1 : 2;
-
-      return normalized.map((order, bondIndex) =>
-        bondIndex === index ? nextOrder : order,
-      );
-    });
   }
 
   const scene = getSceneImageByStep(displayedStep);
