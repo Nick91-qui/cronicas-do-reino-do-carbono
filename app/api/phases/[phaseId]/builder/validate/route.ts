@@ -1,4 +1,4 @@
-import { canonicalBuilderStateSchema } from "@/lib/builder/schema";
+import { futureBuilderStateSchema } from "@/lib/builder/schema";
 import {
   ApiAuthenticationRequiredError,
   requireApiAuthenticatedPlayer,
@@ -26,7 +26,7 @@ export async function POST(
   try {
     await requireApiAuthenticatedPlayer(prisma);
     const json = await request.json().catch(() => null);
-    const parsedBuilderState = canonicalBuilderStateSchema.safeParse(json);
+    const parsedBuilderState = futureBuilderStateSchema.safeParse(json);
 
     if (!parsedBuilderState.success) {
       return jsonNoStore(

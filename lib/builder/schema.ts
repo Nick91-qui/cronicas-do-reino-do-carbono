@@ -20,11 +20,11 @@ export const graphBuilderStateSchema = z.object({
 /** Schema canônico do builder usado pela UI atual do MVP. */
 export const canonicalBuilderStateSchema = graphBuilderStateSchema;
 
-export const builderStateSchema = canonicalBuilderStateSchema;
 export const futureBuilderStateSchema = z.union([
   graphBuilderStateSchema,
   branchedBuilderStateSchema,
 ]);
+export const builderStateSchema = futureBuilderStateSchema;
 
 export const builderValidationRequestSchema = z.object({
   phaseId: phaseIdSchema,

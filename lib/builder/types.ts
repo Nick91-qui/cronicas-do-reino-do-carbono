@@ -20,8 +20,8 @@ export type GraphBuilderState = {
 /** Formato canônico do builder usado pela UI atual do MVP. */
 export type CanonicalBuilderState = GraphBuilderState;
 
-export type BuilderState = GraphBuilderState;
 export type FutureBuilderState = GraphBuilderState | BranchedBuilderState;
+export type BuilderState = FutureBuilderState;
 
 export type BuilderDerivedStructure = {
   layout?: BuilderLayout;

@@ -15,7 +15,7 @@ import { PhaseResultPanel } from "@/components/phase/phase-result-panel";
 import { PhaseRitualConsole } from "@/components/phase/phase-ritual-console";
 import { PhaseSelectPanel } from "@/components/phase/phase-select-panel";
 import { PhaseStepHeader } from "@/components/phase/phase-step-header";
-import { SynthesisLab } from "@/components/phase/synthesis-lab";
+import { SynthesisLabV2 } from "@/components/phase/synthesis-lab-v2";
 import { SynthesisTutorial } from "@/components/phase/synthesis-tutorial";
 
 import type {
@@ -24,6 +24,8 @@ import type {
   BuilderValidationResult,
   GraphBuilderBondOrder,
 } from "@/lib/builder/types";
+import { createBranchedBuilderState } from "@/lib/builder/state/branched-operations";
+import type { BranchedBuilderState } from "@/lib/builder/state/branched-types";
 import {
   buildGraphBuilderState,
   getBuilderBondType,
@@ -184,6 +186,8 @@ export function PhaseExperience({
     String(Math.max(1, Math.min(phase.resources.carbonAvailable, 1))),
   );
   const [bondOrders, setBondOrders] = useState<GraphBuilderBondOrder[]>([]);
+  const [branchedBuilderState, setBranchedBuilderState] =
+    useState<BranchedBuilderState>(createBranchedBuilderState);
   const [builderResult, setBuilderResult] =
     useState<BuilderValidationResult | null>(null);
   const [selectedMoleculeId, setSelectedMoleculeId] = useState<MoleculeId | "">(
@@ -238,11 +242,7 @@ export function PhaseExperience({
     activeCarbonCount,
     normalizedBondOrders,
   );
-  const previewBuilderState = buildGraphBuilderState(
-    layout,
-    activeCarbonCount,
-    normalizedBondOrders,
-  );
+  const previewBuilderState: BuilderState = branchedBuilderState;
   const previewHydrogensByCarbon = getHydrogensByCarbon(
     layout,
     activeCarbonCount,
@@ -367,7 +367,7 @@ export function PhaseExperience({
   useEffect(() => {
     setBuilderResult(null);
     setBuilderError(null);
-  }, [layout, activeCarbonCount, bondOrdersKey]);
+  }, [layout, activeCarbonCount, bondOrdersKey, branchedBuilderState]);
 
   useEffect(() => {
     const requestedStep = new URLSearchParams(searchParamsKey).get("step");
@@ -670,29 +670,19 @@ export function PhaseExperience({
         {displayedStep === "intro" ? <PhaseIntroPanel phase={phase} /> : null}
 
         {displayedStep === "synthesis" ? (
-          <SynthesisLab
-            onOpenTutorial={() => setIsTutorialOpen(true)}
+          <SynthesisLabV2
+            onOpenTutorialAction={() => setIsTutorialOpen(true)}
             objective={phase.objective}
-            layout={layout}
-            carbonCount={carbonCount}
-            activeCarbonCount={activeCarbonCount}
-            minimumCarbonCount={minimumCarbonCount}
-            maximumCarbonCount={maximumCarbonCount}
+            builderState={branchedBuilderState}
+            maximumCarbonCount={phase.resources.carbonAvailable}
             canUseDoubleBond={canUseDoubleBond}
             canUseClosedRing={canUseClosedRing}
-            availableBondTypes={availableBondTypes}
-            normalizedBondOrders={normalizedBondOrders}
-            previewHydrogensByCarbon={previewHydrogensByCarbon}
-            previewFormulaEstrutural={previewFormulaEstrutural}
-            previewFormulaMolecular={previewFormulaMolecular}
             isValidatingBuilder={isValidatingBuilder}
             builderError={builderError}
             builderResult={builderResult}
             synthesizedMolecule={synthesizedMolecule}
-            onSetLayout={setLayout}
-            onSetCarbonCount={setCarbonCount}
-            onUpdateBondOrder={updateBondOrder}
-            onValidateBuilder={handleValidateBuilder}
+            onBuilderStateChangeAction={setBranchedBuilderState}
+            onValidateBuilderAction={handleValidateBuilder}
           />
         ) : null}
 

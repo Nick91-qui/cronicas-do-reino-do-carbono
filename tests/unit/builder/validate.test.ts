@@ -79,4 +79,69 @@ describe("builder/validate", () => {
     expect(result.derivedStructure?.bondType).toBe("aromatic");
     expect(result.errors).toEqual([]);
   });
+
+  it("aceita etano no formato ramificado v2", () => {
+    const result = validateBuilderStateForPhase("chapter-1-phase-2", {
+      kind: "branched_v2",
+      atoms: [
+        { id: "a0", element: "C" },
+        { id: "a1", element: "C" },
+      ],
+      bonds: [{ id: "b0", from: "a0", to: "a1", order: 1 }],
+      selectedAtomId: "a0",
+      nextAtomIndex: 2,
+      nextBondIndex: 1,
+    });
+
+    expect(result.structuralValid).toBe(true);
+    expect(result.canCreateMolecule).toBe(true);
+    expect(result.resolvedMoleculeId).toBe("etano");
+    expect(result.derivedStructure?.formulaMolecular).toBe("C2H6");
+    expect(result.errors).toEqual([]);
+  });
+
+  it("resolve isômero de posição do buteno no formato ramificado v2", () => {
+    const result = validateBuilderStateForPhase("chapter-1-phase-8", {
+      kind: "branched_v2",
+      atoms: [
+        { id: "a0", element: "C" },
+        { id: "a1", element: "C" },
+        { id: "a2", element: "C" },
+        { id: "a3", element: "C" },
+      ],
+      bonds: [
+        { id: "b0", from: "a0", to: "a1", order: 1 },
+        { id: "b1", from: "a1", to: "a2", order: 2 },
+        { id: "b2", from: "a2", to: "a3", order: 1 },
+      ],
+      selectedAtomId: "a1",
+      nextAtomIndex: 4,
+      nextBondIndex: 3,
+    });
+
+    expect(result.structuralValid).toBe(true);
+    expect(result.canCreateMolecule).toBe(true);
+    expect(result.resolvedMoleculeId).toBe("buteno");
+    expect(result.derivedStructure?.formulaMolecular).toBe("C4H8");
+    expect(result.errors).toEqual([]);
+  });
+
+  it("rejeita ligação tripla no formato ramificado v2 enquanto a fase não desbloqueia esse fragmento", () => {
+    const result = validateBuilderStateForPhase("chapter-1-phase-8", {
+      kind: "branched_v2",
+      atoms: [
+        { id: "a0", element: "C" },
+        { id: "a1", element: "C" },
+      ],
+      bonds: [{ id: "b0", from: "a0", to: "a1", order: 3 }],
+      selectedAtomId: "a0",
+      nextAtomIndex: 2,
+      nextBondIndex: 1,
+    });
+
+    expect(result.structuralValid).toBe(false);
+    expect(result.canCreateMolecule).toBe(false);
+    expect(result.resolvedMoleculeId).toBeNull();
+    expect(result.errors).toContain("A estrutura usa um tipo de ligação não desbloqueado nesta fase.");
+  });
 });
