@@ -72,6 +72,7 @@ Esses arquivos não substituem os centrais, mas formalizam regras operacionais r
 - `legal/terms-of-use.md`
 - `planning/operator-observability-plan.md`
 - `planning/synthesis-tutorial-plan.md`
+- `planning/synthesis-lab-branched-builder-plan.md`
 - `tech/builder-legacy-removal.md`
 
 ### 3. Documentos auxiliares de uso pedagógico e narrativo
